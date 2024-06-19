@@ -1,21 +1,22 @@
-import React, { LegacyRef } from 'react';
+import React, { LegacyRef, forwardRef } from 'react';
 import { SearchChat } from './SearchChat.tsx';
+import { SearchQuery } from './SearchPage.tsx';
 
-export const SearchScrollView = ({views, removeView, ref, lastElementRef}: 
-  {
-    views: {id: string, text: string, left: boolean}[]
-    removeView: (id: string) => string
-    ref: LegacyRef<HTMLDivElement>
-    lastElementRef: LegacyRef<HTMLDivElement>
-  }) => {
-  const imageUrl = 'https://via.placeholder.com/150';
+export const SearchScrollView = (({searchQueries, removeSearchQuery, lastElementRef}:{
+  searchQueries: SearchQuery[]
+  removeSearchQuery: (id: string) => string
+  lastElementRef: LegacyRef<HTMLDivElement>
+}) => {
+
+  const userImageUrl = 'https://imgv3.fotor.com/images/slider-image/A-clear-close-up-photo-of-a-woman.jpg';
+  const chatBotImageUrl = 'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
 
   return (
-    <div ref={ref} className="flex flex-col-reverse overflow-y-scroll no-scrollbar flex-1 pl-4 pr-4">
-      {views.map((view) => (
-        <SearchChat data={view} imageUrl={imageUrl} removeView={removeView}/>
+    <div className="flex flex-col-reverse overflow-y-scroll no-scrollbar flex-1 pl-12 pr-12">
+      {searchQueries.map((searchQuery) => (
+        <SearchChat key={searchQuery.id} data={searchQuery} userImageUrl={userImageUrl} chatBotImageUrl={chatBotImageUrl} removeSearchQuery={removeSearchQuery}/>
       ))}
       <div ref={lastElementRef}/>
     </div>
   );
-};
+});

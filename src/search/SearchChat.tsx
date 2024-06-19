@@ -1,40 +1,37 @@
 import React from 'react';
 
-export const SearchChat = ({data, imageUrl, removeView}: 
+export const SearchChat = ({data, chatBotImageUrl, userImageUrl, removeSearchQuery}: 
   {
-    data: {id: string, text: string, left: boolean},
-    imageUrl: string,
-    removeView: (id: string) => void
+    data: {id: string, query: string, answer: string},
+    chatBotImageUrl: string,
+    userImageUrl: string,
+    removeSearchQuery: (id: string) => void
   }) => {
 
   return (
-    data.left ? 
-      <div key={data.id} className="h-24 flex flex-1 flex-row mb-2 relative">
-        <img src={imageUrl} alt="Placeholder" className="w-10 h-10 mr-4" />
-        <div className='flex-1'>
+    <div key={data.id} >
+      <div className="mb-2 flex" style={{width: '100%'}}>
+        <div className='flex flex-col flex-1 overflow-clip'>
+          <p className="text-lg text-right">민지</p>
+          <div className="p-3 inline-block self-end bg-gray0 rounded-lg overflow-hidden max-w-70p">
+            <p className="text-lg inline text-right whitespace-normal break-words">{data.query}</p>
+          </div>
+        </div>
+        <img src={userImageUrl} alt="Placeholder" className="w-10 h-10 ml-4 object-cover rounded" />
+      </div>
+      <div className="h-24 flex flex-1 flex-row mb-2 relative">
+        <img src={chatBotImageUrl} alt="Placeholder" className="w-10 h-10 mr-4 object-cover rounded" />
+        <div className='flex flex-col flex-1 '>
           <p className="text-lg">챗봇</p>
-          <div className="p-3" style={{backgroundColor: '#F9F9F9'}}>
-            <p className="text-lg">{data.text}</p>
+          <div className="p-3 inline-block self-start bg-gray0 rounded-lg  max-w-70p">
+            <p className="text-lg inline">{data.answer}</p>
           </div>
         </div>
-        <button
-          onClick={() => removeView(data.id)}
-          className="h-8 top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
-        >Remove</button>
       </div>
-      : 
-      <div key={data.id} className="mb-2 flex" style={{width: '100%'}}>
-        <button
-          onClick={() => removeView(data.id)}
+      {/* <button
+          onClick={() => removeSearchQuery(data.id)}
           className="h-8 top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
-        >Remove</button>
-        <div className='flex-1 overflow-clip'>
-          <p className="text-lg text-right">챗봇</p>
-          <div className="p-3 flex-1" style={{backgroundColor: '#F9F9F9'}}>
-            <p className="text-lg text-right whitespace-normal break-words">{data.text}</p>
-          </div>
-        </div>
-        <img src={imageUrl} alt="Placeholder" className="w-10 h-10 ml-4" />
-      </div>
+        >Remove</button> */}
+    </div>
   )
 };
