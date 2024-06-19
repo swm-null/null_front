@@ -1,4 +1,4 @@
-import React, { LegacyRef, forwardRef } from 'react';
+import React, { LegacyRef } from 'react';
 import { SearchChat } from './SearchChat.tsx';
 import { SearchQuery } from './SearchPage.tsx';
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SearchInput } from './SearchInput.tsx';
 import { SearchScrollView } from './SearchScrollView.tsx';
 import { v4 as uuid_v4 } from 'uuid';
