@@ -90,7 +90,7 @@ interface memoResponse extends memo, validResponse {
 // 1. OK
 export const searchMemo = async (inputContent: string): Promise<memoResponse | errorResponse> => {
   const method = "searchMemo";
-  const endpoint = `${LOCALHOST}/search`;
+  const endpoint = `${LOCALHOST}/memos/search`;
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -103,6 +103,64 @@ export const searchMemo = async (inputContent: string): Promise<memoResponse | e
       method,
       status: response.status,
       message: "메모 검색을 성공했습니다. ",
+      id,
+      content,
+      tags
+    }
+    console.log(response)
+    return responseInfo;
+  }
+  catch (error) {
+    console.log(error)
+    return handleError(error, method);
+  }
+}
+
+// 2. OK
+export const addMemo = async (inputContent: string): Promise<memoResponse | errorResponse> => {
+  const method = "addMemo";
+  const endpoint = `${LOCALHOST}/memos`;
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  try {
+    const response = await axios.post(endpoint, JSON.stringify({"content": inputContent}), config);
+    const { id, content, tags } = response.data;
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: "메모 추가를 성공했습니다. ",
+      id,
+      content,
+      tags
+    }
+    console.log(response)
+    return responseInfo;
+  }
+  catch (error) {
+    console.log(error)
+    return handleError(error, method);
+  }
+}
+
+// 3. Check
+export const editMemo = async (inputId: string, inputContent: string): Promise<memoResponse | errorResponse> => {
+  const method = "editMemo";
+  const endpoint = `${LOCALHOST}/memos`;
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  try {
+    const response = await axios.put(endpoint, JSON.stringify({"id": inputId, "content": inputContent}), config);
+    const { id, content, tags } = response.data;
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: "메모 수정을 성공했습니다. ",
       id,
       content,
       tags
