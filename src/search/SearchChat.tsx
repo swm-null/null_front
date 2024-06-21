@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchQuery } from './SearchPage';
+import { SearchQuery } from './interface/SearchQuery';
 
 export const SearchChat = ({data, chatBotImageUrl, userImageUrl, removeSearchQuery}: 
   {

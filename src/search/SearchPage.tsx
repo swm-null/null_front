@@ -3,23 +3,8 @@ import { SearchInput } from './SearchInput.tsx';
 import { SearchScrollView } from './SearchScrollView.tsx';
 import { v4 as uuid_v4 } from 'uuid';
 import { useInView } from 'react-intersection-observer';
-
-interface Memo {
-  id: string;
-  content: string;
-  tags: string[];
-}
-
-export interface Answer {
-  text: string;
-  memos: Memo[] | undefined;
-}
-
-export interface SearchQuery {
-  id: string;
-  query: string;
-  answer: Answer;
-}
+import { SearchQuery } from './interface/SearchQuery.tsx';
+import { Answer } from './interface/Answer.tsx';
 
 const PAGE_SIZE = 10;
 const MAX_SEARCH_QUERIES = 100;

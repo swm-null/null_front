@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { isSearchMemoResponse, searchMemo } from '../util/auth.tsx';
-import { Answer } from './SearchPage.tsx';
+import { Answer } from './interface/Answer.tsx';
 
 export const SearchInput = ({addSearchQuery, editSearchQuery}: 
   {
@@ -17,6 +17,11 @@ export const SearchInput = ({addSearchQuery, editSearchQuery}:
         text: '관련 메모는 다음과 같습니다',
         memos: response.memos
       };
+    } else {
+      answer = {
+        text: response.message,
+        memos: null
+      }
     }
     
     return answer;

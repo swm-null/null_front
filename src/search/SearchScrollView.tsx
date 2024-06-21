@@ -1,6 +1,6 @@
 import React, { LegacyRef } from 'react';
 import { SearchChat } from './SearchChat.tsx';
-import { SearchQuery } from './SearchPage.tsx';
+import { SearchQuery } from './interface/SearchQuery.tsx';
 
 export const SearchScrollView = (({searchQueries, removeSearchQuery, lastElementRef}:{
   searchQueries: SearchQuery[]
