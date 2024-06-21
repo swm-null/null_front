@@ -4,11 +4,21 @@ import { SearchScrollView } from './SearchScrollView.tsx';
 import { v4 as uuid_v4 } from 'uuid';
 import { useInView } from 'react-intersection-observer';
 
+interface Memo {
+  id: string;
+  content: string;
+  tags: string[];
+}
+
+export interface Answer {
+  text: string;
+  memos: Memo[] | undefined;
+}
 
 export interface SearchQuery {
   id: string;
   query: string;
-  answer: string;
+  answer: Answer;
 }
 
 const PAGE_SIZE = 10;
@@ -51,16 +61,16 @@ export const SearchPage = () => {
     const answerID = uuid_v4();
     
     setNewSearchQueries((prevViews) => [
-      { id: answerID, query: text, answer: '' },
+      { id: answerID, query: text, answer: {text: '', memos: undefined}},
       ...prevViews, 
     ]);
 
     return answerID;
   };
 
-  const editSearchQuery = (id: string, newText: string) => {
-    setNewSearchQueries(prevViews => prevViews.map(view => view.id === id ? { ...view, answer: newText } : view));
-    setCachedSearchQueries(prevViews => prevViews.map(view => view.id === id ? { ...view, answer: newText } : view));
+  const editSearchQuery = (id: string, newAnswer: Answer) => {
+    setNewSearchQueries(prevViews => prevViews.map(view => view.id === id ? { ...view, answer: newAnswer } : view));
+    setCachedSearchQueries(prevViews => prevViews.map(view => view.id === id ? { ...view, answer: newAnswer } : view));
   };
 
   const removeSearchQuery = (id: string) => {
@@ -84,6 +94,7 @@ export const SearchPage = () => {
       ...newSearchQueries,
       ...cachedSearchQueries,
     ];
+    // localStorage.setItem('search_queries', JSON.stringify([]))
     localStorage.setItem('search_queries', JSON.stringify(temp.length > MAX_SEARCH_CHAT ? temp.slice(0, MAX_SEARCH_CHAT) : temp))
   }, [newSearchQueries, cachedSearchQueries])
 

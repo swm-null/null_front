@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as Config from '../config';
+import * as Config from '../config.js';
 const LOCALHOST = Config.LOCALHOST;
 
 export interface validResponse {
@@ -98,14 +98,11 @@ export const searchMemo = async (inputContent: string): Promise<memoResponse | e
   }
   try {
     const response = await axios.post(endpoint, JSON.stringify({"content": inputContent}), config);
-    const { id, content, tags } = response.data;
     const responseInfo = {
       method,
       status: response.status,
       message: "메모 검색을 성공했습니다. ",
-      id,
-      content,
-      tags
+      memos: response.data,
     }
     console.log(response)
     return responseInfo;
@@ -183,6 +180,6 @@ export const isErrorResponse = (response: validResponse | errorResponse): respon
   return (response as errorResponse).exceptionCode !== undefined;
 }
 
-export const isMemoResponse = (response: memoResponse | errorResponse): response is memoResponse => {
-  return (response as memoResponse).id !== undefined;
+export const isSearchMemoResponse = (response: searchMemoResponse | errorResponse): response is searchMemoResponse => {
+  return (response as searchMemoResponse).memos !== undefined;
 }

@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
+import { isSearchMemoResponse, searchMemo } from '../util/auth.tsx';
+import { Answer } from './SearchPage.tsx';
 
 export const SearchInput = ({addSearchQuery, editSearchQuery}: 
   {
     addSearchQuery: (text: string) => string, 
-    editSearchQuery: (id: string, text: string) => void
+    editSearchQuery: (id: string, answer: Answer) => void
   }) => {
   const [message, setMessage] = useState('');
 
-  const getSearchResponse = async (id: string, text: string) => {
-    const answer = 'answer';
+  const getSearchResponse = async (text: string) => {
+    const response = await searchMemo(text);
+    var answer;
+    if (isSearchMemoResponse(response)) {
+      answer = {
+        text: '관련 메모는 다음과 같습니다',
+        memos: response.memos
+      };
+    }
+    
     return answer;
   }
 
-  const editSearchText = async (id: string, text: string) => {
-    const answer = await getSearchResponse(id, text);
+  const editSearchAnswer = async (id: string, text: string) => {
+    const answer = await getSearchResponse(text);
     editSearchQuery(id, answer);
   }
 
   const addSearchQueries = (text: string) => {
     const answerID = addSearchQuery(text);
 
-    editSearchText(answerID, text);
+    editSearchAnswer(answerID, text);
   };
 
 
