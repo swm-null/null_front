@@ -29,7 +29,7 @@ export const handleError = (error: unknown, method: string): errorResponse => {
       errorInfo = {
         method,
         status: httpErrorCode,
-        message: errorDetails.message,
+        message: error.message,
         exceptionCode: errorDetails.exceptionCode,
       };
     }
