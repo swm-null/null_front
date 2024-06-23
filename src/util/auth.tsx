@@ -104,11 +104,9 @@ export const searchMemo = async (inputContent: string): Promise<memoResponse | e
       message: "메모 검색을 성공했습니다. ",
       memos: response.data,
     }
-    console.log(response)
     return responseInfo;
   }
   catch (error) {
-    console.log(error)
     return handleError(error, method);
   }
 }

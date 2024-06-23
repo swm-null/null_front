@@ -15,7 +15,7 @@ export const SearchPage: React.FC = () => {
   return (
     <div className='flex flex-col h-screen'>
       <div className='px-4 py-4'>
-        <h1>챗봇으로 메모 검색하기</h1>
+        <p className='font-semibold text-lg'>챗봇으로 메모 검색하기</p>
       </div>
       <SearchScrollView
         removeSearchQuery={removeSearchQuery}
