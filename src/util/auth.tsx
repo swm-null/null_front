@@ -22,7 +22,6 @@ export const handleError = (error: unknown, method: string): errorResponse => {
 
     // 요청이 전송되었고, 서버는 2xx 외의 상태 코드로 응답했습니다.
     if (error.response) {
-      console.log(error)
       const httpErrorCode = error.response.status;
       const errorDetails = error.response?.data ? { ...error.response.data } : {};  
       
@@ -70,7 +69,6 @@ export const handleError = (error: unknown, method: string): errorResponse => {
     }
   }
   
-  console.log("handleError:", JSON.stringify(errorInfo));
   return errorInfo;
 }
 
@@ -131,11 +129,9 @@ export const addMemo = async (inputContent: string): Promise<memoResponse | erro
       content,
       tags
     }
-    console.log(response)
     return responseInfo;
   }
   catch (error) {
-    console.log(error)
     return handleError(error, method);
   }
 }
@@ -160,11 +156,9 @@ export const editMemo = async (inputId: string, inputContent: string): Promise<m
       content,
       tags
     }
-    console.log(response)
     return responseInfo;
   }
   catch (error) {
-    console.log(error)
     return handleError(error, method);
   }
 }

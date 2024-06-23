@@ -7,7 +7,7 @@ export const SearchScrollView = (({searchQueries, removeSearchQuery, lastElement
   removeSearchQuery: (id: string) => string
   lastElementRef: LegacyRef<HTMLDivElement>
 }) => {
-  // FIXME user, chatbot 데이터 따로 관리하고, 거기서 데이터 가져오는 코드 추가
+  // FIXME: user, chatbot 데이터 따로 관리하고, 거기서 데이터 가져오는 코드 추가
   const userName = '민지';
   const chatBotName = '챗봇';
   const userImageUrl = 'https://imgv3.fotor.com/images/slider-image/A-clear-close-up-photo-of-a-woman.jpg';
