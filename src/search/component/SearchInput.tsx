@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { isSearchMemoResponse, searchMemo } from '../util/auth.tsx';
-import { Answer } from './interface/Answer.tsx';
+import { isSearchMemoResponse, searchMemo } from '../../util/auth.tsx';
+import { Answer } from '../interface/SearchResultInterface.tsx';
 
 export const SearchInput = ({addSearchQuery, editSearchQuery}: 
   {
     addSearchQuery: (text: string) => string, 
-    editSearchQuery: (id: string, answer: Answer) => void
+    editSearchQuery: (id: string, answer: Answer) => string, 
   }) => {
   const [message, setMessage] = useState('');
 
@@ -23,7 +23,6 @@ export const SearchInput = ({addSearchQuery, editSearchQuery}:
         memos: null
       }
     }
-    
     return answer;
   }
 
@@ -34,7 +33,6 @@ export const SearchInput = ({addSearchQuery, editSearchQuery}:
 
   const addSearchQueries = (text: string) => {
     const answerID = addSearchQuery(text);
-
     editSearchAnswer(answerID, text);
   };
 
@@ -45,8 +43,6 @@ export const SearchInput = ({addSearchQuery, editSearchQuery}:
 
   const handleSendClick = () => {
     if (message.trim()) {
-      console.log('Sending message:', message);
-      // 여기서 메시지를 서버로 전송하는 로직을 추가할 수 있습니다.
       addSearchQueries(message);
       setMessage('');
     }
@@ -59,7 +55,7 @@ export const SearchInput = ({addSearchQuery, editSearchQuery}:
         onChange={handleInputChange}
         className="flex-1 px-4 py-2 h-[110px] focus:outline-none resize-none"
         placeholder="입력 프롬프트"
-        rows={6} // 줄 수를 설정할 수 있습니다.
+        rows={6}
       />
       <button
         onClick={handleSendClick}
