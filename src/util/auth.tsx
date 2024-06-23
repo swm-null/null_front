@@ -111,7 +111,7 @@ export const searchMemo = async (inputContent: string): Promise<memoResponse | e
   }
 }
 
-// 2. OK
+// 2. FIXME: 확인하기
 export const addMemo = async (inputContent: string): Promise<memoResponse | errorResponse> => {
   const method = "addMemo";
   const endpoint = `${LOCALHOST}/memos`;
@@ -140,7 +140,7 @@ export const addMemo = async (inputContent: string): Promise<memoResponse | erro
   }
 }
 
-// 3. Check
+// 3. FIXME: 확인하기
 export const editMemo = async (inputId: string, inputContent: string): Promise<memoResponse | errorResponse> => {
   const method = "editMemo";
   const endpoint = `${LOCALHOST}/memos`;
@@ -174,10 +174,7 @@ export const isValidResponse = (response: validResponse | errorResponse): respon
   return validStatus.includes(response.status)
 }
 
-export const isErrorResponse = (response: validResponse | errorResponse): response is errorResponse => {
-  return (response as errorResponse).exceptionCode !== undefined;
-}
-
 export const isSearchMemoResponse = (response: searchMemoResponse | errorResponse): response is searchMemoResponse => {
-  return (response as searchMemoResponse).memos !== undefined;
+  // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
+  return (response as searchMemoResponse).memos !== null && (response as searchMemoResponse).memos.length !== 0;
 }
