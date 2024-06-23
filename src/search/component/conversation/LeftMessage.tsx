@@ -14,7 +14,7 @@ export const LeftMessage = ({name, imageUrl, content}:
       return (
         <div className="flex flex-col p-3 bg-gray1 rounded-lg w-72 min-w-72 whitespace-normal break-words text-base">
           {memo.content}
-          <div className='flex-1'/>
+          <div className='flex-1 m-1'/>
           {tags.map((tag) => {
             return `#${tag} `;
           })}
