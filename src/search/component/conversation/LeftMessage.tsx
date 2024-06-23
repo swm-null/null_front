@@ -29,9 +29,12 @@ export const LeftMessage = ({name, imageUrl, content}:
           <p className="text-lg font-semibold">{name}</p>
           <div className="p-3 inline-block self-start bg-gray0 rounded-lg overflow-hidden max-w-3/4">
             <p className="inline whitespace-normal break-words">{content.text}</p>
-            <div className='flex w-full flex-row overflow-x-scroll no-scrollbar gap-4 mt-2'>
-              {processedMessageContent}
-            </div>
+            {
+              (content.memos) &&
+                <div className='flex w-full flex-row overflow-x-scroll no-scrollbar gap-4 mt-2'>
+                  {processedMessageContent}
+                </div>
+            }
           </div>
         </div>
       </div>
