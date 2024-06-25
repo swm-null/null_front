@@ -1,5 +1,6 @@
 import axios from 'axios';
-import * as Config from '../config.js';
+import * as Config from '../config';
+import { Answer as MemoSearchAnswer } from '../search/interface/SearchResultInterface';
 const LOCALHOST = Config.LOCALHOST;
 
 export interface validResponse {
@@ -72,21 +73,11 @@ export const handleError = (error: unknown, method: string): errorResponse => {
   return errorInfo;
 }
 
-interface memo {
-  id: string;
-  content: string;
-  tags: string[];
-}
-
-interface searchMemoResponse extends validResponse {
-  memos: memo[]
-}
-
-interface memoResponse extends memo, validResponse {
+interface searchMemoResponse extends MemoSearchAnswer, validResponse {
 }
 
 // 1. OK
-export const searchMemo = async (inputContent: string): Promise<memoResponse | errorResponse> => {
+export const searchMemo = async (inputContent: string): Promise<searchMemoResponse | errorResponse> => {
   const method = "searchMemo";
   const endpoint = `${LOCALHOST}/memos/search`;
   const config = {
@@ -109,8 +100,8 @@ export const searchMemo = async (inputContent: string): Promise<memoResponse | e
   }
 }
 
-// 2. FIXME: 확인하기
-export const addMemo = async (inputContent: string): Promise<memoResponse | errorResponse> => {
+// 2. FIXME: response 새로 만들어서 수정하기
+export const addMemo = async (inputContent: string): Promise<searchMemoResponse | errorResponse> => {
   const method = "addMemo";
   const endpoint = `${LOCALHOST}/memos`;
   const config = {
@@ -136,8 +127,8 @@ export const addMemo = async (inputContent: string): Promise<memoResponse | erro
   }
 }
 
-// 3. FIXME: 확인하기
-export const editMemo = async (inputId: string, inputContent: string): Promise<memoResponse | errorResponse> => {
+// 3. FIXME: response 새로 만들어서 수정하기
+export const editMemo = async (inputId: string, inputContent: string): Promise<searchMemoResponse | errorResponse> => {
   const method = "editMemo";
   const endpoint = `${LOCALHOST}/memos`;
   const config = {
@@ -170,5 +161,5 @@ export const isValidResponse = (response: validResponse | errorResponse): respon
 
 export const isSearchMemoResponse = (response: searchMemoResponse | errorResponse): response is searchMemoResponse => {
   // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
-  return (response as searchMemoResponse).memos !== null && (response as searchMemoResponse).memos.length !== 0;
+  return (response as searchMemoResponse).memos !== null && (response as searchMemoResponse).memos?.length !== 0;
 }
