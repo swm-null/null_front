@@ -33,16 +33,14 @@ export const SearchInput = ({addSearchQuery, editSearchQuery}:
     return answer;
   }
 
-  const editSearchAnswer = async (id: string, text: string) => {
-    const answer = await getSearchResponse(text);
-    editSearchQuery(id, answer);
-  }
-
-  const addSearchQueries = (text: string) => {
+  const addSearchQueries = async (text: string) => {
+    // 검색 내용과 답변 메시지 객체 추가(이 때, 답변 메시지 내용은 없음)
     const answerID = addSearchQuery(text);
-    editSearchAnswer(answerID, text);
-  };
 
+    // 검색 answer 메시지의 내용을 서버에 요청하고 받으면, 객체 수정
+    const answer = await getSearchResponse(text);
+    editSearchQuery(answerID, answer);
+  };
 
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setMessage(e.target.value);
