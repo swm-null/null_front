@@ -6,7 +6,7 @@ interface Memo {
 
 export interface Answer {
   text: string;
-  memos: Memo[] | undefined;
+  memos: Memo[] | null;
 }
 
 export interface SearchQuery {

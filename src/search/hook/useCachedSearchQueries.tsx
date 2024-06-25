@@ -24,7 +24,7 @@ export const useCachedSearchQueries = () => {
   const addSearchQuery = (text: string) => {
     const answerID = uuid_v4();
     setNewSearchQueries((prevViews) => [
-      { id: answerID, query: text, answer: { text: '', memos: undefined } },
+      { id: answerID, query: text, answer: { text: '', memos: null } },
       ...prevViews,
     ]);
     return answerID;
