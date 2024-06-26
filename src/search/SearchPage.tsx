@@ -9,7 +9,6 @@ export const SearchPage: React.FC = () => {
     addSearchQuery,
     editSearchQuery,
     removeSearchQuery,
-    emptyViewRef
   } = useCachedSearchQueries();
 
   return (
@@ -19,9 +18,7 @@ export const SearchPage: React.FC = () => {
       </div>
       <SearchScrollView
         removeSearchQuery={removeSearchQuery}
-        lastElementRef={emptyViewRef}
-        searchQueries={searchQueries}
-      />
+        searchQueries={searchQueries}/>
       <SearchInput addSearchQuery={addSearchQuery} editSearchQuery={editSearchQuery} />
     </div>
   );

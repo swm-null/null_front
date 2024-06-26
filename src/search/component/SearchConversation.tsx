@@ -3,9 +3,9 @@ import { SearchQuery } from '../interface/SearchResultInterface.tsx';
 import { RightMessage } from './conversation/RightMessage.tsx';
 import { LeftMessage } from './conversation/LeftMessage.tsx';
 
-export const SearchConversation = ({data, userName, chatBotName, userImageUrl, chatBotImageUrl, removeSearchQuery}: 
+export const SearchConversation = ({searchQuery, userName, chatBotName, userImageUrl, chatBotImageUrl, removeSearchQuery}: 
   {
-    data: SearchQuery,
+    searchQuery: SearchQuery,
     userName: string,
     chatBotName: string, 
     userImageUrl: string,
@@ -13,11 +13,11 @@ export const SearchConversation = ({data, userName, chatBotName, userImageUrl, c
     removeSearchQuery: (id: string) => string
   }) => {
   return (
-    <div key={data.id}>
-      <RightMessage name={userName} contentText={data.query} imageUrl={userImageUrl}/>
-      <LeftMessage name={chatBotName} imageUrl={chatBotImageUrl} content={data.answer}/>
+    <div key={searchQuery.id}>
+      <RightMessage name={userName} contentText={searchQuery.query} imageUrl={userImageUrl}/>
+      <LeftMessage name={chatBotName} imageUrl={chatBotImageUrl} content={searchQuery.answer}/>
       {/* <button
-          onClick={() => removeSearchQuery(data.id)}
+          onClick={() => removeSearchQuery(searchQuery.id)}
           className="h-8 top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
         >Remove</button> */}
     </div>

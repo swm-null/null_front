@@ -1,11 +1,10 @@
-import React, { LegacyRef } from 'react';
+import React from 'react';
 import { SearchConversation } from './SearchConversation.tsx';
 import { SearchQuery } from '../interface/SearchResultInterface.tsx';
 
-export const SearchScrollView = (({searchQueries, removeSearchQuery, lastElementRef}:{
+export const SearchScrollView = (({searchQueries, removeSearchQuery}:{
   searchQueries: SearchQuery[]
   removeSearchQuery: (id: string) => string
-  lastElementRef: LegacyRef<HTMLDivElement>
 }) => {
   // FIXME: user, chatbot 데이터 따로 관리하고, 거기서 데이터 가져오는 코드 추가
   const userName = '민지';
@@ -16,9 +15,11 @@ export const SearchScrollView = (({searchQueries, removeSearchQuery, lastElement
   return (
     <div className="flex flex-col-reverse overflow-y-scroll no-scrollbar flex-1 pl-12 pr-12">
       {searchQueries.map((searchQuery) => (
-        <SearchConversation key={searchQuery.id} data={searchQuery} userName={userName} userImageUrl={userImageUrl} chatBotImageUrl={chatBotImageUrl} chatBotName={chatBotName} removeSearchQuery={removeSearchQuery}/>
+        <SearchConversation key={searchQuery.id} 
+          searchQuery={searchQuery} removeSearchQuery={removeSearchQuery}
+          userName={userName} userImageUrl={userImageUrl} 
+          chatBotImageUrl={chatBotImageUrl} chatBotName={chatBotName}/>
       ))}
-      <div ref={lastElementRef}/>
     </div>
   );
 });
