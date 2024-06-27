@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { EditableTag } from '../../component/EditableTag';
-import { TagCreateInput } from './memo/TagCreateInput';
-import { Memo } from '../../search/interface/SearchResultInterface';
+import { EditableTag } from '../../../component/EditableTag';
+import { TagCreateInput } from '../../../component/TagCreateInput';
+import { Memo } from '../../../search/interface/SearchResultInterface';
 
-export const EditableMemo = ({memo, updateMemo, editable=false}: {
+export const EditableMemo = ({memo, updateMemo, deleteMemo, editable=false}: {
   memo: Memo
   updateMemo: (newMemo: Memo) => void
+  deleteMemo: () => void
   editable?: boolean
 }) => {
   const {id, content, tags: _tags} = memo;
@@ -63,7 +64,10 @@ export const EditableMemo = ({memo, updateMemo, editable=false}: {
           )}
           {editable && <TagCreateInput value={tagInput} onChange={handleTagChange}/>}
         </div>
-        {editable && <button className="justify-self-end mt-2 bg-gray2 text-white rounded-full py-2 px-6">삭제</button>}
+        {editable && 
+          <button className="justify-self-end mt-2 bg-gray2 text-white rounded-full py-2 px-6"
+            onClick={deleteMemo}
+            >삭제</button>}
       </div>
     </div>
   );
