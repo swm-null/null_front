@@ -4,7 +4,7 @@ interface MemoInputProps {
   value: string;
   placeholder: string;
   buttonText: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (text: string) => void;
   onButtonClick: () => void;
 }
 
@@ -20,7 +20,7 @@ export const MemoInput = ({
     <div>
       <textarea
         value={value}
-        onChange={onChange}
+        onChange={e => onChange(e.target.value)}
         className="px-4 py-2 h-[120px] w-full focus:outline-none resize-none rounded-xl border-[0.12rem]"
         placeholder={placeholder}
         rows={4}

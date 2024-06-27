@@ -1,4 +1,5 @@
 import React from 'react';
+import { specialCharsPattern } from './TagCreateInput';
 
 export const EditableTag = ({text, editable=false, setText, onDelete}: {
     text: string
@@ -6,8 +7,11 @@ export const EditableTag = ({text, editable=false, setText, onDelete}: {
     setText: (text: string) => void
     onDelete: () => void
   }) => {
+  // tag 수정 시, tag에 특정 문자가 있으면 필터링 하고 표시
   const saveTag = (e: React.FormEvent<HTMLSpanElement>) => {
-    setText(e.currentTarget.innerText);
+    const innerText = e.currentTarget.innerText.replace(specialCharsPattern, '');
+    setText(innerText);
+    e.currentTarget.innerText=innerText;
   };
 
   return (

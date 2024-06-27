@@ -2,24 +2,26 @@ import React, { useRef } from 'react';
 
 interface Props{
   value: string;
-  onChange: (text: string) => void;
+  addTag: (text: string) => void;
 }
+
+export const specialCharsPattern = /[#,. \t\v\r\n\f\s]/g;
 
 export const TagCreateInput = ({
   value,
-  onChange,
+  addTag,
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const handleInputEvent = (e: React.FormEvent<HTMLDivElement>) => {
     const inputText = e.currentTarget.innerText;
-    
-    const specialCharsPattern = /[#,. \t\v\r\n\f\s]/g;
+
+    // 압력에 태그에 들어갈 수 없는 문자가 나오면, 새로운 태그 생성
     if (specialCharsPattern.test(inputText)) {
       if (ref.current) {
         ref.current.innerHTML=''
         const newTagText = inputText.replace(specialCharsPattern, '');
-        onChange(newTagText)
+        addTag(newTagText)
       }
     }
   };

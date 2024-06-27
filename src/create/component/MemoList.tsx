@@ -1,5 +1,5 @@
 import React from 'react';
-import { EditableMemo } from './memo/EditableMemo';
+import { EditableMemo } from './EditableMemo';
 import { Memo } from '../../search/interface/SearchResultInterface';
 
 interface MemoListProps {
@@ -8,8 +8,7 @@ interface MemoListProps {
   deleteMemo: (index: number) => void;
 }
 
-const MemoList = (props: MemoListProps) => {
-  const { memos, updateMemo, deleteMemo } = props;
+const MemoList = ({memos, updateMemo, deleteMemo}: MemoListProps) => {
 
   return (
     <div className='flex flex-col flex-1 overflow-y-scroll no-scrollbar my-4'>

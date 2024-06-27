@@ -5,8 +5,8 @@ import { AddPage } from './create/AddPage';
 
 function App() {
   return (
-    // <AddPage/>
-    <SearchPage/>
+    <AddPage/>
+    // <SearchPage/>
   );
 }
 
