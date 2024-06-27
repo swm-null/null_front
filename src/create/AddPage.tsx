@@ -27,6 +27,7 @@ export const AddPage = () => {
 
   const handleRefresh = () => {
     setMemos([]);
+    setMessage('');
   };
 
   return (
