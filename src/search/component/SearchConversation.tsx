@@ -1,7 +1,7 @@
 import React from 'react';
-import { SearchQuery } from '../interface/SearchResultInterface.tsx';
-import { RightMessage } from './conversation/RightMessage.tsx';
-import { LeftMessage } from './conversation/LeftMessage.tsx';
+import { SearchQuery } from '../interface/SearchResultInterface';
+import { RightMessage } from './conversation/RightMessage';
+import { LeftMessage } from './conversation/LeftMessage';
 
 export const SearchConversation = ({searchQuery, userName, chatBotName, userImageUrl, chatBotImageUrl, removeSearchQuery}: 
   {

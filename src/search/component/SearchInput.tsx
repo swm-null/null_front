@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { isSearchMemoResponse, isValidResponse, searchMemo } from '../../util/auth.tsx';
-import { Answer } from '../interface/SearchResultInterface.tsx';
+import { isSearchMemoResponse, isValidResponse, searchMemo } from '../../util/auth';
+import { Answer } from '../interface/SearchResultInterface';
 
 export const SearchInput = ({addSearchQuery, editSearchQuery}: 
   {

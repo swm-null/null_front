@@ -1,7 +1,8 @@
 import React from 'react';
-import { SearchInput } from './component/SearchInput.tsx';
-import { SearchScrollView } from './component/SearchScrollView.tsx';
-import { useCachedSearchQueries } from './hook/useCachedSearchQueries.tsx';
+import { SearchInput } from './component/SearchInput';
+import { SearchScrollView } from './component/SearchScrollView';
+import { useCachedSearchQueries } from './hook/useCachedSearchQueries';
+import { Header } from '../component/Header';
 
 export const SearchPage: React.FC = () => {
   const {
@@ -13,9 +14,7 @@ export const SearchPage: React.FC = () => {
 
   return (
     <div className='flex flex-col h-screen'>
-      <div className='px-4 py-4'>
-        <p className='font-semibold text-lg'>챗봇으로 메모 검색하기</p>
-      </div>
+      <Header text='메모 검색하기'/>
       <SearchScrollView
         removeSearchQuery={removeSearchQuery}
         searchQueries={searchQueries}/>
