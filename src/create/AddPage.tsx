@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Header } from '../component/Header';
+import { AnimatedHeader } from '../component/AnimatedHeader';
 import MemoList from './component/MemoList';
-import { Memo } from '../search/interface/SearchResultInterface';
-import { MemoInput } from './component/MemoInput';
+import { Memo } from '../interface/MemoInterface';
+import { MemoTextInput } from './component/MemoTextInput';
+import { addMemo, isAddMemoResponse, isValidResponse } from '../util/auth';
 
-export const AddPage = () => {
+export const AddPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimationDuration, headerToggleOnDuration, headerToggleOffDuration}: {
+    headerLeftMarginToggle?: boolean
+    headerLeftMargin?: number
+    headerAnimationDuration?: number
+    headerToggleOnDuration?: number
+    headerToggleOffDuration?: number
+  }) => {
   const [message, setMessage] = useState('');
-  // FIXME: BE와 통신해서, 결과를 memos에 저장하게 수정하기
   const [memos, setMemos] = useState<Memo[]>([]);
 
   const updateMemo = (index: number, newMemo: Memo) => {
@@ -17,28 +23,62 @@ export const AddPage = () => {
     setMemos((prev) => prev.filter((memo, i) => i !== index ));
   };
 
-  const handleMemoCreation = () => {
-    // FIXME: BE와 통신하는 코드 여기에 추가 작성하기
-    setMemos([
-      {id: '1', content: '메모 테스트1', tags: ['태그1']},
-      {id: '2', content: '메모 테스트2', tags: ['태그2']},
-    ]);
+  // generate 화면에 나오는 메모 객체 내용을 만들어주는 메소드
+  const generateMemoResultContext = async (text: string) => {
+    const response = await addMemo(text);
+    const answer = 
+      (!isValidResponse(response)) ? 
+        {
+          id: '1',
+          content: '죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+          tags: []
+        }
+      : (isAddMemoResponse(response)) ? 
+        {
+          id: response.id,
+          content: response.content,
+          tags: response.tags
+        }
+      : {
+          id: '1',
+          content: '테스트. 존재하지 않아야 정상인데 혹시 모르니',
+          tags: []
+        };
+
+    return answer as Memo;
+  }
+
+  const updateMemoResultList = async () => {
+    const answer = await generateMemoResultContext(message);
+    setMemos([answer]);
   };
 
+  /**
+   * TODO: 디버깅용 or 기능 살리기? 2024.06.28
+   * 메모를 추가하거나, 작성 도중에 화면을 비우고 싶을 때 사용하는 기능
+   */
   const handleRefresh = () => {
     setMemos([]);
     setMessage('');
   };
 
+  // FIXME: 하드 코딩된 텍스트 나중에 다국어지원(react-i18next)을 위해 변수로 관리
   return (
-    <div className="flex flex-col h-screen text-gray2">
-      <Header text={'메모 추가하기'} />
-      <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
-        <MemoInput
+    <div className="flex flex-col flex-1 h-screen text-gray2">
+      <AnimatedHeader 
+        text={'메모 추가하기'} 
+        leftMarginToggle={headerLeftMarginToggle}
+        leftMargin={headerLeftMargin}
+        animationDuration={headerAnimationDuration} 
+        toggleOnDurationDelay={headerToggleOnDuration}
+        toggleOffDurationDelay={headerToggleOffDuration}/>
+        <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
+        {/* TODO: 메모 내용 없으면, 버튼 비활성화 */}
+        <MemoTextInput
           value={message}
           onChange={setMessage}
           placeholder="입력 프롬프트"
-          onButtonClick={handleMemoCreation}
+          onButtonClick={updateMemoResultList}
           buttonText="메모 AI로 생성하기"
         />
         <div className="flex flex-col flex-1">

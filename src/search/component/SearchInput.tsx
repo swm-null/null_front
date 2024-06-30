@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { isSearchMemoResponse, isValidResponse, searchMemo } from '../../util/auth';
-import { Answer } from '../interface/SearchResultInterface';
+import { MemoSearchAnswer } from '../../interface/MemoInterface';
 
-export const SearchInput = ({addSearchQuery, editSearchQuery}: 
+export const SearchInput = ({addSearchConversation, editSearchConversation}: 
   {
-    addSearchQuery: (text: string) => string, 
-    editSearchQuery: (id: string, answer: Answer) => string, 
+    addSearchConversation: (text: string) => string, 
+    editSearchConversation: (id: string, answer: MemoSearchAnswer) => string, 
   }) => {
   const [message, setMessage] = useState('');
 
@@ -35,11 +35,11 @@ export const SearchInput = ({addSearchQuery, editSearchQuery}:
 
   const addSearchQueries = async (text: string) => {
     // 검색 내용과 답변 메시지 객체 추가(이 때, 답변 메시지 내용은 없음)
-    const answerID = addSearchQuery(text);
+    const answerID = addSearchConversation(text);
 
     // 검색 answer 메시지의 내용을 서버에 요청하고 받으면, 객체 수정
     const answer = await getSearchResponse(text);
-    editSearchQuery(answerID, answer);
+    editSearchConversation(answerID, answer);
   };
 
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
