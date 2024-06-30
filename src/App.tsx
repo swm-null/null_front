@@ -18,7 +18,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
   const [isOpen, setIsOpen] = useState(true);
   const scope = useSideBarOpenCloseButtonAnimation(isOpen);
-  const commonProps = {
+  const commonPageProps = {
     headerLeftMarginToggle: !isOpen,
     headerLeftMargin: HEADER_LEFT_MARGIN,
     headerAnimationDuration: HEADER_ANIMATION_DURATION,
@@ -28,11 +28,11 @@ const App = () => {
   const renderContent = () => {
     switch (currentPage) {
       case 'add':
-        return <AddPage {...commonProps}/>;
+        return <AddPage {...commonPageProps}/>;
       case 'search':
-        return <SearchPage {...commonProps}/>;
+        return <SearchPage {...commonPageProps}/>;
       default:
-        return <AddPage {...commonProps}/>;
+        return <AddPage {...commonPageProps}/>;
     }
   };
 
