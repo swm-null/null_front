@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as Config from '../config';
-import { Answer as MemoSearchAnswer } from '../search/interface/SearchResultInterface';
+import { Memo, MemoSearchAnswer } from '../interface/MemoInterface';
 const LOCALHOST = Config.LOCALHOST;
 
 export interface validResponse {
@@ -100,8 +100,11 @@ export const searchMemo = async (inputContent: string): Promise<searchMemoRespon
   }
 }
 
-// 2. FIXME: response 새로 만들어서 수정하기
-export const addMemo = async (inputContent: string): Promise<searchMemoResponse | errorResponse> => {
+interface addMemoResponse extends Memo, validResponse {
+}
+
+// 2. 
+export const addMemo = async (inputContent: string): Promise<addMemoResponse | errorResponse> => {
   const method = "addMemo";
   const endpoint = `${LOCALHOST}/memos`;
   const config = {
@@ -111,6 +114,7 @@ export const addMemo = async (inputContent: string): Promise<searchMemoResponse 
   }
   try {
     const response = await axios.post(endpoint, JSON.stringify({"content": inputContent}), config);
+    console.log(response);
     const { id, content, tags } = response.data;
     const responseInfo = {
       method,
@@ -162,4 +166,9 @@ export const isValidResponse = (response: validResponse | errorResponse): respon
 export const isSearchMemoResponse = (response: searchMemoResponse | errorResponse): response is searchMemoResponse => {
   // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
   return (response as searchMemoResponse).memos !== null && (response as searchMemoResponse).memos?.length !== 0;
+}
+
+export const isAddMemoResponse = (response: addMemoResponse | errorResponse): response is addMemoResponse => {
+  // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
+  return (response as addMemoResponse).content !== null;
 }

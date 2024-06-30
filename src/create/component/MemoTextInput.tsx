@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface MemoInputProps {
+interface MemoTextInputProps {
   value: string;
   placeholder: string;
   buttonText: string;
@@ -8,13 +8,13 @@ interface MemoInputProps {
   onButtonClick: () => void;
 }
 
-export const MemoInput = ({
+export const MemoTextInput = ({
     value,
     placeholder,
     buttonText,
     onChange,
     onButtonClick,
-  }: MemoInputProps) => {
+  }: MemoTextInputProps) => {
   
   return (
     <div>
