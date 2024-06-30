@@ -32,29 +32,29 @@ const SideBar = ({ setCurrentPage, isSideBarOpen, sideBarWidth, buttonAnimationD
   return (
     <motion.div 
       className='h-screen bg-gray-100 flex flex-col'
-      animate={sidebarControls} // 사이드바 너비를 제어할 animate 속성
-    >
-      <div className={`flex-1 p-4 w-[${sideBarWidth}px]`}>
-        <div className="grid my-6">
-          <motion.button 
-            className="my-4 flex justify-self-center justify-center py-2 px-6 text-white bg-gray-500 rounded-full"
-            onClick={() => setCurrentPage('add')}
-            animate={buttonControls} // 버튼의 opacity와 x 위치를 제어할 animate 속성
-            style={{ opacity: 0, x: -50 }}
-          >
-            <AddLogo className='w-4 h-4 self-center mr-2'/>
-            Add Memo
-          </motion.button>
+      animate={sidebarControls}>
+      <div className={`p-4 flex flex-col flex-1`} style={{width: sideBarWidth}}>
+        <div className="items-center my-6">
+          <div className='flex justify-center'>
+            <motion.button 
+              className="my-4 flex py-2 px-6 text-white bg-gray-500 rounded-full"
+              onClick={() => setCurrentPage('add')}
+              animate={buttonControls}
+              style={{ opacity: 0, x: -50 }}>
+              <AddLogo className='w-4 h-4 self-center mr-2'/>
+              Add Memo
+            </motion.button>
+          </div>
           <motion.button 
             className="flex items-center p-2 w-full text-left rounded"
             onClick={() => setCurrentPage('search')}
-            animate={buttonControls} // 버튼의 opacity와 x 위치를 제어할 animate 속성
-            style={{ opacity: 0, x: -50 }}
-          >
+            animate={buttonControls}
+            style={{ opacity: 0, x: -50 }}>
             <SearchLogo className='w-5 h-5 self-center mr-2'/>
             Search
           </motion.button>
         </div>
+        <div className='flex flex-col flex-1'/>
       </div>
     </motion.div>
   );
