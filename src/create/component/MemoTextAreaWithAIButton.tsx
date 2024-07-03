@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface MemoTextInputProps {
+interface MemoTextAreaWithAIButtonProps {
   value: string;
   placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -8,13 +8,13 @@ interface MemoTextInputProps {
   status: 'default' | 'loading' | 'success' | 'error';
 }
 
-export const MemoTextInput = ({
+export const MemoTextAreaWithAIButton = ({
     value,
     placeholder,
     onChange,
     onButtonClick,
     status
-  }: MemoTextInputProps) => {
+  }: MemoTextAreaWithAIButtonProps) => {
   const isDisabled = status === 'loading';
   
   return (

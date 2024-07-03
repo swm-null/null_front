@@ -1,7 +1,7 @@
 import React from 'react';
 import { SearchInput } from './component/SearchInput';
 import { SearchScrollView } from './component/SearchScrollView';
-import { useCachedSearchQueries } from './hook/useCachedSearchQueries';
+import { useSearchConversationManager } from './hook/useSearchConversationManager';
 import { AnimatedHeader } from '../component/AnimatedHeader';
 import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
 
@@ -11,7 +11,7 @@ export const SearchPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?
     addSearchConversation,
     editSearchConversation,
     removeSearchConversation,
-  } = useCachedSearchQueries();
+  } = useSearchConversationManager();
 
   return (
     <div className='flex flex-col flex-1 h-screen'>
@@ -23,7 +23,9 @@ export const SearchPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?
       <SearchScrollView
         removeSearchConversation={removeSearchConversation}
         searchConversations={searchConversations}/>
-      <SearchInput addSearchConversation={addSearchConversation} editSearchConversation={editSearchConversation} />
+      <SearchInput 
+        addSearchConversation={addSearchConversation} 
+        editSearchConversation={editSearchConversation} />
     </div>
   );
 };

@@ -100,12 +100,12 @@ export const searchMemo = async (inputContent: string): Promise<searchMemoRespon
   }
 }
 
-interface addMemoResponse extends Memo, validResponse {
+interface createMemoResponse extends Memo, validResponse {
 }
 
 // 2. 
-export const addMemo = async (inputContent: string): Promise<addMemoResponse | errorResponse> => {
-  const method = "addMemo";
+export const createMemo = async (inputContent: string): Promise<createMemoResponse | errorResponse> => {
+  const method = "createMemo";
   const endpoint = `${LOCALHOST}/memos`;
   const config = {
     headers: {
@@ -119,7 +119,7 @@ export const addMemo = async (inputContent: string): Promise<addMemoResponse | e
     const responseInfo = {
       method,
       status: response.status,
-      message: "메모 추가를 성공했습니다. ",
+      message: "메모를 생성했습니다. ",
       id,
       content,
       tags
@@ -168,7 +168,7 @@ export const isSearchMemoResponse = (response: searchMemoResponse | errorRespons
   return (response as searchMemoResponse).memos !== null && (response as searchMemoResponse).memos?.length !== 0;
 }
 
-export const isAddMemoResponse = (response: addMemoResponse | errorResponse): response is addMemoResponse => {
+export const isCreateMemoResponse = (response: createMemoResponse | errorResponse): response is createMemoResponse => {
   // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
-  return (response as addMemoResponse).content !== null;
+  return (response as createMemoResponse).content !== null;
 }
