@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AnimatedHeader } from '../component/AnimatedHeader';
 import MemoList from './component/MemoList';
 import { MemoTextInput } from './component/MemoTextInput';
@@ -6,16 +6,31 @@ import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/
 import useMemoManager from './hook/useMemoManager';
 
 export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean }) => {
+  const [message, setMessage] = useState('');
   const {
-    message,
     memos,
     status,
     updateMemo,
     deleteMemo,
     updateMemoResultList,
-    handleRefresh,
-    handleMessageChange,
+    messageReset,
+    setStatus,
   } = useMemoManager();
+
+  // input의 text가 수정 되면, status를 default로 초기화
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
+    setStatus('default');
+  };
+
+  const handleRefresh = () => {
+    messageReset();
+    setMessage('');
+  };
+
+  const handleUpdateMemoResultList = async () => {
+    await updateMemoResultList(message);
+  };
 
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
@@ -30,7 +45,7 @@ export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: b
           value={message}
           onChange={handleMessageChange}
           placeholder="입력 프롬프트"
-          onButtonClick={updateMemoResultList}
+          onButtonClick={handleUpdateMemoResultList}
           status={status}
         />
         <div className="flex flex-col flex-1">

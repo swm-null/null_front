@@ -3,7 +3,6 @@ import { Memo } from '../../interface/MemoInterface';
 import { addMemo, isAddMemoResponse, isValidResponse } from '../../util/auth';
 
 const useMemoManager = () => {
-  const [message, setMessage] = useState('');
   const [memos, setMemos] = useState<Memo[]>([]);
   const [status, setStatus] = useState<'default' | 'loading' | 'success' | 'error'>('default');
 
@@ -36,7 +35,7 @@ const useMemoManager = () => {
     return answer as Memo;
   };
 
-  const updateMemoResultList = async () => {
+  const updateMemoResultList = async (message: string) => {
     setStatus('loading');
     try {
       const answer = await generateMemoResultContext(message);
@@ -47,26 +46,19 @@ const useMemoManager = () => {
     }
   };
 
-  const handleRefresh = () => {
+  const messageReset = () => {
     setMemos([]);
-    setMessage('');
-    setStatus('default');
-  };
-
-  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
     setStatus('default');
   };
 
   return {
-    message,
     memos,
     status,
     updateMemo,
     deleteMemo,
     updateMemoResultList,
-    handleRefresh,
-    handleMessageChange,
+    messageReset,
+    setStatus,
   };
 };
 
