@@ -6,12 +6,12 @@ import { motion, useAnimation } from 'framer-motion';
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
   isSideBarOpen: boolean;
-  sideBarWidth: number;
+  sideBarWidth?: number;
   buttonAnimationDuration: number;
   sideBarAnimationDuration: number;
 }
 
-const SideBar = ({ setCurrentPage, isSideBarOpen, sideBarWidth, buttonAnimationDuration, sideBarAnimationDuration }: SideBarProps) => {
+const SideBar = ({ setCurrentPage, isSideBarOpen, sideBarWidth=250, buttonAnimationDuration, sideBarAnimationDuration }: SideBarProps) => {
   const buttonControls = useAnimation();
   const sidebarControls = useAnimation();
 
@@ -33,6 +33,7 @@ const SideBar = ({ setCurrentPage, isSideBarOpen, sideBarWidth, buttonAnimationD
     <motion.div 
       className='h-screen bg-gray-100 flex flex-col'
       animate={sidebarControls}>
+      {/* TODO: tailwind에서 동적 데이터 지원하는지 확인 */}
       <div className={`p-4 flex flex-col flex-1`} style={{width: sideBarWidth}}>
         <div className="items-center my-6">
           <div className='flex justify-center'>

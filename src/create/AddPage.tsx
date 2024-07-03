@@ -4,14 +4,9 @@ import MemoList from './component/MemoList';
 import { Memo } from '../interface/MemoInterface';
 import { MemoTextInput } from './component/MemoTextInput';
 import { addMemo, isAddMemoResponse, isValidResponse } from '../util/auth';
+import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
 
-export const AddPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimationDuration, headerToggleOnDuration, headerToggleOffDuration}: {
-    headerLeftMarginToggle?: boolean
-    headerLeftMargin?: number
-    headerAnimationDuration?: number
-    headerToggleOnDuration?: number
-    headerToggleOffDuration?: number
-  }) => {
+export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean}) => {
   const [message, setMessage] = useState('');
   const [memos, setMemos] = useState<Memo[]>([]);
   const [status, setStatus] = useState<'default' | 'loading' | 'success' | 'error'>('default');
@@ -79,10 +74,8 @@ export const AddPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimati
       <AnimatedHeader 
         text={'메모 추가하기'} 
         leftMarginToggle={headerLeftMarginToggle}
-        leftMargin={headerLeftMargin}
-        animationDuration={headerAnimationDuration} 
-        toggleOnDurationDelay={headerToggleOnDuration}
-        toggleOffDurationDelay={headerToggleOffDuration}/>
+        animationDuration={HEADER_ANIMATION_DURATION} 
+        toggleOnDurationDelay={HEADER_ANIMATION_DELAY}/>
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <MemoTextInput
           value={message}

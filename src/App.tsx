@@ -5,41 +5,28 @@ import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { AddPage } from './create/AddPage';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
-
-const SIDEBAR_WIDTH = 250;
-const HEADER_LEFT_MARGIN = 48;
-const SIDEBAR_ANIMATION_DURATION = 300;
-const HEADER_ANIMATION_DURATION = SIDEBAR_ANIMATION_DURATION / 1000;
-const SIDEBAR_BUTTON_ANIMATION_DURATION = 200;
-const HEADER_ANIMATION_DELAY = SIDEBAR_BUTTON_ANIMATION_DURATION / 1000;
-
+import { SIDEBAR_ANIMATION_DURATION, SIDEBAR_BUTTON_ANIMATION_DURATION } from './constants/HeaderSideBarAnimation';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
   const [isOpen, setIsOpen] = useState(true);
   const scope = useSideBarOpenCloseButtonAnimation(isOpen);
-  const commonPageProps = {
-    headerLeftMarginToggle: !isOpen,
-    headerLeftMargin: HEADER_LEFT_MARGIN,
-    headerAnimationDuration: HEADER_ANIMATION_DURATION,
-    headerToggleOnDuration: HEADER_ANIMATION_DELAY,
-  };
 
   const renderContent = () => {
     switch (currentPage) {
       case 'add':
-        return <AddPage {...commonPageProps}/>;
+        return <AddPage headerLeftMarginToggle={!isOpen}/>;
       case 'search':
-        return <SearchPage {...commonPageProps}/>;
+        return <SearchPage headerLeftMarginToggle={!isOpen}/>;
       default:
-        return <AddPage {...commonPageProps}/>;
+        return <AddPage headerLeftMarginToggle={!isOpen}/>;
     }
   };
 
   return (
     <div className="relative flex w-full h-full">
       <SideBar 
-        setCurrentPage={setCurrentPage} isSideBarOpen={isOpen} sideBarWidth={SIDEBAR_WIDTH}
+        setCurrentPage={setCurrentPage} isSideBarOpen={isOpen}
         sideBarAnimationDuration={SIDEBAR_ANIMATION_DURATION} buttonAnimationDuration={SIDEBAR_BUTTON_ANIMATION_DURATION}
         />
       <div ref={scope} className="flex flex-col w-full h-screen  overflow-x-hidden">

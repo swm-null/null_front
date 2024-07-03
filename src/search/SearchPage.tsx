@@ -3,14 +3,9 @@ import { SearchInput } from './component/SearchInput';
 import { SearchScrollView } from './component/SearchScrollView';
 import { useCachedSearchQueries } from './hook/useCachedSearchQueries';
 import { AnimatedHeader } from '../component/AnimatedHeader';
+import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
 
-export const SearchPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimationDuration, headerToggleOnDuration, headerToggleOffDuration}: {
-  headerLeftMarginToggle?: boolean
-  headerLeftMargin?: number
-  headerAnimationDuration?: number
-  headerToggleOnDuration?: number
-  headerToggleOffDuration?: number
-}) => {
+export const SearchPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean}) => {
   const {
     searchConversations,
     addSearchConversation,
@@ -23,10 +18,8 @@ export const SearchPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnim
       <AnimatedHeader 
         text={'메모 검색하기'} 
         leftMarginToggle={headerLeftMarginToggle}
-        leftMargin={headerLeftMargin}
-        animationDuration={headerAnimationDuration} 
-        toggleOnDurationDelay={headerToggleOnDuration}
-        toggleOffDurationDelay={headerToggleOffDuration}/>
+        animationDuration={HEADER_ANIMATION_DURATION} 
+        toggleOnDurationDelay={HEADER_ANIMATION_DELAY}/>
       <SearchScrollView
         removeSearchConversation={removeSearchConversation}
         searchConversations={searchConversations}/>
