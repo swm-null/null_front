@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { AnimatedHeader } from '../component/AnimatedHeader';
 import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
-import useMemoManager from './hook/useMemoManager';
+import useResultMemoManagerWithStatus from './hook/useResultMemoManagerWithStatus';
 import { MemoTextAreaWithAIButton } from './component/MemoTextAreaWithAIButton';
 import { ResultMemoList } from './component/ResultMemoList';
 
 export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean }) => {
   const [message, setMessage] = useState('');
   const {
-    memos,
+    resultMemos,
     status,
-    updateMemo,
-    deleteMemo,
-    updateMemoResultList,
-    messageReset,
+    updateResultMemo,
+    deleteResultMemo,
+    createResultMemosAndEditStatus,
+    resetResultMemos,
     setStatus,
-  } = useMemoManager();
+  } = useResultMemoManagerWithStatus();
 
   // input의 text가 수정 되면, status를 default로 초기화
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -24,12 +24,12 @@ export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: b
   };
 
   const handleRefresh = () => {
-    messageReset();
+    resetResultMemos();
     setMessage('');
   };
 
-  const handleUpdateMemoResultList = async () => {
-    await updateMemoResultList(message);
+  const handleUpdateResultMemoListAndStatus = async () => {
+    await createResultMemosAndEditStatus(message);
   };
 
   return (
@@ -45,12 +45,12 @@ export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: b
           value={message}
           onChange={handleMessageChange}
           placeholder="입력 프롬프트"
-          onButtonClick={handleUpdateMemoResultList}
+          onButtonClick={handleUpdateResultMemoListAndStatus}
           status={status}
         />
         <div className="flex flex-col flex-1">
           {status === 'error' && <span className="error-text">{"죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."}</span>}
-          {status === 'success' && <ResultMemoList memos={memos} updateMemo={updateMemo} deleteMemo={deleteMemo} />}
+          {status === 'success' && <ResultMemoList memos={resultMemos} updateResultMemo={updateResultMemo} deleteResultMemo={deleteResultMemo} />}
         </div>
         <button className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6" onClick={handleRefresh}>
           새로고침(임시 버튼)
