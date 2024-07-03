@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { AnimatedHeader } from '../component/AnimatedHeader';
 import MemoList from './component/MemoList';
-import { MemoTextInput } from './component/MemoTextInput';
 import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
 import useMemoManager from './hook/useMemoManager';
+import { MemoTextAreaWithAIButton } from './component/MemoTextAreaWithAIButton';
 
 export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean }) => {
   const [message, setMessage] = useState('');
@@ -41,7 +41,7 @@ export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: b
         toggleOnDurationDelay={HEADER_ANIMATION_DELAY}
       />
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
-        <MemoTextInput
+        <MemoTextAreaWithAIButton
           value={message}
           onChange={handleMessageChange}
           placeholder="입력 프롬프트"
