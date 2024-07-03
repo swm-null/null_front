@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { AnimatedHeader } from '../component/AnimatedHeader';
-import MemoList from './component/MemoList';
 import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
 import useMemoManager from './hook/useMemoManager';
 import { MemoTextAreaWithAIButton } from './component/MemoTextAreaWithAIButton';
+import { ResultMemoList } from './component/ResultMemoList';
 
 export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean }) => {
   const [message, setMessage] = useState('');
@@ -50,7 +50,7 @@ export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: b
         />
         <div className="flex flex-col flex-1">
           {status === 'error' && <span className="error-text">{"죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."}</span>}
-          {status === 'success' && <MemoList memos={memos} updateMemo={updateMemo} deleteMemo={deleteMemo} />}
+          {status === 'success' && <ResultMemoList memos={memos} updateMemo={updateMemo} deleteMemo={deleteMemo} />}
         </div>
         <button className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6" onClick={handleRefresh}>
           새로고침(임시 버튼)

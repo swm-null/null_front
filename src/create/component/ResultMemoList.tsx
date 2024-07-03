@@ -2,13 +2,13 @@ import React from 'react';
 import { ResultMemo } from './ResultMemo';
 import { Memo } from '../../interface/MemoInterface';
 
-interface MemoListProps {
+interface ResultMemoListProps {
   memos: Memo[];
   updateMemo: (index: number, newMemo: Memo) => void;
   deleteMemo: (index: number) => void;
 }
 
-const MemoList = ({memos, updateMemo, deleteMemo}: MemoListProps) => {
+export const ResultMemoList = ({memos, updateMemo, deleteMemo}: ResultMemoListProps) => {
 
   return (
     <>
@@ -23,5 +23,3 @@ const MemoList = ({memos, updateMemo, deleteMemo}: MemoListProps) => {
     </>
   );
 };
-
-export default MemoList;
