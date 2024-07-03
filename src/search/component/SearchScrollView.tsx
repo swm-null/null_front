@@ -1,10 +1,10 @@
 import React from 'react';
 import { SearchConversation } from './SearchConversation';
-import { SearchQuery } from '../interface/SearchResultInterface';
+import { MemoSearchConversation } from '../../interface/MemoInterface';
 
-export const SearchScrollView = (({searchQueries, removeSearchQuery}:{
-  searchQueries: SearchQuery[]
-  removeSearchQuery: (id: string) => string
+export const SearchScrollView = (({searchConversations, removeSearchConversation}:{
+  searchConversations: MemoSearchConversation[]
+  removeSearchConversation: (id: string) => string
 }) => {
   // FIXME: user, chatbot 데이터 따로 관리하고, 거기서 데이터 가져오는 코드 추가
   const userName = '민지';
@@ -13,10 +13,10 @@ export const SearchScrollView = (({searchQueries, removeSearchQuery}:{
   const chatBotImageUrl = 'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
 
   return (
-    <div className="flex flex-col-reverse overflow-y-scroll no-scrollbar flex-1 pl-12 pr-12">
-      {searchQueries.map((searchQuery) => (
-        <SearchConversation key={searchQuery.id} 
-          searchQuery={searchQuery} removeSearchQuery={removeSearchQuery}
+    <div className="flex-1 overflow-y-scroll no-scrollbar flex flex-col-reverse pl-12 pr-12">
+      {searchConversations.map((searchConversation) => (
+        <SearchConversation key={searchConversation.id} 
+          data={searchConversation} removeSearchConversation={removeSearchConversation}
           userName={userName} userImageUrl={userImageUrl} 
           chatBotImageUrl={chatBotImageUrl} chatBotName={chatBotName}/>
       ))}

@@ -2,23 +2,28 @@ import React from 'react';
 import { SearchInput } from './component/SearchInput';
 import { SearchScrollView } from './component/SearchScrollView';
 import { useCachedSearchQueries } from './hook/useCachedSearchQueries';
-import { Header } from '../component/Header';
+import { AnimatedHeader } from '../component/AnimatedHeader';
+import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
 
-export const SearchPage: React.FC = () => {
+export const SearchPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean}) => {
   const {
-    searchQueries,
-    addSearchQuery,
-    editSearchQuery,
-    removeSearchQuery,
+    searchConversations,
+    addSearchConversation,
+    editSearchConversation,
+    removeSearchConversation,
   } = useCachedSearchQueries();
 
   return (
-    <div className='flex flex-col h-screen'>
-      <Header text='메모 검색하기'/>
+    <div className='flex flex-col flex-1 h-screen'>
+      <AnimatedHeader 
+        text={'메모 검색하기'} 
+        leftMarginToggle={headerLeftMarginToggle}
+        animationDuration={HEADER_ANIMATION_DURATION} 
+        toggleOnDurationDelay={HEADER_ANIMATION_DELAY}/>
       <SearchScrollView
-        removeSearchQuery={removeSearchQuery}
-        searchQueries={searchQueries}/>
-      <SearchInput addSearchQuery={addSearchQuery} editSearchQuery={editSearchQuery} />
+        removeSearchConversation={removeSearchConversation}
+        searchConversations={searchConversations}/>
+      <SearchInput addSearchConversation={addSearchConversation} editSearchConversation={editSearchConversation} />
     </div>
   );
 };
