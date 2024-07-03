@@ -3,7 +3,7 @@ import { v4 as uuid_v4 } from 'uuid';
 import { MemoSearchAnswer, MemoSearchConversation } from '../../interface/MemoInterface';
 
 const MAX_SEARCH_QUERIES = 100;
-export const useCachedSearchQueries = () => {
+export const useSearchConversationManager = () => {
   // searchConversations: 화면에서 보이는 검색 결과를 저장
   // 화면을 불러왔을 때, localStorage에서 가져온, 이전에 검색한 결과
   const [searchConversations, setSearchConversations] = useState<MemoSearchConversation[]>(() => JSON.parse(localStorage.getItem('search_queries') || '[]'));
