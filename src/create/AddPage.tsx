@@ -14,26 +14,25 @@ export const AddPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimati
   }) => {
   const [message, setMessage] = useState('');
   const [memos, setMemos] = useState<Memo[]>([]);
+  const [status, setStatus] = useState<'default' | 'loading' | 'success' | 'error'>('default');
 
   const updateMemo = (index: number, newMemo: Memo) => {
     setMemos((prev) => prev.map((memo, i) => (i === index ? newMemo : memo)));
   };
 
   const deleteMemo = (index: number) => {
-    setMemos((prev) => prev.filter((memo, i) => i !== index ));
+    setMemos((prev) => prev.filter((memo, i) => i !== index));
   };
 
   // generate 화면에 나오는 메모 객체 내용을 만들어주는 메소드
   const generateMemoResultContext = async (text: string) => {
     const response = await addMemo(text);
+    if (!isValidResponse(response)) {
+      throw new Error('error');
+    }
+
     const answer = 
-      (!isValidResponse(response)) ? 
-        {
-          id: '1',
-          content: '죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.',
-          tags: []
-        }
-      : (isAddMemoResponse(response)) ? 
+      (isAddMemoResponse(response)) ? 
         {
           id: response.id,
           content: response.content,
@@ -49,8 +48,14 @@ export const AddPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimati
   }
 
   const updateMemoResultList = async () => {
-    const answer = await generateMemoResultContext(message);
-    setMemos([answer]);
+    setStatus('loading');
+    try {
+      const answer = await generateMemoResultContext(message);
+      setMemos([answer]);
+      setStatus('success');
+    } catch (error) {
+      setStatus('error');
+    }
   };
 
   /**
@@ -60,6 +65,12 @@ export const AddPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimati
   const handleRefresh = () => {
     setMemos([]);
     setMessage('');
+    setStatus('default');
+  };
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
+    setStatus('default');
   };
 
   // FIXME: 하드 코딩된 텍스트 나중에 다국어지원(react-i18next)을 위해 변수로 관리
@@ -72,18 +83,17 @@ export const AddPage = ({headerLeftMarginToggle, headerLeftMargin, headerAnimati
         animationDuration={headerAnimationDuration} 
         toggleOnDurationDelay={headerToggleOnDuration}
         toggleOffDurationDelay={headerToggleOffDuration}/>
-        <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
-        {/* TODO: 메모 내용 없으면, 버튼 비활성화 */}
+      <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <MemoTextInput
           value={message}
-          onChange={setMessage}
+          onChange={handleMessageChange}
           placeholder="입력 프롬프트"
           onButtonClick={updateMemoResultList}
-          buttonText="메모 AI로 생성하기"
-        />
+          status={status}/>
+        {/* 메모 AI로 생성하기 결과 보여주는 div */}
         <div className="flex flex-col flex-1">
-          {memos.length !== 0 && <span className="mt-3">AI로 생성한 메모를 추가했습니다. </span>}
-          <MemoList memos={memos} updateMemo={updateMemo} deleteMemo={deleteMemo}/>
+          {status === 'error' && <span className="error-text">{"죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."}</span>}
+          {status==='success' && <MemoList memos={memos} updateMemo={updateMemo} deleteMemo={deleteMemo}/>}
         </div>
         <button className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6" onClick={handleRefresh}>
           새로고침(임시 버튼)
