@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchConversation } from './SearchConversation';
-import { MemoSearchConversation } from '../../interface/MemoInterface';
+import { MemoSearchConversation } from 'interfaces/MemoInterface';
 
 export const SearchScrollView = (({searchConversations, removeSearchConversation}:{
   searchConversations: MemoSearchConversation[]

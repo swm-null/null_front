@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
-import { SearchPage } from './search/SearchPage';
 import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
-import { AddPage } from './create/AddPage';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
 import { SIDEBAR_ANIMATION_DURATION, SIDEBAR_BUTTON_ANIMATION_DURATION } from './constants/HeaderSideBarAnimation';
+import { AddPage, SearchPage } from './pages';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');

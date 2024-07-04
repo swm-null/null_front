@@ -1,5 +1,6 @@
 import React from 'react';
-import { MemoSearchAnswer } from '../../../interface/MemoInterface';
+import { MemoSearchAnswer } from 'interfaces/MemoInterface';
+import { EditableMemo } from 'components/memo';
 
 export const LeftMessage = ({ name, imageUrl, content }: 
   {
@@ -10,17 +11,9 @@ export const LeftMessage = ({ name, imageUrl, content }:
 
   const processedMessageContent = (
     content.memos?.map((memo) => {
-      const tags = memo.tags;
-
       return (
-        <div key={memo.id} className="flex-shrink-0 p-3 bg-gray1 rounded-lg w-72 whitespace-normal break-words text-base">
-          {memo.content}
-          <div className='flex-1 m-1'/>
-          <div className='mt-2'>
-            {tags.map((tag, index) => (
-              <span key={index}>{`#${tag} `}</span>
-            ))}
-          </div>
+        <div key={memo.id} className="flex-shrink-0 bg-gray1 rounded-lg w-72 whitespace-normal break-words text-base">
+          <EditableMemo memo={memo}/>
         </div>
       );
   }));

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as Config from '../config';
-import { Memo, MemoSearchAnswer } from '../interface/MemoInterface';
+import { Memo, MemoSearchAnswer } from '../interfaces/MemoInterface';
 const LOCALHOST = Config.LOCALHOST;
 
 export interface validResponse {

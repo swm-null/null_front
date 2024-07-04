@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { isSearchMemoResponse, isValidResponse, searchMemo } from '../../util/auth';
-import { MemoSearchAnswer } from '../../interface/MemoInterface';
+import { isSearchMemoResponse, isValidResponse, searchMemo } from 'utils/auth';
+import { MemoSearchAnswer } from 'interfaces/MemoInterface';
 
 export const SearchInput = ({addSearchConversation, editSearchConversation}: 
   {

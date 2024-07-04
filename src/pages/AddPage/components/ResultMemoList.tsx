@@ -1,6 +1,6 @@
 import React from 'react';
-import { ResultMemo } from './ResultMemo';
-import { Memo } from '../../interface/MemoInterface';
+import { EditableMemo as ResultMemo } from 'components/memo';
+import { Memo } from 'interfaces/MemoInterface';
 
 interface ResultMemoListProps {
   memos: Memo[];
@@ -16,7 +16,11 @@ export const ResultMemoList = ({memos, updateResultMemo, deleteResultMemo}: Resu
       <div className='flex flex-col flex-1 overflow-y-scroll no-scrollbar my-4'>
         <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-4'>
           {memos.map((memo, index) => (
-            <ResultMemo key={memo.id} memo={memo} updateMemo={(newMemo) => updateResultMemo(index, newMemo)} deleteMemo={()=> deleteResultMemo(index)}/>
+            <ResultMemo 
+              key={memo.id} 
+              memo={memo} 
+              updateMemo={(newMemo) => updateResultMemo(index, newMemo)} 
+              deleteMemo={()=> deleteResultMemo(index)}/>
           ))}
         </div>
       </div>
