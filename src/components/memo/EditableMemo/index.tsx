@@ -1,35 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Memo } from 'interfaces/MemoInterface';
 import { TagManager } from './TagManager';
+import { TextareaAutosize } from '@mui/material';
 
 const EditableMemoText = ({ message, setMessage, editable = false }: {
   message: string
   setMessage: (newMessage: string) => void
   editable?: boolean
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
-  const adjustTextareaHeight = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'; // 초기 높이를 자동으로 설정
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 내용물에 따라 높이 설정
-    }
-  };
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [message]);
-
   return (
-    <textarea
-      ref={textareaRef}
+    <TextareaAutosize
       className='p-2 mb-1 w-full bg-transparent focus:outline-none resize-none rounded-xl'
       value={message}
-      rows={1}
       onChange={handleChange}
       readOnly={!editable}
     />
@@ -59,7 +45,7 @@ export const EditableMemo = ({ memo, updateMemo, deleteMemo, editable = false }:
   }, [id, message, tags, memo, updateMemo]);
 
   return (
-    <div className='p-2 grid first-letter:flex-col rounded-md border-[1px]'>
+    <div className='p-2 grid first-letter:flex-col bg-gray1 rounded-md border-[1px]'>
       <EditableMemoText message={message} setMessage={setMessage} editable={editable}/>
       <TagManager tags={tags} setTags={setTags} editable={editable}/>
       {editable &&
