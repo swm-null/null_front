@@ -1,7 +1,7 @@
 import React from 'react';
-import { MemoSearchConversation } from '../../interface/MemoInterface';
-import { RightMessage } from './conversation/RightMessage';
-import { LeftMessage } from './conversation/LeftMessage';
+import { MemoSearchConversation } from 'interfaces/MemoInterface';
+import { RightMessage } from './RightMessage';
+import { LeftMessage } from './LeftMessage';
 
 export const SearchConversation = ({data, userName, chatBotName, userImageUrl, chatBotImageUrl, removeSearchConversation}: 
   {

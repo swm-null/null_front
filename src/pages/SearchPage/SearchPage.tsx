@@ -1,9 +1,8 @@
 import React from 'react';
-import { SearchInput } from './component/SearchInput';
-import { SearchScrollView } from './component/SearchScrollView';
 import { useSearchConversationManager } from './hook/useSearchConversationManager';
-import { AnimatedHeader } from '../component/AnimatedHeader';
-import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
+import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from 'constants/HeaderSideBarAnimation';
+import { AnimatedHeader } from 'components/ui';
+import { SearchInput, SearchScrollView } from './components';
 
 export const SearchPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean}) => {
   const {
@@ -14,7 +13,7 @@ export const SearchPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?
   } = useSearchConversationManager();
 
   return (
-    <div className='flex flex-col flex-1 h-screen'>
+    <div className='flex flex-col flex-1 h-screen text-gray2'>
       <AnimatedHeader 
         text={'메모 검색하기'} 
         leftMarginToggle={headerLeftMarginToggle}
@@ -23,7 +22,7 @@ export const SearchPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?
       <SearchScrollView
         removeSearchConversation={removeSearchConversation}
         searchConversations={searchConversations}/>
-      <SearchInput 
+      <SearchInput
         addSearchConversation={addSearchConversation} 
         editSearchConversation={editSearchConversation} />
     </div>

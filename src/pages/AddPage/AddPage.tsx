@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { AnimatedHeader } from '../component/AnimatedHeader';
-import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from '../constants/HeaderSideBarAnimation';
+import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from 'constants/HeaderSideBarAnimation';
 import useResultMemoManagerWithStatus from './hook/useResultMemoManagerWithStatus';
-import { MemoTextAreaWithAIButton } from './component/MemoTextAreaWithAIButton';
-import { ResultMemoList } from './component/ResultMemoList';
+import { AnimatedHeader } from 'components/ui';
+import { MemoTextAreaWithAIButton, ResultMemoList } from './components';
 
 export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean }) => {
   const [message, setMessage] = useState('');

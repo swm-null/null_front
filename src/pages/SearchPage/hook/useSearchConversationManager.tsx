@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
-import { MemoSearchAnswer, MemoSearchConversation } from '../../interface/MemoInterface';
+import { MemoSearchAnswer, MemoSearchConversation } from 'interfaces/MemoInterface';
 
 const MAX_SEARCH_QUERIES = 100;
 export const useSearchConversationManager = () => {

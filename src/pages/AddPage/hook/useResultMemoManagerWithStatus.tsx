@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Memo } from '../../interface/MemoInterface';
-import { createMemo, isCreateMemoResponse, isValidResponse } from '../../util/auth';
+import { Memo } from 'interfaces/MemoInterface';
+import { createMemo, isCreateMemoResponse, isValidResponse } from 'utils/auth';
 
 /**
  * 서버와 통신하여, 입력한 메모 내용으로 태그를 가진 메모 리스트(resultMemos)를 생성하고, 
@@ -29,7 +29,7 @@ const useResultMemoManagerWithStatus = () => {
       throw new Error('not valid status error');
     } else if (!isCreateMemoResponse(response)) {
       throw new Error('not valid response structure error');
-    }
+    } 
 
     const answer = {
       id: response.id,
