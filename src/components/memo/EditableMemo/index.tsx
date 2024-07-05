@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Memo } from 'interfaces/MemoInterface';
-import { TagManager } from 'components/ui';
-import { tagInvalidCharsPattern } from 'constants/TagRule';
+import { TagManager } from './TagManager';
 
 const EditableMemoText = ({ message, setMessage, editable = false }: {
   message: string
@@ -62,7 +61,7 @@ export const EditableMemo = ({ memo, updateMemo, deleteMemo, editable = false }:
   return (
     <div className='p-2 grid first-letter:flex-col rounded-md border-[1px]'>
       <EditableMemoText message={message} setMessage={setMessage} editable={editable}/>
-      <TagManager tags={tags} setTags={setTags} editable={editable} invalidCharsPattern={tagInvalidCharsPattern}/>
+      <TagManager tags={tags} setTags={setTags} editable={editable}/>
       {editable &&
         <button className="text-right justify-self-end mt-2 bg-gray2 text-white rounded-full py-2 px-6"
           onClick={deleteMemo}>삭제

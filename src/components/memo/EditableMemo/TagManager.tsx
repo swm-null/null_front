@@ -1,18 +1,18 @@
 import React, { useRef, useState } from 'react';
 import { EditableTag } from 'components/ui/';
+import { tagInvalidCharsPattern } from 'constants/memo/TagRule';
 
 interface TagCreateInputProps{
   value: string
-  invalidCharsPattern: RegExp
   addTag: (text: string) => void
 }
-const TagCreateInput = ({ value, invalidCharsPattern, addTag }: TagCreateInputProps) => {
+const TagCreateInput = ({ value, addTag }: TagCreateInputProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
     // text 업데이트 전, 다시 한번 invalidChars 필터링
-    if (invalidCharsPattern.test(e.currentTarget.innerText)) {
-      const innerText = e.currentTarget.innerText.replace(invalidCharsPattern, '');
+    if (tagInvalidCharsPattern.test(e.currentTarget.innerText)) {
+      const innerText = e.currentTarget.innerText.replace(tagInvalidCharsPattern, '');
       addTag(innerText)
       e.currentTarget.innerText='';
     }
@@ -32,13 +32,11 @@ const TagCreateInput = ({ value, invalidCharsPattern, addTag }: TagCreateInputPr
 interface TagManagerProps {
   tags: string[]
   editable: boolean
-  invalidCharsPattern?: RegExp
   setTags: (tags: string[]) => void
 }
 export const TagManager = ({ 
     tags, 
     editable, 
-    invalidCharsPattern = /[#,. \t\v\r\n\f\s]/g, 
     setTags 
   }: TagManagerProps) => {
   const [tagInput, setTagInput] = useState('');
@@ -69,9 +67,9 @@ export const TagManager = ({
         <EditableTag 
           key={index} text={tag} editable={editable} 
           onTextChange={(text) => updateTag(index, text)} onDelete={() => deleteTag(index)}
-          invalidCharsPattern={invalidCharsPattern}/>
+          invalidCharsPattern={tagInvalidCharsPattern}/>
       )}
-      {editable && <TagCreateInput value={tagInput} invalidCharsPattern={invalidCharsPattern} addTag={addTag} />}
+      {editable && <TagCreateInput value={tagInput} addTag={addTag} />}
     </div>
   );
 };

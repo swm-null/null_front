@@ -5,10 +5,10 @@ interface EditableTagProps {
   text: string
   editable?: boolean
   /**
-   * tag에 제외하고 싶은 문자 설정 후 string으로 전달
-   * default: "#,. \t\v\r\n\f"
+   * tag에 제외하고 싶은 문자 Regex 규칙 전달
+   * ex: /[#,. \t\v\r\n\f\s]/g
    */
-  invalidCharsPattern?: RegExp
+  invalidCharsPattern: RegExp
   /**
    * tag의 text 변경사항을 받고 싶은 경우, text를 저장하는 메소드 전달
    */
@@ -22,7 +22,7 @@ interface EditableTagProps {
 export const EditableTag = ({ 
     text, 
     editable = false, 
-    invalidCharsPattern = /[#,. \t\v\r\n\f\s]/g,
+    invalidCharsPattern,
     onTextChange, 
     onDelete, 
   }: EditableTagProps) => {
