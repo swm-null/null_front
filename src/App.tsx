@@ -4,7 +4,7 @@ import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
 import { SIDEBAR_ANIMATION_DURATION, SIDEBAR_BUTTON_ANIMATION_DURATION } from './constants/HeaderSideBarAnimation';
-import { AddPage, SearchPage } from './pages';
+import { AddPage, SearchPage } from 'pages';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
