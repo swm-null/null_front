@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import { ReactComponent as SearchLogo } from '../assets/icons/search.svg';
-import { ReactComponent as AddLogo } from '../assets/icons/add.svg';
 import { motion, useAnimation } from 'framer-motion';
+import { AddIcon, SearchIcon } from 'assets/icons';
 
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
@@ -42,7 +41,7 @@ const SideBar = ({ setCurrentPage, isSideBarOpen, sideBarWidth=250, buttonAnimat
               onClick={() => setCurrentPage('add')}
               animate={buttonControls}
               style={{ opacity: 0, x: -50 }}>
-              <AddLogo className='w-4 h-4 self-center mr-2'/>
+              <AddIcon className='w-4 h-4 self-center mr-2'/>
               Add Memo
             </motion.button>
           </div>
@@ -51,7 +50,7 @@ const SideBar = ({ setCurrentPage, isSideBarOpen, sideBarWidth=250, buttonAnimat
             onClick={() => setCurrentPage('search')}
             animate={buttonControls}
             style={{ opacity: 0, x: -50 }}>
-            <SearchLogo className='w-5 h-5 self-center mr-2'/>
+            <SearchIcon className='w-5 h-5 self-center mr-2'/>
             Search
           </motion.button>
         </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoSearchAnswer } from 'interfaces/MemoInterface';
 import { EditableMemo } from 'components/memo';
+import { TextareaAutosize } from '@mui/material';
 
 export const LeftMessage = ({ name, imageUrl, content }: 
   {
@@ -12,7 +13,7 @@ export const LeftMessage = ({ name, imageUrl, content }:
   const processedMessageContent = (
     content.memos?.map((memo) => {
       return (
-        <div key={memo.id} className="flex-shrink-0 bg-gray1 rounded-lg w-72 whitespace-normal break-words text-base">
+        <div key={memo.id} className="flex-shrink-0 rounded-lg w-72 whitespace-normal break-words text-base">
           <EditableMemo memo={memo}/>
         </div>
       );
@@ -24,9 +25,11 @@ export const LeftMessage = ({ name, imageUrl, content }:
         <div className='flex flex-col flex-1 overflow-hidden'>
           <p className="text-lg font-semibold">{name}</p>
           <div className="p-3 inline-block self-start bg-gray0 rounded-lg overflow-hidden max-w-3/4">
-            <p className="inline whitespace-normal break-words">{content.text}</p>
+            <TextareaAutosize 
+              className="inline bg-transparent resize-none focus:outline-none whitespace-normal break-words" 
+              value={content.text} readOnly/>
             {content.memos && (
-              <div className='w-full flex overflow-x-auto no-scrollbar gap-4 mt-2'>
+              <div className='w-full flex overflow-x-auto no-scrollbar gap-4'>
                 {processedMessageContent}
               </div>
             )}
