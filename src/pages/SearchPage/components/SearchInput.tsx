@@ -12,8 +12,8 @@ const usePressEnterFetch = ({ handleSubmit } : { handleSubmit: () => void }) => 
       return;
     }
 
-    // shift + Enter or ctrl + Enter는 해당 안되도록 체크 후 submit
-    if (e.key === "Enter" && !e.shiftKey) {
+    // shift + Enter는 해당 안되도록 체크 후 submit
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
