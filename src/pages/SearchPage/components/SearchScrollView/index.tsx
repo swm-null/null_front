@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { SearchConversation } from './SearchConversation';
 import { MemoSearchConversation } from 'interfaces/MemoInterface';
 import { DownIcon } from 'assets/icons';
-import { Slide } from '@mui/material';
+import { Slide, SvgIcon } from '@mui/material';
 
 export const SearchScrollView = ({ searchConversations, removeSearchConversation }: {
   searchConversations: MemoSearchConversation[],
@@ -38,11 +38,11 @@ export const SearchScrollView = ({ searchConversations, removeSearchConversation
     <div className='relative flex flex-col flex-1 overflow-hidden'>
       {/* 스크롤 아래로 이동하는 버튼 */}
       <Slide direction="up" in={!endOfScrollViewObserverInView} mountOnEnter unmountOnExit>
-        <DownIcon
-          width={'40'}
-          height={'40'}
+        <SvgIcon 
           className='absolute self-center bottom-2 rounded-full bg-white ring-slate-900/5 drop-shadow-lg cursor-pointer z-10'
-          onClick={scrollToRecent}/>
+          style={{width: 40, height: 40}} onClick={scrollToRecent}>
+          <DownIcon />
+        </SvgIcon>
       </Slide>
       <div className="flex flex-col-reverse overflow-y-scroll no-scrollbar flex-1 pl-12 pr-12">
         <div ref={endOfScrollViewObserverRef}/>
