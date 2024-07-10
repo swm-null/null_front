@@ -3,16 +3,21 @@ module.exports = {
   env: { browser: true, es2020: true },
   extends: [
     'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'eslint-config-prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
+  settings: { react: { version: '18.2' } },
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'prettier'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
     ],
+    'import/newline-after-import': ['error', { count: 1 }],
   },
 }
