@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion'; // FIXME: 이 라이브러리 문제가 있는듯
 
 
