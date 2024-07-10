@@ -1,3 +1,3 @@
-export { ReactComponent as SearchIcon } from './search.svg';
-export { ReactComponent as AddIcon } from './add.svg';
-export { ReactComponent as DownIcon } from './down.svg';
+export { default as SearchIcon } from './search.svg?react';
+export { default as AddIcon } from './add.svg?react';
+export { default as DownIcon } from './down.svg?react';
