@@ -57,7 +57,7 @@ export const TagManager = ({
 
   // 기존에 있던 tag 내용 삭제
   const deleteTag = (index: number) => {
-    const updatedTags = tags.filter((tag, i) => i !== index);
+    const updatedTags = tags.filter((_, i) => i !== index);
     setTags(updatedTags);
   };
 

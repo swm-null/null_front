@@ -1,5 +1,3 @@
-import * as React from "react";
-
 const Path = (props: any) => (
   <path
     fill="transparent"

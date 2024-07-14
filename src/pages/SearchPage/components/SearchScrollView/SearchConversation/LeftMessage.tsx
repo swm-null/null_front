@@ -1,4 +1,3 @@
-import React from 'react';
 import { MemoSearchAnswer } from 'interfaces/MemoInterface';
 import { EditableMemo } from 'components/memo';
 import { TextareaAutosize } from '@mui/material';

@@ -1,7 +1,6 @@
 import axios from 'axios';
-import * as Config from '../config';
 import { Memo, MemoSearchAnswer } from '../interfaces/MemoInterface';
-const LOCALHOST = Config.LOCALHOST;
+const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 
 export interface validResponse {
   method: string;

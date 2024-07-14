@@ -18,7 +18,7 @@ const useResultMemoManagerWithStatus = () => {
   };
 
   const deleteResultMemo = (index: number) => {
-    setResultMemos((prev) => prev.filter((memo, i) => i !== index));
+    setResultMemos((prev) => prev.filter((_, i) => i !== index));
   };
 
   const getResultMemoContext = async (text: string): Promise<Memo> => {
