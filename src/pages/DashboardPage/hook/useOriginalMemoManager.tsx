@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Memo } from 'interfaces/MemoInterface';
+import { useState } from 'react';
 import { getAllMemos, isGetAllMemosResponse } from 'utils/auth';
+import { useQuery } from '@tanstack/react-query';
 
-const useOriginalMemoManager = ({ dummyData = [] }: { dummyData?: Memo[] }) => {
-  const [originalMemos, setOriginalMemos] = useState<Memo[]>([]);
+const useOriginalMemoManager = () => {
+  const { data: originalMemosAll = [] } = useQuery({
+    queryKey: ['memos', 'all'],
+    queryFn: getAllMemos,
+    select: (data) => (isGetAllMemosResponse(data) ? data.memos : []),
+  });
+
+  // TODO: Tag를 이용하여 메모를 가져오는 api 만들면, react-query 사용하도록 수정
+  const originalMemosByTag = originalMemosAll.filter((item) =>
+    item.tags.includes(selectedTag)
+  );
+
   const [selectedTag, setSelectedTag] = useState<'all' | string>('all');
   const viewMemos =
-    selectedTag !== 'all'
-      ? originalMemos.filter((item) => item.tags.includes(selectedTag))
-      : originalMemos;
+    selectedTag !== 'all' ? originalMemosByTag : originalMemosAll;
 
-  const tags = [...new Set(originalMemos.flatMap((memo) => memo.tags))].sort();
-
-  const updateOriginalMemo = (index: number, newMemo: Memo) => {
-    setOriginalMemos((prev) =>
-      prev.map((memo, i) => (i === index ? newMemo : memo))
-    );
-  };
-
-  const deleteOriginalMemo = (index: number) => {
-    setOriginalMemos((prev) => prev.filter((_, i) => i !== index));
-  };
+  const tags = [
+    ...new Set(originalMemosAll.flatMap((memo) => memo.tags)),
+  ].sort();
 
   const handleTagClick = (tag: string) => {
     if (tag !== selectedTag) {
@@ -28,26 +28,9 @@ const useOriginalMemoManager = ({ dummyData = [] }: { dummyData?: Memo[] }) => {
     }
   };
 
-  // FIXME: 현재는 react-query 안 쓰고 대충 서버와 연동만 함. 나중에 추가.
-  const setAllMemos = async () => {
-    const response = await getAllMemos();
-    if (!isGetAllMemosResponse(response)) {
-      setOriginalMemos(dummyData);
-      return;
-    }
-
-    setOriginalMemos(response.memos);
-  };
-
-  useEffect(() => {
-    setAllMemos();
-  }, []);
-
   return {
     viewMemos,
     tags,
-    updateOriginalMemo,
-    deleteOriginalMemo,
     handleTagClick,
   };
 };

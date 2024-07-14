@@ -13,13 +13,18 @@ export const DashboardPage = ({
 }: {
   headerLeftMarginToggle?: boolean;
 }) => {
-  const {
-    viewMemos,
-    tags,
-    updateOriginalMemo,
-    deleteOriginalMemo,
-    handleTagClick,
-  } = useOriginalMemoManager({});
+  const { viewMemos, tags, handleTagClick } = useOriginalMemoManager();
+
+  // TODO: api 연동하는 코드 추가하기
+  // 위치는 여기에 할지, EditableMemo 할지 고민 더 해보기
+  const updateMemo = () => {
+    console.log('updateMemo api 연동 예정');
+  };
+
+  // TODO: api 연동하는 코드 추가하기
+  const deleteMemo = () => {
+    console.log('deleteMemo api 연동 예정');
+  };
 
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
@@ -55,8 +60,8 @@ export const DashboardPage = ({
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <OriginalMemoList
           originalMemos={viewMemos}
-          updateOriginalMemo={updateOriginalMemo}
-          deleteOriginalMemo={deleteOriginalMemo}
+          updateOriginalMemo={updateMemo}
+          deleteOriginalMemo={deleteMemo}
         />
       </div>
     </div>
