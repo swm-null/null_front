@@ -219,6 +219,5 @@ export const isCreateMemoResponse = (
 export const isGetAllMemosResponse = (
   response: getAllMemosResponse | errorResponse
 ): response is getAllMemosResponse => {
-  // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
   return isValidResponse(response as getAllMemosResponse);
 };
