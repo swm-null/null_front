@@ -1,4 +1,3 @@
-import React from 'react';
 import { EditableMemo as ResultMemo } from 'components/memo';
 import { Memo } from 'interfaces/MemoInterface';
 

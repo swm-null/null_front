@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSearchConversationManager } from './hook/useSearchConversationManager';
 import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from 'constants/HeaderSideBarAnimation';
 import { AnimatedHeader } from 'components/ui';
