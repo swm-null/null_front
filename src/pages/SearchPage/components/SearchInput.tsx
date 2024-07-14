@@ -43,11 +43,7 @@ export const SearchInput = ({
         }
       : isSearchMemoResponse(response)
         ? {
-            /**
-             * FIXME: text에 원래는 메모 검색 기능으로 생기는 자연어 메시지를 보여줘야하는데,
-             * 현재 자연어 검색으로 자동 전환해주는 기능이 없어 지금은 하드 코딩
-             */
-            text: '메모 검색을 완료했습니다',
+            text: response.text,
             memos: response.memos,
           }
         : {

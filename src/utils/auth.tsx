@@ -91,7 +91,8 @@ export const searchMemo = async (
       method,
       status: response.status,
       message: '메모 검색을 성공했습니다. ',
-      memos: response.data,
+      text: response.data.processed_message,
+      memos: response.data.memos,
     };
     return responseInfo;
   } catch (error) {
@@ -177,11 +178,7 @@ export const isValidResponse = (
 export const isSearchMemoResponse = (
   response: searchMemoResponse | errorResponse
 ): response is searchMemoResponse => {
-  // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
-  return (
-    (response as searchMemoResponse).memos !== null &&
-    (response as searchMemoResponse).memos?.length !== 0
-  );
+  return (response as searchMemoResponse).text !== null;
 };
 
 export const isCreateMemoResponse = (
