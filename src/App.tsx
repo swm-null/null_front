@@ -71,7 +71,7 @@ const App = () => {
           transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND }}
           style={{ position: 'absolute', left: 0, top: 0, bottom: 0 }}
         >
-          <SideBar zIndex={20} setCurrentPage={setCurrentPage} />
+          <SideBar setCurrentPage={setCurrentPage} />
         </motion.div>
         <div
           className="flex flex-col h-screen overflow-x-hidden z-10"
@@ -87,7 +87,10 @@ const App = () => {
             transition={{
               duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND,
             }}
-            style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              pointerEvents: isOpen ? 'auto' : 'none',
+            }}
           />
         </div>
       </div>
@@ -98,7 +101,9 @@ const App = () => {
   return (
     <div ref={scope} className="flex w-full h-full">
       <SideBarOpenCloseButton handleClick={() => setIsOpen(!isOpen)} />
-      <SideBar zIndex={10} setCurrentPage={setCurrentPage} />
+      <div className="z-10">
+        <SideBar setCurrentPage={setCurrentPage} />
+      </div>
       <motion.div
         className="flex flex-col h-screen overflow-x-hidden z-20 bg-white"
         animate={{ width: isOpen ? 'calc(100vw - 250px)' : '100vw' }}

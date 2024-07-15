@@ -3,16 +3,11 @@ import { AddIcon, SearchIcon } from 'assets/icons';
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
   sideBarWidth?: number;
-  zIndex: number;
 }
 
-const SideBar = ({
-  setCurrentPage,
-  sideBarWidth = 250,
-  zIndex,
-}: SideBarProps) => {
+const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
   return (
-    <div className={`z-${zIndex} h-screen bg-gray-100 flex flex-col`}>
+    <div className={`h-screen bg-gray-100 flex flex-col`}>
       {/* TODO: tailwind에서 동적 데이터 지원하는지 확인 */}
       <div
         className={`p-4 flex flex-col flex-1`}
