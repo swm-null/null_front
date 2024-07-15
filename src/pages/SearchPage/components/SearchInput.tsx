@@ -4,7 +4,7 @@ import { MemoSearchAnswer } from 'interfaces/MemoInterface';
 
 // Enter keyboard 동작 확인 시, submit 동작 수행
 // form 형식은 textarea 못 써서, keyboard 입력으로 직접 수행
-const usePressEnterFetch = ({ handleSubmit } : { handleSubmit: () => void }) => {
+const usePressEnterFetch = ({ handleSubmit }: { handleSubmit: () => void }) => {
   const handlePressEnterFetch = (
     e: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
@@ -20,39 +20,42 @@ const usePressEnterFetch = ({ handleSubmit } : { handleSubmit: () => void }) => 
   };
 
   return { handlePressEnterFetch };
-}
+};
 
-export const SearchInput = ({addSearchConversation, editSearchConversation}: 
-  {
-    addSearchConversation: (text: string) => string, 
-    editSearchConversation: (id: string, answer: MemoSearchAnswer) => string, 
-  }) => {
+export const SearchInput = ({
+  addSearchConversation,
+  editSearchConversation,
+}: {
+  addSearchConversation: (text: string) => string;
+  editSearchConversation: (id: string, answer: MemoSearchAnswer) => string;
+}) => {
   const [message, setMessage] = useState('');
-  const { handlePressEnterFetch } = usePressEnterFetch({handleSubmit: submitSearchQuery});
+  const { handlePressEnterFetch } = usePressEnterFetch({
+    handleSubmit: submitSearchQuery,
+  });
 
   const getSearchResponse = async (text: string) => {
     const response = await searchMemo(text);
-    const answer = 
-      (!isValidResponse(response)) ? 
-        {
+    const answer = !isValidResponse(response)
+      ? {
           text: '검색을 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 검색해주세요',
-          memos: null
+          memos: null,
         }
-      : (isSearchMemoResponse(response)) ? 
-        {
-          /**
-           * FIXME: text에 원래는 메모 검색 기능으로 생기는 자연어 메시지를 보여줘야하는데, 
-           * 현재 자연어 검색으로 자동 전환해주는 기능이 없어 지금은 하드 코딩
-           */
-          text: '메모 검색을 완료했습니다',
-          memos: response.memos
-        }
-      : {
-          text: '관련된 메모가 없습니다',
-          memos: null
-        };
+      : isSearchMemoResponse(response)
+        ? {
+            /**
+             * FIXME: text에 원래는 메모 검색 기능으로 생기는 자연어 메시지를 보여줘야하는데,
+             * 현재 자연어 검색으로 자동 전환해주는 기능이 없어 지금은 하드 코딩
+             */
+            text: '메모 검색을 완료했습니다',
+            memos: response.memos,
+          }
+        : {
+            text: '관련된 메모가 없습니다',
+            memos: null,
+          };
     return answer;
-  }
+  };
 
   const addSearchConversationWithLateUpdateResponse = async (text: string) => {
     // 검색 내용과 답변 메시지 객체 추가(이 때, 답변 메시지 내용은 없음)
@@ -63,7 +66,9 @@ export const SearchInput = ({addSearchConversation, editSearchConversation}:
     editSearchConversation(answerID, answer);
   };
 
-  const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleInputChange = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setMessage(e.target.value);
   };
 
@@ -72,20 +77,22 @@ export const SearchInput = ({addSearchConversation, editSearchConversation}:
       addSearchConversationWithLateUpdateResponse(message);
       setMessage('');
     }
-  };
+  }
 
   return (
-    <div className="flex items-start m-4 pt-4 border-t border-gray-300">
+    <div className="flex items-start mt-4 pt-4 border-t border-gray-300">
       <textarea
         value={message}
         onChange={handleInputChange}
         className="flex-1 px-4 py-2 h-[110px] focus:outline-none resize-none"
         placeholder="입력 프롬프트"
         onKeyDown={handlePressEnterFetch}
-        rows={6}/>
+        rows={6}
+      />
       <button
         onClick={submitSearchQuery}
-        className="mt-2 ml-4 bg-black text-white rounded-full py-2 px-6">
+        className="mt-2 ml-4 bg-black text-white rounded-full py-2 px-6"
+      >
         검색
       </button>
     </div>

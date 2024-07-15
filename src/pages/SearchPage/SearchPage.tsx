@@ -22,14 +22,16 @@ export const SearchPage = ({
         leftMarginToggle={headerLeftMarginToggle}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
       />
-      <SearchScrollView
-        removeSearchConversation={removeSearchConversation}
-        searchConversations={searchConversations}
-      />
-      <SearchInput
-        addSearchConversation={addSearchConversation}
-        editSearchConversation={editSearchConversation}
-      />
+      <div className="flex flex-col flex-1 overflow-hidden px-4">
+        <SearchScrollView
+          removeSearchConversation={removeSearchConversation}
+          searchConversations={searchConversations}
+        />
+        <SearchInput
+          addSearchConversation={addSearchConversation}
+          editSearchConversation={editSearchConversation}
+        />
+      </div>
     </div>
   );
 };
