@@ -1,1 +1,1 @@
-export { OriginalMemoList } from "./OriginalMemoList";
+export { SelectedTagMemosList } from './SelectedTagMemosList';

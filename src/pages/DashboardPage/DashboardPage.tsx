@@ -1,6 +1,6 @@
 import { AnimatedHeader, EditableTag } from 'components/ui';
-import useOriginalMemoManager from './hook/useOriginalMemoManager';
-import { OriginalMemoList } from './components';
+import { SelectedTagMemosList } from './components';
+import useSelectedTagMemosManager from './hook/useSelectedTagMemosManager';
 import { Divider } from '@mui/material';
 import {
   HEADER_ANIMATION_DELAY,
@@ -13,7 +13,7 @@ export const DashboardPage = ({
 }: {
   headerLeftMarginToggle?: boolean;
 }) => {
-  const { viewMemos, tags, handleTagClick } = useOriginalMemoManager();
+  const { viewMemos, tags, handleTagClick } = useSelectedTagMemosManager();
 
   // TODO: api 연동하는 코드 추가하기
   // 위치는 여기에 할지, EditableMemo 할지 고민 더 해보기
@@ -58,10 +58,10 @@ export const DashboardPage = ({
       </div>
 
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
-        <OriginalMemoList
-          originalMemos={viewMemos}
-          updateOriginalMemo={updateMemo}
-          deleteOriginalMemo={deleteMemo}
+        <SelectedTagMemosList
+          selectedTagMemos={viewMemos}
+          updateSelectedTagMemo={updateMemo}
+          deleteSelectedTagMemo={deleteMemo}
         />
       </div>
     </div>
