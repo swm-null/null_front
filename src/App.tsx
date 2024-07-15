@@ -1,8 +1,8 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
-import { SIDEBAR_ANIMATION_DURATION, SIDEBAR_BUTTON_ANIMATION_DURATION } from './constants/HeaderSideBarAnimation';
 import { AddPage, SearchPage } from './pages';
 
 const App = () => {
@@ -13,24 +13,28 @@ const App = () => {
   const renderContent = () => {
     switch (currentPage) {
       case 'add':
-        return <AddPage headerLeftMarginToggle={!isOpen}/>;
+        return <AddPage headerLeftMarginToggle={!isOpen} />;
       case 'search':
-        return <SearchPage headerLeftMarginToggle={!isOpen}/>;
+        return <SearchPage headerLeftMarginToggle={!isOpen} />;
       default:
-        return <AddPage headerLeftMarginToggle={!isOpen}/>;
+        return <AddPage headerLeftMarginToggle={!isOpen} />;
     }
   };
 
+  // 화면이 큰 경우, 사이드바를 맨 뒤에 놓고, 페이지 화면의 width를 조절
   return (
-    <div className="relative flex w-full h-full">
-      <SideBar 
-        setCurrentPage={setCurrentPage} isSideBarOpen={isOpen}
-        sideBarAnimationDuration={SIDEBAR_ANIMATION_DURATION} buttonAnimationDuration={SIDEBAR_BUTTON_ANIMATION_DURATION}
-        />
-      <div ref={scope} className="flex flex-col w-full h-screen  overflow-x-hidden">
+    <div ref={scope} className="flex w-full h-full">
+      <SideBar zIndex={10} setCurrentPage={setCurrentPage} />
+      <SideBarOpenCloseButton handleClick={() => setIsOpen(!isOpen)} />
+      <motion.div
+        className="flex flex-col h-screen overflow-x-hidden z-20 bg-white"
+        animate={{ width: isOpen ? 'calc(100vw - 250px)' : '100vw' }}
+        initial={{ width: '100vw' }}
+        transition={{ duration: 0.5 }}
+        style={{ position: 'absolute', right: 0, top: 0, bottom: 0 }}
+      >
         {renderContent()}
-        <SideBarOpenCloseButton handleClick={() => setIsOpen(!isOpen)}/>
-      </div>
+      </motion.div>
     </div>
   );
 };
