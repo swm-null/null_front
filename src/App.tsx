@@ -39,6 +39,12 @@ const App = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isSmallScreen) {
+      setIsOpen(false);
+    }
+  }, [isSmallScreen]);
+
   // 화면이 작은 경우
   if (isSmallScreen) {
     return (
@@ -47,7 +53,7 @@ const App = () => {
         <motion.div
           className="overflow-x-hidden z-20"
           animate={{ width: isOpen ? '250px' : '0' }}
-          initial={{ width: '250px' }}
+          initial={{ width: isOpen ? '250px' : '0' }}
           transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND }}
           style={{ position: 'absolute', left: 0, top: 0, bottom: 0 }}
         >
@@ -67,16 +73,16 @@ const App = () => {
   return (
     <div ref={scope} className="flex w-full h-full">
       <SideBarOpenCloseButton handleClick={() => setIsOpen(!isOpen)} />
+      <SideBar zIndex={10} setCurrentPage={setCurrentPage} />
       <motion.div
         className="flex flex-col h-screen overflow-x-hidden z-20 bg-white"
         animate={{ width: isOpen ? 'calc(100vw - 250px)' : '100vw' }}
-        initial={{ width: '100vw' }}
+        initial={{ width: isOpen ? 'calc(100vw - 250px)' : '100vw' }}
         transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND }}
         style={{ position: 'absolute', right: 0, top: 0, bottom: 0 }}
       >
         {renderContent(true)}
       </motion.div>
-      <SideBar zIndex={10} setCurrentPage={setCurrentPage} />
     </div>
   );
 };
