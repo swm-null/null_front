@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { HEADER_ANIMATION_DELAY, HEADER_ANIMATION_DURATION } from 'constants/HeaderSideBarAnimation';
+import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimation';
 import useResultMemoManagerWithStatus from './hook/useResultMemoManagerWithStatus';
 import { AnimatedHeader } from 'components/ui';
 import { MemoTextAreaWithAIButton, ResultMemoList } from './components';
 
-export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: boolean }) => {
+export const AddPage = ({
+  headerLeftMarginToggle,
+}: {
+  headerLeftMarginToggle?: boolean;
+}) => {
   const [message, setMessage] = useState('');
   const {
     resultMemos,
@@ -36,8 +40,7 @@ export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: b
       <AnimatedHeader
         text={'메모 추가하기'}
         leftMarginToggle={headerLeftMarginToggle}
-        animationDuration={HEADER_ANIMATION_DURATION}
-        toggleOnDurationDelay={HEADER_ANIMATION_DELAY}
+        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
       />
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <MemoTextAreaWithAIButton
@@ -48,10 +51,25 @@ export const AddPage = ({ headerLeftMarginToggle }: { headerLeftMarginToggle?: b
           status={status}
         />
         <div className="flex flex-col flex-1">
-          {status === 'error' && <span className="error-text">{"죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."}</span>}
-          {status === 'success' && <ResultMemoList memos={resultMemos} updateResultMemo={updateResultMemo} deleteResultMemo={deleteResultMemo} />}
+          {status === 'error' && (
+            <span className="error-text">
+              {
+                '죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+              }
+            </span>
+          )}
+          {status === 'success' && (
+            <ResultMemoList
+              memos={resultMemos}
+              updateResultMemo={updateResultMemo}
+              deleteResultMemo={deleteResultMemo}
+            />
+          )}
         </div>
-        <button className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6" onClick={handleRefresh}>
+        <button
+          className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6"
+          onClick={handleRefresh}
+        >
           새로고침(임시 버튼)
         </button>
       </div>

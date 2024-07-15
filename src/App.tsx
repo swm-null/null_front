@@ -4,6 +4,7 @@ import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
 import { AddPage, SearchPage } from './pages';
+import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimation';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
@@ -30,7 +31,7 @@ const App = () => {
         className="flex flex-col h-screen overflow-x-hidden z-20 bg-white"
         animate={{ width: isOpen ? 'calc(100vw - 250px)' : '100vw' }}
         initial={{ width: '100vw' }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND }}
         style={{ position: 'absolute', right: 0, top: 0, bottom: 0 }}
       >
         {renderContent()}
