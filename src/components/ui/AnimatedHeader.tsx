@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'; // FIXME: 이 라이브러리 문제가 있는듯
+import { motion } from 'framer-motion';
 
 interface AnimatedHeaderProps {
   text: string;
@@ -12,16 +12,6 @@ interface AnimatedHeaderProps {
    * 설정하고 싶은 경우 해당 파라미터 전달
    */
   animationDuration?: number;
-  /**
-   * toggleOnDurationDelay: (단위: s)
-   * leftMargin 생기는 애니메이션 전에 딜레이를 주고 싶은 경우 설정
-   */
-  toggleOnDurationDelay?: number;
-  /**
-   * toggleOffDurationDelay: (단위: s)
-   * leftMargin 사라지는 애니메이션 전에 딜레이를 주고 싶은 경우 설정
-   */
-  toggleOffDurationDelay?: number;
 }
 
 /**
@@ -34,8 +24,6 @@ export const AnimatedHeader = ({
   leftMarginToggle,
   leftMargin = 48,
   animationDuration = 0,
-  toggleOnDurationDelay = 0,
-  toggleOffDurationDelay = 0,
 }: AnimatedHeaderProps) => {
   if (leftMarginToggle !== undefined) {
     return (
@@ -45,9 +33,6 @@ export const AnimatedHeader = ({
         animate={{ marginLeft: leftMarginToggle ? leftMargin : 0 }}
         transition={{
           duration: animationDuration,
-          delay: leftMarginToggle
-            ? toggleOnDurationDelay
-            : toggleOffDurationDelay,
         }}
       >
         <p className="font-semibold text-lg">{text}</p>
