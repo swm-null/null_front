@@ -15,7 +15,7 @@ export const SideBarOpenCloseButton = ({
   handleClick: () => void;
 }) => (
   <button
-    className="z-30 absolute top-2 left-2 rounded-full overflow-hidden grid justify-center items-center"
+    className="z-30 absolute top-[5px] left-2 rounded-full overflow-hidden grid justify-center items-center"
     style={{ padding: 5, margin: 7.5 }}
     onClick={handleClick}
   >
