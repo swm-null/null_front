@@ -14,16 +14,30 @@ const App = () => {
   const [isOpen, setIsOpen] = useState(true);
   const scope = useSideBarOpenCloseButtonAnimation(isOpen);
 
-  const renderContent = (useIsOpen: boolean) => {
+  const pageContent = ({
+    useHeaderAnimation,
+  }: {
+    useHeaderAnimation: boolean;
+  }) => {
     switch (currentPage) {
       case 'add':
-        return <AddPage headerLeftMarginToggle={useIsOpen ? !isOpen : true} />;
+        return (
+          <AddPage
+            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
+          />
+        );
       case 'search':
         return (
-          <SearchPage headerLeftMarginToggle={useIsOpen ? !isOpen : true} />
+          <SearchPage
+            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
+          />
         );
       default:
-        return <AddPage headerLeftMarginToggle={useIsOpen ? !isOpen : true} />;
+        return (
+          <AddPage
+            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
+          />
+        );
     }
   };
 
@@ -63,7 +77,7 @@ const App = () => {
           className="flex flex-col h-screen overflow-x-hidden z-10"
           style={{ position: 'absolute', right: 0, top: 0, bottom: 0, left: 0 }}
         >
-          {renderContent(false)}
+          {pageContent({ useHeaderAnimation: false })}
           {/* 불투명한 배경을 클릭했을 때 메뉴바 닫기 */}
           <motion.div
             className="absolute top-0 left-0 w-full h-full"
@@ -92,7 +106,7 @@ const App = () => {
         transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND }}
         style={{ position: 'absolute', right: 0, top: 0, bottom: 0 }}
       >
-        {renderContent(true)}
+        {pageContent({ useHeaderAnimation: true })}
       </motion.div>
     </div>
   );
