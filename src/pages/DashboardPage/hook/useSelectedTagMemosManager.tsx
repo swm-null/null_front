@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllMemos, isGetAllMemosResponse } from 'utils/auth';
 import { useQuery } from '@tanstack/react-query';
 
@@ -7,7 +7,7 @@ const useSelectedTagMemosManager = () => {
   const [selectedTag, setSelectedTag] = useState<'all' | string>('all');
 
   // 메모 전체
-  const { data: allMemos = [] } = useQuery({
+  const { data: allMemos = [], refetch } = useQuery({
     queryKey: ['memos', 'all'],
     queryFn: getAllMemos,
     select: (data) => (isGetAllMemosResponse(data) ? data.memos : []),
@@ -28,6 +28,19 @@ const useSelectedTagMemosManager = () => {
       setSelectedTag(tag);
     }
   };
+
+  useEffect(() => {
+    const handleFocus = () => {
+      // 윈도우 포커스 시 refetch 호출
+      refetch();
+    };
+
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [refetch]);
 
   return {
     viewMemos,
