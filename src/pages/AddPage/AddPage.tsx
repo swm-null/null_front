@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimation';
+import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimationDurationConstant';
 import useResultMemoManagerWithStatus from './hook/useResultMemoManagerWithStatus';
 import { AnimatedHeader } from 'components/ui';
 import { MemoTextAreaWithAIButton, ResultMemoList } from './components';

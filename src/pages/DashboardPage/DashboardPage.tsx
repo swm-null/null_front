@@ -2,10 +2,7 @@ import { AnimatedHeader, UnEditableTag } from 'components/ui';
 import { SelectedTagMemosList } from './components';
 import useSelectedTagMemosManager from './hook/useSelectedTagMemosManager';
 import { Divider } from '@mui/material';
-import {
-  HEADER_ANIMATION_DELAY,
-  HEADER_ANIMATION_DURATION,
-} from 'constants/HeaderSideBarAnimation';
+import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimationDurationConstant';
 import { tagInvalidCharsPattern } from 'constants/memo/TagRule';
 
 export const DashboardPage = ({
@@ -32,8 +29,7 @@ export const DashboardPage = ({
       <AnimatedHeader
         text={'메모 대시보드'}
         leftMarginToggle={headerLeftMarginToggle}
-        animationDuration={HEADER_ANIMATION_DURATION}
-        toggleOnDurationDelay={HEADER_ANIMATION_DELAY}
+        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
       />
 
       {/* tag들 선택하는 부분 */}

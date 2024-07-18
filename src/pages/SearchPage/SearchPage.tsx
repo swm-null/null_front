@@ -1,5 +1,5 @@
 import { useSearchConversationManager } from './hook/useSearchConversationManager';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimation';
+import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimationDurationConstant';
 import { AnimatedHeader } from 'components/ui';
 import { SearchInput, SearchScrollView } from './components';
 
