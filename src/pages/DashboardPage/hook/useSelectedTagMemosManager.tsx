@@ -16,7 +16,7 @@ const useSelectedTagMemosManager = () => {
   // 특정 태그의 메모
   // TODO: Tag를 이용하여 메모를 가져오는 api 만들면, react-query 사용하도록 수정
   const selectedMemosByTag = allMemos.filter((item) =>
-    item.tags.includes(selectedTag || '')
+    item.tags.some((tag) => tag.name === selectedTag)
   );
   // 화면에 보여지는 메모
   const viewMemos = selectedTag ? selectedMemosByTag : allMemos;
