@@ -1,0 +1,1 @@
+export { ResultMemoList } from './ResultMemoList';
