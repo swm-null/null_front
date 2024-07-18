@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
 import { AddIcon, DashboardIcon, SearchIcon } from 'assets/icons';
 
 interface SideBarProps {
@@ -34,9 +32,9 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           </button>
           <button
             className="flex items-center p-2 w-full text-left rounded"
-            onClick={() => setCurrentPage('search')}
+            onClick={() => setCurrentPage('dashboard')}
           >
-            <DashboardIcon className='w-4 h-4 ml-[2px] self-center mr-[10px]'/>
+            <DashboardIcon className="w-4 h-4 ml-[2px] self-center mr-[10px]" />
             Dashboard
           </button>
         </div>
