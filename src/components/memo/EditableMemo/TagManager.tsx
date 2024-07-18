@@ -1,39 +1,8 @@
-import React, { useRef, useState } from 'react';
+import { useState } from 'react';
 import { EditableTag } from 'components/ui/';
 import { tagInvalidCharsPattern } from 'constants/memo/TagRule';
 import { Tag } from 'interfaces/MemoInterface';
-
-interface TagCreateInputProps {
-  value: string;
-  addTag: (text: string) => void;
-}
-const TagCreateInput = ({ value, addTag }: TagCreateInputProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    // text 업데이트 전, 다시 한번 invalidChars 필터링
-    if (tagInvalidCharsPattern.test(e.currentTarget.innerText)) {
-      const innerText = e.currentTarget.innerText.replace(
-        tagInvalidCharsPattern,
-        ''
-      );
-      addTag(innerText);
-      e.currentTarget.innerText = '';
-    }
-  };
-
-  return (
-    <div
-      className="flex flex-1 text-left focus:outline-none break-words self-center focus:self-center cursor:empty:before text-lg"
-      ref={ref}
-      contentEditable
-      suppressContentEditableWarning
-      onInput={handleInput}
-    >
-      {value}
-    </div>
-  );
-};
+import { TagCreateInput } from './TagCreateInput';
 
 interface TagManagerProps {
   tags: Tag[];
@@ -81,7 +50,13 @@ export const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
           invalidCharsPattern={tagInvalidCharsPattern}
         />
       ))}
-      {editable && <TagCreateInput value={tagInput} addTag={addTag} />}
+      {editable && (
+        <TagCreateInput
+          value={tagInput}
+          addTag={addTag}
+          tagInvalidCharsPattern={tagInvalidCharsPattern}
+        />
+      )}
     </div>
   );
 };
