@@ -76,7 +76,7 @@ export const SearchInput = ({
   }
 
   return (
-    <div className="flex items-start m-4 pt-4 border-t border-gray-300">
+    <div className="flex items-start mt-4 pt-4 border-t border-gray-300">
       <textarea
         value={message}
         onChange={handleInputChange}

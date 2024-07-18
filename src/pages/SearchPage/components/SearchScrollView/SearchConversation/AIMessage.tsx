@@ -1,7 +1,8 @@
 import { MemoSearchAnswer } from 'interfaces/MemoInterface';
 import { EditableMemo } from 'components/memo';
+import { TextareaAutosize } from '@mui/material';
 
-export const LeftMessage = ({
+export const AIMessage = ({
   name,
   imageUrl,
   content,
@@ -10,7 +11,7 @@ export const LeftMessage = ({
   imageUrl: string;
   content: MemoSearchAnswer;
 }) => {
-  const processedMessageContent = content.memos?.map((memo) => {
+  const answerRelatedMemos = content.memos?.map((memo) => {
     return (
       <div
         key={memo.id}
@@ -31,12 +32,14 @@ export const LeftMessage = ({
       <div className="flex flex-col flex-1 overflow-hidden">
         <p className="text-lg font-semibold">{name}</p>
         <div className="p-3 inline-block self-start bg-gray0 rounded-lg overflow-hidden max-w-3/4">
-          <div className="inline bg-transparent resize-none focus:outline-none whitespace-normal break-words">
-            {content.text}
-          </div>
+          <TextareaAutosize
+            className="inline bg-transparent resize-none focus:outline-none whitespace-normal break-words"
+            value={content.text}
+            readOnly
+          />
           {content.memos && (
             <div className="w-full flex overflow-x-auto no-scrollbar gap-4">
-              {processedMessageContent}
+              {answerRelatedMemos}
             </div>
           )}
         </div>

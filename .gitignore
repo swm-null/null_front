@@ -25,3 +25,6 @@ yarn-error.log*
 
 # environment variable
 .env
+
+# development test
+*/_redirects

@@ -168,6 +168,31 @@ export const editMemo = async (
   }
 };
 
+interface getAllMemosResponse extends validResponse {
+  memos: Memo[];
+}
+
+// 4.
+export const getAllMemos = async (): Promise<
+  getAllMemosResponse | errorResponse
+> => {
+  const method = 'getAllMemos';
+  const endpoint = `${LOCALHOST}/memos`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '모든 메모 가져오는 것을 성공했습니다. ',
+      memos: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
 export const isValidResponse = (
   response: validResponse | errorResponse
 ): response is validResponse => {
@@ -186,4 +211,10 @@ export const isCreateMemoResponse = (
 ): response is createMemoResponse => {
   // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
   return (response as createMemoResponse).content !== null;
+};
+
+export const isGetAllMemosResponse = (
+  response: getAllMemosResponse | errorResponse
+): response is getAllMemosResponse => {
+  return isValidResponse(response as getAllMemosResponse);
 };
