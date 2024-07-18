@@ -27,7 +27,7 @@
     "baseUrl": "src",
     "paths": {
       "components/*": ["components/*"],
-      "constants/*": ["constants/*"],
+      "config/*": ["config/*"],
       "interfaces/*": ["interfaces/*"],
       "utils/*": ["utils/*"],
       "assets/*": ["assets/*"]

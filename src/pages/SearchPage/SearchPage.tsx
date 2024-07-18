@@ -1,7 +1,7 @@
 import { useSearchConversationManager } from './hook/useSearchConversationManager';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimationDurationConstant';
 import { AnimatedHeader } from 'components/ui';
 import { SearchInput, SearchScrollView } from './components';
+import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'config/constants';
 
 export const SearchPage = ({
   headerLeftMarginToggle = false,

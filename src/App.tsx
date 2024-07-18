@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimationDurationConstant';
 import { AddPage, SearchPage, DashboardPage } from 'pages';
+import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'config/constants';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');

@@ -2,8 +2,10 @@ import { AnimatedHeader, UnEditableTag } from 'components/ui';
 import { SelectedTagMemosList } from './components';
 import useSelectedTagMemosManager from './hook/useSelectedTagMemosManager';
 import { Divider } from '@mui/material';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimationDurationConstant';
-import { tagInvalidCharsPattern } from 'constants/memo/TagRule';
+import {
+  SIDEBAR_HEADER_ANIMATION_DURATION_SECOND,
+  tagInvalidCharsPattern,
+} from 'config/constants';
 
 export const DashboardPage = ({
   headerLeftMarginToggle = false,
