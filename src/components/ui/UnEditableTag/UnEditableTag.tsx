@@ -1,4 +1,4 @@
-import { EditableTag } from './EditableTag';
+import { EditableTag } from 'components/ui/EditableTag';
 
 interface UnEditableTagProps {
   text: string;
