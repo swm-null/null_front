@@ -2,8 +2,11 @@ import { useState } from 'react';
 import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
-import { SIDEBAR_ANIMATION_DURATION, SIDEBAR_BUTTON_ANIMATION_DURATION } from './constants/HeaderSideBarAnimation';
-import { AddPage, SearchPage } from './pages';
+import { AddPage, SearchPage, DashboardPage } from 'pages';
+import {
+  SIDEBAR_ANIMATION_DURATION,
+  SIDEBAR_BUTTON_ANIMATION_DURATION,
+} from 'constants/HeaderSideBarAnimation';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
@@ -13,23 +16,30 @@ const App = () => {
   const renderContent = () => {
     switch (currentPage) {
       case 'add':
-        return <AddPage headerLeftMarginToggle={!isOpen}/>;
+        return <AddPage headerLeftMarginToggle={!isOpen} />;
       case 'search':
-        return <SearchPage headerLeftMarginToggle={!isOpen}/>;
+        return <SearchPage headerLeftMarginToggle={!isOpen} />;
+      case 'dashboard':
+        return <DashboardPage headerLeftMarginToggle={!isOpen} />;
       default:
-        return <AddPage headerLeftMarginToggle={!isOpen}/>;
+        return <AddPage headerLeftMarginToggle={!isOpen} />;
     }
   };
 
   return (
     <div className="relative flex w-full h-full">
-      <SideBar 
-        setCurrentPage={setCurrentPage} isSideBarOpen={isOpen}
-        sideBarAnimationDuration={SIDEBAR_ANIMATION_DURATION} buttonAnimationDuration={SIDEBAR_BUTTON_ANIMATION_DURATION}
-        />
-      <div ref={scope} className="flex flex-col w-full h-screen  overflow-x-hidden">
+      <SideBar
+        setCurrentPage={setCurrentPage}
+        isSideBarOpen={isOpen}
+        sideBarAnimationDuration={SIDEBAR_ANIMATION_DURATION}
+        buttonAnimationDuration={SIDEBAR_BUTTON_ANIMATION_DURATION}
+      />
+      <div
+        ref={scope}
+        className="flex flex-col w-full h-screen  overflow-x-hidden"
+      >
         {renderContent()}
-        <SideBarOpenCloseButton handleClick={() => setIsOpen(!isOpen)}/>
+        <SideBarOpenCloseButton handleClick={() => setIsOpen(!isOpen)} />
       </div>
     </div>
   );

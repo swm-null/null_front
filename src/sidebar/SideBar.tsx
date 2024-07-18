@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
-import { AddIcon, SearchIcon } from 'assets/icons';
+import { AddIcon, DashboardIcon, SearchIcon } from 'assets/icons';
 
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
@@ -52,6 +52,14 @@ const SideBar = ({ setCurrentPage, isSideBarOpen, sideBarWidth=250, buttonAnimat
             style={{ opacity: 0, x: -50 }}>
             <SearchIcon className='w-5 h-5 self-center mr-2'/>
             Search
+          </motion.button>
+          <motion.button 
+            className="flex items-center p-2 w-full text-left rounded"
+            onClick={() => setCurrentPage('dashboard')}
+            animate={buttonControls}
+            style={{ opacity: 0, x: -50 }}>
+            <DashboardIcon className='w-4 h-4 ml-[2px] self-center mr-[10px]'/>
+            Dashboard
           </motion.button>
         </div>
         <div className='flex flex-col flex-1'/>
