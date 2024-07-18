@@ -11,7 +11,7 @@ export const AIMessage = ({
   imageUrl: string;
   content: MemoSearchAnswer;
 }) => {
-  const processedMessageContent = content.memos?.map((memo) => {
+  const answerRelatedMemos = content.memos?.map((memo) => {
     return (
       <div
         key={memo.id}
@@ -39,7 +39,7 @@ export const AIMessage = ({
           />
           {content.memos && (
             <div className="w-full flex overflow-x-auto no-scrollbar gap-4">
-              {processedMessageContent}
+              {answerRelatedMemos}
             </div>
           )}
         </div>
