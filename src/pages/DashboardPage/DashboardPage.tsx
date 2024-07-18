@@ -1,4 +1,4 @@
-import { AnimatedHeader, EditableTag } from 'components/ui';
+import { AnimatedHeader, UnEditableTag } from 'components/ui';
 import { SelectedTagMemosList } from './components';
 import useSelectedTagMemosManager from './hook/useSelectedTagMemosManager';
 import { Divider } from '@mui/material';
@@ -13,7 +13,8 @@ export const DashboardPage = ({
 }: {
   headerLeftMarginToggle?: boolean;
 }) => {
-  const { viewMemos, tags, handleTagClick } = useSelectedTagMemosManager();
+  const { viewMemos, tags, handleTagClick, clickAllTags } =
+    useSelectedTagMemosManager();
 
   // TODO: api 연동하는 코드 추가하기
   // 위치는 여기에 할지, EditableMemo 할지 고민 더 해보기
@@ -37,16 +38,17 @@ export const DashboardPage = ({
 
       {/* tag들 선택하는 부분 */}
       <div className="flex w-full px-4 gap-2 overflow-hidden">
-        <EditableTag
+        <UnEditableTag
+          key="all"
           text="모든 메모"
           invalidCharsPattern={tagInvalidCharsPattern}
-          onClick={() => handleTagClick('all')}
+          onClick={clickAllTags}
         />
         <Divider orientation="vertical" />
         <div className="flex flex-1 overflow-hidden overflow-x-scroll">
           <div className="flex flex-none gap-1 overflow-x-scroll">
             {tags.map((tag, index) => (
-              <EditableTag
+              <UnEditableTag
                 key={index}
                 text={tag}
                 invalidCharsPattern={tagInvalidCharsPattern}
