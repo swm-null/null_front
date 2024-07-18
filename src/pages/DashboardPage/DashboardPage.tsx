@@ -46,9 +46,9 @@ export const DashboardPage = ({
             {tags.map((tag, index) => (
               <UnEditableTag
                 key={index}
-                text={tag}
+                text={tag.name}
                 invalidCharsPattern={tagInvalidCharsPattern}
-                onClick={() => handleTagClick(tag)}
+                onClick={() => handleTagClick(tag.name)}
               />
             ))}
           </div>
