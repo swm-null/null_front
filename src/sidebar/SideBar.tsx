@@ -1,4 +1,6 @@
-import { AddIcon, SearchIcon } from 'assets/icons';
+import { useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { AddIcon, DashboardIcon, SearchIcon } from 'assets/icons';
 
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
@@ -29,6 +31,13 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           >
             <SearchIcon className="w-5 h-5 self-center mr-2" />
             Search
+          </button>
+          <button
+            className="flex items-center p-2 w-full text-left rounded"
+            onClick={() => setCurrentPage('search')}
+          >
+            <DashboardIcon className='w-4 h-4 ml-[2px] self-center mr-[10px]'/>
+            Dashboard
           </button>
         </div>
         <div className="flex flex-col flex-1" />

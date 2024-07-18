@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
-import { AddPage, SearchPage } from './pages';
 import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBarAnimation';
+import { AddPage, SearchPage, DashboardPage } from 'pages';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
@@ -29,6 +29,12 @@ const App = () => {
       case 'search':
         return (
           <SearchPage
+            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
+          />
+        );
+      case 'dashboard':
+        return (
+          <DashboardPage
             headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
           />
         );
