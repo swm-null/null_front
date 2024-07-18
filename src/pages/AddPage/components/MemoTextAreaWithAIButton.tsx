@@ -9,14 +9,14 @@ interface MemoTextAreaWithAIButtonProps {
 }
 
 export const MemoTextAreaWithAIButton = ({
-    value,
-    placeholder,
-    onChange,
-    onButtonClick,
-    status
-  }: MemoTextAreaWithAIButtonProps) => {
+  value,
+  placeholder,
+  onChange,
+  onButtonClick,
+  status,
+}: MemoTextAreaWithAIButtonProps) => {
   const isDisabled = status === 'loading';
-  
+
   return (
     <div>
       <textarea
@@ -26,11 +26,16 @@ export const MemoTextAreaWithAIButton = ({
         placeholder={placeholder}
         rows={4}
       />
-      <div className='w-full flex flex-row mb-10'>
-        <span className='mt-3 flex flex-1 items-center'>AI로 관련 태그를 생성해드립니다. </span>
-        <button className="mt-2 ml-4 bg-gray2 text-white rounded-full py-2 px-6" 
-          onClick={onButtonClick} disabled={isDisabled}>
-          {status === 'loading' ? "로딩 중..." : "메모 AI로 생성하기"}
+      <div className="w-full flex flex-row mb-10">
+        <span className="mt-3 flex flex-1 items-center">
+          AI로 관련 태그를 생성해드립니다.{' '}
+        </span>
+        <button
+          className="mt-2 ml-4 bg-gray2 text-white rounded-full py-2 px-6"
+          onClick={onButtonClick}
+          disabled={isDisabled}
+        >
+          {status === 'loading' ? '로딩 중...' : '메모 AI로 생성하기'}
         </button>
       </div>
     </div>
