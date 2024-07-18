@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'config/constants';
+import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'config/constants';
 import useResultMemoManagerWithStatus from './hook/useResultMemoManagerWithStatus';
 import { AnimatedHeader } from 'components/ui';
 import { MemoTextAreaWithAIButton, ResultMemoList } from './components';
@@ -43,7 +43,7 @@ export const AddPage = ({
         text={'메모 추가하기'}
         leftMarginToggle={headerLeftMarginToggle}
         leftMargin={headerLeftMargin}
-        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
+        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
       />
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <MemoTextAreaWithAIButton

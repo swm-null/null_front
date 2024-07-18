@@ -1,7 +1,7 @@
 import { useSearchConversationManager } from './hook/useSearchConversationManager';
 import { AnimatedHeader } from 'components/ui';
 import { SearchInput, SearchScrollView } from './components';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'config/constants';
+import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'config/constants';
 
 export const SearchPage = ({
   headerLeftMarginToggle = false,
@@ -23,7 +23,7 @@ export const SearchPage = ({
         text={'메모 검색하기'}
         leftMarginToggle={headerLeftMarginToggle}
         leftMargin={headerLeftMargin}
-        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
+        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
       />
       <div className="flex flex-col flex-1 overflow-hidden px-4">
         <SearchScrollView

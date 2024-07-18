@@ -3,7 +3,7 @@ import { SelectedTagMemosList } from './components';
 import useSelectedTagMemosManager from './hook/useSelectedTagMemosManager';
 import { Divider } from '@mui/material';
 import {
-  SIDEBAR_HEADER_ANIMATION_DURATION_SECOND,
+  SIDEBAR_HEADER_ANIMATION_DURATION,
   TAG_INVALID_CHARS_PATTERN,
 } from 'config/constants';
 
@@ -34,7 +34,7 @@ export const DashboardPage = ({
         text={'메모 대시보드'}
         leftMarginToggle={headerLeftMarginToggle}
         leftMargin={headerLeftMargin}
-        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
+        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
       />
 
       {/* tag들 선택하는 부분 */}

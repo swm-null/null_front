@@ -4,7 +4,7 @@ import SideBar from './sidebar/SideBar';
 import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
 import { AddPage, SearchPage, DashboardPage } from 'pages';
-import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'config/constants';
+import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'config/constants';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
@@ -63,7 +63,7 @@ const App = () => {
           className="overflow-x-hidden z-20"
           animate={{ width: isOpen ? '250px' : '0' }}
           initial={{ width: isOpen ? '250px' : '0' }}
-          transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND }}
+          transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION }}
           style={{ position: 'absolute', left: 0, top: 0, bottom: 0 }}
         >
           <SideBar setCurrentPage={setCurrentPage} />
@@ -80,7 +80,7 @@ const App = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: isOpen ? 1 : 0 }}
             transition={{
-              duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND,
+              duration: SIDEBAR_HEADER_ANIMATION_DURATION,
             }}
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -103,7 +103,7 @@ const App = () => {
         className="flex flex-col h-screen overflow-x-hidden z-20 bg-white"
         animate={{ width: isOpen ? 'calc(100vw - 250px)' : '100vw' }}
         initial={{ width: isOpen ? 'calc(100vw - 250px)' : '100vw' }}
-        transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION_SECOND }}
+        transition={{ duration: SIDEBAR_HEADER_ANIMATION_DURATION }}
         style={{ position: 'absolute', right: 0, top: 0, bottom: 0 }}
       >
         {pageContent({ useHeaderAnimation: true })}
