@@ -19,31 +19,20 @@ const App = () => {
   }: {
     useHeaderAnimation: boolean;
   }) => {
+    const commonProps = {
+      headerLeftMarginToggle: useHeaderAnimation ? !isOpen : false,
+      headerLeftMargin: useHeaderAnimation ? 48 : 0,
+    };
+
     switch (currentPage) {
       case 'add':
-        return (
-          <AddPage
-            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
-          />
-        );
+        return <AddPage {...commonProps} />;
       case 'search':
-        return (
-          <SearchPage
-            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
-          />
-        );
+        return <SearchPage {...commonProps} />;
       case 'dashboard':
-        return (
-          <DashboardPage
-            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
-          />
-        );
+        return <DashboardPage {...commonProps} />;
       default:
-        return (
-          <AddPage
-            headerLeftMarginToggle={useHeaderAnimation ? !isOpen : true}
-          />
-        );
+        return <AddPage {...commonProps} />;
     }
   };
 

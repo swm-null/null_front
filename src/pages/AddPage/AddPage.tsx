@@ -5,9 +5,11 @@ import { AnimatedHeader } from 'components/ui';
 import { MemoTextAreaWithAIButton, ResultMemoList } from './components';
 
 export const AddPage = ({
-  headerLeftMarginToggle,
+  headerLeftMarginToggle = false,
+  headerLeftMargin = 0,
 }: {
   headerLeftMarginToggle?: boolean;
+  headerLeftMargin?: number;
 }) => {
   const [message, setMessage] = useState('');
   const {
@@ -40,6 +42,7 @@ export const AddPage = ({
       <AnimatedHeader
         text={'메모 추가하기'}
         leftMarginToggle={headerLeftMarginToggle}
+        leftMargin={headerLeftMargin}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
       />
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">

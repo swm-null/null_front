@@ -6,9 +6,11 @@ import { SIDEBAR_HEADER_ANIMATION_DURATION_SECOND } from 'constants/HeaderSideBa
 import { tagInvalidCharsPattern } from 'constants/memo/TagRule';
 
 export const DashboardPage = ({
-  headerLeftMarginToggle,
+  headerLeftMarginToggle = false,
+  headerLeftMargin = 0,
 }: {
   headerLeftMarginToggle?: boolean;
+  headerLeftMargin?: number;
 }) => {
   const { viewMemos, tags, handleTagClick, clickAllTags } =
     useSelectedTagMemosManager();
@@ -29,6 +31,7 @@ export const DashboardPage = ({
       <AnimatedHeader
         text={'메모 대시보드'}
         leftMarginToggle={headerLeftMarginToggle}
+        leftMargin={headerLeftMargin}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
       />
 

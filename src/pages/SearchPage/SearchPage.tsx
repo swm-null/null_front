@@ -4,9 +4,11 @@ import { AnimatedHeader } from 'components/ui';
 import { SearchInput, SearchScrollView } from './components';
 
 export const SearchPage = ({
-  headerLeftMarginToggle,
+  headerLeftMarginToggle = false,
+  headerLeftMargin = 0,
 }: {
   headerLeftMarginToggle?: boolean;
+  headerLeftMargin?: number;
 }) => {
   const {
     searchConversations,
@@ -20,6 +22,7 @@ export const SearchPage = ({
       <AnimatedHeader
         text={'메모 검색하기'}
         leftMarginToggle={headerLeftMarginToggle}
+        leftMargin={headerLeftMargin}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION_SECOND}
       />
       <div className="flex flex-col flex-1 overflow-hidden px-4">
