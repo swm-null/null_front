@@ -4,7 +4,7 @@ import useSelectedTagMemosManager from './hook/useSelectedTagMemosManager';
 import { Divider } from '@mui/material';
 import {
   SIDEBAR_HEADER_ANIMATION_DURATION_SECOND,
-  tagInvalidCharsPattern,
+  TAG_INVALID_CHARS_PATTERN,
 } from 'config/constants';
 
 export const DashboardPage = ({
@@ -42,7 +42,7 @@ export const DashboardPage = ({
         <UnEditableTag
           key="all"
           text="모든 메모"
-          invalidCharsPattern={tagInvalidCharsPattern}
+          invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
           onClick={clickAllTags}
         />
         <Divider orientation="vertical" />
@@ -52,7 +52,7 @@ export const DashboardPage = ({
               <UnEditableTag
                 key={index}
                 text={tag.name}
-                invalidCharsPattern={tagInvalidCharsPattern}
+                invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
                 onClick={() => handleTagClick(tag.name)}
               />
             ))}

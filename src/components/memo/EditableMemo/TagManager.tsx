@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { EditableTag } from 'components/ui/';
 import { Tag } from 'interfaces/MemoInterface';
 import { TagCreateInput } from './TagCreateInput';
-import { tagInvalidCharsPattern } from 'config/constants';
+import { TAG_INVALID_CHARS_PATTERN } from 'config/constants';
 
 interface TagManagerProps {
   tags: Tag[];
@@ -47,14 +47,14 @@ export const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
           editable={editable}
           onTextChange={(text) => updateTag(index, text)}
           onDelete={() => deleteTag(index)}
-          invalidCharsPattern={tagInvalidCharsPattern}
+          invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
         />
       ))}
       {editable && (
         <TagCreateInput
           value={tagInput}
           addTag={addTag}
-          tagInvalidCharsPattern={tagInvalidCharsPattern}
+          tagInvalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
         />
       )}
     </div>
