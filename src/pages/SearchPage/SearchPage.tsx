@@ -2,6 +2,7 @@ import { useSearchConversationManager } from './hook/useSearchConversationManage
 import { AnimatedHeader } from 'components/ui';
 import { SearchInput, SearchScrollView } from './components';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'config/constants';
+import { useTranslation } from 'react-i18next';
 
 export const SearchPage = ({
   headerLeftMarginToggle = false,
@@ -16,11 +17,12 @@ export const SearchPage = ({
     editSearchConversation,
     removeSearchConversation,
   } = useSearchConversationManager();
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
       <AnimatedHeader
-        text={'메모 검색하기'}
+        text={t('pages.search.header')}
         leftMarginToggle={headerLeftMarginToggle}
         leftMargin={headerLeftMargin}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}

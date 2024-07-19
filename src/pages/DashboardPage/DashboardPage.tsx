@@ -6,6 +6,7 @@ import {
   SIDEBAR_HEADER_ANIMATION_DURATION,
   TAG_INVALID_CHARS_PATTERN,
 } from 'config/constants';
+import { useTranslation } from 'react-i18next';
 
 export const DashboardPage = ({
   headerLeftMarginToggle = false,
@@ -14,6 +15,7 @@ export const DashboardPage = ({
   headerLeftMarginToggle?: boolean;
   headerLeftMargin?: number;
 }) => {
+  const { t } = useTranslation();
   const { viewMemos, tags, handleTagClick, clickAllTags } =
     useSelectedTagMemosManager();
 
@@ -31,7 +33,7 @@ export const DashboardPage = ({
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
       <AnimatedHeader
-        text={'메모 대시보드'}
+        text={t('pages.dashboard.header')}
         leftMarginToggle={headerLeftMarginToggle}
         leftMargin={headerLeftMargin}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
@@ -41,7 +43,7 @@ export const DashboardPage = ({
       <div className="flex w-full px-4 gap-2 overflow-hidden">
         <UnEditableTag
           key="all"
-          text="모든 메모"
+          text={t('pages.dashboard.allMemoButton')}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
           onClick={clickAllTags}
         />

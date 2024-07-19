@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { isSearchMemoResponse, isValidResponse, searchMemo } from 'utils/auth';
 import { MemoSearchAnswer } from 'interfaces/MemoInterface';
 import { usePressEnterFetch } from './usePressEnterFetch';
+import { useTranslation } from 'react-i18next';
 
 export const SearchInput = ({
   addSearchConversation,
@@ -10,6 +11,7 @@ export const SearchInput = ({
   addSearchConversation: (text: string) => string;
   editSearchConversation: (id: string, answer: MemoSearchAnswer) => string;
 }) => {
+  const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleSubmit: submitSearchQuery,
@@ -59,7 +61,7 @@ export const SearchInput = ({
         value={message}
         onChange={handleInputChange}
         className="flex-1 px-4 py-2 h-[110px] focus:outline-none resize-none"
-        placeholder="입력 프롬프트"
+        placeholder={t('pages.search.inputPlaceholder')}
         onKeyDown={handlePressEnterFetch}
         rows={6}
       />
@@ -67,7 +69,7 @@ export const SearchInput = ({
         onClick={submitSearchQuery}
         className="mt-2 ml-4 bg-black text-white rounded-full py-2 px-6"
       >
-        검색
+        {t('pages.search.searchButton')}
       </button>
     </div>
   );

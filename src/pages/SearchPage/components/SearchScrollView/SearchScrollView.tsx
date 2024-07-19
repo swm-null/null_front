@@ -4,6 +4,7 @@ import { SearchConversation } from './SearchConversation';
 import { MemoSearchConversation } from 'interfaces/MemoInterface';
 import { DownIcon } from 'assets/icons';
 import { Slide, SvgIcon } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export const SearchScrollView = ({
   searchConversations,
@@ -12,13 +13,13 @@ export const SearchScrollView = ({
   searchConversations: MemoSearchConversation[];
   removeSearchConversation: (id: string) => string;
 }) => {
-  // FIXME: user, chatbot 데이터 따로 관리하고, 거기서 데이터 가져오는 코드 추가
-  const userName = '민지';
-  const chatBotName = '오트서처';
-  const userImageUrl =
-    'https://imgv3.fotor.com/images/slider-image/A-clear-close-up-photo-of-a-woman.jpg';
-  const chatBotImageUrl =
-    'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg';
+  const { t } = useTranslation();
+
+  // FIXME: user마다 다른 user, chatbot 데이터 서버에서 관리하고, 거기서 데이터 가져오는 코드 추가
+  const userName = t('pages.search.use.name');
+  const chatBotName = t('pages.search.ai.name');
+  const userImageUrl = t('pages.search.use.url');
+  const chatBotImageUrl = t('pages.search.ai.url');
 
   // 버튼 클릭 시 스크롤 이동할 방향의 div에 설정하는 ref
   const scrollDirectionRef = useRef<HTMLDivElement>(null);

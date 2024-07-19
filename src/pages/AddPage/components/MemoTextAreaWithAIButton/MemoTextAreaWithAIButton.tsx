@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface MemoTextAreaWithAIButtonProps {
   value: string;
@@ -15,6 +16,7 @@ export const MemoTextAreaWithAIButton = ({
   onButtonClick,
   status,
 }: MemoTextAreaWithAIButtonProps) => {
+  const { t } = useTranslation();
   const isDisabled = status === 'loading';
 
   return (
@@ -28,14 +30,16 @@ export const MemoTextAreaWithAIButton = ({
       />
       <div className="w-full flex flex-row mb-10">
         <span className="mt-3 flex flex-1 items-center">
-          AI로 관련 태그를 생성해드립니다.{' '}
+          {t('pages.add.memoCreateExplainText')}
         </span>
         <button
           className="mt-2 ml-4 bg-gray2 text-white rounded-full py-2 px-6"
           onClick={onButtonClick}
           disabled={isDisabled}
         >
-          {status === 'loading' ? '로딩 중...' : '메모 AI로 생성하기'}
+          {status === 'loading'
+            ? t('pages.add.memoCreateButton.loading')
+            : t('pages.add.memoCreateButton.default')}
         </button>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { SideBarOpenCloseButton } from './sidebar/SideBarOpenCloseButton';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar/useSideBarOpenCloseButtonAnimation';
 import { AddPage, SearchPage, DashboardPage } from 'pages';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'config/constants';
+import './i18n';
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');

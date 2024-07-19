@@ -1,6 +1,7 @@
 import { MemoSearchConversation } from 'interfaces/MemoInterface';
 import { AIMessage } from './AIMessage';
 import { UserMessage } from './UserMessage';
+import { useTranslation } from 'react-i18next';
 
 export const SearchConversation = ({
   data,
@@ -17,6 +18,8 @@ export const SearchConversation = ({
   chatBotImageUrl: string;
   removeSearchConversation: (id: string) => string;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div key={data.id}>
       <UserMessage
@@ -35,7 +38,7 @@ export const SearchConversation = ({
         // 버튼 안 보이게 하기 위한 임시 hidden 처리
         className="hidden h-8 top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
       >
-        Remove
+        {t('pages.search.conversation.removeButton')}
       </button>
     </div>
   );
