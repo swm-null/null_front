@@ -20,8 +20,8 @@ const App = () => {
     useHeaderAnimation: boolean;
   }) => {
     const commonProps = {
-      headerLeftMarginToggle: useHeaderAnimation ? !isOpen : false,
-      headerLeftMargin: useHeaderAnimation ? 48 : 0,
+      headerLeftMarginToggle: useHeaderAnimation ? !isOpen : true,
+      headerLeftMargin: 48,
     };
 
     switch (currentPage) {
