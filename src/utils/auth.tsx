@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Memo, MemoSearchAnswer } from '../interfaces/MemoInterface';
+import { Memo, MemoSearchAnswer } from 'pages/home/contents/@interfaces';
 const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 
 export interface validResponse {
@@ -184,7 +184,7 @@ export const getAllMemos = async (): Promise<
     const responseInfo = {
       method,
       status: response.status,
-      message: '모든 메모 가져오는 것을 성공했습니다. ',
+      message: '모든 메모 가져오는 것을 성공했습니다.',
       memos: response.data,
     };
     return responseInfo;

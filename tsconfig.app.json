@@ -26,9 +26,9 @@
     /* Modules */
     "baseUrl": "src",
     "paths": {
-      "components/*": ["components/*"],
-      "config/*": ["config/*"],
-      "interfaces/*": ["interfaces/*"],
+      "app/*": ["app/*"],
+      "features/*": ["features/*"],
+      "i18n/*": ["i18n/*"],
       "utils/*": ["utils/*"],
       "assets/*": ["assets/*"]
     },

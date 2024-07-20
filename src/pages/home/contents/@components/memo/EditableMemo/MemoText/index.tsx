@@ -1,0 +1,1 @@
+export { MemoText } from './MemoText';
