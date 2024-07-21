@@ -24,7 +24,7 @@ const ResultMemoList = ({
               key={memo.id}
               memo={memo}
               updateMemo={(newMemo) => updateResultMemo(index, newMemo)}
-              deleteMemo={() => deleteResultMemo(index)}
+              softDeleteMemo={() => deleteResultMemo(index)}
             />
           ))}
         </div>

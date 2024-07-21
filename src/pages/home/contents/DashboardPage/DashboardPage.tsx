@@ -22,17 +22,6 @@ const DashboardPage = ({
   const { viewMemos, tags, handleTagClick, clickAllTags } =
     useSelectedTagMemosManager();
 
-  // TODO: api 연동하는 코드 추가하기
-  // 위치는 여기에 할지, EditableMemo 할지 고민 더 해보기
-  const updateMemo = () => {
-    console.log('updateMemo api 연동 예정');
-  };
-
-  // TODO: api 연동하는 코드 추가하기
-  const deleteMemo = () => {
-    console.log('deleteMemo api 연동 예정');
-  };
-
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
       <AnimatedHeader
@@ -61,13 +50,7 @@ const DashboardPage = ({
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <SelectedTagMemosList>
           {viewMemos.map((memo) => (
-            <SelectedTagMemo
-              editable
-              key={memo.id}
-              memo={memo}
-              updateMemo={updateMemo}
-              deleteMemo={deleteMemo}
-            />
+            <SelectedTagMemo editable key={memo.id} memo={memo} />
           ))}
         </SelectedTagMemosList>
       </div>
