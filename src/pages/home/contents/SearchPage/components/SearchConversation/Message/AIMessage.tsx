@@ -1,5 +1,5 @@
 import { MemoSearchAnswer } from 'pages/home/contents/@interfaces';
-import { EditableMemo } from 'pages/home/contents/@components';
+import { UneditableMemo } from 'pages/home/contents/@components';
 
 const AIMessage = ({
   name,
@@ -16,7 +16,7 @@ const AIMessage = ({
         key={memo.id}
         className="flex-shrink-0 rounded-lg w-72 whitespace-normal break-words text-base"
       >
-        <EditableMemo memo={memo} />
+        <UneditableMemo memo={memo} />
       </div>
     );
   });
