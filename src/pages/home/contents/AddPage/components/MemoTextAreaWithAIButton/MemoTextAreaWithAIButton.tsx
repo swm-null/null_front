@@ -30,7 +30,7 @@ const MemoTextAreaWithAIButton = ({
       />
       <div className="w-full flex flex-row mb-10">
         <span className="mt-3 flex flex-1 items-center">
-          {t('pages.add.memoCreateExplainText')}
+          {t('pages.add.placeholder')}
         </span>
         <button
           className="mt-2 ml-4 bg-gray2 text-white rounded-full py-2 px-6"
