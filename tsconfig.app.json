@@ -25,14 +25,6 @@
 
     /* Modules */
     "baseUrl": "src",
-    "paths": {
-      "components/*": ["components/*"],
-      "constants/*": ["constants/*"],
-      "interfaces/*": ["interfaces/*"],
-      "utils/*": ["utils/*"],
-      "assets/*": ["assets/*"]
-    },
-
     "types": ["vite-plugin-svgr/client"]
   },
   "include": ["src", "svg.d.ts"]

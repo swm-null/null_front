@@ -1,1 +1,0 @@
-export { SelectedTagMemosList } from './SelectedTagMemosList';
