@@ -100,12 +100,13 @@ export const searchMemo = async (
   }
 };
 
-interface createMemoResponse extends Memo, validResponse {}
+// Create, Update Memo Response
+interface cuMemoResponse extends Memo, validResponse {}
 
-// 2.
+// 2. TODO: 작동 확인하기
 export const createMemo = async (
   inputContent: string
-): Promise<createMemoResponse | errorResponse> => {
+): Promise<cuMemoResponse | errorResponse> => {
   const method = 'createMemo';
   const endpoint = `${LOCALHOST}/memos`;
   const config = {
@@ -119,7 +120,6 @@ export const createMemo = async (
       JSON.stringify({ content: inputContent }),
       config
     );
-    console.log(response);
     const { id, content, tags } = response.data;
     const responseInfo = {
       method,
@@ -135,29 +135,56 @@ export const createMemo = async (
   }
 };
 
-// 3. FIXME: response 새로 만들어서 수정하기
-export const editMemo = async (
-  inputId: string,
-  inputContent: string
-): Promise<searchMemoResponse | errorResponse> => {
+// 3. TODO: 작동 확인하기
+export const updateMemo = async (
+  id: string,
+  content: string
+): Promise<cuMemoResponse | errorResponse> => {
   const method = 'editMemo';
-  const endpoint = `${LOCALHOST}/memos`;
+  const endpoint = `${LOCALHOST}/memos/${id}`;
+  const data = JSON.stringify({
+    content: content,
+  });
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
   try {
-    const response = await axios.put(
-      endpoint,
-      JSON.stringify({ id: inputId, content: inputContent }),
-      config
-    );
+    const response = await axios.put(endpoint, data, config);
     const { id, content, tags } = response.data;
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모 수정을 성공했습니다. ',
+      message: '메모 수정을 성공했습니다.',
+      id,
+      content,
+      tags,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+// 4. TODO: 작동 확인하기
+export const deleteMemo = async (
+  id: string
+): Promise<validResponse | errorResponse> => {
+  const method = 'deleteMemo';
+  const endpoint = `${LOCALHOST}/memos/${id}`;
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    const response = await axios.delete(endpoint, config);
+    const { id, content, tags } = response.data;
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '메모를 삭제했습니다.',
       id,
       content,
       tags,
@@ -172,7 +199,7 @@ interface getAllMemosResponse extends validResponse {
   memos: Memo[];
 }
 
-// 4.
+// 5.
 export const getAllMemos = async (): Promise<
   getAllMemosResponse | errorResponse
 > => {
@@ -207,14 +234,25 @@ export const isSearchMemoResponse = (
 };
 
 export const isCreateMemoResponse = (
-  response: createMemoResponse | errorResponse
-): response is createMemoResponse => {
-  // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
-  return (response as createMemoResponse).content !== null;
+  response: cuMemoResponse | errorResponse
+): response is cuMemoResponse => {
+  return (response as cuMemoResponse).content !== null;
+};
+
+export const isUpdateMemoResponse = (
+  response: cuMemoResponse | errorResponse
+): response is cuMemoResponse => {
+  return (response as cuMemoResponse).content !== null;
+};
+
+export const isDeleteMemoResponse = (
+  response: validResponse | errorResponse
+): response is validResponse => {
+  return isValidResponse(response);
 };
 
 export const isGetAllMemosResponse = (
   response: getAllMemosResponse | errorResponse
 ): response is getAllMemosResponse => {
-  return isValidResponse(response as getAllMemosResponse);
+  return isValidResponse(response);
 };
