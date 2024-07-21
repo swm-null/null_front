@@ -1,1 +1,1 @@
-export { default as UnEditableTag } from './UnEditableTag';
+export { default as UneditableTag } from './UneditableTag';

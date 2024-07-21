@@ -1,3 +1,3 @@
 export * from './AnimatedHeader';
 export * from './EditableTag';
-export * from './UnEditableTag';
+export * from './UneditableTag';

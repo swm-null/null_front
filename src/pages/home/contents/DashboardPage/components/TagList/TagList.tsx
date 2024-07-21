@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Divider } from '@mui/material';
-import { UnEditableTag } from 'pages/home/contents/@components';
+import { UneditableTag } from 'pages/home/contents/@components';
 
 const TagList = ({
   children,
@@ -15,7 +15,7 @@ const TagList = ({
 }) => {
   return (
     <div className="flex w-full px-4 gap-2 overflow-hidden">
-      <UnEditableTag
+      <UneditableTag
         key="all"
         text={allTagText}
         invalidCharsPattern={invalidCharsPattern}

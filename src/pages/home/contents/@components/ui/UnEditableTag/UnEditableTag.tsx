@@ -1,6 +1,6 @@
 import { EditableTag } from 'pages/home/contents/@components';
 
-interface UnEditableTagProps {
+interface UneditableTagProps {
   text: string;
   /**
    * tag에 제외하고 싶은 문자 Regex 규칙 전달
@@ -10,11 +10,11 @@ interface UnEditableTagProps {
   onClick?: () => void;
 }
 
-const UnEditableTag = ({
+const UneditableTag = ({
   text,
   invalidCharsPattern,
   onClick,
-}: UnEditableTagProps) => {
+}: UneditableTagProps) => {
   return (
     <EditableTag
       text={text}
@@ -24,4 +24,4 @@ const UnEditableTag = ({
   );
 };
 
-export default UnEditableTag;
+export default UneditableTag;

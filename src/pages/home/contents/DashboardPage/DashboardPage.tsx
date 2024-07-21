@@ -5,7 +5,7 @@ import {
 } from 'pages/home/constants';
 import {
   AnimatedHeader,
-  UnEditableTag,
+  UneditableTag,
   EditableMemo as SelectedTagMemo,
 } from 'pages/home/contents/@components';
 import { SelectedTagMemosList, TagList } from './components';
@@ -49,7 +49,7 @@ const DashboardPage = ({
         invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
       >
         {tags.map((tag, index) => (
-          <UnEditableTag
+          <UneditableTag
             key={index}
             text={tag.name}
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
