@@ -1,13 +1,11 @@
-import { Masonry } from '@mui/lab';
 import { ReactNode } from 'react';
+import { Masonry } from '@mui/lab';
 
 interface SelectedTagMemosListProps {
   children?: ReactNode;
 }
 
-export const SelectedTagMemosList = ({
-  children,
-}: SelectedTagMemosListProps) => {
+const SelectedTagMemosList = ({ children }: SelectedTagMemosListProps) => {
   return (
     <div className="flex flex-col flex-1 overflow-y-scroll no-scrollbar my-4">
       {children ? (
@@ -18,3 +16,5 @@ export const SelectedTagMemosList = ({
     </div>
   );
 };
+
+export default SelectedTagMemosList;

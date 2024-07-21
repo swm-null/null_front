@@ -1,1 +1,1 @@
-export { SearchScrollView } from './SearchScrollView';
+export { default as SearchScrollView } from './SearchScrollView';

@@ -1,18 +1,17 @@
-import {
-  AnimatedHeader,
-  UnEditableTag,
-} from 'pages/home/contents/@components/ui';
-import { SelectedTagMemosList } from './components';
-import useSelectedTagMemosManager from './hook/useSelectedTagMemosManager';
+import { useTranslation } from 'react-i18next';
 import {
   SIDEBAR_HEADER_ANIMATION_DURATION,
   TAG_INVALID_CHARS_PATTERN,
 } from 'pages/home/constants';
-import { EditableMemo as SelectedTagMemo } from 'pages/home/contents/@components';
-import { useTranslation } from 'react-i18next';
-import { TagList } from './components/TagList';
+import {
+  AnimatedHeader,
+  UnEditableTag,
+  EditableMemo as SelectedTagMemo,
+} from 'pages/home/contents/@components';
+import { SelectedTagMemosList, TagList } from './components';
+import { useSelectedTagMemosManager } from './hook';
 
-export const DashboardPage = ({
+const DashboardPage = ({
   headerLeftMarginToggle = false,
   headerLeftMargin = 0,
 }: {
@@ -75,3 +74,5 @@ export const DashboardPage = ({
     </div>
   );
 };
+
+export default DashboardPage;

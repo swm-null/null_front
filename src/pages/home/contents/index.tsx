@@ -1,3 +1,3 @@
-export { AddPage } from './AddPage';
-export { SearchPage } from './SearchPage';
-export { DashboardPage } from './DashboardPage';
+export * from './AddPage';
+export * from './SearchPage';
+export * from './DashboardPage';

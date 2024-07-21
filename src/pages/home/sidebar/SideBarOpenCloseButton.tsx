@@ -9,7 +9,7 @@ const Path = (props: any) => (
 );
 
 // 햄버거 버튼과 메뉴 닫기 버튼
-export const SideBarOpenCloseButton = ({
+const SideBarOpenCloseButton = ({
   handleClick,
 }: {
   handleClick: () => void;
@@ -40,3 +40,5 @@ export const SideBarOpenCloseButton = ({
     </svg>
   </button>
 );
+
+export default SideBarOpenCloseButton;

@@ -1,1 +1,1 @@
-export { SelectedTagMemosList } from './SelectedTagMemosList';
+export { default as SelectedTagMemosList } from './SelectedTagMemosList';

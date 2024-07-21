@@ -9,7 +9,7 @@ interface TagCreateInputProps {
    */
   tagInvalidCharsPattern: RegExp;
 }
-export const TagCreateInput = ({
+const TagCreateInput = ({
   value,
   addTag,
   tagInvalidCharsPattern,
@@ -40,3 +40,5 @@ export const TagCreateInput = ({
     </div>
   );
 };
+
+export default TagCreateInput;

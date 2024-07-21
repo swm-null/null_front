@@ -1,1 +1,1 @@
-export { SearchConversation } from './SearchConversation';
+export { default as SearchConversation } from './SearchConversation';

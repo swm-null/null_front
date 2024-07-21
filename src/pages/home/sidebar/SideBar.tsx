@@ -5,10 +5,7 @@ interface SideBarProps {
   sideBarWidth?: number;
 }
 
-export const SideBar = ({
-  setCurrentPage,
-  sideBarWidth = 250,
-}: SideBarProps) => {
+const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
   return (
     <div className={`h-screen bg-gray-100 flex flex-col`}>
       {/* TODO: tailwind에서 동적 데이터 지원하는지 확인 */}
@@ -46,3 +43,5 @@ export const SideBar = ({
     </div>
   );
 };
+
+export default SideBar;

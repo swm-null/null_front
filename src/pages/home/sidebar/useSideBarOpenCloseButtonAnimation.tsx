@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useAnimate } from 'framer-motion';
 
-export const useSideBarOpenCloseButtonAnimation = (isOpen: boolean) => {
+const useSideBarOpenCloseButtonAnimation = (isOpen: boolean) => {
   const [scope, animate] = useAnimate();
 
   useEffect(() => {
@@ -23,3 +23,5 @@ export const useSideBarOpenCloseButtonAnimation = (isOpen: boolean) => {
 
   return scope;
 };
+
+export default useSideBarOpenCloseButtonAnimation;

@@ -1,4 +1,4 @@
-export const UserMessage = ({
+const UserMessage = ({
   name,
   imageUrl,
   contentText,
@@ -25,3 +25,5 @@ export const UserMessage = ({
     </div>
   );
 };
+
+export default UserMessage;

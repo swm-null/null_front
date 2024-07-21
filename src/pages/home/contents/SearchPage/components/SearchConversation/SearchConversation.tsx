@@ -2,7 +2,7 @@ import { MemoSearchConversation } from 'pages/home/contents/@interfaces';
 import { AIMessage, UserMessage } from './Message';
 import { useTranslation } from 'react-i18next';
 
-export const SearchConversation = ({
+const SearchConversation = ({
   data,
   userName,
   chatBotName,
@@ -42,3 +42,5 @@ export const SearchConversation = ({
     </div>
   );
 };
+
+export default SearchConversation;

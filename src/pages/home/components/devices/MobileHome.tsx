@@ -1,7 +1,7 @@
+import { ReactNode } from 'react';
 import { AnimationScope, motion } from 'framer-motion';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import { SideBar, SideBarOpenCloseButton } from 'pages/home/sidebar';
-import { ReactNode } from 'react';
 
 interface MobileHomeProps {
   isOpen: boolean;
@@ -11,7 +11,7 @@ interface MobileHomeProps {
   scope: AnimationScope<any>;
 }
 
-export const MobileHome = ({
+const MobileHome = ({
   isOpen,
   onOpenButtonClick,
   setCurrentPage,
@@ -53,3 +53,5 @@ export const MobileHome = ({
     </div>
   );
 };
+
+export default MobileHome;

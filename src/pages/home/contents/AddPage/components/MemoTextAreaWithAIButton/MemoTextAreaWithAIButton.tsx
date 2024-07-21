@@ -9,7 +9,7 @@ interface MemoTextAreaWithAIButtonProps {
   status: 'default' | 'loading' | 'success' | 'error';
 }
 
-export const MemoTextAreaWithAIButton = ({
+const MemoTextAreaWithAIButton = ({
   value,
   placeholder,
   onChange,
@@ -45,3 +45,5 @@ export const MemoTextAreaWithAIButton = ({
     </div>
   );
 };
+
+export default MemoTextAreaWithAIButton;

@@ -1,1 +1,1 @@
-export { EditableMemo } from './EditableMemo';
+export { default as EditableMemo } from './EditableMemo';

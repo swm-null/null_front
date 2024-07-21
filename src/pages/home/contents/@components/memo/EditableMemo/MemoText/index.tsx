@@ -1,1 +1,1 @@
-export { MemoText } from './MemoText';
+export { default as MemoText } from './MemoText';

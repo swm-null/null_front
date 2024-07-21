@@ -4,7 +4,7 @@ import { usePressEnterFetch } from './hook';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchAnswer } from 'pages/home/contents/@interfaces';
 
-export const SearchInput = ({
+const SearchInput = ({
   addSearchConversation,
   editSearchConversation,
 }: {
@@ -74,3 +74,5 @@ export const SearchInput = ({
     </div>
   );
 };
+
+export default SearchInput;

@@ -1,1 +1,1 @@
-export { EditableMemo } from './EditableMemo';
+export * from './EditableMemo';

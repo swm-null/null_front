@@ -1,14 +1,14 @@
-import { useSearchConversationManager } from './hook/useSearchConversationManager';
-import { AnimatedHeader } from 'pages/home/contents/@components/ui';
+import { useTranslation } from 'react-i18next';
+import { AnimatedHeader } from 'pages/home/contents/@components';
+import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import {
   SearchInput,
   SearchScrollView,
   SearchConversation,
 } from './components';
-import { useTranslation } from 'react-i18next';
-import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
+import { useSearchConversationManager } from './hook';
 
-export const SearchPage = ({
+const SearchPage = ({
   headerLeftMarginToggle = false,
   headerLeftMargin = 0,
 }: {
@@ -59,3 +59,5 @@ export const SearchPage = ({
     </div>
   );
 };
+
+export default SearchPage;

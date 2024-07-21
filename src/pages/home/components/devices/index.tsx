@@ -1,2 +1,2 @@
-export { DesktopHome } from './DesktopHome';
-export { MobileHome } from './MobileHome';
+export { default as DesktopHome } from './DesktopHome';
+export { default as MobileHome } from './MobileHome';

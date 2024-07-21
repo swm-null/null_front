@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { TagManager } from './TagManager';
 import { MemoText } from './MemoText';
-import { Memo } from 'pages/home/interfaces/MemoInterface';
+import { Memo } from 'pages/home/contents/@interfaces';
 
-export const EditableMemo = ({
+const EditableMemo = ({
   memo,
   updateMemo,
   deleteMemo,
@@ -49,3 +49,5 @@ export const EditableMemo = ({
     </div>
   );
 };
+
+export default EditableMemo;

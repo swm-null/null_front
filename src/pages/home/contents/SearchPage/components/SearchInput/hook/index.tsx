@@ -1,1 +1,1 @@
-export { usePressEnterFetch } from './usePressEnterFetch';
+export { default as usePressEnterFetch } from './usePressEnterFetch';

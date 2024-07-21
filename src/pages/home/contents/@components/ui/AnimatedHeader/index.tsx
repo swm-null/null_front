@@ -1,1 +1,1 @@
-export { AnimatedHeader } from './AnimatedHeader';
+export { default as AnimatedHeader } from './AnimatedHeader';

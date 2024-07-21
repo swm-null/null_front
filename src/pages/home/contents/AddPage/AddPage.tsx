@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
-import useResultMemoManagerWithStatus from './hook/useResultMemoManagerWithStatus';
 import { AnimatedHeader } from 'pages/home/contents/@components/ui';
 import { MemoTextAreaWithAIButton, ResultMemoList } from './components';
-import { useTranslation } from 'react-i18next';
+import { useResultMemoManagerWithStatus } from './hook';
 
-export const AddPage = ({
+const AddPage = ({
   headerLeftMarginToggle = false,
   headerLeftMargin = 0,
 }: {
@@ -77,3 +77,5 @@ export const AddPage = ({
     </div>
   );
 };
+
+export default AddPage;

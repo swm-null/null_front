@@ -1,7 +1,7 @@
+import { ReactNode } from 'react';
 import { AnimationScope, motion } from 'framer-motion';
 import { SideBar, SideBarOpenCloseButton } from 'pages/home/sidebar';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
-import { ReactNode } from 'react';
 
 interface DesktopHomeProps {
   isOpen: boolean;
@@ -11,7 +11,7 @@ interface DesktopHomeProps {
   scope: AnimationScope<any>;
 }
 
-export const DesktopHome = ({
+const DesktopHome = ({
   isOpen,
   onOpenButtonClick,
   setCurrentPage,
@@ -36,3 +36,5 @@ export const DesktopHome = ({
     </div>
   );
 };
+
+export default DesktopHome;

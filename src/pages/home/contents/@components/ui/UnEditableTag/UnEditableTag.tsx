@@ -10,7 +10,7 @@ interface UnEditableTagProps {
   onClick?: () => void;
 }
 
-export const UnEditableTag = ({
+const UnEditableTag = ({
   text,
   invalidCharsPattern,
   onClick,
@@ -23,3 +23,5 @@ export const UnEditableTag = ({
     />
   );
 };
+
+export default UnEditableTag;

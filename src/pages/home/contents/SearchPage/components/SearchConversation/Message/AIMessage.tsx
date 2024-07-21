@@ -1,7 +1,7 @@
 import { MemoSearchAnswer } from 'pages/home/contents/@interfaces';
-import { EditableMemo } from 'pages/home/contents/@components/memo';
+import { EditableMemo } from 'pages/home/contents/@components';
 
-export const AIMessage = ({
+const AIMessage = ({
   name,
   imageUrl,
   content,
@@ -44,3 +44,5 @@ export const AIMessage = ({
     </div>
   );
 };
+
+export default AIMessage;

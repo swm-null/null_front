@@ -1,6 +1,6 @@
-import { EditableMemo as ResultMemo } from 'pages/home/contents/@components/memo';
-import { Memo } from 'pages/interfaces/MemoInterface';
 import { useTranslation } from 'react-i18next';
+import { EditableMemo as ResultMemo } from 'pages/home/contents/@components';
+import { Memo } from 'pages/home/contents/@interfaces';
 
 interface ResultMemoListProps {
   memos: Memo[];
@@ -8,7 +8,7 @@ interface ResultMemoListProps {
   deleteResultMemo: (index: number) => void;
 }
 
-export const ResultMemoList = ({
+const ResultMemoList = ({
   memos,
   updateResultMemo,
   deleteResultMemo,
@@ -32,3 +32,5 @@ export const ResultMemoList = ({
     </>
   );
 };
+
+export default ResultMemoList;

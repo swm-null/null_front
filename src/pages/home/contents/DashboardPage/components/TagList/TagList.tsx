@@ -1,8 +1,8 @@
+import { ReactNode } from 'react';
 import { Divider } from '@mui/material';
 import { UnEditableTag } from 'pages/home/contents/@components';
-import { ReactNode } from 'react';
 
-export const TagList = ({
+const TagList = ({
   children,
   allTagText,
   handleAllTagClick,
@@ -28,3 +28,5 @@ export const TagList = ({
     </div>
   );
 };
+
+export default TagList;

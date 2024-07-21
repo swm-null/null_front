@@ -4,7 +4,7 @@ import { MemoSearchConversation } from 'pages/home/contents/@interfaces';
 import { DownIcon } from 'assets/icons';
 import { Slide, SvgIcon } from '@mui/material';
 
-export const SearchScrollView = ({
+const SearchScrollView = ({
   searchConversations,
   children,
 }: {
@@ -58,3 +58,5 @@ export const SearchScrollView = ({
     </div>
   );
 };
+
+export default SearchScrollView;

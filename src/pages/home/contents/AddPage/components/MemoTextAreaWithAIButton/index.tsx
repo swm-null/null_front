@@ -1,1 +1,1 @@
-export { MemoTextAreaWithAIButton } from './MemoTextAreaWithAIButton';
+export { default as MemoTextAreaWithAIButton } from './MemoTextAreaWithAIButton';

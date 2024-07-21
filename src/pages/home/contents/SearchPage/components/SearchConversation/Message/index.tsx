@@ -1,2 +1,2 @@
-export { AIMessage } from './AIMessage';
-export { UserMessage } from './UserMessage';
+export { default as AIMessage } from './AIMessage';
+export { default as UserMessage } from './UserMessage';

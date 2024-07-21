@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { EditableTag } from 'pages/home/contents/@components';
 import { TagCreateInput } from './TagCreateInput';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
-import { Tag } from 'pages/home/interfaces/MemoInterface';
+import { Tag } from 'pages/home/contents/@interfaces';
 
 interface TagManagerProps {
   tags: Tag[];
   editable: boolean;
   setTags: (tags: Tag[]) => void;
 }
-export const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
+const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
   const [tagInput, setTagInput] = useState('');
 
   // 새로운 tag 추가
@@ -60,3 +60,5 @@ export const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
     </div>
   );
 };
+
+export default TagManager;

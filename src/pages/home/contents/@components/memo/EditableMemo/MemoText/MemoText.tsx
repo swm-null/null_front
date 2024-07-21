@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import { TextareaAutosize } from '@mui/material';
 
-export const MemoText = ({
+const MemoText = ({
   message,
   setMessage,
   editable = false,
@@ -23,3 +23,5 @@ export const MemoText = ({
     />
   );
 };
+
+export default MemoText;

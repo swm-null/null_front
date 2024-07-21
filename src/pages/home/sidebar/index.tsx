@@ -1,3 +1,3 @@
-export { SideBar } from './SideBar';
-export { SideBarOpenCloseButton } from './SideBarOpenCloseButton';
-export { useSideBarOpenCloseButtonAnimation } from './useSideBarOpenCloseButtonAnimation';
+export { default as SideBar } from './SideBar';
+export { default as SideBarOpenCloseButton } from './SideBarOpenCloseButton';
+export { default as useSideBarOpenCloseButtonAnimation } from './useSideBarOpenCloseButtonAnimation';

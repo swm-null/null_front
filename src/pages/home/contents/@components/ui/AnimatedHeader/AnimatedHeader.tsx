@@ -19,7 +19,7 @@ interface AnimatedHeaderProps {
  * ex) 메모 검색히기, 메모 추가하기
  * 왼쪽에 margin을 조절하는 애니메이션 설정할 수 있음
  */
-export const AnimatedHeader = ({
+const AnimatedHeader = ({
   text,
   leftMarginToggle,
   leftMargin = 48,
@@ -47,3 +47,5 @@ export const AnimatedHeader = ({
     </div>
   );
 };
+
+export default AnimatedHeader;

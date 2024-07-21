@@ -1,3 +1,3 @@
-export { AnimatedHeader } from './AnimatedHeader';
-export { EditableTag } from './EditableTag';
-export { UnEditableTag } from './UnEditableTag';
+export * from './AnimatedHeader';
+export * from './EditableTag';
+export * from './UnEditableTag';

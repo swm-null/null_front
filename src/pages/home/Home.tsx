@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useSideBarOpenCloseButtonAnimation } from 'pages/home/sidebar';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DesktopHome, MobileHome } from './components';
 import { AddPage, DashboardPage, SearchPage } from './contents';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useSideBarOpenCloseButtonAnimation } from './sidebar';
 
 const queryClient = new QueryClient();
 const MOBILE_DEVICE_WIDTH = 770;
 
-export const Home = () => {
+const Home = () => {
   const [currentPage, setCurrentPage] = useState<string>('add');
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(
     window.innerWidth <= 770
@@ -82,3 +82,5 @@ export const Home = () => {
     </QueryClientProvider>
   );
 };
+
+export default Home;

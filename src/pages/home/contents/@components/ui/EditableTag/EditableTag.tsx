@@ -19,7 +19,7 @@ interface EditableTagProps {
   onClick?: () => void;
 }
 
-export const EditableTag = ({
+const EditableTag = ({
   text,
   editable = false,
   invalidCharsPattern,
@@ -75,3 +75,5 @@ export const EditableTag = ({
     </div>
   );
 };
+
+export default EditableTag;
