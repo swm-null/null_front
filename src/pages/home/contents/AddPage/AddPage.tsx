@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import useResultMemoManagerWithStatus from './hook/useResultMemoManagerWithStatus';
 import { AnimatedHeader } from 'pages/home/contents/@components/ui';
@@ -25,7 +25,7 @@ export const AddPage = ({
   } = useResultMemoManagerWithStatus();
 
   // input의 text가 수정 되면, status를 default로 초기화
-  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
     setStatus('default');
   };

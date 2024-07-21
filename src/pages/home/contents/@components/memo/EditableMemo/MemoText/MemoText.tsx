@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { TextareaAutosize } from '@mui/material';
 
 export const MemoText = ({
@@ -9,7 +10,7 @@ export const MemoText = ({
   setMessage: (newMessage: string) => void;
   editable?: boolean;
 }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 

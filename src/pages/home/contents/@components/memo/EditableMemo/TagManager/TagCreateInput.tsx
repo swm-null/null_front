@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 
 interface TagCreateInputProps {
   value: string;
@@ -16,7 +16,7 @@ export const TagCreateInput = ({
 }: TagCreateInputProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+  const handleInput = (e: FormEvent<HTMLDivElement>) => {
     // text 업데이트 전, 다시 한번 invalidChars 필터링
     if (tagInvalidCharsPattern.test(e.currentTarget.innerText)) {
       const innerText = e.currentTarget.innerText.replace(

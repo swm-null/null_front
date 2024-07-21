@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { isSearchMemoResponse, isValidResponse, searchMemo } from 'utils/auth';
 import { usePressEnterFetch } from './hook';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +50,7 @@ export const SearchInput = ({
   }
 
   const handleInputChange = (e: {
-    target: { value: React.SetStateAction<string> };
+    target: { value: SetStateAction<string> };
   }) => {
     setMessage(e.target.value);
   };

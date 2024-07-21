@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 
 interface EditableTagProps {
   text: string;
@@ -29,7 +29,7 @@ export const EditableTag = ({
 }: EditableTagProps) => {
   const ref = useRef<HTMLSpanElement>(null);
 
-  const handleInput = (e: React.FormEvent<HTMLSpanElement>) => {
+  const handleInput = (e: FormEvent<HTMLSpanElement>) => {
     if (invalidCharsPattern.test(e.currentTarget.innerHTML)) {
       const innerText = e.currentTarget.innerText.replace(
         invalidCharsPattern,

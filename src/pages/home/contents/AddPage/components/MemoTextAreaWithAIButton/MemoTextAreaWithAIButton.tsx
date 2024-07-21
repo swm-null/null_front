@@ -1,10 +1,10 @@
-import React from 'react';
+import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface MemoTextAreaWithAIButtonProps {
   value: string;
   placeholder: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onButtonClick: () => void;
   status: 'default' | 'loading' | 'success' | 'error';
 }
