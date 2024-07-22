@@ -23,7 +23,7 @@ const useSelectedTagMemosManager = () => {
 
   const tags = Array.from(
     new Map(
-      allMemos.flatMap((memo) => memo.tags.map((tag) => [tag.id, tag]))
+      viewMemos.flatMap((memo) => memo.tags.map((tag) => [tag.id, tag]))
     ).values()
   ).sort((tag1, tag2) => tag1.name.localeCompare(tag2.name));
 

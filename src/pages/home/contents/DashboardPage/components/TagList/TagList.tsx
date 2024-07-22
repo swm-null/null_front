@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { Divider } from '@mui/material';
+import { Breadcrumbs } from '@mui/material';
 import { UneditableTag } from 'pages/home/contents/@components';
+import { RightIcon } from 'assets/icons';
 
 const TagList = ({
   children,
@@ -14,15 +15,35 @@ const TagList = ({
   invalidCharsPattern: RegExp;
 }) => {
   return (
-    <div className="flex w-full px-4 gap-2 overflow-hidden">
-      <UneditableTag
-        key="all"
-        text={allTagText}
-        invalidCharsPattern={invalidCharsPattern}
-        onClick={handleAllTagClick}
-      />
-      <Divider orientation="vertical" />
-      <div className="flex flex-1 overflow-hidden overflow-x-scroll">
+    <div className="w-full px-4">
+      <Breadcrumbs separator={<RightIcon />} aria-label="breadcrumb">
+        <UneditableTag
+          key="all"
+          text={allTagText}
+          color="transparent"
+          invalidCharsPattern={invalidCharsPattern}
+          onClick={handleAllTagClick}
+        />
+        <UneditableTag
+          key="all"
+          text={allTagText}
+          color="transparent"
+          invalidCharsPattern={invalidCharsPattern}
+        />
+        <UneditableTag
+          key="all"
+          text={allTagText}
+          color="transparent"
+          invalidCharsPattern={invalidCharsPattern}
+        />
+        <UneditableTag
+          key="all"
+          text={allTagText}
+          color="transparent"
+          invalidCharsPattern={invalidCharsPattern}
+        />
+      </Breadcrumbs>
+      <div className="mt-2 flex flex-1 overflow-hidden overflow-x-scroll">
         <div className="flex flex-none gap-1 overflow-x-scroll">{children}</div>
       </div>
     </div>
