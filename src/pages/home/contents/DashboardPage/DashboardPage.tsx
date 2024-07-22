@@ -19,7 +19,7 @@ const DashboardPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const { viewMemos, tags, handleTagClick, clickAllTags } =
+  const { viewMemos, tags, selectedTag, handleTagClick, clickAllTags } =
     useSelectedTagMemosManager();
 
   // TODO: api 연동하는 코드 추가하기
@@ -45,6 +45,7 @@ const DashboardPage = ({
       {/* tag들 선택하는 부분 */}
       <TagList
         allTagText={t('pages.dashboard.allMemoButton')}
+        selectedTag={selectedTag}
         handleAllTagClick={clickAllTags}
         invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
       >
@@ -53,7 +54,7 @@ const DashboardPage = ({
             key={index}
             text={tag.name}
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-            onClick={() => handleTagClick(tag.name)}
+            onClick={() => handleTagClick(tag)}
           />
         ))}
       </TagList>

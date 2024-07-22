@@ -168,13 +168,13 @@ export const editMemo = async (
   }
 };
 
-interface getAllMemosResponse extends validResponse {
+interface getMemosResponse extends validResponse {
   memos: Memo[];
 }
 
 // 4.
 export const getAllMemos = async (): Promise<
-  getAllMemosResponse | errorResponse
+  getMemosResponse | errorResponse
 > => {
   const method = 'getAllMemos';
   const endpoint = `${LOCALHOST}/memos`;
@@ -185,6 +185,27 @@ export const getAllMemos = async (): Promise<
       method,
       status: response.status,
       message: '모든 메모 가져오는 것을 성공했습니다.',
+      memos: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+// 5.
+export const getSelectedTagMemos = async (
+  tagId: string
+): Promise<getMemosResponse | errorResponse> => {
+  const method = 'getSelectedTagMemos';
+  const endpoint = `${LOCALHOST}/memos/tags/${tagId}`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '특정 태그의 메모 가져오는 것을 성공했습니다.',
       memos: response.data,
     };
     return responseInfo;
@@ -213,8 +234,8 @@ export const isCreateMemoResponse = (
   return (response as createMemoResponse).content !== null;
 };
 
-export const isGetAllMemosResponse = (
-  response: getAllMemosResponse | errorResponse
-): response is getAllMemosResponse => {
-  return isValidResponse(response as getAllMemosResponse);
+export const isGetMemosResponse = (
+  response: getMemosResponse | errorResponse
+): response is getMemosResponse => {
+  return isValidResponse(response as getMemosResponse);
 };
