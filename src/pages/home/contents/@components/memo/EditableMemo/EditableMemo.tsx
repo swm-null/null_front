@@ -56,7 +56,7 @@ const EditableMemo = ({
     [memo]
   );
 
-  const handleBlur = () => {
+  const tryUpdateMemo = () => {
     const newMemo = { id, content: message, tags };
 
     // FIXME: 2024.07.21 - tag 업데이트 기능 추가시 적용하기
@@ -80,7 +80,7 @@ const EditableMemo = ({
         message={message}
         setMessage={setMessage}
         editable={editable}
-        handleBlur={handleBlur}
+        handleBlur={tryUpdateMemo}
       />
       <TagManager tags={tags} setTags={setTags} editable={editable} />
       {editable && (
