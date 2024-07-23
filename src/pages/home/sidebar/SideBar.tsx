@@ -1,4 +1,9 @@
-import { AddIcon, DashboardIcon, SearchIcon } from 'assets/icons';
+import {
+  AddIcon,
+  DashboardIcon,
+  SearchIcon,
+  UploadDataIcon,
+} from 'assets/icons';
 
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
@@ -36,6 +41,13 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           >
             <DashboardIcon className="w-4 h-4 ml-[2px] self-center mr-[10px]" />
             Dashboard
+          </button>
+          <button
+            className="flex items-center p-2 w-full text-left rounded"
+            onClick={() => setCurrentPage('uploadData')}
+          >
+            <UploadDataIcon className="w-4 h-4 ml-[2px] self-center mr-[10px]" />
+            Upload Data
           </button>
         </div>
         <div className="flex flex-col flex-1" />
