@@ -2,16 +2,17 @@ import axios from 'axios';
 import { Memo, MemoSearchAnswer } from 'pages/home/contents/@interfaces';
 const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 
-export interface validResponse {
+interface response {
   method: string;
   status: number;
-  message: string;
 }
+export interface validResponse extends response {}
 
-export interface errorResponse {
-  method: string;
-  status: number;
+export interface errorResponse extends response {
   exceptionCode?: number;
+  /**
+   * 디버거에 뜨는 내용
+   */
   message: string;
 }
 
@@ -31,7 +32,7 @@ export const handleError = (error: unknown, method: string): errorResponse => {
         status: httpErrorCode,
         message: error.message,
         exceptionCode: errorDetails.exceptionCode,
-      };
+      } as errorResponse;
     }
 
     // 요청이 전송되었지만, 응답이 수신되지 않았습니다.
@@ -40,7 +41,7 @@ export const handleError = (error: unknown, method: string): errorResponse => {
         method,
         status: 0,
         message: '서버로부터 응답이 없습니다.',
-      };
+      } as errorResponse;
     }
 
     // 요청을 설정하는 동안 문제가 발생했습니다.
@@ -49,20 +50,20 @@ export const handleError = (error: unknown, method: string): errorResponse => {
         method,
         status: -1,
         message: '요청을 설정하는 동안 문제가 발생했습니다.',
-      };
+      } as errorResponse;
     }
   } else if (error instanceof Error) {
     errorInfo = {
       method,
       status: -2,
       message: `${method}에서 예상치 못한 에러 발생: ${error.message}`,
-    };
+    } as errorResponse;
   } else {
     errorInfo = {
       method,
       status: -3,
       message: `${method}에서 처리할 수 없는 예상치 못한 에러 발생`,
-    };
+    } as errorResponse;
   }
 
   return errorInfo;
@@ -90,10 +91,9 @@ export const searchMemo = async (
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모 검색을 성공했습니다. ',
       text: response.data.processed_message,
       memos: response.data.memos,
-    };
+    } as searchMemoResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
@@ -124,11 +124,10 @@ export const createMemo = async (
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모를 생성했습니다. ',
       id,
       content,
       tags,
-    };
+    } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
@@ -156,11 +155,10 @@ export const updateMemo = async (
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모 수정을 성공했습니다.',
       id,
       content,
       tags,
-    };
+    } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
@@ -184,11 +182,10 @@ export const deleteMemo = async (
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모를 삭제했습니다.',
       id,
       content,
       tags,
-    };
+    } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
@@ -211,9 +208,8 @@ export const getAllMemos = async (): Promise<
     const responseInfo = {
       method,
       status: response.status,
-      message: '모든 메모 가져오는 것을 성공했습니다.',
       memos: response.data,
-    };
+    } as getAllMemosResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
