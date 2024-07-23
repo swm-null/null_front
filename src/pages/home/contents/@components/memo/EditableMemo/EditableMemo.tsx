@@ -13,17 +13,22 @@ import { debounce } from 'lodash';
 const EditableMemo = ({
   memo,
   editable = false,
+  softUpdateMemo,
+  softDeleteMemo,
+  softRevertMemo,
 }: {
   memo: Memo;
   editable?: boolean;
+  softUpdateMemo?: (newMemo: Memo) => void;
+  softDeleteMemo?: (memoId: string) => void;
+  softRevertMemo?: (memo: Memo) => void;
 }) => {
   const { id, content, tags: originTags } = memo;
   const [message, setMessage] = useState(content);
   const [tags, setTags] = useState(originTags);
-  const [hidden, setHidden] = useState(false);
 
-  const handleDelete = async () => {
-    setHidden(true);
+  const handleDeleteMemo = async () => {
+    softDeleteMemo && softDeleteMemo(id);
 
     const response = await deleteMemo(memo.id);
     // 메모 삭제 실패, 메모 다시 화면에 추가
@@ -31,14 +36,17 @@ const EditableMemo = ({
       // FIXME: 일단, 알림만 띄우는데, 다른 방법으로 수정해야함.
       // 다시 삭제 하시겠습니까? 같은거 띄워야하나 고민중
       alert('메모 삭제에 실패했습니다. 다시 시도해 주세요.');
-      setHidden(false);
+
+      // 화면에서 지웠던 메모를 다시 생성
+      softRevertMemo && softRevertMemo(memo);
     }
   };
 
   const debouncedUpdateMemo = useCallback(
     debounce(async (newMemo: Memo) => {
+      softUpdateMemo && softUpdateMemo(newMemo);
+
       const response = await updateMemo(newMemo.id, newMemo.content);
-      // 메모 수정 실패시, 이전 메모 내용으로 화면에 표시
       if (!isUpdateMemoResponse(response)) {
         // FIXME: 일단, 알림만 띄우는데, 다른 방법으로 수정해야함.
         // 다시 업데이트 하시겠습니까? 같은거 띄워야하나 고민중
@@ -67,9 +75,7 @@ const EditableMemo = ({
   };
 
   return (
-    <div
-      className={`p-2 grid first-letter:flex-col bg-gray1 rounded-md border-[1px] ${hidden && 'hidden'}`}
-    >
+    <div className="p-2 grid first-letter:flex-col bg-gray1 rounded-md border-[1px]">
       <MemoText
         message={message}
         setMessage={setMessage}
@@ -80,7 +86,7 @@ const EditableMemo = ({
       {editable && (
         <button
           className="text-right justify-self-end mt-2 bg-gray2 text-white rounded-full py-2 px-6"
-          onClick={handleDelete}
+          onClick={handleDeleteMemo}
         >
           삭제
         </button>
