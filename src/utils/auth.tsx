@@ -2,16 +2,17 @@ import axios from 'axios';
 import { Memo, MemoSearchAnswer } from 'pages/home/contents/@interfaces';
 const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 
-export interface validResponse {
+interface response {
   method: string;
   status: number;
-  message: string;
 }
+export interface validResponse extends response {}
 
-export interface errorResponse {
-  method: string;
-  status: number;
+export interface errorResponse extends response {
   exceptionCode?: number;
+  /**
+   * 디버거에 뜨는 내용
+   */
   message: string;
 }
 
@@ -31,7 +32,7 @@ export const handleError = (error: unknown, method: string): errorResponse => {
         status: httpErrorCode,
         message: error.message,
         exceptionCode: errorDetails.exceptionCode,
-      };
+      } as errorResponse;
     }
 
     // 요청이 전송되었지만, 응답이 수신되지 않았습니다.
@@ -40,7 +41,7 @@ export const handleError = (error: unknown, method: string): errorResponse => {
         method,
         status: 0,
         message: '서버로부터 응답이 없습니다.',
-      };
+      } as errorResponse;
     }
 
     // 요청을 설정하는 동안 문제가 발생했습니다.
@@ -49,20 +50,20 @@ export const handleError = (error: unknown, method: string): errorResponse => {
         method,
         status: -1,
         message: '요청을 설정하는 동안 문제가 발생했습니다.',
-      };
+      } as errorResponse;
     }
   } else if (error instanceof Error) {
     errorInfo = {
       method,
       status: -2,
       message: `${method}에서 예상치 못한 에러 발생: ${error.message}`,
-    };
+    } as errorResponse;
   } else {
     errorInfo = {
       method,
       status: -3,
       message: `${method}에서 처리할 수 없는 예상치 못한 에러 발생`,
-    };
+    } as errorResponse;
   }
 
   return errorInfo;
@@ -90,22 +91,22 @@ export const searchMemo = async (
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모 검색을 성공했습니다. ',
       text: response.data.processed_message,
       memos: response.data.memos,
-    };
+    } as searchMemoResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
   }
 };
 
-interface createMemoResponse extends Memo, validResponse {}
+// Create, Update Memo Response
+interface cuMemoResponse extends Memo, validResponse {}
 
-// 2.
+// 2. TODO: 작동 확인하기
 export const createMemo = async (
   inputContent: string
-): Promise<createMemoResponse | errorResponse> => {
+): Promise<cuMemoResponse | errorResponse> => {
   const method = 'createMemo';
   const endpoint = `${LOCALHOST}/memos`;
   const config = {
@@ -119,49 +120,72 @@ export const createMemo = async (
       JSON.stringify({ content: inputContent }),
       config
     );
-    console.log(response);
     const { id, content, tags } = response.data;
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모를 생성했습니다. ',
       id,
       content,
       tags,
-    };
+    } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
   }
 };
 
-// 3. FIXME: response 새로 만들어서 수정하기
-export const editMemo = async (
-  inputId: string,
-  inputContent: string
-): Promise<searchMemoResponse | errorResponse> => {
+// 3. TODO: 작동 확인하기
+export const updateMemo = async (
+  id: string,
+  content: string
+): Promise<cuMemoResponse | errorResponse> => {
   const method = 'editMemo';
-  const endpoint = `${LOCALHOST}/memos`;
+  const endpoint = `${LOCALHOST}/memos/${id}`;
+  const data = JSON.stringify({
+    content: content,
+  });
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
   try {
-    const response = await axios.put(
-      endpoint,
-      JSON.stringify({ id: inputId, content: inputContent }),
-      config
-    );
+    const response = await axios.put(endpoint, data, config);
     const { id, content, tags } = response.data;
     const responseInfo = {
       method,
       status: response.status,
-      message: '메모 수정을 성공했습니다. ',
       id,
       content,
       tags,
-    };
+    } as cuMemoResponse;
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+// 4. TODO: 작동 확인하기
+export const deleteMemo = async (
+  id: string
+): Promise<validResponse | errorResponse> => {
+  const method = 'deleteMemo';
+  const endpoint = `${LOCALHOST}/memos/${id}`;
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  try {
+    const response = await axios.delete(endpoint, config);
+    const { id, content, tags } = response.data;
+    const responseInfo = {
+      method,
+      status: response.status,
+      id,
+      content,
+      tags,
+    } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
@@ -172,7 +196,7 @@ interface getAllMemosResponse extends validResponse {
   memos: Memo[];
 }
 
-// 4.
+// 5.
 export const getAllMemos = async (): Promise<
   getAllMemosResponse | errorResponse
 > => {
@@ -184,9 +208,8 @@ export const getAllMemos = async (): Promise<
     const responseInfo = {
       method,
       status: response.status,
-      message: '모든 메모 가져오는 것을 성공했습니다.',
       memos: response.data,
-    };
+    } as getAllMemosResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
@@ -207,14 +230,25 @@ export const isSearchMemoResponse = (
 };
 
 export const isCreateMemoResponse = (
-  response: createMemoResponse | errorResponse
-): response is createMemoResponse => {
-  // FIXME: 현재 memos에 빈 array가 오는 오류가 있어서 length !== 0 확인 코드 추가
-  return (response as createMemoResponse).content !== null;
+  response: cuMemoResponse | errorResponse
+): response is cuMemoResponse => {
+  return (response as cuMemoResponse).content !== null;
+};
+
+export const isUpdateMemoResponse = (
+  response: cuMemoResponse | errorResponse
+): response is cuMemoResponse => {
+  return (response as cuMemoResponse).content !== null;
+};
+
+export const isDeleteMemoResponse = (
+  response: validResponse | errorResponse
+): response is validResponse => {
+  return isValidResponse(response);
 };
 
 export const isGetAllMemosResponse = (
   response: getAllMemosResponse | errorResponse
 ): response is getAllMemosResponse => {
-  return isValidResponse(response as getAllMemosResponse);
+  return isValidResponse(response);
 };

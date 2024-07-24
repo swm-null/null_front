@@ -19,19 +19,15 @@ const DashboardPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const { viewMemos, tags, handleTagClick, clickAllTags } =
-    useSelectedTagMemosManager();
-
-  // TODO: api 연동하는 코드 추가하기
-  // 위치는 여기에 할지, EditableMemo 할지 고민 더 해보기
-  const updateMemo = () => {
-    console.log('updateMemo api 연동 예정');
-  };
-
-  // TODO: api 연동하는 코드 추가하기
-  const deleteMemo = () => {
-    console.log('deleteMemo api 연동 예정');
-  };
+  const {
+    viewMemos,
+    tags,
+    handleTagClick,
+    clickAllTags,
+    updateViewMemo,
+    deleteViewMemo,
+    revertViewMemo,
+  } = useSelectedTagMemosManager();
 
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
@@ -60,13 +56,14 @@ const DashboardPage = ({
 
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <SelectedTagMemosList>
-          {viewMemos.map((memo) => (
+          {viewMemos.map((memo, index) => (
             <SelectedTagMemo
               editable
               key={memo.id}
               memo={memo}
-              updateMemo={updateMemo}
-              deleteMemo={deleteMemo}
+              softUpdateMemo={updateViewMemo}
+              softDeleteMemo={deleteViewMemo}
+              softRevertMemo={(memo) => revertViewMemo(index, memo)}
             />
           ))}
         </SelectedTagMemosList>
