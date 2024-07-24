@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { AnimatedHeader } from 'pages/home/contents/@components';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
-import Dropzone from 'react-dropzone';
 import { KakaoDropzone } from './KakaoDropzone';
 
 const UploadDataPage = ({

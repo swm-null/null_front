@@ -3,8 +3,7 @@ import { useDropzone } from 'react-dropzone';
 const KakaoDropzone = () => {
   const { acceptedFiles, getRootProps } = useDropzone({
     accept: {
-      'image/jpeg': [],
-      'image/png': [],
+      'text/csv': [],
     },
   });
 
@@ -18,19 +17,21 @@ const KakaoDropzone = () => {
     <section>
       <div
         {...getRootProps({ className: 'dropzone' })}
-        className="bg-[#F0F0F0] p-5"
+        className="bg-[#F0F0F0] py-10"
       >
         <p className="text-center">
           Drag 'n' drop some files here, or click to select files
         </p>
-        <p className="text-center">
-          Only *.jpeg and *.png images will be accepted
-        </p>
+        <p className="text-center">Only *.csv files will be accepted</p>
       </div>
-      <aside>
-        <h4>Accepted files</h4>
-        <ul>{acceptedFileItems}</ul>
-      </aside>
+      {acceptedFiles.length !== 0 ? (
+        <aside>
+          <h4>카카오톡 데이터 파일</h4>
+          <ul>{acceptedFileItems}</ul>
+        </aside>
+      ) : (
+        <></>
+      )}
     </section>
   );
 };
