@@ -35,7 +35,8 @@
       "searchButton": "검색"
     },
     "uploadData": {
-      "header": "카카오톡 나와의 채팅 데이터 가져오기"
+      "header": "카카오톡 나와의 채팅 데이터 가져오기",
+      "addMemoButton": "카카오톡 데이터로 메모 추가하기"
     }
   }
 }
