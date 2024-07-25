@@ -7,14 +7,16 @@ import { Tag } from 'pages/home/contents/@interfaces';
 const TagList = ({
   children,
   allTagText,
-  selectedTag,
-  handleAllTagClick,
+  tagStack,
+  onTagClickAtIndex,
+  onAllTagClick,
   invalidCharsPattern,
 }: {
   children: ReactNode;
   allTagText: string;
-  selectedTag: Tag | null;
-  handleAllTagClick: () => void;
+  tagStack: Tag[];
+  onTagClickAtIndex: (index: number) => void;
+  onAllTagClick: () => void;
   invalidCharsPattern: RegExp;
 }) => {
   return (
@@ -25,16 +27,22 @@ const TagList = ({
           text={allTagText}
           color="transparent"
           invalidCharsPattern={invalidCharsPattern}
-          onClick={handleAllTagClick}
+          onClick={onAllTagClick}
         />
-        {selectedTag && (
+        {tagStack.map((tag, index) => (
           <UneditableTag
-            key="all"
-            text={selectedTag.name}
+            key={tag.id}
+            text={tag.name}
             color="transparent"
             invalidCharsPattern={invalidCharsPattern}
+            // 마지막 태그는 클릭 안되게 구현
+            onClick={
+              index !== tagStack.length - 1
+                ? () => onTagClickAtIndex(index)
+                : undefined
+            }
           />
-        )}
+        ))}
       </Breadcrumbs>
       <div className="mt-2 flex flex-1 overflow-hidden overflow-x-scroll">
         <div className="flex flex-none gap-1 overflow-x-scroll">{children}</div>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   SIDEBAR_HEADER_ANIMATION_DURATION,
@@ -10,6 +11,7 @@ import {
 } from 'pages/home/contents/@components';
 import { SelectedTagMemosList, TagList } from './components';
 import { useSelectedTagMemosManager } from './hook';
+import { Tag } from '../@interfaces';
 
 const DashboardPage = ({
   headerLeftMarginToggle = false,
@@ -19,16 +21,31 @@ const DashboardPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const { viewMemos, tags, selectedTag, handleTagClick, clickAllTags } =
+  const { viewMemos, tags, handleTagClick, clickAllTags } =
     useSelectedTagMemosManager();
 
-  // TODO: api 연동하는 코드 추가하기
-  // 위치는 여기에 할지, EditableMemo 할지 고민 더 해보기
+  const [tagStack, setTagStack] = useState<Tag[]>([]);
+
+  const addTagToStack = (tag: Tag) => {
+    setTagStack((prevStack) => [...prevStack, tag]);
+    handleTagClick(tag);
+  };
+
+  const resetTagStack = () => {
+    setTagStack([]);
+    clickAllTags();
+  };
+
+  const selectTagAtIndex = (index: number) => {
+    setTagStack((prevStack) => prevStack.slice(0, index + 1));
+    const tag = tagStack[index];
+    handleTagClick(tag);
+  };
+
   const updateMemo = () => {
     console.log('updateMemo api 연동 예정');
   };
 
-  // TODO: api 연동하는 코드 추가하기
   const deleteMemo = () => {
     console.log('deleteMemo api 연동 예정');
   };
@@ -45,8 +62,9 @@ const DashboardPage = ({
       {/* tag들 선택하는 부분 */}
       <TagList
         allTagText={t('pages.dashboard.allMemoButton')}
-        selectedTag={selectedTag}
-        handleAllTagClick={clickAllTags}
+        tagStack={tagStack}
+        onTagClickAtIndex={selectTagAtIndex}
+        onAllTagClick={resetTagStack}
         invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
       >
         {tags.map((tag, index) => (
@@ -54,7 +72,7 @@ const DashboardPage = ({
             key={index}
             text={tag.name}
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-            onClick={() => handleTagClick(tag)}
+            onClick={() => addTagToStack(tag)}
           />
         ))}
       </TagList>

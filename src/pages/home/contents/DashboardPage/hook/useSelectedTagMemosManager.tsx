@@ -72,7 +72,6 @@ const useSelectedTagMemosManager = () => {
   return {
     viewMemos: selectedTag ? selectedMemosByTag : allMemos,
     tags,
-    selectedTag,
     handleTagClick,
     clickAllTags,
   };
