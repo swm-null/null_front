@@ -10,7 +10,7 @@ import {
   EditableMemo as SelectedTagMemo,
 } from 'pages/home/contents/@components';
 import { SelectedTagMemosList, TagList } from './components';
-import { useSelectedTagMemosManager } from './hook';
+import { useSelectedTagMemosManager, useTagsManager } from './hook';
 import { Tag } from '../@interfaces';
 
 const DashboardPage = ({
@@ -21,15 +21,11 @@ const DashboardPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const {
-    viewMemos,
-    tags,
-    handleTagClick,
-    clickAllTags,
-    updateViewMemo,
-    deleteViewMemo,
-    revertViewMemo,
-  } = useSelectedTagMemosManager();
+
+  const { tags, selectedTag, handleTagClick, clickAllTags } = useTagsManager();
+
+  const { viewMemos, updateViewMemo, deleteViewMemo, revertViewMemo } =
+    useSelectedTagMemosManager(selectedTag);
 
   // 클릭한 태그 경로
   const [tagStack, setTagStack] = useState<Tag[]>([]);
@@ -51,14 +47,6 @@ const DashboardPage = ({
     setTagStack((prevStack) => prevStack.slice(0, index + 1));
     const tag = tagStack[index];
     handleTagClick(tag);
-  };
-
-  const updateMemo = () => {
-    console.log('updateMemo api 연동 예정');
-  };
-
-  const deleteMemo = () => {
-    console.log('deleteMemo api 연동 예정');
   };
 
   return (

@@ -209,7 +209,7 @@ export const getAllMemos = async (): Promise<
       method,
       status: response.status,
       memos: response.data,
-    } as getAllMemosResponse;
+    } as getMemosResponse;
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
