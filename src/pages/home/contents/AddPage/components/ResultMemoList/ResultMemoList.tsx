@@ -4,14 +4,16 @@ import { Memo } from 'pages/home/contents/@interfaces';
 
 interface ResultMemoListProps {
   memos: Memo[];
-  updateResultMemo: (index: number, newMemo: Memo) => void;
-  deleteResultMemo: (index: number) => void;
+  softUpdateResultMemo: (newMemo: Memo) => void;
+  softDeleteResultMemo: (memoId: string) => void;
+  softRevertResultMemo: (index: number, deletedMemo: Memo) => void;
 }
 
 const ResultMemoList = ({
   memos,
-  updateResultMemo,
-  deleteResultMemo,
+  softUpdateResultMemo,
+  softDeleteResultMemo,
+  softRevertResultMemo,
 }: ResultMemoListProps) => {
   const { t } = useTranslation();
   return (
@@ -23,8 +25,11 @@ const ResultMemoList = ({
             <ResultMemo
               key={memo.id}
               memo={memo}
-              updateMemo={(newMemo) => updateResultMemo(index, newMemo)}
-              deleteMemo={() => deleteResultMemo(index)}
+              softUpdateMemo={(newMemo) => softUpdateResultMemo(newMemo)}
+              softDeleteMemo={() => softDeleteResultMemo(memo.id)}
+              softRevertMemo={(deletedMemo) =>
+                softRevertResultMemo(index, deletedMemo)
+              }
             />
           ))}
         </div>

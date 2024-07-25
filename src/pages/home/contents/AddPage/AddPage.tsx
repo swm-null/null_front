@@ -19,6 +19,7 @@ const AddPage = ({
     status,
     updateResultMemo,
     deleteResultMemo,
+    revertResultMemo,
     createResultMemosAndEditStatus,
     resetResultMemos,
     setStatus,
@@ -62,8 +63,9 @@ const AddPage = ({
           {status === 'success' && (
             <ResultMemoList
               memos={resultMemos}
-              updateResultMemo={updateResultMemo}
-              deleteResultMemo={deleteResultMemo}
+              softUpdateResultMemo={updateResultMemo}
+              softDeleteResultMemo={deleteResultMemo}
+              softRevertResultMemo={revertResultMemo}
             />
           )}
         </div>

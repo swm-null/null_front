@@ -12,13 +12,36 @@ import { Memo, Tag } from '../../@interfaces';
 
 const useSelectedTagMemosManager = () => {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
-
   const { data: allMemos = [] } = useQuery({
     queryKey: ['memos', 'ALL_MEMOS'],
     queryFn: getAllMemos,
     select: (data) => (isGetMemosResponse(data) ? data.memos : []),
     enabled: selectedTag == null,
   });
+  const selectedMemosByTag = allMemos.filter((item) =>
+    item.tags.some((tag) => tag.name === selectedTag)
+  );
+
+  const [viewMemos, setViewMemos] = useState(
+    selectedTag ? selectedMemosByTag : allMemos
+  );
+
+  // tag가 변경될 때마다 viewMemos 수정
+  useEffect(() => {
+    setViewMemos(selectedTag ? selectedMemosByTag : allMemos);
+  }, [selectedTag, allMemos]);
+
+  const tags = Array.from(
+    new Map(
+      allMemos.flatMap((memo) => memo.tags.map((tag) => [tag.id, tag]))
+    ).values()
+  ).sort((tag1, tag2) => tag1.name.localeCompare(tag2.name));
+
+  const handleTagClick = (tag: string | null) => {
+    if (tag !== selectedTag) {
+      setSelectedTag(tag);
+    }
+  };
 
   const { data: selectedMemosByTag = [] }: UseQueryResult<Memo[], Error> =
     useQuery({
@@ -42,6 +65,24 @@ const useSelectedTagMemosManager = () => {
   });
 
   const [tags, setTags] = useState<Tag[]>(initialTags);
+
+  const updateViewMemo = (newMemo: Memo) => {
+    setViewMemos((prev) =>
+      prev.map((memo) => (memo.id === newMemo.id ? newMemo : memo))
+    );
+  };
+
+  const deleteViewMemo = (memoId: string) => {
+    setViewMemos((prev) => prev.filter((memo, _) => memo.id !== memoId));
+  };
+
+  const revertViewMemo = (index: number, memo: Memo) => {
+    setViewMemos((prev) => {
+      const newMemos = [...prev];
+      newMemos.splice(index, 0, memo);
+      return newMemos;
+    });
+  };
 
   useEffect(() => {
     if (selectedTag === null) {
@@ -74,6 +115,9 @@ const useSelectedTagMemosManager = () => {
     tags,
     handleTagClick,
     clickAllTags,
+    updateViewMemo,
+    deleteViewMemo,
+    revertViewMemo,
   };
 };
 

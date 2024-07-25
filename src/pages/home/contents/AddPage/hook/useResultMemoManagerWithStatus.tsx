@@ -15,14 +15,22 @@ const useResultMemoManagerWithStatus = () => {
     'default' | 'loading' | 'success' | 'error'
   >('default');
 
-  const updateResultMemo = (index: number, newMemo: Memo) => {
+  const revertResultMemo = (index: number, memo: Memo) => {
+    setResultMemos((prev) => {
+      const newMemos = [...prev];
+      newMemos.splice(index, 0, memo);
+      return newMemos;
+    });
+  };
+
+  const updateResultMemo = (newMemo: Memo) => {
     setResultMemos((prev) =>
-      prev.map((memo, i) => (i === index ? newMemo : memo))
+      prev.map((memo, _) => (memo.id === newMemo.id ? newMemo : memo))
     );
   };
 
-  const deleteResultMemo = (index: number) => {
-    setResultMemos((prev) => prev.filter((_, i) => i !== index));
+  const deleteResultMemo = (memoId: string) => {
+    setResultMemos((prev) => prev.filter((memo, _) => memo.id !== memoId));
   };
 
   const getResultMemoContext = async (text: string): Promise<Memo> => {
@@ -69,6 +77,7 @@ const useResultMemoManagerWithStatus = () => {
     status,
     updateResultMemo,
     deleteResultMemo,
+    revertResultMemo,
     createResultMemosAndEditStatus,
     resetResultMemos,
     setStatus,
