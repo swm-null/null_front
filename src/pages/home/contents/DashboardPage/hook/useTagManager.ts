@@ -8,6 +8,20 @@ const useTagsManager = () => {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
 
   useEffect(() => {
+    // Initial call to fetch all tags
+    const fetchAllTags = async () => {
+      const response = await getAllTags();
+      if (isGetTagsResponse(response)) {
+        setTags(response.tags);
+      } else {
+        setTags([]);
+      }
+    };
+
+    fetchAllTags();
+  }, []);
+
+  useEffect(() => {
     if (selectedTag === null) {
       setTags([]);
     }
