@@ -24,18 +24,22 @@ const DashboardPage = ({
   const { viewMemos, tags, handleTagClick, clickAllTags } =
     useSelectedTagMemosManager();
 
+  // 클릭한 태그 경로
   const [tagStack, setTagStack] = useState<Tag[]>([]);
 
+  // 자식 태그 리스트에 있는 태그 클릭 시, stack에 추가
   const addTagToStack = (tag: Tag) => {
     setTagStack((prevStack) => [...prevStack, tag]);
     handleTagClick(tag);
   };
 
-  const resetTagStack = () => {
+  // 모든 메모 태그 클릭 시 수행되는 코드
+  const handleAllTags = () => {
     setTagStack([]);
     clickAllTags();
   };
 
+  // tag stack에서 특정 index의 태그 클릭 시 수행되는 코드
   const selectTagAtIndex = (index: number) => {
     setTagStack((prevStack) => prevStack.slice(0, index + 1));
     const tag = tagStack[index];
@@ -64,7 +68,7 @@ const DashboardPage = ({
         allTagText={t('pages.dashboard.allMemoButton')}
         tagStack={tagStack}
         onTagClickAtIndex={selectTagAtIndex}
-        onAllTagClick={resetTagStack}
+        onAllTagClick={handleAllTags}
         invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
       >
         {tags.map((tag, index) => (
