@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Memo, MemoSearchAnswer } from 'pages/home/contents/@interfaces';
+import { Memo, MemoSearchAnswer, Tag } from 'pages/home/contents/@interfaces';
 const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 
 export interface validResponse {
@@ -214,6 +214,52 @@ export const getSelectedTagMemos = async (
   }
 };
 
+interface getTagsResponse extends validResponse {
+  tags: Tag[];
+}
+
+// 6.
+export const getAllTags = async (): Promise<
+  getTagsResponse | errorResponse
+> => {
+  const method = 'getChildTags';
+  const endpoint = `${LOCALHOST}/tags`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '모든 태그를 가져오는 것을 성공했습니다.',
+      tags: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+// 7.
+export const getChildTags = async (
+  tagId: string
+): Promise<getTagsResponse | errorResponse> => {
+  const method = 'getChildTags';
+  const endpoint = `${LOCALHOST}/tags/${tagId}/childTags`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '특정 태그의 자식 태그를 가져오는 것을 성공했습니다.',
+      tags: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
 export const isValidResponse = (
   response: validResponse | errorResponse
 ): response is validResponse => {
@@ -238,4 +284,10 @@ export const isGetMemosResponse = (
   response: getMemosResponse | errorResponse
 ): response is getMemosResponse => {
   return isValidResponse(response as getMemosResponse);
+};
+
+export const isGetTagsResponse = (
+  response: getTagsResponse | errorResponse
+): response is getTagsResponse => {
+  return (response as getTagsResponse).tags !== null;
 };
