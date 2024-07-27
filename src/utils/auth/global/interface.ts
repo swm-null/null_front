@@ -2,6 +2,7 @@ interface response {
   method: string;
   status: number;
 }
+
 export interface validResponse extends response {}
 
 export interface errorResponse extends response {
