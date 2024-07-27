@@ -3,6 +3,6 @@ import { errorResponse, validResponse } from './interface';
 export const isValidResponse = (
   response: validResponse | errorResponse
 ): response is validResponse => {
-  const validStatus = [200, 201, 202, 203, 204, 205, 206];
+  const validStatus = [200, 201, 204];
   return validStatus.includes(response.status);
 };
