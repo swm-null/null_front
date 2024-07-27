@@ -1,3 +1,3 @@
 export * from './dashboard';
-export * from './default';
+export * from './global';
 export * from './memo';
