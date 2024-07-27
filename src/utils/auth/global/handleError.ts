@@ -19,7 +19,6 @@ const handleError = (error: unknown, method: string): errorResponse => {
         exceptionCode: errorDetails.exceptionCode,
       } as errorResponse;
     }
-
     // 요청이 전송되었지만, 응답이 수신되지 않았습니다.
     else if (error.request) {
       errorInfo = {
@@ -28,7 +27,6 @@ const handleError = (error: unknown, method: string): errorResponse => {
         message: '서버로부터 응답이 없습니다.',
       } as errorResponse;
     }
-
     // 요청을 설정하는 동안 문제가 발생했습니다.
     else {
       errorInfo = {
