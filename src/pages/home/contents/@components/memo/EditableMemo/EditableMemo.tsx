@@ -1,4 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { TagManager } from './TagManager';
 import { MemoText } from './MemoText';
 import { Memo } from 'pages/home/contents/@interfaces';
@@ -8,7 +10,6 @@ import {
   isUpdateMemoResponse,
   isValidResponse,
 } from 'utils/auth';
-import { debounce } from 'lodash';
 
 const EditableMemo = ({
   memo,
@@ -26,6 +27,7 @@ const EditableMemo = ({
   const { id, content, tags: originTags } = memo;
   const [message, setMessage] = useState(content);
   const [tags, setTags] = useState(originTags);
+  const updateMemoSubject = useRef(new Subject<Memo>()).current;
 
   const handleDeleteMemo = async () => {
     softDeleteMemo && softDeleteMemo(id);
@@ -42,20 +44,6 @@ const EditableMemo = ({
     }
   };
 
-  const debouncedUpdateMemo = useCallback(
-    debounce(async (newMemo: Memo) => {
-      softUpdateMemo && softUpdateMemo(newMemo);
-
-      const response = await updateMemo(newMemo.id, newMemo.content);
-      if (!isUpdateMemoResponse(response)) {
-        // FIXME: 일단, 알림만 띄우는데, 다른 방법으로 수정해야함.
-        // 다시 업데이트 하시겠습니까? 같은거 띄워야하나 고민중
-        alert('메모 업데이트에 실패했습니다. 다시 시도해 주세요.');
-      }
-    }, 1000), // 1000ms 디바운스
-    [memo]
-  );
-
   const tryUpdateMemo = () => {
     const newMemo = { id, content: message, tags };
 
@@ -70,9 +58,28 @@ const EditableMemo = ({
 
     // 메모 내용 달라진 것이 있을 때에만 서버에 업데이트 요청
     if (memo.content !== newMemo.content) {
-      debouncedUpdateMemo(newMemo);
+      updateMemoSubject.next(newMemo);
     }
   };
+
+  useEffect(() => {
+    const subscription = updateMemoSubject
+      .pipe(debounceTime(1000))
+      .subscribe(async (newMemo: Memo) => {
+        softUpdateMemo && softUpdateMemo(newMemo);
+
+        const response = await updateMemo(newMemo.id, newMemo.content);
+        if (!isUpdateMemoResponse(response)) {
+          // FIXME: 일단, 알림만 띄우는데, 다른 방법으로 수정해야함.
+          // 다시 업데이트 하시겠습니까? 같은거 띄워야하나 고민중
+          alert('메모 업데이트에 실패했습니다. 다시 시도해 주세요.');
+        }
+      });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [updateMemoSubject]);
 
   return (
     <div className="p-2 grid first-letter:flex-col bg-gray1 rounded-md border-[1px]">
