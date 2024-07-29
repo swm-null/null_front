@@ -6,7 +6,7 @@ const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 export const createMemo = async (
   inputContent: string
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = 'createMemo';
+  const method = createMemo.name;
   const endpoint = `${LOCALHOST}/memos`;
   const config = {
     headers: {
@@ -36,7 +36,7 @@ export const createMemo = async (
 export const searchMemo = async (
   inputContent: string
 ): Promise<searchMemoResponse | errorResponse> => {
-  const method = 'searchMemo';
+  const method = searchMemo.name;
   const endpoint = `${LOCALHOST}/memos/search`;
   const config = {
     headers: {
@@ -66,7 +66,7 @@ export const updateMemo = async (
   id: string,
   content: string
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = 'editMemo';
+  const method = updateMemo.name;
   const endpoint = `${LOCALHOST}/memos/${id}`;
   const data = JSON.stringify({
     content: content,
@@ -96,7 +96,7 @@ export const updateMemo = async (
 export const deleteMemo = async (
   id: string
 ): Promise<validResponse | errorResponse> => {
-  const method = 'deleteMemo';
+  const method = deleteMemo.name;
   const endpoint = `${LOCALHOST}/memos/${id}`;
   const config = {
     headers: {

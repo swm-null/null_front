@@ -6,7 +6,7 @@ const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 export const getAllMemos = async (): Promise<
   getMemosResponse | errorResponse
 > => {
-  const method = 'getAllMemos';
+  const method = getAllMemos.name;
   const endpoint = `${LOCALHOST}/memos`;
 
   try {
@@ -25,7 +25,7 @@ export const getAllMemos = async (): Promise<
 export const getSelectedTagMemos = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
-  const method = 'getSelectedTagMemos';
+  const method = getSelectedTagMemos.name;
   const endpoint = `${LOCALHOST}/memos/tags/${tagId}`;
 
   try {
@@ -45,7 +45,7 @@ export const getSelectedTagMemos = async (
 export const getAllTags = async (): Promise<
   getTagsResponse | errorResponse
 > => {
-  const method = 'getChildTags';
+  const method = getAllTags.name;
   const endpoint = `${LOCALHOST}/tags`;
 
   try {
@@ -65,7 +65,7 @@ export const getAllTags = async (): Promise<
 export const getChildTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
-  const method = 'getChildTags';
+  const method = getChildTags.name;
   const endpoint = `${LOCALHOST}/tags/${tagId}/childTags`;
 
   try {
