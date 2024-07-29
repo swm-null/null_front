@@ -283,6 +283,25 @@ export const getChildTags = async (
   }
 };
 
+export const getRootTags = async (): Promise<
+  getTagsResponse | errorResponse
+> => {
+  const method = 'getRootTags';
+  const endpoint = `${LOCALHOST}/tags/depth/1`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      tags: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
 export const isValidResponse = (
   response: validResponse | errorResponse
 ): response is validResponse => {

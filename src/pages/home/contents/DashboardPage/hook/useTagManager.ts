@@ -1,6 +1,6 @@
 // hooks/useTags.ts
 import { useState, useEffect } from 'react';
-import { getAllTags, getChildTags, isGetTagsResponse } from 'utils/auth';
+import { getChildTags, getRootTags, isGetTagsResponse } from 'utils/auth';
 import { Tag } from '../../@interfaces';
 
 const useTagsManager = () => {
@@ -8,9 +8,8 @@ const useTagsManager = () => {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
 
   useEffect(() => {
-    // Initial call to fetch all tags
     const fetchAllTags = async () => {
-      const response = await getAllTags();
+      const response = await getRootTags();
       if (isGetTagsResponse(response)) {
         setTags(response.tags);
       } else {
@@ -41,7 +40,7 @@ const useTagsManager = () => {
 
   const clickAllTags = async () => {
     setSelectedTag(null);
-    const response = await getAllTags();
+    const response = await getRootTags();
     if (isGetTagsResponse(response)) {
       setTags(response.tags);
     }
