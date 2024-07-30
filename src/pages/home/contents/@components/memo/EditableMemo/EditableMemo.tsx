@@ -1,4 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { TagManager } from './TagManager';
 import { MemoText } from './MemoText';
 import { Memo } from 'pages/home/contents/@interfaces';
@@ -8,7 +10,6 @@ import {
   isUpdateMemoResponse,
   isValidResponse,
 } from 'utils/auth';
-import { debounce } from 'lodash';
 
 const EditableMemo = ({
   memo,
@@ -25,6 +26,7 @@ const EditableMemo = ({
 }) => {
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
+  const updateMemoSubject = useRef(new Subject<Memo>()).current;
 
   // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
   useEffect(() => {
@@ -42,16 +44,6 @@ const EditableMemo = ({
     }
   };
 
-  const debouncedUpdateMemo = useCallback(
-    debounce(async (newMemo: Memo) => {
-      const response = await updateMemo(newMemo.id, newMemo.content);
-      if (!isUpdateMemoResponse(response)) {
-        alert('메모 업데이트에 실패했습니다. 다시 시도해 주세요.');
-      }
-    }, 1000),
-    [softUpdateMemo]
-  );
-
   const tryUpdateMemo = () => {
     const newMemo = { id: memo.id, content: message, tags };
 
@@ -60,13 +52,30 @@ const EditableMemo = ({
     // !arraysEqual(memo.tags, newMemo.tags);
 
     if (memo.content !== newMemo.content) {
-      debouncedUpdateMemo(newMemo);
+      updateMemoSubject.next(newMemo);
     }
   };
 
   // const arraysEqual = (a: any[], b: any[]) => {
   //   return JSON.stringify(a) === JSON.stringify(b);
   // };
+
+  useEffect(() => {
+    const subscription = updateMemoSubject
+      .pipe(debounceTime(1000))
+      .subscribe(async (newMemo: Memo) => {
+        softUpdateMemo && softUpdateMemo(newMemo);
+
+        const response = await updateMemo(newMemo.id, newMemo.content);
+        if (!isUpdateMemoResponse(response)) {
+          alert('메모 업데이트에 실패했습니다. 다시 시도해 주세요.');
+        }
+      });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [updateMemoSubject]);
 
   return (
     <div className="p-2 grid first-letter:flex-col bg-gray1 rounded-md border-[1px]">
