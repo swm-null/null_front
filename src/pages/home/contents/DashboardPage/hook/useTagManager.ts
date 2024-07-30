@@ -1,49 +1,52 @@
-// hooks/useTags.ts
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChildTags, getRootTags, isGetTagsResponse } from 'utils/auth';
 import { Tag } from '../../@interfaces';
 
 const useTagsManager = () => {
-  const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchAllTags = async () => {
-      const response = await getRootTags();
-      if (isGetTagsResponse(response)) {
-        setTags(response.tags);
-      } else {
-        setTags([]);
-      }
-    };
-
-    fetchAllTags();
-  }, []);
-
-  useEffect(() => {
-    if (selectedTag === null) {
-      setTags([]);
-    }
-  }, [selectedTag]);
-
-  const handleTagClick = async (tag: Tag | null) => {
-    if (tag && tag !== selectedTag) {
-      setSelectedTag(tag);
-      const response = await getChildTags(tag.id);
-      if (isGetTagsResponse(response)) {
-        setTags(response.tags);
-      } else {
-        setTags([]);
-      }
+  const fetchAllTags = async () => {
+    const response = await getRootTags();
+    if (isGetTagsResponse(response)) {
+      return response.tags;
+    } else {
+      return [];
     }
   };
 
-  const clickAllTags = async () => {
-    setSelectedTag(null);
-    const response = await getRootTags();
+  const fetchChildTags = async (tagId: string) => {
+    const response = await getChildTags(tagId);
     if (isGetTagsResponse(response)) {
-      setTags(response.tags);
+      return response.tags;
+    } else {
+      return [];
     }
+  };
+
+  const {
+    data: tags = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['tags', selectedTag ? selectedTag.id : 'root'],
+    queryFn: () =>
+      selectedTag ? fetchChildTags(selectedTag.id) : fetchAllTags(),
+  });
+
+  const handleTagClick = (tag: Tag | null) => {
+    setSelectedTag(tag);
+    if (tag) {
+      queryClient.invalidateQueries({ queryKey: ['tags', tag.id] });
+    } else {
+      queryClient.invalidateQueries({ queryKey: ['tags', 'root'] });
+    }
+  };
+
+  const clickAllTags = () => {
+    setSelectedTag(null);
+    queryClient.invalidateQueries({ queryKey: ['tags', 'root'] });
   };
 
   return {
@@ -51,6 +54,8 @@ const useTagsManager = () => {
     selectedTag,
     handleTagClick,
     clickAllTags,
+    isLoading,
+    isError,
   };
 };
 
