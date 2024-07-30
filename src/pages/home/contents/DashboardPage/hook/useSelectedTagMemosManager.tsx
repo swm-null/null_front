@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useEffect, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getAllMemos,
   getSelectedTagMemos,
@@ -8,53 +8,72 @@ import {
 import { Memo, Tag } from '../../@interfaces';
 
 const useSelectedTagMemosManager = (selectedTag: Tag | null) => {
-  const { data: allMemos = [] } = useQuery({
-    queryKey: ['memos', 'ALL_MEMOS'],
-    queryFn: getAllMemos,
-    select: (data) => (isGetMemosResponse(data) ? data.memos : []),
-    enabled: selectedTag == null,
-  });
-  const { data: selectedMemosByTag = [] }: UseQueryResult<Memo[], Error> =
-    useQuery({
-      queryKey: ['memos', 'SELECTED_MEMOS', selectedTag],
-      queryFn: () => getSelectedTagMemos(selectedTag ? selectedTag.id : ''),
-      select: (data): Memo[] => {
-        if (isGetMemosResponse(data)) {
-          return data.memos;
-        } else {
-          return [];
-        }
-      },
-      enabled: !!selectedTag,
-    });
+  const queryClient = useQueryClient();
 
-  // 화면에 보이는
-  const [viewMemos, setViewMemos] = useState<Memo[]>(
-    selectedTag ? selectedMemosByTag : allMemos
+  const { data: viewMemos = [], refetch } = useQuery({
+    queryKey: ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
+    queryFn: () =>
+      selectedTag ? fetchSelectedTagMemos(selectedTag.id) : fetchAllMemos(),
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+  });
+
+  const fetchSelectedTagMemos = async (tagId: string) => {
+    const response = await getSelectedTagMemos(tagId);
+    if (isGetMemosResponse(response)) {
+      return response.memos;
+    } else {
+      return [];
+    }
+  };
+
+  const fetchAllMemos = async () => {
+    const response = await getAllMemos();
+    if (isGetMemosResponse(response)) {
+      return response.memos;
+    } else {
+      return [];
+    }
+  };
+
+  const updateViewMemo = useCallback(
+    (newMemo: Memo) => {
+      queryClient.setQueryData(
+        ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
+        (prev: Memo[] = []) =>
+          prev.map((memo) => (memo.id === newMemo.id ? newMemo : memo))
+      );
+    },
+    [queryClient, selectedTag]
+  );
+
+  const deleteViewMemo = useCallback(
+    (memoId: string) => {
+      queryClient.setQueryData(
+        ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
+        (prev: Memo[] = []) => prev.filter((memo) => memo.id !== memoId)
+      );
+    },
+    [queryClient, selectedTag]
+  );
+
+  const revertViewMemo = useCallback(
+    (index: number, memo: Memo) => {
+      queryClient.setQueryData(
+        ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
+        (prev: Memo[] = []) => {
+          const newMemos = [...prev];
+          newMemos.splice(index, 0, memo);
+          return newMemos;
+        }
+      );
+    },
+    [queryClient, selectedTag]
   );
 
   useEffect(() => {
-    setViewMemos(selectedTag ? selectedMemosByTag : allMemos);
-  }, [selectedTag, selectedMemosByTag, allMemos]);
-
-  // 서버 요청시, 낙관적 업데이트를 위한 코드
-  const updateViewMemo = (newMemo: Memo) => {
-    setViewMemos((prev) =>
-      prev.map((memo) => (memo.id === newMemo.id ? newMemo : memo))
-    );
-  };
-
-  const deleteViewMemo = (memoId: string) => {
-    setViewMemos((prev) => prev.filter((memo) => memo.id !== memoId));
-  };
-
-  const revertViewMemo = (index: number, memo: Memo) => {
-    setViewMemos((prev) => {
-      const newMemos = [...prev];
-      newMemos.splice(index, 0, memo);
-      return newMemos;
-    });
-  };
+    refetch();
+  }, [selectedTag, refetch]);
 
   return {
     viewMemos,
