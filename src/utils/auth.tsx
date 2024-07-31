@@ -262,7 +262,7 @@ export const getAllTags = async (): Promise<
   }
 };
 
-// 7.
+// 8.
 export const getChildTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
