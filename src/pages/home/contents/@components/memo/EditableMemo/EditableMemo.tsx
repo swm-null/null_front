@@ -10,6 +10,7 @@ import {
   isUpdateMemoResponse,
   isValidResponse,
 } from 'utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const EditableMemo = ({
   memo,
@@ -27,6 +28,7 @@ const EditableMemo = ({
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
   const updateMemoSubject = useRef(new Subject<Memo>()).current;
+  const { t } = useTranslation();
 
   // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
   useEffect(() => {
@@ -39,7 +41,7 @@ const EditableMemo = ({
 
     const response = await deleteMemo(memo.id);
     if (!isValidResponse(response)) {
-      alert('메모 삭제에 실패했습니다. 다시 시도해 주세요.');
+      alert(t('pages.memo.deleteErrorMessage'));
       softRevertMemo && softRevertMemo(memo);
     }
   };
@@ -68,7 +70,7 @@ const EditableMemo = ({
 
         const response = await updateMemo(newMemo.id, newMemo.content);
         if (!isUpdateMemoResponse(response)) {
-          alert('메모 업데이트에 실패했습니다. 다시 시도해 주세요.');
+          alert(t('pages.memo.updateErrorMessage'));
         }
       });
 
