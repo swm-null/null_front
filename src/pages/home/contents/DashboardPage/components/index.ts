@@ -1,2 +1,2 @@
 export * from './SelectedTagMemosList';
-export * from './TagList';
+export * from './CurrentTagPath';

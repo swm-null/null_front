@@ -9,7 +9,7 @@ import {
   UneditableTag,
   EditableMemo as SelectedTagMemo,
 } from 'pages/home/contents/@components';
-import { SelectedTagMemosList, TagList } from './components';
+import { SelectedTagMemosList, CurrentTagPath } from './components';
 import { useSelectedTagMemosManager, useTagsManager } from './hook';
 import { Tag } from '../@interfaces';
 
@@ -59,7 +59,7 @@ const DashboardPage = ({
       />
 
       {/* tag들 선택하는 부분 */}
-      <TagList
+      <CurrentTagPath
         allTagText={t('pages.dashboard.allMemoButton')}
         tagStack={tagStack}
         onTagClickAtIndex={selectTagAtIndex}
@@ -74,7 +74,7 @@ const DashboardPage = ({
             onClick={() => addTagToStack(tag)}
           />
         ))}
-      </TagList>
+      </CurrentTagPath>
 
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
         <SelectedTagMemosList>

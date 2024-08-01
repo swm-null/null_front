@@ -4,7 +4,7 @@ import { UneditableTag } from 'pages/home/contents/@components';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/contents/@interfaces';
 
-const TagList = ({
+const CurrentTagPath = ({
   children,
   allTagText,
   tagStack,
@@ -51,4 +51,4 @@ const TagList = ({
   );
 };
 
-export default TagList;
+export default CurrentTagPath;
