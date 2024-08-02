@@ -52,13 +52,11 @@ const KakaoDropzone = () => {
         </p>
         <p className="text-center">Only *.csv files will be accepted</p>
       </div>
-      {kakaoCsvFiles.length !== 0 ? (
+      {kakaoCsvFiles.length !== 0 && (
         <aside>
           <h4>카카오톡 데이터 파일</h4>
           <ul>{acceptedFileItems}</ul>
         </aside>
-      ) : (
-        <></>
       )}
     </section>
   );
