@@ -10,6 +10,7 @@ import {
   isUpdateMemoResponse,
   isValidResponse,
 } from 'utils/auth';
+import { useTranslation } from 'react-i18next';
 
 const EditableMemo = ({
   memo,
@@ -24,43 +25,42 @@ const EditableMemo = ({
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
 }) => {
-  const { id, content, tags: originTags } = memo;
-  const [message, setMessage] = useState(content);
-  const [tags, setTags] = useState(originTags);
+  const [message, setMessage] = useState(memo.content);
+  const [tags, setTags] = useState(memo.tags);
   const updateMemoSubject = useRef(new Subject<Memo>()).current;
+  const { t } = useTranslation();
+
+  // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
+  useEffect(() => {
+    setMessage(memo.content);
+    setTags(memo.tags);
+  }, [memo]);
 
   const handleDeleteMemo = async () => {
-    softDeleteMemo && softDeleteMemo(id);
+    softDeleteMemo && softDeleteMemo(memo.id);
 
     const response = await deleteMemo(memo.id);
-    // 메모 삭제 실패, 메모 다시 화면에 추가
     if (!isValidResponse(response)) {
-      // FIXME: 일단, 알림만 띄우는데, 다른 방법으로 수정해야함.
-      // 다시 삭제 하시겠습니까? 같은거 띄워야하나 고민중
-      alert('메모 삭제에 실패했습니다. 다시 시도해 주세요.');
-
-      // 화면에서 지웠던 메모를 다시 생성
+      alert(t('pages.memo.deleteErrorMessage'));
       softRevertMemo && softRevertMemo(memo);
     }
   };
 
   const tryUpdateMemo = () => {
-    const newMemo = { id, content: message, tags };
+    const newMemo = { id: memo.id, content: message, tags };
 
-    // FIXME: 2024.07.21 - tag 업데이트 기능 추가시 적용하기
-    // const arraysEqual = (a: any[], b: any[]) => {
-    //   return JSON.stringify(a) === JSON.stringify(b);
-    // };
-    // if (
-    //   memo.content !== newMemo.content ||
-    //   !arraysEqual(memo.tags, newMemo.tags)
-    // )
+    // FIXME: 2024.07.30
+    // tag 비교 내용. 태그 수정 기능 추가시 추가(이번주 내에 수정 가능할 것으로 추정)
+    // !arraysEqual(memo.tags, newMemo.tags);
 
-    // 메모 내용 달라진 것이 있을 때에만 서버에 업데이트 요청
     if (memo.content !== newMemo.content) {
       updateMemoSubject.next(newMemo);
     }
   };
+
+  // const arraysEqual = (a: any[], b: any[]) => {
+  //   return JSON.stringify(a) === JSON.stringify(b);
+  // };
 
   useEffect(() => {
     const subscription = updateMemoSubject
@@ -70,9 +70,7 @@ const EditableMemo = ({
 
         const response = await updateMemo(newMemo.id, newMemo.content);
         if (!isUpdateMemoResponse(response)) {
-          // FIXME: 일단, 알림만 띄우는데, 다른 방법으로 수정해야함.
-          // 다시 업데이트 하시겠습니까? 같은거 띄워야하나 고민중
-          alert('메모 업데이트에 실패했습니다. 다시 시도해 주세요.');
+          alert(t('pages.memo.updateErrorMessage'));
         }
       });
 
