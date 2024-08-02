@@ -1,5 +1,8 @@
 {
-  "memo": {},
+  "memo": {
+    "deleteErrorMessage": "메모 삭제에 실패했습니다. 다시 시도해 주세요.",
+    "updateErrorMessage": "메모 업데이트에 실패했습니다. 다시 시도해 주세요."
+  },
   "pages": {
     "add": {
       "header": "메모 추가하기",

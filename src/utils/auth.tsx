@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Memo, MemoSearchAnswer } from 'pages/home/contents/@interfaces';
+import { Memo, MemoSearchAnswer, Tag } from 'pages/home/contents/@interfaces';
 const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 
 interface response {
@@ -192,13 +192,13 @@ export const deleteMemo = async (
   }
 };
 
-interface getAllMemosResponse extends validResponse {
+interface getMemosResponse extends validResponse {
   memos: Memo[];
 }
 
 // 5.
 export const getAllMemos = async (): Promise<
-  getAllMemosResponse | errorResponse
+  getMemosResponse | errorResponse
 > => {
   const method = 'getAllMemos';
   const endpoint = `${LOCALHOST}/memos`;
@@ -209,7 +209,93 @@ export const getAllMemos = async (): Promise<
       method,
       status: response.status,
       memos: response.data,
-    } as getAllMemosResponse;
+    } as getMemosResponse;
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+// 6.
+export const getSelectedTagMemos = async (
+  tagId: string
+): Promise<getMemosResponse | errorResponse> => {
+  const method = 'getSelectedTagMemos';
+  const endpoint = `${LOCALHOST}/memos/tags/${tagId}`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '특정 태그의 메모 가져오는 것을 성공했습니다.',
+      memos: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+interface getTagsResponse extends validResponse {
+  tags: Tag[];
+}
+
+// 7.
+export const getAllTags = async (): Promise<
+  getTagsResponse | errorResponse
+> => {
+  const method = 'getChildTags';
+  const endpoint = `${LOCALHOST}/tags`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '모든 태그를 가져오는 것을 성공했습니다.',
+      tags: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+// 8.
+export const getChildTags = async (
+  tagId: string
+): Promise<getTagsResponse | errorResponse> => {
+  const method = 'getChildTags';
+  const endpoint = `${LOCALHOST}/tags/${tagId}/childTags`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: '특정 태그의 자식 태그를 가져오는 것을 성공했습니다.',
+      tags: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return handleError(error, method);
+  }
+};
+
+export const getRootTags = async (): Promise<
+  getTagsResponse | errorResponse
+> => {
+  const method = 'getRootTags';
+  const endpoint = `${LOCALHOST}/tags/depth/1`;
+
+  try {
+    const response = await axios.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      tags: response.data,
+    };
     return responseInfo;
   } catch (error) {
     return handleError(error, method);
@@ -247,8 +333,14 @@ export const isDeleteMemoResponse = (
   return isValidResponse(response);
 };
 
-export const isGetAllMemosResponse = (
-  response: getAllMemosResponse | errorResponse
-): response is getAllMemosResponse => {
-  return isValidResponse(response);
+export const isGetMemosResponse = (
+  response: getMemosResponse | errorResponse
+): response is getMemosResponse => {
+  return isValidResponse(response as getMemosResponse);
+};
+
+export const isGetTagsResponse = (
+  response: getTagsResponse | errorResponse
+): response is getTagsResponse => {
+  return (response as getTagsResponse).tags !== null;
 };

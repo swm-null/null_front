@@ -9,6 +9,11 @@ interface EditableTagProps {
    */
   invalidCharsPattern: RegExp;
   /**
+   * tag에 적용하고 싶은 배경색을 string으로 전달
+   * ex) #000000, tailwind에 적용되어있는 color
+   */
+  color?: string;
+  /**
    * tag의 text 변경사항을 받고 싶은 경우, text를 저장하는 메소드 전달
    */
   onTextChange?: (text: string) => void;
@@ -23,6 +28,7 @@ const EditableTag = ({
   text,
   editable = false,
   invalidCharsPattern,
+  color,
   onTextChange,
   onDelete,
   onClick,
@@ -43,7 +49,7 @@ const EditableTag = ({
 
   return (
     <div
-      className={`inline-flex self-start items-center px-3 py-1 bg-blue-300 rounded-full ${onClick && 'cursor-pointer'}`}
+      className={`inline-flex self-start items-center px-3 py-1 ${color ? `bg-[${color}]` : 'bg-blue-300'} rounded-full ${onClick && 'cursor-pointer'}`}
       onClick={onClick}
     >
       <span
