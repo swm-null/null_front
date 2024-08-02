@@ -1,4 +1,10 @@
-import { AddIcon, DashboardIcon, SearchIcon } from 'assets/icons';
+import {
+  AddIcon,
+  DashboardIcon,
+  SearchIcon,
+  UploadDataIcon,
+} from 'assets/icons';
+import { SideBarButton } from './components';
 
 interface SideBarProps {
   setCurrentPage: (page: string) => void;
@@ -23,20 +29,25 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
               Add Memo
             </button>
           </div>
-          <button
-            className="flex items-center p-2 w-full text-left rounded"
+          <SideBarButton
+            icon={<SearchIcon className="w-5 h-5 self-center mr-2" />}
+            label="Search"
             onClick={() => setCurrentPage('search')}
-          >
-            <SearchIcon className="w-5 h-5 self-center mr-2" />
-            Search
-          </button>
-          <button
-            className="flex items-center p-2 w-full text-left rounded"
+          />
+          <SideBarButton
+            icon={
+              <DashboardIcon className="w-4 h-4 ml-[2px] self-center mr-[10px]" />
+            }
+            label="Dashboard"
             onClick={() => setCurrentPage('dashboard')}
-          >
-            <DashboardIcon className="w-4 h-4 ml-[2px] self-center mr-[10px]" />
-            Dashboard
-          </button>
+          />
+          <SideBarButton
+            icon={
+              <UploadDataIcon className="w-4 h-4 ml-[2px] self-center mr-[10px]" />
+            }
+            label="Upload Data"
+            onClick={() => setCurrentPage('uploadData')}
+          />
         </div>
         <div className="flex flex-col flex-1" />
       </div>

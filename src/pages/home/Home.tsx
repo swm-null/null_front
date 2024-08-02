@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DesktopHome, MobileHome } from './components';
-import { AddPage, DashboardPage, SearchPage } from './contents';
+import { AddPage, DashboardPage, SearchPage, UploadDataPage } from './contents';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar';
 
 const queryClient = new QueryClient();
@@ -32,6 +32,8 @@ const Home = () => {
         return <SearchPage {...commonProps} />;
       case 'dashboard':
         return <DashboardPage {...commonProps} />;
+      case 'uploadData':
+        return <UploadDataPage {...commonProps} />;
       default:
         return <AddPage {...commonProps} />;
     }
