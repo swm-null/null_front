@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DesktopHome, MobileHome } from './components';
-import { AddPage, DashboardPage, SearchPage, UploadDataPage } from './contents';
+import { DashboardPage, SearchPage, UploadDataPage } from './contents';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar';
+import { MainPage } from './contents/MainPage';
+import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 
 const queryClient = new QueryClient();
 const MOBILE_DEVICE_WIDTH = 770;
@@ -26,8 +28,8 @@ const Home = () => {
     };
 
     switch (currentPage) {
-      case 'add':
-        return <AddPage {...commonProps} />;
+      case 'main':
+        return <MainPage />;
       case 'search':
         return <SearchPage {...commonProps} />;
       case 'dashboard':
@@ -35,28 +37,29 @@ const Home = () => {
       case 'uploadData':
         return <UploadDataPage {...commonProps} />;
       default:
-        return <AddPage {...commonProps} />;
+        return <MainPage />;
     }
   };
 
   useEffect(() => {
-    const handleResize = () => {
-      // 작은 화면인지 확인하고 수정
-      const nowScreen = window.innerWidth <= MOBILE_DEVICE_WIDTH;
-      if (nowScreen != isSmallScreen) {
-        setIsSmallScreen(nowScreen);
+    const resize$ = fromEvent(window, 'resize').pipe(
+      debounceTime(300), // 300ms 지연 시간 설정
+      map(() => window.innerWidth <= MOBILE_DEVICE_WIDTH),
+      distinctUntilChanged() // 값이 변경되었을 때만 emit
+    );
 
-        // 큰 화면 -> 작은 화면으로 전환될 때, 사이드바 닫기
-        if (isSmallScreen) {
-          setIsOpen(false);
-        }
+    const subscription = resize$.subscribe((nowScreen) => {
+      setIsSmallScreen(nowScreen);
+
+      // 큰 화면 -> 작은 화면으로 전환될 때, 사이드바 닫기
+      if (nowScreen) {
+        setIsOpen(false);
       }
-    };
+    });
 
-    window.addEventListener('resize', handleResize);
-
+    // 컴포넌트가 언마운트될 때 이벤트 구독 해제
     return () => {
-      window.removeEventListener('resize', handleResize);
+      subscription.unsubscribe();
     };
   }, []);
 

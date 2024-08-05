@@ -1,11 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { AnimatedHeader } from 'pages/home/contents/@components';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
-import {
-  SearchInput,
-  SearchScrollView,
-  SearchConversation,
-} from './components';
+import { SearchScrollView, SearchConversation } from './components';
 import { useSearchConversationManager } from './hook';
 
 const SearchPage = ({
@@ -16,12 +12,8 @@ const SearchPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const {
-    searchConversations,
-    addSearchConversation,
-    editSearchConversation,
-    removeSearchConversation,
-  } = useSearchConversationManager();
+  const { searchConversations, removeSearchConversation } =
+    useSearchConversationManager();
 
   // FIXME: user마다 다른 user, chatbot 데이터 서버에서 관리하고, 거기서 데이터 가져오는 코드 추가
   const userName = t('pages.search.user.name');
@@ -51,10 +43,6 @@ const SearchPage = ({
             />
           ))}
         </SearchScrollView>
-        <SearchInput
-          addSearchConversation={addSearchConversation}
-          editSearchConversation={editSearchConversation}
-        />
       </div>
     </div>
   );
