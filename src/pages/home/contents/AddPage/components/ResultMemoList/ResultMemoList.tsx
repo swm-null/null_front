@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { EditableMemo as ResultMemo } from 'pages/home/contents/@components';
-import { Memo } from 'pages/home/contents/@interfaces';
+import { EditableMemo as ResultMemo } from 'pages/home/contents/_components';
+import { Memo } from 'pages/home/contents/_interfaces';
 
 interface ResultMemoListProps {
   memos: Memo[];

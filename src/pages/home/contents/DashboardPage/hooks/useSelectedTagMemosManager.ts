@@ -5,7 +5,7 @@ import {
   getSelectedTagMemos,
   isGetMemosResponse,
 } from 'utils/auth';
-import { Memo, Tag } from '../../@interfaces';
+import { Memo, Tag } from '../../_interfaces';
 
 const useSelectedTagMemosManager = (selectedTag: Tag | null) => {
   const queryClient = useQueryClient();

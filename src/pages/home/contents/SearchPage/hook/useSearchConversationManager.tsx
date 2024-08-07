@@ -3,7 +3,7 @@ import { v4 as uuid_v4 } from 'uuid';
 import {
   MemoSearchAnswer,
   MemoSearchConversation,
-} from 'pages/home/contents/@interfaces';
+} from 'pages/home/contents/_interfaces';
 
 const MAX_SEARCH_QUERIES = 100;
 const useSearchConversationManager = () => {
