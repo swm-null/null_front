@@ -1,9 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { AuthInput, SocialLoginButton } from './components';
+import { useState } from 'react';
+import { AuthButton } from './components/AuthButton';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = () => {
     // TODO: 로그인 로직 추가
@@ -16,70 +21,57 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 py-8">
-      <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         <div className="mb-6">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-700"
-          >
-            {t('login.email')}
-          </label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          <AuthInput
+            label={t('login.email')}
+            value={email}
+            setValue={setEmail}
+          />
+          <AuthInput
+            label={t('login.password')}
+            value={password}
+            setValue={setPassword}
+            hidden
           />
         </div>
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-700"
-          >
-            {t('login.password')}
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-          />
-        </div>
+
         <div className="flex justify-between mb-2 gap-2">
-          <button
-            type="button"
-            className="flex-1 py-2 text-black bg-yellow-400 rounded-lg hover:bg-yellow-500"
-          >
-            {t('login.socialLogin.kakao')}
-          </button>
-          <button
-            type="button"
-            className="flex-1 py-2 text-white bg-black rounded-lg hover:bg-gray-800"
-          >
-            {t('login.socialLogin.apple')}
-          </button>
-          <button
-            type="button"
-            className="flex-1 py-2 text-black bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
-          >
-            {t('login.socialLogin.google')}
-          </button>
+          <SocialLoginButton
+            label={t('login.socialLogin.kakao')}
+            backgroundColor="#FEE500"
+            hoverColor="#FFD700"
+            textColor="black"
+          />
+          <SocialLoginButton
+            label={t('login.socialLogin.apple')}
+            backgroundColor="#000000"
+            hoverColor="#333333"
+            textColor="white"
+          />
+          <SocialLoginButton
+            label={t('login.socialLogin.google')}
+            backgroundColor="#FFFFFF"
+            hoverColor="#F5F5F5"
+            textColor="black"
+            borderColor="border-gray-300"
+          />
         </div>
-        <button
-          type="button"
+        <AuthButton
+          label={t('login.loginButton')}
           onClick={handleLogin}
-          className="w-full py-2 mb-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-700"
-        >
-          {t('login.loginButton')}
-        </button>
-        <button
-          type="button"
+          bgColor="#3B82F6"
+          hoverColor="#2563EB"
+          additionalClasses="mb-4 text-white"
+        />
+        <AuthButton
+          label={t('login.signUpButton')}
           onClick={handleSignUp}
-          className="w-full py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:bg-gray-400"
-        >
-          {t('login.signUpButton')}
-        </button>
-      </form>
+          bgColor="#E5E7EB"
+          hoverColor="#D1D5DB"
+          textColor="gray-700"
+        />
+      </div>
     </div>
   );
 };
