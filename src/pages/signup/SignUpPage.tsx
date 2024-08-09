@@ -1,96 +1,78 @@
-import { FormControl, FormLabel, TextField, Button } from '@mui/material';
-
 const SignUpPage = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 py-8">
       <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg overflow-y-auto">
         <div className="mb-6">
-          <FormControl fullWidth>
-            <FormLabel
-              htmlFor="id"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              아이디
-            </FormLabel>
-            <div className="flex items-center">
-              <TextField
-                type="text"
-                id="id"
-                name="id"
-                variant="outlined"
-                fullWidth
-              />
-              <span className="mx-1">@</span>
-              <TextField
-                type="text"
-                id="id"
-                name="id"
-                variant="outlined"
-                fullWidth
-              />
-            </div>
-          </FormControl>
-        </div>
-        <div className="mb-6">
-          <FormControl fullWidth>
-            <FormLabel
-              htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Password
-            </FormLabel>
-            <TextField
-              type="password"
-              id="password"
-              name="password"
-              variant="outlined"
-              fullWidth
-            />
-          </FormControl>
-        </div>
-        <div className="mb-6">
-          <FormControl fullWidth>
-            <FormLabel
-              htmlFor="passwordConfirm"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              Password 확인
-            </FormLabel>
-            <TextField
-              type="password"
-              id="passwordConfirm"
-              name="passwordConfirm"
-              variant="outlined"
-              fullWidth
-            />
-          </FormControl>
-        </div>
-        <div className="mb-6">
-          <FormControl fullWidth>
-            <FormLabel
-              htmlFor="name"
-              className="block mb-2 text-sm font-medium text-gray-700"
-            >
-              이름
-            </FormLabel>
-            <TextField
+          <label
+            htmlFor="emailUsername"
+            className="block mb-2 text-sm font-medium text-gray-700"
+          >
+            Email
+          </label>
+          <div className="flex items-center">
+            <input
               type="text"
-              id="name"
-              name="name"
-              variant="outlined"
-              fullWidth
+              id="emailUsername"
+              name="emailUsername"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
             />
-          </FormControl>
+            <span className="mx-1">@</span>
+            <input
+              type="text"
+              id="emailDomain"
+              name="emailDomain"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
         </div>
-        <Button
+        <div className="mb-6">
+          <label
+            htmlFor="password"
+            className="block mb-2 text-sm font-medium text-gray-700"
+          >
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            htmlFor="passwordConfirm"
+            className="block mb-2 text-sm font-medium text-gray-700"
+          >
+            Password 확인
+          </label>
+          <input
+            type="password"
+            id="passwordConfirm"
+            name="passwordConfirm"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          />
+        </div>
+        <div className="mb-6">
+          <label
+            htmlFor="name"
+            className="block mb-2 text-sm font-medium text-gray-700"
+          >
+            이름
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          />
+        </div>
+        <button
           type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          className="py-2 mb-4"
+          className="w-full py-2 mb-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-700"
         >
           회원가입
-        </Button>
+        </button>
       </form>
     </div>
   );
