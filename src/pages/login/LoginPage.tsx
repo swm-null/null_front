@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogin = () => {
     // TODO: 로그인 로직 추가
@@ -9,7 +11,7 @@ const LoginPage = () => {
   };
 
   const handleSignUp = () => {
-    navigate('/signup');
+    navigate('/signUp');
   };
 
   return (
@@ -20,7 +22,7 @@ const LoginPage = () => {
             htmlFor="email"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            Email
+            {t('login.email')}
           </label>
           <input
             type="text"
@@ -34,7 +36,7 @@ const LoginPage = () => {
             htmlFor="password"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            Password
+            {t('login.password')}
           </label>
           <input
             type="password"
@@ -48,19 +50,19 @@ const LoginPage = () => {
             type="button"
             className="flex-1 py-2 text-black bg-yellow-400 rounded-lg hover:bg-yellow-500"
           >
-            카카오톡
+            {t('login.socialLogin.kakao')}
           </button>
           <button
             type="button"
             className="flex-1 py-2 text-white bg-black rounded-lg hover:bg-gray-800"
           >
-            애플 아이디
+            {t('login.socialLogin.apple')}
           </button>
           <button
             type="button"
             className="flex-1 py-2 text-black bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
           >
-            구글
+            {t('login.socialLogin.google')}
           </button>
         </div>
         <button
@@ -68,14 +70,14 @@ const LoginPage = () => {
           onClick={handleLogin}
           className="w-full py-2 mb-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-700"
         >
-          Login
+          {t('login.loginButton')}
         </button>
         <button
           type="button"
           onClick={handleSignUp}
           className="w-full py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:bg-gray-400"
         >
-          Sign Up
+          {t('login.signUpButton')}
         </button>
       </form>
     </div>

@@ -1,4 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 const SignUpPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 py-8">
       <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg overflow-y-auto">
@@ -7,7 +11,7 @@ const SignUpPage = () => {
             htmlFor="emailUsername"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            Email
+            {t('signUp.email')}
           </label>
           <div className="flex items-center">
             <input
@@ -30,7 +34,7 @@ const SignUpPage = () => {
             htmlFor="password"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            Password
+            {t('signUp.password')}
           </label>
           <input
             type="password"
@@ -44,7 +48,7 @@ const SignUpPage = () => {
             htmlFor="passwordConfirm"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            Password 확인
+            {t('signUp.passwordConfirm')}
           </label>
           <input
             type="password"
@@ -58,7 +62,7 @@ const SignUpPage = () => {
             htmlFor="name"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            이름
+            {t('signUp.name')}
           </label>
           <input
             type="text"
@@ -71,7 +75,7 @@ const SignUpPage = () => {
           type="submit"
           className="w-full py-2 mb-4 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-700"
         >
-          회원가입
+          {t('signUp.signUpButton')}
         </button>
       </form>
     </div>
