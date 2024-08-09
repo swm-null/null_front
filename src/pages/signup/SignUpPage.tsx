@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AuthButton, AuthInput } from './components';
+import { AuthButton, AuthInput } from 'pages/components';
 import { useState } from 'react';
 
 const SignUpPage = () => {

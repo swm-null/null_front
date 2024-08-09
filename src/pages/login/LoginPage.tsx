@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AuthInput, SocialLoginButton } from './components';
+import { SocialLoginButton } from './components';
 import { useState } from 'react';
-import { AuthButton } from './components/AuthButton';
+import { AuthButton, AuthInput } from 'pages/components';
 
 const LoginPage = () => {
   const navigate = useNavigate();
