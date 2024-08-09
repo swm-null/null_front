@@ -1,10 +1,18 @@
-import { Home } from 'pages';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { LoginPage, SignUpPage, Home } from 'pages';
 import 'i18n';
 import './index.css';
 
 const App = () => {
-  // TODO: 로그인, home 라우팅 기능 넣기
-  return <Home />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;
