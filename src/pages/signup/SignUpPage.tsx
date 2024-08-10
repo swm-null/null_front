@@ -2,18 +2,27 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { AuthButton, AuthInput } from 'pages/components';
 import { useState } from 'react';
+import { EmailInput } from './components';
 
 const SignUpPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState({ username: '', domain: '' });
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [name, setName] = useState('');
+
   const handleSignUp = () => {
     navigate(-1);
   };
 
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [name, setName] = useState('');
+  const handleEmailChange = (newEmail: {
+    username: string;
+    domain: string;
+  }) => {
+    setEmail(newEmail);
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 py-8">
@@ -25,21 +34,7 @@ const SignUpPage = () => {
           >
             {t('signUp.email')}
           </label>
-          <div className="flex items-center">
-            <input
-              type="text"
-              id="emailUsername"
-              name="emailUsername"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-            />
-            <span className="mx-1">@</span>
-            <input
-              type="text"
-              id="emailDomain"
-              name="emailDomain"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-            />
-          </div>
+          <EmailInput value={email} onChange={handleEmailChange} />
           <AuthInput
             label={t('signUp.password')}
             value={password}
