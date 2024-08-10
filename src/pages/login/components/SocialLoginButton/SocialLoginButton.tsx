@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface SocialLoginButtonProps {
   label: string;
   backgroundColor: string;
@@ -9,14 +7,14 @@ interface SocialLoginButtonProps {
   onClick?: () => void;
 }
 
-const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
+const SocialLoginButton = ({
   label,
   backgroundColor,
   hoverColor,
   textColor = 'black',
   borderColor,
   onClick,
-}) => {
+}: SocialLoginButtonProps) => {
   return (
     <button
       type="button"
