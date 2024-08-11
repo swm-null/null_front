@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { AnimatedHeader } from 'pages/home/contents/@components';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import { SearchScrollView, SearchConversation } from './components';
-import { useSearchConversationManager } from './hook';
+import { MemoSearchConversation } from '../@interfaces';
 
-const SearchPage = ({
+const SearchHistoryPage = ({
   headerLeftMarginToggle = false,
   headerLeftMargin = 0,
 }: {
@@ -12,13 +12,12 @@ const SearchPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const { searchConversations, removeSearchConversation } =
-    useSearchConversationManager();
+  const searchConversations: MemoSearchConversation[] = JSON.parse(
+    localStorage.getItem('search_queries') || '[]'
+  );
 
   // FIXME: user마다 다른 user, chatbot 데이터 서버에서 관리하고, 거기서 데이터 가져오는 코드 추가
-  const userName = t('pages.search.user.name');
   const chatBotName = t('pages.search.ai.name');
-  const userImageUrl = t('pages.search.user.url');
   const chatBotImageUrl = t('pages.search.ai.url');
 
   return (
@@ -35,11 +34,8 @@ const SearchPage = ({
             <SearchConversation
               key={searchConversation.id}
               data={searchConversation}
-              userName={userName}
-              userImageUrl={userImageUrl}
               chatBotImageUrl={chatBotImageUrl}
               chatBotName={chatBotName}
-              removeSearchConversation={removeSearchConversation}
             />
           ))}
         </SearchScrollView>
@@ -48,4 +44,4 @@ const SearchPage = ({
   );
 };
 
-export default SearchPage;
+export default SearchHistoryPage;

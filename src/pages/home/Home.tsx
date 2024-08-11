@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { DesktopHome, MobileHome } from './components';
-import { DashboardPage, SearchPage, UploadDataPage } from './contents';
+import { DashboardPage, SearchHistoryPage, UploadDataPage } from './contents';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar';
 import { MainPage } from './contents/MainPage';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
@@ -30,8 +30,8 @@ const Home = () => {
     switch (currentPage) {
       case 'main':
         return <MainPage />;
-      case 'search':
-        return <SearchPage {...commonProps} />;
+      case 'searchHistory':
+        return <SearchHistoryPage {...commonProps} />;
       case 'dashboard':
         return <DashboardPage {...commonProps} />;
       case 'uploadData':

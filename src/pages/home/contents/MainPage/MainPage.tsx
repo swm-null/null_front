@@ -1,10 +1,10 @@
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MemoTextAreaWithAIButton, SearchConversation } from './components';
+import { MemoTextAreaWithAIButton } from './components';
 import { useCreateSearchNoteManager } from './hook';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { EditableMemo } from '../@components';
+import { EditableMemo, SearchConversation } from '../@components';
 
 const MainPage = () => {
   const { t } = useTranslation();

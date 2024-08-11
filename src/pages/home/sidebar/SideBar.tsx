@@ -25,8 +25,8 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           </div>
           <SideBarButton
             icon={<SearchIcon className="w-5 h-5 self-center mr-2" />}
-            label="Search"
-            onClick={() => setCurrentPage('search')}
+            label="Search History"
+            onClick={() => setCurrentPage('searchHistory')}
           />
           <SideBarButton
             icon={
