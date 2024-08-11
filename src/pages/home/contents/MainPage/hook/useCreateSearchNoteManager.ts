@@ -6,8 +6,10 @@ import {
   searchMemo,
 } from 'utils/auth';
 import { v4 as uuid_v4 } from 'uuid';
-import { Memo, MemoSearchConversation } from '../../@interfaces';
+import { Memo, MemoSearchConversation } from 'pages/home/contents/@interfaces';
 import { useState } from 'react';
+
+const MAX_SEARCH_QUERIES = 100;
 
 const useCreateSearchNoteManager = () => {
   const [createAnswer, setCreateAnswer] = useState<Memo>();
@@ -67,7 +69,13 @@ const useCreateSearchNoteManager = () => {
       setStatus('loading');
       try {
         const answer = await getSearchResponse(message);
-        setSearchAnswer({ id: uuid_v4(), query: message, answer: answer });
+        const newSearchAnswer = {
+          id: uuid_v4(),
+          query: message,
+          answer: answer,
+        };
+        saveSearchHistory(newSearchAnswer);
+        setSearchAnswer(newSearchAnswer);
         setStatus('success');
       } catch (error) {
         setStatus('error');
@@ -92,6 +100,20 @@ const useCreateSearchNoteManager = () => {
             memos: null,
           };
     return answer;
+  };
+
+  const saveSearchHistory = (newSearchAnswer: MemoSearchConversation) => {
+    const searchConversations = JSON.parse(
+      localStorage.getItem('search_queries') || '[]'
+    );
+
+    searchConversations.unshift(newSearchAnswer);
+
+    if (searchConversations.length > MAX_SEARCH_QUERIES) {
+      searchConversations.length = MAX_SEARCH_QUERIES;
+    }
+
+    localStorage.setItem('search_queries', JSON.stringify(searchConversations));
   };
 
   return {
