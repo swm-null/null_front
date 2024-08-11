@@ -1,9 +1,7 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MemoTextAreaWithAIButton } from './components';
+import { MemoTextAreaWithAIButton, ModeToggle } from './components';
 import { useCreateSearchNoteManager } from './hook';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { EditableMemo, SearchConversation } from '../@components';
 
 const MainPage = () => {
@@ -17,16 +15,13 @@ const MainPage = () => {
     tryCreateMemoAndSetStatus,
     trySearchMemoAndSetStatus,
   } = useCreateSearchNoteManager();
-  const chatBotName = t('pages.search.ai.name');
-  const chatBotImageUrl = t('pages.search.ai.url');
 
-  // input의 text가 수정 되면, status를 default로 초기화
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
   const handleModeChange = (
-    _: React.MouseEvent<HTMLElement>,
+    _: MouseEvent<HTMLElement>,
     newMode: 'create' | 'search'
   ) => {
     if (newMode !== null) {
@@ -34,64 +29,57 @@ const MainPage = () => {
     }
   };
 
+  const handleButtonClick = () => {
+    return mode === 'create'
+      ? () => tryCreateMemoAndSetStatus(message, setMessage)
+      : () => trySearchMemoAndSetStatus(message, setMessage);
+  };
+
+  const getButtonText = () => {
+    if (status === 'loading') {
+      return mode === 'create'
+        ? t('pages.add.memoCreateButton.loading')
+        : t('pages.search.memoSearchButton.loading');
+    }
+    return mode === 'create'
+      ? t('pages.add.memoCreateButton.default')
+      : t('pages.search.memoSearchButton.default');
+  };
+
+  const renderResult = () => {
+    return (
+      <div className="my-4 p-2 rounded-xl border-[0.12rem]">
+        {mode === 'create' && createAnswer ? (
+          <EditableMemo
+            color="transparent"
+            key={createAnswer.id}
+            memo={createAnswer}
+          />
+        ) : mode === 'search' && searchAnswer ? (
+          <SearchConversation
+            key={searchAnswer.id}
+            data={searchAnswer}
+            chatBotImageUrl={t('pages.search.ai.url')}
+            chatBotName={t('pages.search.ai.name')}
+          />
+        ) : null}
+      </div>
+    );
+  };
+
   return (
-    <div className="flex justify-center">
+    <div className="flex h-full justify-center pb-4">
       <div className="max-w-[561px] flex flex-col flex-1 overflow-hidden text-gray2">
-        <ToggleButtonGroup
-          value={mode}
-          exclusive
-          onChange={handleModeChange}
-          aria-label="mode"
-          className="my-4"
-        >
-          <ToggleButton value="create" aria-label="create">
-            create
-          </ToggleButton>
-          <ToggleButton value="search" aria-label="search">
-            search
-          </ToggleButton>
-        </ToggleButtonGroup>
+        <ModeToggle mode={mode} onModeChange={handleModeChange} />
         <MemoTextAreaWithAIButton
           value={message}
           onChange={handleMessageChange}
           placeholder={t('pages.add.inputPlaceholder')}
-          onButtonClick={
-            mode === 'create'
-              ? () => tryCreateMemoAndSetStatus(message, setMessage)
-              : () => trySearchMemoAndSetStatus(message, setMessage)
-          }
+          onButtonClick={handleButtonClick()}
           isDisabled={status === 'loading'}
-          buttonText={
-            mode === 'create'
-              ? status === 'loading'
-                ? t('pages.add.memoCreateButton.loading')
-                : t('pages.add.memoCreateButton.default')
-              : status === 'loading'
-                ? '메모를 검색 중...'
-                : '메모 검색하기'
-          }
+          buttonText={getButtonText()}
         />
-        {status === 'success' && (
-          <div className="my-4 p-2 rounded-xl border-[0.12rem]">
-            {mode === 'create' && createAnswer && (
-              <EditableMemo
-                color="transparent"
-                key={createAnswer.id}
-                memo={createAnswer}
-              />
-            )}
-            {mode === 'search' && searchAnswer && (
-              <SearchConversation
-                key={searchAnswer.id}
-                data={searchAnswer}
-                chatBotImageUrl={chatBotImageUrl}
-                chatBotName={chatBotName}
-              />
-            )}
-          </div>
-        )}
-
-        <div className="flex flex-col flex-1 " />
+        {status === 'success' && renderResult()}
       </div>
     </div>
   );
