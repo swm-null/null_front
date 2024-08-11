@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
-import { AnimatedHeader } from 'pages/home/contents/@components/ui';
+import { AnimatedHeader } from 'pages/home/contents/_components/ui';
 import { MemoTextAreaWithAIButton, ResultMemoList } from './components';
 import { useResultMemoManagerWithStatus } from './hook';
 

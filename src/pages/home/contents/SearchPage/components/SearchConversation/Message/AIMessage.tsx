@@ -1,5 +1,5 @@
-import { MemoSearchAnswer } from 'pages/home/contents/@interfaces';
-import { UneditableMemo } from 'pages/home/contents/@components';
+import { MemoSearchAnswer } from 'pages/home/contents/_interfaces';
+import { UneditableMemo } from 'pages/home/contents/_components';
 
 const AIMessage = ({
   name,

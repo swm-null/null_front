@@ -1,4 +1,4 @@
-import { MemoSearchConversation } from 'pages/home/contents/@interfaces';
+import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
 import { AIMessage, UserMessage } from './Message';
 import { useTranslation } from 'react-i18next';
 

@@ -2,7 +2,7 @@ import { SetStateAction, useState } from 'react';
 import { isSearchMemoResponse, isValidResponse, searchMemo } from 'utils/auth';
 import { usePressEnterFetch } from './hook';
 import { useTranslation } from 'react-i18next';
-import { MemoSearchAnswer } from 'pages/home/contents/@interfaces';
+import { MemoSearchAnswer } from 'pages/home/contents/_interfaces';
 
 const SearchInput = ({
   addSearchConversation,

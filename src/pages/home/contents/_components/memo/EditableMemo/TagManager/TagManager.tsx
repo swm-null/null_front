@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { EditableTag } from 'pages/home/contents/@components';
+import { EditableTag } from 'pages/home/contents/_components';
 import { TagCreateInput } from './TagCreateInput';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
-import { Tag } from 'pages/home/contents/@interfaces';
+import { Tag } from 'pages/home/contents/_interfaces';
 
 interface TagManagerProps {
   tags: Tag[];

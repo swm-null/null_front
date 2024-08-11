@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Memo, MemoSearchAnswer, Tag } from 'pages/home/contents/@interfaces';
+import { Memo, MemoSearchAnswer, Tag } from 'pages/home/contents/_interfaces';
 const LOCALHOST = import.meta.env.VITE_LOCALHOST;
 
 interface response {

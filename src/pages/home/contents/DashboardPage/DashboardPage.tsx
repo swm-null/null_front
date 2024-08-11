@@ -8,10 +8,10 @@ import {
   AnimatedHeader,
   UneditableTag,
   EditableMemo as SelectedTagMemo,
-} from 'pages/home/contents/@components';
+} from 'pages/home/contents/_components';
 import { SelectedTagMemosList, CurrentTagPath } from './components';
 import { useSelectedTagMemosManager, useTagsManager } from './hooks';
-import { Tag } from '../@interfaces';
+import { Tag } from '../_interfaces';
 
 const DashboardPage = ({
   headerLeftMarginToggle = false,

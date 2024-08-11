@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { Breadcrumbs } from '@mui/material';
-import { UneditableTag } from 'pages/home/contents/@components';
+import { UneditableTag } from 'pages/home/contents/_components';
 import { RightIcon } from 'assets/icons';
-import { Tag } from 'pages/home/contents/@interfaces';
+import { Tag } from 'pages/home/contents/_interfaces';
 
 const CurrentTagPath = ({
   children,

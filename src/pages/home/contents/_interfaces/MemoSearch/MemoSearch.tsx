@@ -1,4 +1,4 @@
-import { Memo } from 'pages/home/contents/@interfaces/MemoInterface';
+import { Memo } from 'pages/home/contents/_interfaces/MemoInterface';
 
 /**
  * 메모 검색 기능 사용 후 받은 대답 객체

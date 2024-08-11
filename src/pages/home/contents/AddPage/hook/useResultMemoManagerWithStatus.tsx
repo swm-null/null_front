@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Memo } from 'pages/home/contents/@interfaces';
+import { Memo } from 'pages/home/contents/_interfaces';
 import { createMemo, isCreateMemoResponse, isValidResponse } from 'utils/auth';
 
 /**
