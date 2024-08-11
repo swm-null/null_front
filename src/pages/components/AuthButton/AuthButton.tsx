@@ -7,7 +7,7 @@ interface AuthButtonProps {
   additionalClasses?: string;
 }
 
-const ActionButton = ({
+const AuthButton = ({
   label,
   onClick,
   bgColor,
@@ -29,4 +29,4 @@ const ActionButton = ({
   );
 };
 
-export default ActionButton;
+export default AuthButton;
