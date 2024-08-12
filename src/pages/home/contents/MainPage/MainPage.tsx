@@ -2,28 +2,29 @@ import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoTextAreaWithAIButton, ModeToggle } from './components';
 import { useCreateSearchNoteManager } from './hook';
-import { EditableMemo, SearchConversation } from '../@components';
+import {
+  EditableMemo,
+  SearchConversation,
+} from 'pages/home/contents/@components';
+import { Mode } from 'pages/home/contents/@interfaces';
 
 const MainPage = () => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
-  const [mode, setMode] = useState<'create' | 'search'>('create');
+  const [mode, setMode] = useState<Mode>('create');
   const {
     status,
     createAnswer,
     searchAnswer,
     tryCreateMemoAndSetStatus,
     trySearchMemoAndSetStatus,
-  } = useCreateSearchNoteManager();
+  } = useCreateSearchNoteManager(mode);
 
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
-  const handleModeChange = (
-    _: MouseEvent<HTMLElement>,
-    newMode: 'create' | 'search'
-  ) => {
+  const handleModeChange = (_: MouseEvent<HTMLElement>, newMode: Mode) => {
     if (newMode !== null) {
       setMode(newMode);
     }

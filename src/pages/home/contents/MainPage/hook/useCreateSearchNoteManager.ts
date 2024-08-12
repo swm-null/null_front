@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { v4 as uuid_v4 } from 'uuid';
 import {
   createMemo,
   isCreateMemoResponse,
@@ -5,33 +7,33 @@ import {
   isValidResponse,
   searchMemo,
 } from 'utils/auth';
-import { v4 as uuid_v4 } from 'uuid';
-import { Memo, MemoSearchConversation } from 'pages/home/contents/@interfaces';
-import { useState } from 'react';
+import {
+  Memo,
+  MemoSearchConversation,
+  Mode,
+  Status,
+} from 'pages/home/contents/@interfaces';
 
 const MAX_SEARCH_QUERIES = 100;
 
-const useCreateSearchNoteManager = () => {
+const useCreateSearchNoteManager = (mode: Mode) => {
   const [createAnswer, setCreateAnswer] = useState<Memo>();
   const [searchAnswer, setSearchAnswer] = useState<MemoSearchConversation>();
-  const [status, setStatus] = useState<
-    'default' | 'loading' | 'success' | 'error'
-  >('default');
+  const [status, setStatus] = useState<Status>('default');
 
-  /**
-   * 메모 내용으로 태그가 있는 메모를 서버에 보내 생성하고, 그 과정을 status로 표시한다.
-   * @param message: string. 태그 있는 메모를 자동생성하고 싶은 메모 내용
-   */
+  useEffect(() => {
+    setStatus('default'); // mode가 변경될 때마다 status를 초기화
+  }, [mode]);
+
   const tryCreateMemoAndSetStatus = async (
     message: string,
     setMessage: (message: string) => void
   ) => {
     if (message.trim()) {
       setMessage('');
-
       setStatus('loading');
       try {
-        const answer = await getResultMemoContext(message);
+        const answer = await getCreateResponse(message);
         setCreateAnswer(answer);
         setStatus('success');
       } catch (error) {
@@ -40,23 +42,27 @@ const useCreateSearchNoteManager = () => {
     }
   };
 
-  const getResultMemoContext = async (text: string): Promise<Memo> => {
+  const getCreateResponse = async (text: string): Promise<Memo> => {
     const response = await createMemo(text);
 
-    // 에러 response이거나 올바르지 않은 response인 경우 error 발생시킴.
     if (!isValidResponse(response)) {
-      throw new Error('not valid status error');
-    } else if (!isCreateMemoResponse(response)) {
-      throw new Error('not valid response structure error');
+      return {
+        id: uuid_v4(),
+        content:
+          '추가를 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 시도해주세요',
+        tags: [],
+      };
     }
 
-    const answer = {
-      id: response.id,
-      content: response.content,
-      tags: response.tags,
-    };
+    if (isCreateMemoResponse(response)) {
+      return {
+        id: response.id,
+        content: response.content,
+        tags: response.tags,
+      };
+    }
 
-    return answer as Memo;
+    throw new Error('Unexpected response format');
   };
 
   const trySearchMemoAndSetStatus = async (
@@ -65,7 +71,6 @@ const useCreateSearchNoteManager = () => {
   ) => {
     if (message.trim()) {
       setMessage('');
-
       setStatus('loading');
       try {
         const answer = await getSearchResponse(message);
@@ -85,28 +90,28 @@ const useCreateSearchNoteManager = () => {
 
   const getSearchResponse = async (text: string) => {
     const response = await searchMemo(text);
-    const answer = !isValidResponse(response)
-      ? {
-          text: '검색을 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 검색해주세요',
-          memos: null,
-        }
-      : isSearchMemoResponse(response)
-        ? {
-            text: response.text,
-            memos: response.memos,
-          }
-        : {
-            text: '관련된 메모가 없습니다',
-            memos: null,
-          };
-    return answer;
+
+    if (!isValidResponse(response)) {
+      return {
+        text: '검색을 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 검색해주세요',
+        memos: null,
+      };
+    }
+
+    if (isSearchMemoResponse(response)) {
+      return {
+        text: response.text,
+        memos: response.memos,
+      };
+    }
+
+    throw new Error('Unexpected response format');
   };
 
   const saveSearchHistory = (newSearchAnswer: MemoSearchConversation) => {
     const searchConversations = JSON.parse(
       localStorage.getItem('search_queries') || '[]'
     );
-
     searchConversations.unshift(newSearchAnswer);
 
     if (searchConversations.length > MAX_SEARCH_QUERIES) {
