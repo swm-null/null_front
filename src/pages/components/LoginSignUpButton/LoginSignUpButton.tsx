@@ -1,4 +1,4 @@
-interface AuthButtonProps {
+interface LoginSignUpButtonProps {
   label: string;
   onClick: () => void;
   bgColor: string;
@@ -7,14 +7,14 @@ interface AuthButtonProps {
   additionalClasses?: string;
 }
 
-const AuthButton = ({
+const LoginSignUpButton = ({
   label,
   onClick,
   bgColor,
   hoverColor,
   textColor = 'white',
   additionalClasses = '',
-}: AuthButtonProps) => {
+}: LoginSignUpButtonProps) => {
   return (
     <button
       type="button"
@@ -29,4 +29,4 @@ const AuthButton = ({
   );
 };
 
-export default AuthButton;
+export default LoginSignUpButton;

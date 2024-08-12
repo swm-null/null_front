@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AuthButton, AuthInput } from 'pages/components';
+import { LoginSignUpButton, CustomInput } from 'pages/components';
 import { useState } from 'react';
 import { EmailInput } from './components';
 
@@ -35,21 +35,25 @@ const SignUpPage = () => {
             {t('signUp.email')}
           </label>
           <EmailInput value={email} onChange={handleEmailChange} />
-          <AuthInput
+          <CustomInput
             label={t('signUp.password')}
             value={password}
             setValue={setPassword}
           />
-          <AuthInput
+          <CustomInput
             label={t('signUp.passwordConfirm')}
             value={passwordConfirm}
             setValue={setPasswordConfirm}
           />
         </div>
         <div className="mb-6">
-          <AuthInput label={t('signUp.name')} value={name} setValue={setName} />
+          <CustomInput
+            label={t('signUp.name')}
+            value={name}
+            setValue={setName}
+          />
         </div>
-        <AuthButton
+        <LoginSignUpButton
           label={t('signUp.signUpButton')}
           onClick={handleSignUp}
           bgColor="#3B82F6"

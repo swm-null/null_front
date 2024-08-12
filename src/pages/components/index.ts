@@ -1,2 +1,2 @@
-export * from './AuthButton';
-export * from './AuthInput';
+export * from './LoginSignUpButton';
+export * from './CustomInput';

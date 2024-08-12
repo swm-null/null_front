@@ -1,4 +1,4 @@
-const AuthInput = ({
+const CustomInput = ({
   label,
   value,
   setValue,
@@ -23,4 +23,4 @@ const AuthInput = ({
   );
 };
 
-export default AuthInput;
+export default CustomInput;
