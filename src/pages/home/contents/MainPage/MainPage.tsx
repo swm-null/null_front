@@ -5,8 +5,8 @@ import { useCreateSearchNoteManager } from './hook';
 import {
   EditableMemo,
   SearchConversation,
-} from 'pages/home/contents/@components';
-import { Mode } from 'pages/home/contents/@interfaces';
+} from 'pages/home/contents/_components';
+import { Mode } from 'pages/home/contents/_interfaces';
 
 const MainPage = () => {
   const { t } = useTranslation();

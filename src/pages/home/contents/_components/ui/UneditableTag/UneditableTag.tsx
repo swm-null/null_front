@@ -1,4 +1,4 @@
-import { EditableTag } from 'pages/home/contents/@components';
+import { EditableTag } from 'pages/home/contents/_components';
 
 interface UneditableTagProps {
   text: string;

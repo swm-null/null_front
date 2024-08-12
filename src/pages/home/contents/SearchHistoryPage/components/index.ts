@@ -1,2 +1,2 @@
 export * from './SearchScrollView';
-export * from '../../@components/search/SearchConversation';
+export * from '../../_components/search/SearchConversation';

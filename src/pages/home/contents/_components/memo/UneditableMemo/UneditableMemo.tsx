@@ -1,5 +1,5 @@
-import { Memo } from 'pages/home/contents/@interfaces';
-import { EditableMemo } from 'pages/home/contents/@components/memo';
+import { Memo } from 'pages/home/contents/_interfaces';
+import { EditableMemo } from 'pages/home/contents/_components/memo';
 
 const UneditableMemo = ({
   memo,

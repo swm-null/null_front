@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { MemoSearchConversation } from 'pages/home/contents/@interfaces';
+import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
 import { DownIcon } from 'assets/icons';
 import { Slide, SvgIcon } from '@mui/material';
 

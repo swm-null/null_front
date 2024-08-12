@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { TagManager } from './TagManager';
 import { MemoText } from './MemoText';
-import { Memo } from 'pages/home/contents/@interfaces';
+import { Memo } from 'pages/home/contents/_interfaces';
 import {
   deleteMemo,
   updateMemo,

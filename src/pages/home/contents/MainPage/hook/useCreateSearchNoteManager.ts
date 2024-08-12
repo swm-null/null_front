@@ -12,7 +12,7 @@ import {
   MemoSearchConversation,
   Mode,
   Status,
-} from 'pages/home/contents/@interfaces';
+} from 'pages/home/contents/_interfaces';
 
 const MAX_SEARCH_QUERIES = 100;
 
