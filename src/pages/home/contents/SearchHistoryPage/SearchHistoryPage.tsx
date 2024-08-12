@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { AnimatedHeader } from 'pages/home/contents/_components';
+import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import { SearchScrollView, SearchConversation } from './components';
-import { MemoSearchConversation } from '../_interfaces';
 
 const SearchHistoryPage = ({
   headerLeftMarginToggle = false,
