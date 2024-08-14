@@ -32,10 +32,7 @@ const MemoTextAreaWithAIButton = ({
         onKeyDown={handlePressEnterFetch}
         minRows={1}
         maxRows={20}
-        className="flex-1 focus:outline-none resize-none"
-        style={{
-          marginRight: '1rem', // Add space between the textarea and button
-        }}
+        className="flex-1 focus:outline-none resize-none mr-4"
       />
       <button
         className="bg-gray2 text-white rounded-full py-2 px-6 h-12"
