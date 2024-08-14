@@ -14,7 +14,7 @@ const AIMessage = ({
     return (
       <div
         key={memo.id}
-        className="flex-shrink-0 rounded-lg w-72 whitespace-normal break-words text-base"
+        className="flex-shrink-0 rounded-lg w-72 whitespace-pre-wrap break-words text-base"
       >
         <UneditableMemo memo={memo} />
       </div>
@@ -31,7 +31,7 @@ const AIMessage = ({
       <div className="flex flex-col flex-1 overflow-hidden">
         <p className="text-lg font-semibold">{name}</p>
         <div className="p-3 inline-block self-start bg-gray0 rounded-lg overflow-hidden max-w-3/4">
-          <div className="inline bg-transparent resize-none focus:outline-none whitespace-normal break-words">
+          <div className="inline bg-transparent resize-none focus:outline-none  whitespace-pre-wrap break-words">
             {content.text}
           </div>
           {content.memos && (
