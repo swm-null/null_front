@@ -287,7 +287,7 @@ export const getRootTags = async (): Promise<
   getTagsResponse | errorResponse
 > => {
   const method = 'getRootTags';
-  const endpoint = `${LOCALHOST}/tags/depth/1`;
+  const endpoint = `${LOCALHOST}/tags/root`;
 
   try {
     const response = await axios.get(endpoint);
