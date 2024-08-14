@@ -47,7 +47,7 @@ const MainPage = () => {
       : t('pages.search.memoSearchButton.default');
   };
 
-  const renderResult = () => {
+  const renderResultContentByMode = () => {
     return (
       <div className="my-4 p-2 rounded-xl border-[0.12rem]">
         {mode === 'create' && createAnswer ? (
@@ -80,7 +80,7 @@ const MainPage = () => {
           isDisabled={status === 'loading'}
           buttonText={getButtonText()}
         />
-        {status === 'success' && renderResult()}
+        {status === 'success' && renderResultContentByMode()}
       </div>
     </div>
   );
