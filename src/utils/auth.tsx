@@ -120,7 +120,7 @@ export const createMemo = async (
       JSON.stringify({ content: inputContent }),
       config
     );
-    const { id, content, tags } = response.data;
+    const { id, content, tags } = response.data.memo;
     const responseInfo = {
       method,
       status: response.status,

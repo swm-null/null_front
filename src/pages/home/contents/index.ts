@@ -1,4 +1,3 @@
-export * from './AddPage';
-export * from './SearchPage';
+export * from './SearchHistoryPage';
 export * from './DashboardPage';
 export * from './UploadDataPage';

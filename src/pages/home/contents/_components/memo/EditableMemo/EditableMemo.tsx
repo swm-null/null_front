@@ -15,12 +15,18 @@ import { useTranslation } from 'react-i18next';
 const EditableMemo = ({
   memo,
   editable = false,
+  color,
   softUpdateMemo,
   softDeleteMemo,
   softRevertMemo,
 }: {
   memo: Memo;
   editable?: boolean;
+  /**
+   * 메모에 적용하고 싶은 배경색을 string으로 전달
+   * ex) #000000, tailwind에 적용되어있는 color
+   */
+  color?: string;
   softUpdateMemo?: (newMemo: Memo) => void;
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
@@ -80,7 +86,9 @@ const EditableMemo = ({
   }, [updateMemoSubject]);
 
   return (
-    <div className="p-2 grid first-letter:flex-col bg-gray1 rounded-md border-[1px]">
+    <div
+      className={`p-2 grid first-letter:flex-col ${color ? `bg-[${color}]` : 'bg-gray1'} rounded-md `}
+    >
       <MemoText
         message={message}
         setMessage={setMessage}

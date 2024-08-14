@@ -1,9 +1,4 @@
-import {
-  AddIcon,
-  DashboardIcon,
-  SearchIcon,
-  UploadDataIcon,
-} from 'assets/icons';
+import { DashboardIcon, SearchIcon, UploadDataIcon } from 'assets/icons';
 import { SideBarButton } from './components';
 
 interface SideBarProps {
@@ -23,16 +18,15 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           <div className="flex justify-center">
             <button
               className="my-4 flex py-2 px-6 text-white bg-gray-500 rounded-full"
-              onClick={() => setCurrentPage('add')}
+              onClick={() => setCurrentPage('main')}
             >
-              <AddIcon className="w-4 h-4 self-center mr-2" />
-              Add Memo
+              Oat Note
             </button>
           </div>
           <SideBarButton
             icon={<SearchIcon className="w-5 h-5 self-center mr-2" />}
-            label="Search"
-            onClick={() => setCurrentPage('search')}
+            label="Search History"
+            onClick={() => setCurrentPage('searchHistory')}
           />
           <SideBarButton
             icon={
