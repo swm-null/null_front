@@ -23,7 +23,7 @@ const EditableMemo = ({
   memo: Memo;
   editable?: boolean;
   /**
-   * tag에 적용하고 싶은 배경색을 string으로 전달
+   * 메모에 적용하고 싶은 배경색을 string으로 전달
    * ex) #000000, tailwind에 적용되어있는 color
    */
   color?: string;
