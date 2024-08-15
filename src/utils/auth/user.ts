@@ -24,7 +24,6 @@ export const login = async (
       JSON.stringify({ email, password }),
       config
     );
-    console.log(email, password, response);
     const responseInfo = {
       method,
       status: response.status,
@@ -33,7 +32,6 @@ export const login = async (
     } as loginResponse;
     return responseInfo;
   } catch (error) {
-    console.log(error);
     return errorHandler(error, method);
   }
 };
