@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoginSignUpButton, CustomInput } from 'pages/components';
 import SocialLogins from './components/SocialLogins/SocialLogins';
+import { isLoginResponse, login } from 'utils/auth/user';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -10,9 +11,13 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // TODO: 로그인 로직 추가
-    navigate('/home');
+  const handleLogin = async () => {
+    const response = await login(email, password);
+    if (isLoginResponse(response)) {
+      navigate('/home');
+    } else {
+      alert(response.exceptionMessage);
+    }
   };
 
   const handleSignUp = () => {
