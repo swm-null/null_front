@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoginSignUpButton, CustomInput } from 'pages/components';
 import { useState, useEffect } from 'react';
 import { EmailInput } from './components';
+import { isValidResponse, signup } from 'utils/auth';
 
 const SignUpPage = () => {
   const { t } = useTranslation();
@@ -75,8 +76,13 @@ const SignUpPage = () => {
     }
   }, [email, password, confirmPassword]);
 
-  const handleSignUp = () => {
-    if (getFormValidAndSetErrors()) {
+  const handleSignUp = async () => {
+    if (!getFormValidAndSetErrors()) {
+      return;
+    }
+
+    const response = await signup(`${email.emailId}@${email.domain}`, password);
+    if (isValidResponse(response)) {
       navigate(-1); // 회원가입 성공 시 이전 페이지로 이동
     }
   };
