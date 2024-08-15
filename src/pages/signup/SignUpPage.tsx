@@ -122,6 +122,7 @@ const SignUpPage = () => {
             value={password}
             setValue={handlePasswordChange}
             hidden
+            useHiddenToggle
           />
           {isInputTouched.password && errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
@@ -132,6 +133,7 @@ const SignUpPage = () => {
             value={confirmPassword}
             setValue={handleConfirmPasswordChange}
             hidden
+            useHiddenToggle
           />
           {isInputTouched.confirmPassword && errors.confirmPassword && (
             <p className="text-red-500 text-sm mt-1">

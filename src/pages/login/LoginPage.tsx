@@ -38,6 +38,7 @@ const LoginPage = () => {
             value={password}
             setValue={setPassword}
             hidden
+            useHiddenToggle
           />
         </div>
 
@@ -59,7 +60,6 @@ const LoginPage = () => {
           onClick={handleSignUp}
           bgColor="#E5E7EB"
           hoverColor="#D1D5DB"
-          textColor="gray-700"
         />
       </div>
     </div>

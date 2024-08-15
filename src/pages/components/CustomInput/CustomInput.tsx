@@ -6,11 +6,13 @@ const CustomInput = ({
   value,
   setValue,
   hidden = false,
+  useHiddenToggle = false,
 }: {
   label: string;
   value: string;
   setValue: (value: string) => void;
   hidden?: boolean;
+  useHiddenToggle?: boolean;
 }) => {
   const [isHidden, setIsHidden] = useState(hidden);
 
@@ -29,11 +31,12 @@ const CustomInput = ({
           onChange={(e) => setValue(e.target.value)}
           className="flex-1 focus:outline-none focus:ring focus:border-blue-300"
         />
-        {hidden && isHidden ? (
-          <EyeIcon width={25} height={25} onClick={toggleHidden} />
-        ) : (
-          <EyeOffIcon width={25} height={25} onClick={toggleHidden} />
-        )}
+        {useHiddenToggle &&
+          (isHidden ? (
+            <EyeIcon width={25} height={25} onClick={toggleHidden} />
+          ) : (
+            <EyeOffIcon width={25} height={25} onClick={toggleHidden} />
+          ))}
       </div>
     </div>
   );
