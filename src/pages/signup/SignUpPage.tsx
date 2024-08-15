@@ -1,27 +1,99 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { LoginSignUpButton, CustomInput } from 'pages/components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { EmailInput } from './components';
 
 const SignUpPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState({ username: '', domain: '' });
+  const [email, setEmail] = useState({ emailId: '', domain: '' });
   const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [name, setName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [isInputTouched, setIsInputTouched] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  const handleSignUp = () => {
-    navigate(-1);
+  const validateEmail = () => {
+    // Google에서 제공하는 이메일 규칙 정책에 따른 regex
+    const emailIdRegex = /^[a-zA-Z0-9._%+-]+$/;
+    const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    const isValidEmailId = emailIdRegex.test(email.emailId);
+    const isValidDomain = domainRegex.test(email.domain);
+
+    return isValidEmailId && isValidDomain;
   };
 
-  const handleEmailChange = (newEmail: {
-    username: string;
-    domain: string;
-  }) => {
+  const validatePassword = () => {
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validateConfirmPassword = () => {
+    return password === confirmPassword;
+  };
+
+  const getFormValidAndSetErrors = () => {
+    let isValid = true;
+    const newErrors = { email: '', password: '', confirmPassword: '' };
+
+    if (isInputTouched.email && !validateEmail()) {
+      newErrors.email = t('signUp.invalidEmail');
+      isValid = false;
+    }
+
+    if (isInputTouched.password && !validatePassword()) {
+      newErrors.password = t('signUp.invalidPassword');
+      isValid = false;
+    }
+
+    if (isInputTouched.confirmPassword && !validateConfirmPassword()) {
+      newErrors.confirmPassword = t('signUp.passwordsDoNotMatch');
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  useEffect(() => {
+    const isValid = !getFormValidAndSetErrors();
+    // 모든 Input이 클릭되었을 때만, 회원가입 버튼 상태를 수정
+    if (!Object.values(isInputTouched).includes(false)) {
+      setIsButtonDisabled(isValid);
+    }
+  }, [email, password, confirmPassword]);
+
+  const handleSignUp = () => {
+    if (getFormValidAndSetErrors()) {
+      navigate(-1); // 회원가입 성공 시 이전 페이지로 이동
+    }
+  };
+
+  const handleEmailChange = (newEmail: { emailId: string; domain: string }) => {
     setEmail(newEmail);
+    setIsInputTouched((prev) => ({ ...prev, email: true }));
+  };
+
+  const handlePasswordChange = (newPassword: string) => {
+    setPassword(newPassword);
+    setIsInputTouched((prev) => ({ ...prev, password: true }));
+  };
+
+  const handleConfirmPasswordChange = (newConfirmPassword: string) => {
+    setConfirmPassword(newConfirmPassword);
+    setIsInputTouched((prev) => ({ ...prev, confirmPassword: true }));
   };
 
   return (
@@ -29,36 +101,45 @@ const SignUpPage = () => {
       <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg overflow-y-auto">
         <div className="mb-6">
           <label
-            htmlFor="emailUsername"
+            htmlFor="emailId"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
             {t('signUp.email')}
           </label>
           <EmailInput value={email} onChange={handleEmailChange} />
+          {isInputTouched.email && errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
+
           <CustomInput
             label={t('signUp.password')}
             value={password}
-            setValue={setPassword}
+            setValue={handlePasswordChange}
+            hidden
           />
+          {isInputTouched.password && errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
+
           <CustomInput
-            label={t('signUp.passwordConfirm')}
-            value={passwordConfirm}
-            setValue={setPasswordConfirm}
+            label={t('signUp.confirmPassword')}
+            value={confirmPassword}
+            setValue={handleConfirmPasswordChange}
+            hidden
           />
-        </div>
-        <div className="mb-6">
-          <CustomInput
-            label={t('signUp.name')}
-            value={name}
-            setValue={setName}
-          />
+          {isInputTouched.confirmPassword && errors.confirmPassword && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.confirmPassword}
+            </p>
+          )}
         </div>
         <LoginSignUpButton
           label={t('signUp.signUpButton')}
           onClick={handleSignUp}
           bgColor="#3B82F6"
           hoverColor="#2563EB"
-          additionalClasses="text-white"
+          additionalClasses="bg-[#3B82F6] text-white"
+          disabled={isButtonDisabled}
         />
       </form>
     </div>

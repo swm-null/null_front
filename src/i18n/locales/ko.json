@@ -20,9 +20,11 @@
     "header": "회원가입",
     "email": "Email",
     "password": "Password",
-    "passwordConfirm": "Password 확인",
-    "name": "이름",
     "signUpButton": "회원가입",
+    "confirmPassword": "Password 확인",
+    "invalidEmail": "유효하지 않은 이메일 주소입니다.",
+    "invalidPassword": "비밀번호는 영어, 숫자, 특수기호를 포함해 8자 이상이어야 합니다.",
+    "passwordsDoNotMatch": "비밀번호가 일치하지 않습니다.",
     "signUpErrorMessage": "회원가입 중에 오류가 발생했습니다. 다시 시도해 주세요."
   },
   "pages": {
