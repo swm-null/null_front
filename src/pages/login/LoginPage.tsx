@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoginSignUpButton, CustomInput } from 'pages/components';
-import SocialLogins from './components/SocialLogins/SocialLogins';
+import { LoginSignUpButton, CustomInput, HiddenInput } from 'pages/components';
+import { SocialLogins } from './components';
 import { isLoginResponse, login } from 'utils/auth/user';
 
 const LoginPage = () => {
@@ -33,12 +33,10 @@ const LoginPage = () => {
             value={email}
             setValue={setEmail}
           />
-          <CustomInput
+          <HiddenInput
             label={t('login.password')}
             value={password}
             setValue={setPassword}
-            hidden
-            useHiddenToggle
           />
         </div>
 

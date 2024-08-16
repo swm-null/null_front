@@ -7,12 +7,14 @@ const CustomInput = ({
   setValue,
   hidden = false,
   useHiddenToggle = false,
+  errorMessage = '',
 }: {
   label: string;
   value: string;
   setValue: (value: string) => void;
   hidden?: boolean;
   useHiddenToggle?: boolean;
+  errorMessage?: string;
 }) => {
   const [isHidden, setIsHidden] = useState(hidden);
 
@@ -21,7 +23,7 @@ const CustomInput = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative mb-4">
       <p className="block mb-2 text-sm font-medium text-gray-700">{label}</p>
       <div className="flex items-center w-full border border-gray-300 rounded-lg py-2 px-2">
         <input
@@ -38,6 +40,9 @@ const CustomInput = ({
             <EyeOffIcon width={25} height={25} onClick={toggleHidden} />
           ))}
       </div>
+      {errorMessage && (
+        <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+      )}
     </div>
   );
 };

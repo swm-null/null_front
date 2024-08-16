@@ -1,7 +1,7 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { LoginSignUpButton, CustomInput } from 'pages/components';
-import { useState, useEffect } from 'react';
+import { LoginSignUpButton, HiddenInput } from 'pages/components';
 import { EmailInput } from './components';
 import { isValidResponse, signup } from 'utils/auth';
 
@@ -25,7 +25,6 @@ const SignUpPage = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const validateEmail = () => {
-    // Google에서 제공하는 이메일 규칙 정책에 따른 regex
     const emailIdRegex = /^[a-zA-Z0-9._%+-]+$/;
     const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -70,7 +69,6 @@ const SignUpPage = () => {
 
   useEffect(() => {
     const isValid = !getFormValidAndSetErrors();
-    // 모든 Input이 클릭되었을 때만, 회원가입 버튼 상태를 수정
     if (!Object.values(isInputTouched).includes(false)) {
       setIsButtonDisabled(isValid);
     }
@@ -83,7 +81,7 @@ const SignUpPage = () => {
 
     const response = await signup(`${email.emailId}@${email.domain}`, password);
     if (isValidResponse(response)) {
-      navigate(-1); // 회원가입 성공 시 이전 페이지로 이동
+      navigate(-1);
     }
   };
 
@@ -117,29 +115,21 @@ const SignUpPage = () => {
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
 
-          <CustomInput
+          <HiddenInput
             label={t('signUp.password')}
             value={password}
             setValue={handlePasswordChange}
-            hidden
-            useHiddenToggle
+            errorMessage={isInputTouched.password ? errors.password : ''}
           />
-          {isInputTouched.password && errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-          )}
 
-          <CustomInput
+          <HiddenInput
             label={t('signUp.confirmPassword')}
             value={confirmPassword}
             setValue={handleConfirmPasswordChange}
-            hidden
-            useHiddenToggle
+            errorMessage={
+              isInputTouched.confirmPassword ? errors.confirmPassword : ''
+            }
           />
-          {isInputTouched.confirmPassword && errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.confirmPassword}
-            </p>
-          )}
         </div>
         <LoginSignUpButton
           label={t('signUp.signUpButton')}
