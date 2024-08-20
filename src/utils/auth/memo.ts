@@ -1,77 +1,10 @@
 import axios from 'axios';
 import { Memo, MemoSearchAnswer, Tag } from 'pages/home/contents/_interfaces';
-const LOCALHOST = import.meta.env.VITE_LOCALHOST;
-
-interface response {
-  method: string;
-  status: number;
-}
-export interface validResponse extends response {}
-
-export interface errorResponse extends response {
-  exceptionCode?: number;
-  /**
-   * 디버거에 뜨는 내용
-   */
-  message: string;
-}
-
-export const handleError = (error: unknown, method: string): errorResponse => {
-  let errorInfo;
-
-  if (axios.isAxiosError(error)) {
-    // 요청이 전송되었고, 서버는 2xx 외의 상태 코드로 응답했습니다.
-    if (error.response) {
-      const httpErrorCode = error.response.status;
-      const errorDetails = error.response?.data
-        ? { ...error.response.data }
-        : {};
-
-      errorInfo = {
-        method,
-        status: httpErrorCode,
-        message: error.message,
-        exceptionCode: errorDetails.exceptionCode,
-      } as errorResponse;
-    }
-
-    // 요청이 전송되었지만, 응답이 수신되지 않았습니다.
-    else if (error.request) {
-      errorInfo = {
-        method,
-        status: 0,
-        message: '서버로부터 응답이 없습니다.',
-      } as errorResponse;
-    }
-
-    // 요청을 설정하는 동안 문제가 발생했습니다.
-    else {
-      errorInfo = {
-        method,
-        status: -1,
-        message: '요청을 설정하는 동안 문제가 발생했습니다.',
-      } as errorResponse;
-    }
-  } else if (error instanceof Error) {
-    errorInfo = {
-      method,
-      status: -2,
-      message: `${method}에서 예상치 못한 에러 발생: ${error.message}`,
-    } as errorResponse;
-  } else {
-    errorInfo = {
-      method,
-      status: -3,
-      message: `${method}에서 처리할 수 없는 예상치 못한 에러 발생`,
-    } as errorResponse;
-  }
-
-  return errorInfo;
-};
+import { errorHandler, LOCALHOST } from './errorHandler';
+import { errorResponse, validResponse } from './types';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 
-// 1. OK
 export const searchMemo = async (
   inputContent: string
 ): Promise<searchMemoResponse | errorResponse> => {
@@ -96,14 +29,12 @@ export const searchMemo = async (
     } as searchMemoResponse;
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
-// Create, Update Memo Response
 interface cuMemoResponse extends Memo, validResponse {}
 
-// 2. TODO: 작동 확인하기
 export const createMemo = async (
   inputContent: string
 ): Promise<cuMemoResponse | errorResponse> => {
@@ -130,11 +61,10 @@ export const createMemo = async (
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
-// 3. TODO: 작동 확인하기
 export const updateMemo = async (
   id: string,
   content: string
@@ -161,11 +91,10 @@ export const updateMemo = async (
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
-// 4. TODO: 작동 확인하기
 export const deleteMemo = async (
   id: string
 ): Promise<validResponse | errorResponse> => {
@@ -188,7 +117,7 @@ export const deleteMemo = async (
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
@@ -196,7 +125,6 @@ interface getMemosResponse extends validResponse {
   memos: Memo[];
 }
 
-// 5.
 export const getAllMemos = async (): Promise<
   getMemosResponse | errorResponse
 > => {
@@ -212,11 +140,10 @@ export const getAllMemos = async (): Promise<
     } as getMemosResponse;
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
-// 6.
 export const getSelectedTagMemos = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
@@ -233,7 +160,7 @@ export const getSelectedTagMemos = async (
     };
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
@@ -241,7 +168,6 @@ interface getTagsResponse extends validResponse {
   tags: Tag[];
 }
 
-// 7.
 export const getAllTags = async (): Promise<
   getTagsResponse | errorResponse
 > => {
@@ -258,11 +184,10 @@ export const getAllTags = async (): Promise<
     };
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
-// 8.
 export const getChildTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
@@ -279,13 +204,11 @@ export const getChildTags = async (
     };
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
-export const getRootTags = async (): Promise<
-  getTagsResponse | errorResponse
-> => {
+export const getRootTags = async (): Promise<validResponse | errorResponse> => {
   const method = 'getRootTags';
   const endpoint = `${LOCALHOST}/tags/root`;
 
@@ -298,7 +221,7 @@ export const getRootTags = async (): Promise<
     };
     return responseInfo;
   } catch (error) {
-    return handleError(error, method);
+    return errorHandler(error, method);
   }
 };
 
@@ -312,19 +235,19 @@ export const isValidResponse = (
 export const isSearchMemoResponse = (
   response: searchMemoResponse | errorResponse
 ): response is searchMemoResponse => {
-  return (response as searchMemoResponse).text !== null;
+  return (response as searchMemoResponse).text !== undefined;
 };
 
 export const isCreateMemoResponse = (
   response: cuMemoResponse | errorResponse
 ): response is cuMemoResponse => {
-  return (response as cuMemoResponse).content !== null;
+  return (response as cuMemoResponse).content !== undefined;
 };
 
 export const isUpdateMemoResponse = (
   response: cuMemoResponse | errorResponse
 ): response is cuMemoResponse => {
-  return (response as cuMemoResponse).content !== null;
+  return (response as cuMemoResponse).content !== undefined;
 };
 
 export const isDeleteMemoResponse = (
@@ -342,5 +265,5 @@ export const isGetMemosResponse = (
 export const isGetTagsResponse = (
   response: getTagsResponse | errorResponse
 ): response is getTagsResponse => {
-  return (response as getTagsResponse).tags !== null;
+  return (response as getTagsResponse).tags !== undefined;
 };

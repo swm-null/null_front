@@ -1,27 +1,27 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 interface EmailInputProps {
   value: {
-    username: string;
+    emailId: string;
     domain: string;
   };
-  onChange: (newValue: { username: string; domain: string }) => void;
+  onChange: (newValue: { emailId: string; domain: string }) => void;
 }
 
-const EmailInput: React.FC<EmailInputProps> = ({ value, onChange }) => {
-  const [emailUsername, setEmailUsername] = useState(value.username || '');
+const EmailInput = ({ value, onChange }: EmailInputProps) => {
+  const [emailId, setEmailId] = useState(value.emailId || '');
   const [emailDomain, setEmailDomain] = useState(value.domain || '');
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newUsername = e.target.value;
-    setEmailUsername(newUsername);
-    onChange({ username: newUsername, domain: emailDomain });
+  const handleEmailIdChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newEmailId = e.target.value;
+    setEmailId(newEmailId);
+    onChange({ emailId: newEmailId, domain: emailDomain });
   };
 
-  const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDomainChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newDomain = e.target.value;
     setEmailDomain(newDomain);
-    onChange({ username: emailUsername, domain: newDomain });
+    onChange({ emailId: emailId, domain: newDomain });
   };
 
   return (
@@ -31,8 +31,8 @@ const EmailInput: React.FC<EmailInputProps> = ({ value, onChange }) => {
         id="emailUsername"
         name="emailUsername"
         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-        value={emailUsername}
-        onChange={handleUsernameChange}
+        value={emailId}
+        onChange={handleEmailIdChange}
       />
       <span className="mx-1">@</span>
       <input

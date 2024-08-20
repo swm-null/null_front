@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoginSignUpButton, CustomInput } from 'pages/components';
-import SocialLogins from './components/SocialLogins/SocialLogins';
+import { LoginSignUpButton, CustomInput, HiddenInput } from 'pages/components';
+import { SocialLogins } from './components';
+import { isLoginResponse, login } from 'utils/auth/user';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -10,9 +11,13 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // TODO: 로그인 로직 추가
-    navigate('/home');
+  const handleLogin = async () => {
+    const response = await login(email, password);
+    if (isLoginResponse(response)) {
+      navigate('/home');
+    } else {
+      alert(response.exceptionMessage);
+    }
   };
 
   const handleSignUp = () => {
@@ -28,11 +33,10 @@ const LoginPage = () => {
             value={email}
             setValue={setEmail}
           />
-          <CustomInput
+          <HiddenInput
             label={t('login.password')}
             value={password}
             setValue={setPassword}
-            hidden
           />
         </div>
 
@@ -54,7 +58,6 @@ const LoginPage = () => {
           onClick={handleSignUp}
           bgColor="#E5E7EB"
           hoverColor="#D1D5DB"
-          textColor="gray-700"
         />
       </div>
     </div>
