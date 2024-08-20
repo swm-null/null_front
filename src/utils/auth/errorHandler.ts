@@ -10,12 +10,18 @@ export const errorHandler = (error: unknown, method: string): errorResponse => {
     // 요청이 전송되었고, 서버는 2xx 외의 상태 코드로 응답했습니다.
     if (error.response) {
       const httpErrorCode = error.response.status;
-      const errorDetails = error.response?.data ? error.response.data : '';
+      const errorCode = error.response?.data
+        ? error.response.data.error_code
+        : '';
+      const errorDetails = error.response?.data
+        ? error.response.data.message
+        : '';
 
       errorInfo = {
         method,
         status: httpErrorCode,
         message: error.message,
+        exceptionCode: errorCode,
         exceptionMessage: errorDetails,
       } as errorResponse;
     }

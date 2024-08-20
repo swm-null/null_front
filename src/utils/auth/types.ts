@@ -1,13 +1,12 @@
 interface response {
   method: string;
   status: number;
-  /**
-   * 답변 혹은 오류 시 오류 내용
-   */
+}
+export interface validResponse extends response {
   message?: string;
 }
-export interface validResponse extends response {}
 
 export interface errorResponse extends response {
+  exceptionCode?: number;
   exceptionMessage?: string;
 }
