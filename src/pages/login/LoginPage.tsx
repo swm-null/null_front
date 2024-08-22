@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoginSignUpButton, CustomInput, HiddenInput } from 'pages/components';
-import { SocialLogins } from './components';
 import { isLoginResponse, login } from 'utils/auth/user';
 
 const LoginPage = () => {

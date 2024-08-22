@@ -51,6 +51,9 @@ const useCreateSearchNoteManager = (mode: Mode) => {
         content:
           '추가를 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 시도해주세요',
         tags: [],
+        image_urls: null,
+        updated_at: null,
+        created_at: null,
       };
     }
 
@@ -59,6 +62,9 @@ const useCreateSearchNoteManager = (mode: Mode) => {
         id: response.id,
         content: response.content,
         tags: response.tags,
+        image_urls: response.image_urls,
+        updated_at: response.updated_at,
+        created_at: response.created_at,
       };
     }
 
