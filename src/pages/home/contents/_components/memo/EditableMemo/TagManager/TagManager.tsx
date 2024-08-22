@@ -7,9 +7,14 @@ import { Tag } from 'pages/home/contents/_interfaces';
 interface TagManagerProps {
   tags: Tag[];
   editable: boolean;
+  /**
+   * tag에 적용하고 싶은 배경색을 string으로 전달
+   * ex) #000000, tailwind에 적용되어있는 color
+   */
+  color?: string;
   setTags: (tags: Tag[]) => void;
 }
-const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
+const TagManager = ({ tags, editable, color, setTags }: TagManagerProps) => {
   const [tagInput, setTagInput] = useState('');
 
   // 새로운 tag 추가
@@ -45,6 +50,7 @@ const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
           key={index}
           text={tag.name}
           editable={editable}
+          color={color}
           onTextChange={(text) => updateTag(index, text)}
           onDelete={() => deleteTag(index)}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}

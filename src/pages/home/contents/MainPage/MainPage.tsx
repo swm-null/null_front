@@ -2,12 +2,10 @@ import { ChangeEvent, MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoTextAreaWithAIButton, ModeToggle } from './components';
 import { useCreateSearchNoteManager } from './hook';
-import {
-  SearchConversation,
-  UneditableMemo,
-} from 'pages/home/contents/_components';
+import { SearchConversation } from 'pages/home/contents/_components';
 import { Mode } from 'pages/home/contents/_interfaces';
 import { oatmealUrl } from 'assets/images';
+import { CreateMemoAnswer } from './components/CreateMemoAnswer';
 
 const MainPage = () => {
   const { t } = useTranslation();
@@ -76,12 +74,11 @@ const MainPage = () => {
 
   const renderResultContentByMode = () => {
     return (
-      <div className="my-4 px-2 py-3 max-h-[70%] h-full rounded-xl border-[0.12rem] mr-3">
+      <div className="mt-4 px-2 pt-3 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem] mr-3">
         <div className="box-border h-full overflow-auto">
-          {' '}
           {/* 여기에서 overflow-hidden을 overflow-auto로 변경 */}
           {mode === 'create' && createAnswer ? (
-            <UneditableMemo
+            <CreateMemoAnswer
               color="transparent"
               key={createAnswer.id}
               memo={createAnswer}
