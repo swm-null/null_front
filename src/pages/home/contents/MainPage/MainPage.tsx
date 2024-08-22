@@ -7,6 +7,7 @@ import {
   SearchConversation,
 } from 'pages/home/contents/_components';
 import { Mode } from 'pages/home/contents/_interfaces';
+import { oatmealUrl } from 'assets/images';
 
 const MainPage = () => {
   const { t } = useTranslation();
@@ -36,49 +37,38 @@ const MainPage = () => {
       : () => trySearchMemoAndSetStatus(message, setMessage);
   };
 
-  const getButtonText = () => {
-    if (status === 'loading') {
-      return mode === 'create'
-        ? t('pages.add.memoCreateButton.loading')
-        : t('pages.search.memoSearchButton.loading');
-    }
-    return mode === 'create'
-      ? t('pages.add.memoCreateButton.default')
-      : t('pages.search.memoSearchButton.default');
-  };
-
   const renderResultContentByMode = () => {
     return (
-      <div className="my-4 p-2 rounded-xl border-[0.12rem]">
-        {mode === 'create' && createAnswer ? (
-          <EditableMemo
-            color="transparent"
-            key={createAnswer.id}
-            memo={createAnswer}
-          />
-        ) : mode === 'search' && searchAnswer ? (
-          <SearchConversation
-            key={searchAnswer.id}
-            data={searchAnswer}
-            chatBotImageUrl={t('pages.search.ai.url')}
-            chatBotName={t('pages.search.ai.name')}
-          />
-        ) : null}
+      <div className="my-4 px-2 py-3 max-h-[70%] h-full rounded-xl border-[0.12rem]">
+        <div className="box-border h-full overflow-hidden">
+          {mode === 'create' && createAnswer ? (
+            <EditableMemo
+              color="transparent"
+              key={createAnswer.id}
+              memo={createAnswer}
+            />
+          ) : mode === 'search' && searchAnswer ? (
+            <SearchConversation
+              key={searchAnswer.id}
+              data={searchAnswer}
+              chatBotImageUrl={oatmealUrl}
+              chatBotName={t('pages.search.ai.name')}
+            />
+          ) : null}
+        </div>
       </div>
     );
   };
 
   return (
     <div className="flex h-full justify-center pb-4">
-      <div className="max-w-[561px] flex flex-col flex-1 overflow-hidden text-gray2">
+      <div className="max-w-[60%] flex flex-col flex-1 overflow-hidden text-gray2">
         <ModeToggle mode={mode} onModeChange={handleModeChange} />
         <MemoTextAreaWithAIButton
           value={message}
           onChange={handleMessageChange}
           placeholder={t('pages.add.inputPlaceholder')}
           onButtonClick={handleButtonClick()}
-          isDisabled={status === 'loading'}
-          buttonText={getButtonText()}
         />
         {status === 'success' && renderResultContentByMode()}
       </div>
