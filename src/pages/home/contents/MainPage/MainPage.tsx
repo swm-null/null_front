@@ -76,8 +76,10 @@ const MainPage = () => {
 
   const renderResultContentByMode = () => {
     return (
-      <div className="my-4 px-2 py-3 max-h-[70%] h-full rounded-xl border-[0.12rem]">
-        <div className="box-border h-full overflow-hidden">
+      <div className="my-4 px-2 py-3 max-h-[70%] h-full rounded-xl border-[0.12rem] mr-3">
+        <div className="box-border h-full overflow-auto">
+          {' '}
+          {/* 여기에서 overflow-hidden을 overflow-auto로 변경 */}
           {mode === 'create' && createAnswer ? (
             <UneditableMemo
               color="transparent"
