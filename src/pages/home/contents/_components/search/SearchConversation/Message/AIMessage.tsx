@@ -1,5 +1,5 @@
 import { MemoSearchAnswer } from 'pages/home/contents/_interfaces';
-import { UneditableMemo } from 'pages/home/contents/_components';
+import { MemosList, UneditableMemo } from 'pages/home/contents/_components';
 
 const AIMessage = ({
   name,
@@ -10,37 +10,34 @@ const AIMessage = ({
   imageUrl: string;
   content: MemoSearchAnswer;
 }) => {
-  const answerRelatedMemos = content.memos?.map((memo) => {
-    return (
-      <div
-        key={memo.id}
-        className="flex-shrink-0 rounded-lg w-72 whitespace-pre-wrap break-words text-base"
-      >
-        <UneditableMemo memo={memo} />
-      </div>
-    );
-  });
-
   return (
-    <div className="mb-2 flex w-full">
-      <img
-        src={imageUrl}
-        alt="Placeholder"
-        className="w-10 h-10 mr-4 object-cover rounded"
-      />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <p className="text-lg font-semibold">{name}</p>
-        <div className="p-3 inline-block self-start bg-gray0 rounded-lg overflow-hidden max-w-3/4">
-          <div className="inline bg-transparent resize-none focus:outline-none  whitespace-pre-wrap break-words">
+    <div className="mb-2 flex flex-col w-full">
+      <div className="flex w-full">
+        <img
+          src={imageUrl}
+          alt="Placeholder"
+          className="w-10 h-10 mr-4 object-cover rounded-full"
+        />
+
+        <div className="w-full mt-[6px]">
+          <p className="text-lg font-semibold mb-2">{name}</p>
+          <div className="inline bg-transparent resize-none focus:outline-none whitespace-pre-wrap break-words">
             {content.text}
           </div>
-          {content.memos && (
-            <div className="w-full flex overflow-x-auto no-scrollbar gap-4">
-              {answerRelatedMemos}
-            </div>
-          )}
         </div>
       </div>
+
+      {content.memos && (
+        <div className="mt-[6px] px-8 text-center max-h-60 overflow-y-auto no-scrollbar">
+          <MemosList>
+            {content.memos?.map((memo) => (
+              <div key={memo.id} className="inline rounded-lg min-w-72">
+                <UneditableMemo memo={memo} />
+              </div>
+            ))}
+          </MemosList>
+        </div>
+      )}
     </div>
   );
 };

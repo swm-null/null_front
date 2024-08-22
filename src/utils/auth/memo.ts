@@ -36,7 +36,8 @@ export const searchMemo = async (
 interface cuMemoResponse extends Memo, validResponse {}
 
 export const createMemo = async (
-  inputContent: string
+  inputContent: string,
+  inputImageUrls?: string[]
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = 'createMemo';
   const endpoint = `${LOCALHOST}/memos`;
@@ -48,16 +49,23 @@ export const createMemo = async (
   try {
     const response = await axios.post(
       endpoint,
-      JSON.stringify({ content: inputContent }),
+      JSON.stringify({
+        content: inputContent,
+        image_urls: inputImageUrls ? inputImageUrls : [],
+      }),
       config
     );
-    const { id, content, tags } = response.data.memo;
+    const { id, content, tags, image_urls, created_at, updated_at } =
+      response.data.memo;
     const responseInfo = {
       method,
       status: response.status,
       id,
       content,
       tags,
+      image_urls,
+      created_at,
+      updated_at,
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
@@ -81,13 +89,17 @@ export const updateMemo = async (
   };
   try {
     const response = await axios.put(endpoint, data, config);
-    const { id, content, tags } = response.data;
+    const { id, content, tags, image_urls, created_at, updated_at } =
+      response.data.memo;
     const responseInfo = {
       method,
       status: response.status,
       id,
       content,
       tags,
+      image_urls,
+      created_at,
+      updated_at,
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
@@ -107,13 +119,17 @@ export const deleteMemo = async (
   };
   try {
     const response = await axios.delete(endpoint, config);
-    const { id, content, tags } = response.data;
+    const { id, content, tags, image_urls, created_at, updated_at } =
+      response.data.memo;
     const responseInfo = {
       method,
       status: response.status,
       id,
       content,
       tags,
+      image_urls,
+      created_at,
+      updated_at,
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {

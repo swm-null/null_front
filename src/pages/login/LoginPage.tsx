@@ -40,17 +40,18 @@ const LoginPage = () => {
           />
         </div>
 
-        <SocialLogins
+        {/* <SocialLogins
           kakaoLabel={t('login.socialLogin.kakao')}
           appleLabel={t('login.socialLogin.apple')}
           googleLabel={t('login.socialLogin.google')}
-        />
+        /> */}
         <LoginSignUpButton
           label={t('login.loginButton')}
           onClick={handleLogin}
           bgColor="#3B82F6"
           hoverColor="#2563EB"
           additionalClasses="mb-4 text-white"
+          disabled
         />
 
         <LoginSignUpButton

@@ -6,3 +6,4 @@ export { default as RightIcon } from './right.svg?react';
 export { default as UploadDataIcon } from './cloud.svg?react';
 export { default as EyeIcon } from './eye.svg?react';
 export { default as EyeOffIcon } from './eye-off.svg?react';
+export { default as DeleteIcon } from './trash.svg?react';

@@ -7,11 +7,14 @@ import {
 import {
   AnimatedHeader,
   UneditableTag,
-  EditableMemo as SelectedTagMemo,
+  MemosList,
+  EditableMemo,
+  UneditableMemo,
 } from 'pages/home/contents/_components';
-import { SelectedTagMemosList, CurrentTagPath } from './components';
+import { CurrentTagPath } from './components';
 import { useSelectedTagMemosManager, useTagsManager } from './hooks';
-import { Tag } from '../_interfaces';
+import { Memo, Tag } from '../_interfaces';
+import { Modal } from '@mui/material';
 
 const DashboardPage = ({
   headerLeftMarginToggle = false,
@@ -26,6 +29,10 @@ const DashboardPage = ({
 
   const { viewMemos, updateViewMemo, deleteViewMemo, revertViewMemo } =
     useSelectedTagMemosManager(selectedTag);
+
+  const [open, setOpen] = useState(false);
+  const [selectedMemo, setSelectedMemo] = useState<Memo>();
+  const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
 
   // 클릭한 태그 경로
   const [tagStack, setTagStack] = useState<Tag[]>([]);
@@ -49,6 +56,17 @@ const DashboardPage = ({
     handleTagClick(tag);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedMemo(undefined);
+  };
+
+  const handleMemoClick = (memo: Memo, index: number) => {
+    setOpen(true);
+    setSelectedMemo(memo);
+    setSelectedMemoIndex(index);
+  };
+
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
       <AnimatedHeader
@@ -57,6 +75,31 @@ const DashboardPage = ({
         leftMargin={headerLeftMargin}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
       />
+
+      <Modal
+        open={open}
+        // FIXME: 모달 바깥 layout 클릭할 때, onClose 동작 안함
+        onClose={handleClose}
+      >
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-4xl rounded-lg shadow-lg">
+            {selectedMemo ? (
+              <EditableMemo
+                key={selectedMemoIndex}
+                memo={selectedMemo}
+                editable
+                softUpdateMemo={updateViewMemo}
+                softDeleteMemo={deleteViewMemo}
+                softRevertMemo={(selectedMemo) =>
+                  revertViewMemo(selectedMemoIndex, selectedMemo)
+                }
+              />
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+      </Modal>
 
       {/* tag들 선택하는 부분 */}
       <CurrentTagPath
@@ -77,18 +120,17 @@ const DashboardPage = ({
       </CurrentTagPath>
 
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
-        <SelectedTagMemosList>
+        <MemosList>
           {viewMemos.map((memo, index) => (
-            <SelectedTagMemo
-              editable
+            <UneditableMemo
               key={memo.id}
               memo={memo}
-              softUpdateMemo={updateViewMemo}
+              onClick={() => handleMemoClick(memo, index)}
               softDeleteMemo={deleteViewMemo}
               softRevertMemo={(memo) => revertViewMemo(index, memo)}
             />
           ))}
-        </SelectedTagMemosList>
+        </MemosList>
       </div>
     </div>
   );

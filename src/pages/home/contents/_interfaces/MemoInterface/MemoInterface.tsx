@@ -9,5 +9,8 @@ export interface Memo {
    * 메모 원본 내용 (현재는 텍스트만 지원)
    */
   content: string;
+  image_urls: string[] | null;
+  created_at: string | null;
+  updated_at: string | null;
   tags: Tag[];
 }

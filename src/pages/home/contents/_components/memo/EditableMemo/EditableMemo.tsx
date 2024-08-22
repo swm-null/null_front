@@ -11,6 +11,7 @@ import {
   isValidResponse,
 } from 'utils/auth';
 import { useTranslation } from 'react-i18next';
+import { DeleteIcon } from 'assets/icons';
 
 const EditableMemo = ({
   memo,
@@ -53,24 +54,23 @@ const EditableMemo = ({
   };
 
   const tryUpdateMemo = () => {
-    const newMemo = { id: memo.id, content: message, tags };
-
-    // FIXME: 2024.07.30
-    // tag 비교 내용. 태그 수정 기능 추가시 추가(이번주 내에 수정 가능할 것으로 추정)
-    // !arraysEqual(memo.tags, newMemo.tags);
+    const newMemo = {
+      id: memo.id,
+      content: message,
+      tags,
+      image_urls: memo.image_urls,
+      created_at: memo.created_at,
+      updated_at: memo.updated_at,
+    };
 
     if (memo.content !== newMemo.content) {
       updateMemoSubject.next(newMemo);
     }
   };
 
-  // const arraysEqual = (a: any[], b: any[]) => {
-  //   return JSON.stringify(a) === JSON.stringify(b);
-  // };
-
   useEffect(() => {
     const subscription = updateMemoSubject
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(500))
       .subscribe(async (newMemo: Memo) => {
         softUpdateMemo && softUpdateMemo(newMemo);
 
@@ -87,22 +87,41 @@ const EditableMemo = ({
 
   return (
     <div
-      className={`p-2 grid first-letter:flex-col ${color ? `bg-[${color}]` : 'bg-gray1'} rounded-md `}
+      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md `}
     >
+      <p className="text-center">2024년 8월 7일 10:19</p>
       <MemoText
         message={message}
         setMessage={setMessage}
         editable={editable}
-        handleBlur={tryUpdateMemo}
+        // handleBlur={tryUpdateMemo}
       />
       <TagManager tags={tags} setTags={setTags} editable={editable} />
       {editable && (
-        <button
-          className="text-right justify-self-end mt-2 bg-gray2 text-white rounded-full py-2 px-6"
-          onClick={handleDeleteMemo}
-        >
-          삭제
-        </button>
+        <div className="flex gap-2">
+          <button
+            className="text-right justify-self-end mt-2 rounded-full py-1 px-2"
+            onClick={handleDeleteMemo}
+          >
+            <DeleteIcon className="border-gray2" />
+          </button>
+          <div className="flex flex-1" />
+
+          <button
+            className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
+            onClick={() => {
+              console.log('태그 재생성');
+            }}
+          >
+            태그 재생성
+          </button>
+          <button
+            className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
+            onClick={tryUpdateMemo}
+          >
+            저장
+          </button>
+        </div>
       )}
     </div>
   );
