@@ -31,10 +31,47 @@ const MainPage = () => {
     }
   };
 
-  const handleButtonClick = () => {
-    return mode === 'create'
-      ? () => tryCreateMemoAndSetStatus(message, setMessage)
-      : () => trySearchMemoAndSetStatus(message, setMessage);
+  const handleButtonClick = (message: string) => {
+    if (mode === 'create') {
+      tryCreateMemoAndSetStatus(message, setMessage);
+    } else {
+      trySearchMemoAndSetStatus(message, setMessage);
+    }
+  };
+
+  const renderExampleContentByMode = () => {
+    return (
+      <div className="flex justify-center items-center mt-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div
+            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24"
+            onClick={() => handleButtonClick('라면 레시피 메모 보여줘')}
+          >
+            라면 레시피 메모 보여줘
+          </div>
+          <div
+            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24"
+            onClick={() => handleButtonClick('민지 전화번호 알려줘')}
+          >
+            민지 전화번호 알려줘
+          </div>
+          <div
+            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24"
+            onClick={() => handleButtonClick('맛집 내가 저번에 적은 거 뭐더라')}
+          >
+            맛집 내가 저번에 적은 거 뭐더라
+          </div>
+          <div
+            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24"
+            onClick={() =>
+              handleButtonClick('나 신발 사야하는데 사이즈 알려줘')
+            }
+          >
+            나 신발 사야하는데 사이즈 알려줘
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const renderResultContentByMode = () => {
@@ -68,8 +105,11 @@ const MainPage = () => {
           value={message}
           onChange={handleMessageChange}
           placeholder={t('pages.add.inputPlaceholder')}
-          onButtonClick={handleButtonClick()}
+          onButtonClick={() => handleButtonClick(message)}
         />
+        {status === 'default' &&
+          mode === 'search' &&
+          renderExampleContentByMode()}
         {status === 'success' && renderResultContentByMode()}
       </div>
     </div>
