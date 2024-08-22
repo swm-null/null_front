@@ -49,7 +49,7 @@ const EditableTag = ({
 
   return (
     <div
-      className={`inline-flex self-start items-center px-3 py-1 ${color ? `bg-[${color}]` : 'bg-blue-300'} rounded-full ${onClick && 'cursor-pointer'}`}
+      className={`inline-flex self-start items-center px-2 py-1 ${color ? `bg-[${color}]` : 'bg-gray1'} rounded-xl ${onClick && 'cursor-pointer'}`}
       onClick={onClick}
     >
       <span
