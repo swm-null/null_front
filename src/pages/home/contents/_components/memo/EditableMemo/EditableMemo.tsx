@@ -54,7 +54,14 @@ const EditableMemo = ({
   };
 
   const tryUpdateMemo = () => {
-    const newMemo = { id: memo.id, content: message, tags };
+    const newMemo = {
+      id: memo.id,
+      content: message,
+      tags,
+      image_urls: memo.image_urls,
+      created_at: memo.created_at,
+      updated_at: memo.updated_at,
+    };
 
     if (memo.content !== newMemo.content) {
       updateMemoSubject.next(newMemo);

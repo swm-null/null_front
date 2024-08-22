@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { MemoTextAreaWithAIButton, ModeToggle } from './components';
 import { useCreateSearchNoteManager } from './hook';
 import {
-  EditableMemo,
   SearchConversation,
+  UneditableMemo,
 } from 'pages/home/contents/_components';
 import { Mode } from 'pages/home/contents/_interfaces';
 import { oatmealUrl } from 'assets/images';
@@ -79,7 +79,7 @@ const MainPage = () => {
       <div className="my-4 px-2 py-3 max-h-[70%] h-full rounded-xl border-[0.12rem]">
         <div className="box-border h-full overflow-hidden">
           {mode === 'create' && createAnswer ? (
-            <EditableMemo
+            <UneditableMemo
               color="transparent"
               key={createAnswer.id}
               memo={createAnswer}
