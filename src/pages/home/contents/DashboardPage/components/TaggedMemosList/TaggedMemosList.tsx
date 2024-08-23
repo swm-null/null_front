@@ -29,7 +29,7 @@ const TaggedMemosList = ({
           ))}
         </div>
       </div>
-      <div className="overflow-y-auto no-scrollbar max-h-[calc(100vh-200px)] p-2">
+      <div className="overflow-y-auto no-scrollbar max-h-[calc(100vh-200px)] py-2">
         <div className="grid grid-cols-1 gap-4">
           {memos.map((memo, index) => (
             <UneditableMemo
