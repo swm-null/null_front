@@ -44,8 +44,8 @@ const CurrentTagPath = ({
           />
         ))}
       </Breadcrumbs>
-      <div className="mt-2 flex flex-1 overflow-hidden overflow-x-scroll">
-        <div className="flex flex-none gap-1 overflow-x-scroll">{children}</div>
+      <div className="mt-2 flex flex-1 overflow-hidden overflow-x-scroll no-scrollbar gap-1">
+        {children}
       </div>
     </div>
   );

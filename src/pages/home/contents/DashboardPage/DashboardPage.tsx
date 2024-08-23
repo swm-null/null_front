@@ -86,8 +86,8 @@ const DashboardPage = ({
         ))}
       </CurrentTagPath>
 
-      <div className="flex flex-1 pb-4 px-4 overflow-hidden">
-        <div className="flex gap-4 overflow-x-scroll">
+      <div className="flex flex-1 overflow-hidden pb-4 px-4">
+        <div className="flex gap-4 overflow-x-scroll no-scrollbar">
           {taggedMemos.map(({ tag, childTags, memos }, _) =>
             memos.length !== 0 ? (
               <TaggedMemosList

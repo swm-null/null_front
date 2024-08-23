@@ -19,7 +19,7 @@ const TaggedMemosList = ({
     <div className="w-[300px] flex-shrink-0 py-2">
       <div className="px-2 py-4 bg-[#989898] rounded-t-2xl">
         <p className="mb-2 text-black">{tag.name}</p>
-        <div className="flex gap-2 overflow-x-scroll w-full">
+        <div className="flex gap-2 overflow-x-scroll w-full no-scrollbar">
           {childTags.map((childTag, index) => (
             <UneditableTag
               key={index}
@@ -29,7 +29,7 @@ const TaggedMemosList = ({
           ))}
         </div>
       </div>
-      <div className="overflow-y-auto max-h-[calc(100vh-200px)] p-2">
+      <div className="overflow-y-auto no-scrollbar max-h-[calc(100vh-200px)] p-2">
         <div className="grid grid-cols-1 gap-4">
           {memos.map((memo, index) => (
             <UneditableMemo
