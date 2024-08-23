@@ -31,7 +31,7 @@ const MemoTextAreaWithAIButton = ({
         onKeyDown={handlePressEnterFetch}
         minRows={1}
         maxRows={20}
-        className="flex-1 focus:outline-none resize-none mr-4 ml-2"
+        className="flex-1 flex-shrink-0 focus:outline-none resize-none mr-4 ml-2"
       />
 
       <img src={mikeUrl} className="w-6 h-6 mr-1" />

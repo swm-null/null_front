@@ -75,9 +75,8 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
 
   const renderResultContentByMode = () => {
     return (
-      <div className="mt-4 px-2 pt-3 pb-4 max-h-[90%] w-full rounded-xl border-[0.12rem] mr-3">
-        <div className="box-border h-full overflow-auto">
-          {/* 여기에서 overflow-hidden을 overflow-auto로 변경 */}
+      <div className="mt-4 px-2 pt-3 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem] mr-3">
+        <div className="box-border h-full overflow-auto no-scrollbar">
           {mode === 'create' && createAnswer ? (
             <CreateMemoAnswer
               color="transparent"
@@ -107,8 +106,8 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   };
 
   return (
-    <div className="py-16 flex h-full justify-center pb-4">
-      <div className="max-w-[661px] flex flex-col flex-1 overflow-hidden text-gray2">
+    <div className="py-16 flex h-full justify-center">
+      <div className="max-w-[700px] flex flex-col flex-1 overflow-hidden text-gray2">
         <ModeToggle mode={mode} onModeChange={handleModeChange} />
         <MemoTextAreaWithAIButton
           value={message}

@@ -12,7 +12,7 @@ const AIMessage = ({
 }) => {
   return (
     <div className="mb-2 flex flex-col w-full">
-      <div className="flex w-full">
+      <div className="flex w-full pr-4">
         <img
           src={imageUrl}
           alt="Placeholder"
