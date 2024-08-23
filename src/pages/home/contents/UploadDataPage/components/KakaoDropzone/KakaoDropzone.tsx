@@ -48,9 +48,9 @@ const KakaoDropzone = () => {
         className="bg-[#F0F0F0] py-10"
       >
         <p className="text-center">
-          Drag 'n' drop some files here, or click to select files
+          파일을 여기로 드래그 앤 드롭하거나 클릭하여 파일을 선택하세요.
         </p>
-        <p className="text-center">Only *.csv files will be accepted</p>
+        <p className="text-center">*.csv 파일만 전송 가능합니다.</p>
       </div>
       {kakaoCsvFiles.length !== 0 && (
         <aside>
