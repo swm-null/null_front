@@ -8,10 +8,13 @@ import {
 } from 'utils/auth';
 import { Memo, Tag } from '../../_interfaces';
 
-const useSelectedTagMemosManager = (tags: Tag[] | null) => {
+const useSelectedTagMemosManager = (
+  tags: Tag[] | null,
+  selectedTag: Tag | null
+) => {
   const queryClient = useQueryClient();
   const [taggedMemos, setTaggedMemos] = useState<
-    { tag: Tag; childTags: Tag[]; memos: Memo[] }[]
+    { tag: Tag; childTags: Tag[] | null; memos: Memo[] }[]
   >([]);
 
   const fetchSelectedTagMemos = async (tagId: string) => {
@@ -45,7 +48,10 @@ const useSelectedTagMemosManager = (tags: Tag[] | null) => {
         );
         return tagMemos;
       } else {
-        return [];
+        if (selectedTag === null) return [];
+
+        const memos = await fetchSelectedTagMemos(selectedTag.id);
+        return [{ tag: selectedTag, childTags: null, memos }];
       }
     },
     staleTime: 0,

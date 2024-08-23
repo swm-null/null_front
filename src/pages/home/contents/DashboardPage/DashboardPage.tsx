@@ -4,7 +4,12 @@ import {
   SIDEBAR_HEADER_ANIMATION_DURATION,
   TAG_INVALID_CHARS_PATTERN,
 } from 'pages/home/constants';
-import { AnimatedHeader, UneditableTag } from 'pages/home/contents/_components';
+import {
+  AnimatedHeader,
+  MemosList,
+  UneditableMemo,
+  UneditableTag,
+} from 'pages/home/contents/_components';
 import { CurrentTagPath, MemoEditModal, TaggedMemosList } from './components';
 import { useSelectedTagMemosManager, useTagsManager } from './hooks';
 import { Memo, Tag } from '../_interfaces';
@@ -17,9 +22,9 @@ const DashboardPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const { tags, handleTagClick, clickAllTags } = useTagsManager();
+  const { selectedTag, tags, handleTagClick, clickAllTags } = useTagsManager();
   const { taggedMemos, updateViewMemo, deleteViewMemo, revertViewMemo } =
-    useSelectedTagMemosManager(tags);
+    useSelectedTagMemosManager(tags, selectedTag);
 
   const [open, setOpen] = useState(false);
   const [selectedMemo, setSelectedMemo] = useState<Memo>();
@@ -60,6 +65,56 @@ const DashboardPage = ({
     setSelectedMemoIndex(index);
   };
 
+  const renderTaggedMemosList = () => {
+    // 아무 메모, 아무 태그가 없는 경우
+    if (taggedMemos.length === 0) {
+      return null;
+    }
+
+    // 선택된 태그가 가장 마지막 단계의 태그인 경우
+    if (taggedMemos.length === 1) {
+      const taggedMemo = taggedMemos[0];
+
+      return (
+        <div className="px-4">
+          <MemosList>
+            {taggedMemo.memos.map((memo, _) => (
+              <UneditableMemo memo={memo} />
+            ))}
+          </MemosList>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex flex-1 overflow-hidden pb-4 px-4">
+        <div className="flex gap-4 overflow-x-scroll no-scrollbar">
+          {taggedMemos.map(({ tag, childTags, memos }) => {
+            if (memos.length === 0) {
+              // FIXME: 원래 있으면 안되는 오류임
+              // throw new Error(`Memos should not be empty for tag: ${tag}`);
+              return null;
+            }
+
+            if (!childTags) {
+              throw new Error(`Child tags are missing for tag: ${tag}`);
+            }
+
+            return (
+              <TaggedMemosList
+                tag={tag}
+                childTags={childTags}
+                memos={memos}
+                handleTagClick={() => addTagToStack(tag)}
+                handleMemoClick={handleMemoClick}
+              />
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col h-screen text-gray2 overflow-hidden">
       <AnimatedHeader
@@ -86,20 +141,7 @@ const DashboardPage = ({
         ))}
       </CurrentTagPath>
 
-      <div className="flex flex-1 overflow-hidden pb-4 px-4">
-        <div className="flex gap-4 overflow-x-scroll no-scrollbar">
-          {taggedMemos.map(({ tag, childTags, memos }, _) =>
-            memos.length !== 0 ? (
-              <TaggedMemosList
-                tag={tag}
-                childTags={childTags}
-                memos={memos}
-                handleMemoClick={handleMemoClick}
-              />
-            ) : null
-          )}
-        </div>
-      </div>
+      {renderTaggedMemosList()}
 
       {/* 메모 수정 창 */}
       <MemoEditModal
