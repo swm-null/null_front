@@ -21,7 +21,7 @@ const TaggedMemosList = ({
   return (
     <div className="w-[300px] flex-shrink-0 py-2">
       <div className="bg-[#989898] rounded-t-2xl flex flex-row justify-between items-stretch overflow-hidden">
-        <div className="flex flex-col px-2 py-4">
+        <div className="flex flex-col pl-3 py-4">
           <p className="mb-2 text-black">{tag.name}</p>
           <div className="flex gap-2 overflow-x-scroll w-full no-scrollbar">
             {childTags.map((childTag, index) => (
