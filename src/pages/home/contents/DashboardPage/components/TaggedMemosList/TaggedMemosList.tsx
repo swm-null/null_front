@@ -19,7 +19,7 @@ const TaggedMemosList = ({
   handleMemoClick,
 }: TaggedMemosListProps) => {
   return (
-    <div className="w-[300px] flex-shrink-0 py-2">
+    <div className="w-[360px] flex-shrink-0 py-2">
       <div className="bg-[#989898] rounded-t-2xl flex flex-row justify-between items-stretch overflow-hidden">
         <div className="flex flex-col pl-3 py-4">
           <p className="mb-2 text-black">{tag.name}</p>
