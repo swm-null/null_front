@@ -1,4 +1,4 @@
-import { DashboardIcon, SearchIcon, UploadDataIcon } from 'assets/icons';
+import { DashboardIcon, HistoryIcon, UploadDataIcon } from 'assets/icons';
 import { SideBarButton } from './components';
 
 interface SideBarProps {
@@ -24,8 +24,8 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
             </button>
           </div>
           <SideBarButton
-            icon={<SearchIcon className="w-5 h-5 self-center mr-2" />}
-            label="Search History"
+            icon={<HistoryIcon className="w-5 h-5 self-center mr-2" />}
+            label="History"
             onClick={() => setCurrentPage('searchHistory')}
           />
           <SideBarButton

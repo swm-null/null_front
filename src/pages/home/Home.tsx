@@ -29,7 +29,9 @@ const Home = () => {
 
     switch (currentPage) {
       case 'main':
-        return <MainPage />;
+        return (
+          <MainPage navigateToHistory={() => setCurrentPage('searchHistory')} />
+        );
       case 'searchHistory':
         return <SearchHistoryPage {...commonProps} />;
       case 'dashboard':
@@ -37,7 +39,9 @@ const Home = () => {
       case 'uploadData':
         return <UploadDataPage {...commonProps} />;
       default:
-        return <MainPage />;
+        return (
+          <MainPage navigateToHistory={() => setCurrentPage('searchHistory')} />
+        );
     }
   };
 
