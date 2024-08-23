@@ -87,7 +87,7 @@ const EditableMemo = ({
 
   return (
     <div
-      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md `}
+      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md min-h-72`}
     >
       <p className="text-center">2024년 8월 7일 10:19</p>
       <MemoText

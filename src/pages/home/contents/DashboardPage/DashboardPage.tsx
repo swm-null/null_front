@@ -4,17 +4,10 @@ import {
   SIDEBAR_HEADER_ANIMATION_DURATION,
   TAG_INVALID_CHARS_PATTERN,
 } from 'pages/home/constants';
-import {
-  AnimatedHeader,
-  UneditableTag,
-  MemosList,
-  EditableMemo,
-  UneditableMemo,
-} from 'pages/home/contents/_components';
-import { CurrentTagPath } from './components';
+import { AnimatedHeader, UneditableTag } from 'pages/home/contents/_components';
+import { CurrentTagPath, MemoEditModal, TaggedMemosList } from './components';
 import { useSelectedTagMemosManager, useTagsManager } from './hooks';
 import { Memo, Tag } from '../_interfaces';
-import { Modal } from '@mui/material';
 
 const DashboardPage = ({
   headerLeftMarginToggle = false,
@@ -24,14 +17,13 @@ const DashboardPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-
-  const { tags, selectedTag, handleTagClick, clickAllTags } = useTagsManager();
-
-  const { viewMemos, updateViewMemo, deleteViewMemo, revertViewMemo } =
-    useSelectedTagMemosManager(selectedTag);
+  const { tags, handleTagClick, clickAllTags } = useTagsManager();
+  const { taggedMemos, updateViewMemo, deleteViewMemo, revertViewMemo } =
+    useSelectedTagMemosManager(tags);
 
   const [open, setOpen] = useState(false);
   const [selectedMemo, setSelectedMemo] = useState<Memo>();
+  const [selectedMemoTag, setSelectedMemoTag] = useState<Tag>();
   const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
 
   // 클릭한 태그 경로
@@ -61,14 +53,15 @@ const DashboardPage = ({
     setSelectedMemo(undefined);
   };
 
-  const handleMemoClick = (memo: Memo, index: number) => {
+  const handleMemoClick = (memo: Memo, tag: Tag, index: number) => {
     setOpen(true);
     setSelectedMemo(memo);
+    setSelectedMemoTag(tag);
     setSelectedMemoIndex(index);
   };
 
   return (
-    <div className="flex flex-col flex-1 h-screen text-gray2">
+    <div className="flex flex-col h-screen text-gray2 overflow-hidden">
       <AnimatedHeader
         text={t('pages.dashboard.header')}
         leftMarginToggle={headerLeftMarginToggle}
@@ -76,32 +69,6 @@ const DashboardPage = ({
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
       />
 
-      <Modal
-        open={open}
-        // FIXME: 모달 바깥 layout 클릭할 때, onClose 동작 안함
-        onClose={handleClose}
-      >
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <div className="bg-white w-full max-w-4xl rounded-lg shadow-lg">
-            {selectedMemo ? (
-              <EditableMemo
-                key={selectedMemoIndex}
-                memo={selectedMemo}
-                editable
-                softUpdateMemo={updateViewMemo}
-                softDeleteMemo={deleteViewMemo}
-                softRevertMemo={(selectedMemo) =>
-                  revertViewMemo(selectedMemoIndex, selectedMemo)
-                }
-              />
-            ) : (
-              <></>
-            )}
-          </div>
-        </div>
-      </Modal>
-
-      {/* tag들 선택하는 부분 */}
       <CurrentTagPath
         allTagText={t('pages.dashboard.allMemoButton')}
         tagStack={tagStack}
@@ -119,19 +86,32 @@ const DashboardPage = ({
         ))}
       </CurrentTagPath>
 
-      <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
-        <MemosList>
-          {viewMemos.map((memo, index) => (
-            <UneditableMemo
-              key={memo.id}
-              memo={memo}
-              onClick={() => handleMemoClick(memo, index)}
-              softDeleteMemo={deleteViewMemo}
-              softRevertMemo={(memo) => revertViewMemo(index, memo)}
-            />
-          ))}
-        </MemosList>
+      <div className="flex flex-1 pb-4 px-4 overflow-hidden">
+        <div className="flex gap-4 overflow-x-scroll">
+          {taggedMemos.map(({ tag, childTags, memos }, _) =>
+            memos.length !== 0 ? (
+              <TaggedMemosList
+                tag={tag}
+                childTags={childTags}
+                memos={memos}
+                handleMemoClick={handleMemoClick}
+              />
+            ) : null
+          )}
+        </div>
       </div>
+
+      {/* 메모 수정 창 */}
+      <MemoEditModal
+        open={open}
+        handleClose={handleClose}
+        selectedMemo={selectedMemo}
+        selectedMemoTag={selectedMemoTag}
+        selectedMemoIndex={selectedMemoIndex}
+        updateViewMemo={updateViewMemo}
+        deleteViewMemo={deleteViewMemo}
+        revertViewMemo={revertViewMemo}
+      />
     </div>
   );
 };
