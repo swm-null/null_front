@@ -11,7 +11,7 @@ import { HistoryIcon } from 'assets/icons';
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
-  const [mode, setMode] = useState<Mode>('create');
+  const [mode, setMode] = useState<Mode>('search');
   const {
     status,
     createAnswer,

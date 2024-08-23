@@ -87,7 +87,7 @@ const CreateMemoAnswer = ({
         </div>
         <MemoText message={message} setMessage={setMessage} />
         <div className="flex flex-wrap gap-1 px-2 mt-4">
-          <TagManager tags={tags} color="#FDF0A5" setTags={setTags} editable />
+          <TagManager tags={tags} setTags={setTags} editable />
         </div>
       </div>
     </div>
