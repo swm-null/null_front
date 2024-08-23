@@ -7,6 +7,7 @@ import { Mode } from 'pages/home/contents/_interfaces';
 import { oatmealUrl } from 'assets/images';
 import { CreateMemoAnswer } from './components/CreateMemoAnswer';
 import { HistoryIcon } from 'assets/icons';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
@@ -38,37 +39,33 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     }
   };
 
+  const buttonData = [
+    '라면 레시피 메모 보여줘',
+    '민지 전화번호 알려줘',
+    '맛집 내가 저번에 적은 거 뭐더라',
+    '나 신발 사야하는데 사이즈 알려줘',
+  ];
+
   const renderExampleContentByMode = () => {
     return (
       <div className="flex justify-center items-center mt-4">
-        <div className="flex justify-between gap-4 w-full max-w-4xl">
-          <div
-            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24 w-1/4"
-            onClick={() => handleButtonClick('라면 레시피 메모 보여줘')}
-          >
-            라면 레시피 메모 보여줘
-          </div>
-          <div
-            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24 w-1/4"
-            onClick={() => handleButtonClick('민지 전화번호 알려줘')}
-          >
-            민지 전화번호 알려줘
-          </div>
-          <div
-            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24 w-1/4"
-            onClick={() => handleButtonClick('맛집 내가 저번에 적은 거 뭐더라')}
-          >
-            맛집 내가 저번에 적은 거 뭐더라
-          </div>
-          <div
-            className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24 w-1/4"
-            onClick={() =>
-              handleButtonClick('나 신발 사야하는데 사이즈 알려줘')
-            }
-          >
-            나 신발 사야하는데 사이즈 알려줘
-          </div>
-        </div>
+        <ResponsiveMasonry
+          columnsCountBreakPoints={{ 350: 2, 750: 3, 900: 4 }}
+          className="w-full"
+        >
+          <Masonry gutter="10px">
+            {buttonData.map((text, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24 cursor-pointer"
+                onClick={() => handleButtonClick(text)}
+                style={{ width: '100%', boxSizing: 'border-box' }}
+              >
+                {text}
+              </div>
+            ))}
+          </Masonry>
+        </ResponsiveMasonry>
       </div>
     );
   };
@@ -106,7 +103,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   };
 
   return (
-    <div className="py-16 flex h-full justify-center">
+    <div className="py-16 px-4 flex h-full justify-center">
       <div className="max-w-[700px] flex flex-col flex-1 overflow-hidden text-gray2">
         <ModeToggle mode={mode} onModeChange={handleModeChange} />
         <MemoTextAreaWithAIButton
