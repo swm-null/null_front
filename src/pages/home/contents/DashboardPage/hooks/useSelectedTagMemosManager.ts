@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getChildTags,
@@ -36,7 +36,13 @@ const useSelectedTagMemosManager = (
   };
 
   const { data: fetchedMemos = [], refetch } = useQuery({
-    queryKey: ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
+    queryKey: useMemo(
+      () => [
+        'memos',
+        tags?.length ? tags.map((tag) => tag.id) : selectedTag?.id,
+      ],
+      [tags, selectedTag]
+    ),
     queryFn: async () => {
       if (tags && tags.length > 0) {
         const tagMemos = await Promise.all(
@@ -49,7 +55,6 @@ const useSelectedTagMemosManager = (
         return tagMemos;
       } else {
         if (selectedTag === null) return [];
-
         const memos = await fetchSelectedTagMemos(selectedTag.id);
         return [{ tag: selectedTag, childTags: null, memos }];
       }
