@@ -1,5 +1,5 @@
-import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useState } from 'react';
+import { DragDropContext } from '@hello-pangea/dnd';
 import { useTranslation } from 'react-i18next';
 import {
   SIDEBAR_HEADER_ANIMATION_DURATION,
@@ -11,9 +11,13 @@ import {
   UneditableMemo,
   UneditableTag,
 } from 'pages/home/contents/_components';
+import { Memo, Tag } from 'pages/home/contents//_interfaces';
 import { CurrentTagPath, MemoEditModal, TaggedMemosList } from './components';
-import { useSelectedTagMemosManager, useTagsManager } from './hooks';
-import { Memo, Tag } from '../_interfaces';
+import {
+  useSelectedTagMemosManager,
+  useTagsManager,
+  useDragAndDropManager,
+} from './hooks';
 
 const DashboardPage = ({
   headerLeftMarginToggle = false,
@@ -31,6 +35,8 @@ const DashboardPage = ({
     deleteViewMemo,
     revertViewMemo,
   } = useSelectedTagMemosManager(tags, selectedTag);
+
+  const { onDragEnd } = useDragAndDropManager(taggedMemos, updateTaggedMemos);
 
   const [open, setOpen] = useState(false);
   const [selectedMemo, setSelectedMemo] = useState<Memo>();
@@ -92,34 +98,6 @@ const DashboardPage = ({
       );
     }
 
-    const onDragEnd = (result: DropResult) => {
-      const { source, destination } = result;
-
-      if (!destination) return;
-
-      const newTaggedMemos = [...taggedMemos];
-      const sourceTagIndex = newTaggedMemos.findIndex(
-        (taggedMemo) => taggedMemo.tag.id === source.droppableId
-      );
-      const destinationTagIndex = newTaggedMemos.findIndex(
-        (taggedMemo) => taggedMemo.tag.id === destination.droppableId
-      );
-
-      if (sourceTagIndex === -1 || destinationTagIndex === -1) return;
-
-      const [movedMemo] = newTaggedMemos[sourceTagIndex].memos.splice(
-        source.index,
-        1
-      );
-      newTaggedMemos[destinationTagIndex].memos.splice(
-        destination.index,
-        0,
-        movedMemo
-      );
-
-      updateTaggedMemos(newTaggedMemos);
-    };
-
     return (
       <div className="flex flex-1 h-full gap-4 overflow-x-scroll">
         <DragDropContext onDragEnd={onDragEnd}>
@@ -150,7 +128,7 @@ const DashboardPage = ({
   };
 
   return (
-    <div className="flex flex-col h-screen text-gray2 overflow-hidden">
+    <div className="flex flex-col h-screen text-gray2 overflow-hidden px-4">
       <AnimatedHeader
         text={t('pages.dashboard.header')}
         leftMarginToggle={headerLeftMarginToggle}
@@ -175,7 +153,7 @@ const DashboardPage = ({
         ))}
       </CurrentTagPath>
 
-      <div className="flex-1 overflow-hidden">{renderTaggedMemosList()}</div>
+      {renderTaggedMemosList()}
 
       {/* 메모 수정 창 */}
       <MemoEditModal
