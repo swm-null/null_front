@@ -114,6 +114,7 @@ const DashboardPage = ({
 
             return (
               <TaggedMemosList
+                key={tag.id}
                 tag={tag}
                 childTags={childTags}
                 memos={memos}

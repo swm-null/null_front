@@ -63,10 +63,6 @@ const useSelectedTagMemosManager = (
     refetchOnWindowFocus: true,
   });
 
-  useEffect(() => {
-    setTaggedMemos(fetchedMemos);
-  }, [fetchedMemos]);
-
   const updateViewMemo = useCallback(
     (tag: Tag, newMemo: Memo) => {
       queryClient.setQueryData(
@@ -140,6 +136,12 @@ const useSelectedTagMemosManager = (
     },
     [queryClient, tags]
   );
+
+  useEffect(() => {
+    if (JSON.stringify(fetchedMemos) !== JSON.stringify(taggedMemos)) {
+      setTaggedMemos(fetchedMemos);
+    }
+  }, [fetchedMemos, taggedMemos]);
 
   useEffect(() => {
     refetch();
