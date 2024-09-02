@@ -12,6 +12,7 @@
     "format": "prettier --write ./src"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^16.6.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/lab": "^5.0.0-alpha.172",
     "@mui/material": "^5.16.7",

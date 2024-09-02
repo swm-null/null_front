@@ -1,3 +1,4 @@
+import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -86,30 +87,36 @@ const DashboardPage = ({
       );
     }
 
+    const onDragEnd = (result: DropResult) => {
+      // 드래그 앤 드롭 완료 후 처리할 로직
+    };
+
     return (
       <div className="flex flex-1 overflow-hidden pb-4 px-4">
         <div className="flex gap-4 overflow-x-scroll no-scrollbar">
-          {taggedMemos.map(({ tag, childTags, memos }) => {
-            if (memos.length === 0) {
-              // FIXME: 원래 있으면 안되는 오류임
-              // throw new Error(`Memos should not be empty for tag: ${tag}`);
-              return null;
-            }
+          <DragDropContext onDragEnd={onDragEnd}>
+            {taggedMemos.map(({ tag, childTags, memos }) => {
+              if (memos.length === 0) {
+                // FIXME: 원래 있으면 안되는 오류임
+                // throw new Error(`Memos should not be empty for tag: ${tag}`);
+                return null;
+              }
 
-            if (!childTags) {
-              throw new Error(`Child tags are missing for tag: ${tag}`);
-            }
+              if (!childTags) {
+                throw new Error(`Child tags are missing for tag: ${tag}`);
+              }
 
-            return (
-              <TaggedMemosList
-                tag={tag}
-                childTags={childTags}
-                memos={memos}
-                handleTagClick={() => addTagToStack(tag)}
-                handleMemoClick={handleMemoClick}
-              />
-            );
-          })}
+              return (
+                <TaggedMemosList
+                  tag={tag}
+                  childTags={childTags}
+                  memos={memos}
+                  handleTagClick={() => addTagToStack(tag)}
+                  handleMemoClick={handleMemoClick}
+                />
+              );
+            })}
+          </DragDropContext>
         </div>
       </div>
     );

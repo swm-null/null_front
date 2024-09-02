@@ -1,3 +1,4 @@
+import { Droppable, Draggable } from '@hello-pangea/dnd';
 import { RightIcon } from 'assets/icons';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { UneditableMemo, UneditableTag } from 'pages/home/contents/_components';
@@ -42,15 +43,37 @@ const TaggedMemosList = ({
       </div>
 
       <div className="overflow-y-auto no-scrollbar max-h-[calc(100vh-200px)] py-2">
-        <div className="grid grid-cols-1 gap-4">
-          {memos.map((memo, index) => (
-            <UneditableMemo
-              key={memo.id}
-              memo={memo}
-              onClick={() => handleMemoClick(memo, tag, index)}
-            />
-          ))}
-        </div>
+        <Droppable droppableId={tag.id.toString()} type="MEMO">
+          {(provided) => (
+            <div
+              className="grid grid-cols-1 gap-4"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {memos.map((memo, index) => (
+                <Draggable
+                  key={memo.id}
+                  draggableId={memo.id.toString()}
+                  index={index}
+                >
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <UneditableMemo
+                        memo={memo}
+                        onClick={() => handleMemoClick(memo, tag, index)}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </div>
     </div>
   );
