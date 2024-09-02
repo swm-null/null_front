@@ -40,10 +40,10 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   };
 
   const buttonData = [
-    '라면 레시피 메모 보여줘',
-    '민지 전화번호 알려줘',
-    '맛집 내가 저번에 적은 거 뭐더라',
-    '나 신발 사야하는데 사이즈 알려줘',
+    t('pages.main.example1'),
+    t('pages.main.example2'),
+    t('pages.main.example3'),
+    t('pages.main.example4'),
   ];
 
   const renderExampleContentByMode = () => {
@@ -95,7 +95,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
             onClick={navigateToHistory}
           >
             <HistoryIcon />
-            <p>history</p>
+            <p>{t('pages.main.history')}</p>
           </div>
         ) : null}
       </div>
