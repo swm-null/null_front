@@ -24,8 +24,13 @@ const DashboardPage = ({
 }) => {
   const { t } = useTranslation();
   const { selectedTag, tags, handleTagClick, clickAllTags } = useTagsManager();
-  const { taggedMemos, updateViewMemo, deleteViewMemo, revertViewMemo } =
-    useSelectedTagMemosManager(tags, selectedTag);
+  const {
+    taggedMemos,
+    updateViewMemo,
+    updateTaggedMemos,
+    deleteViewMemo,
+    revertViewMemo,
+  } = useSelectedTagMemosManager(tags, selectedTag);
 
   const [open, setOpen] = useState(false);
   const [selectedMemo, setSelectedMemo] = useState<Memo>();
@@ -88,7 +93,31 @@ const DashboardPage = ({
     }
 
     const onDragEnd = (result: DropResult) => {
-      // 드래그 앤 드롭 완료 후 처리할 로직
+      const { source, destination } = result;
+
+      if (!destination) return;
+
+      const newTaggedMemos = [...taggedMemos];
+      const sourceTagIndex = newTaggedMemos.findIndex(
+        (taggedMemo) => taggedMemo.tag.id === source.droppableId
+      );
+      const destinationTagIndex = newTaggedMemos.findIndex(
+        (taggedMemo) => taggedMemo.tag.id === destination.droppableId
+      );
+
+      if (sourceTagIndex === -1 || destinationTagIndex === -1) return;
+
+      const [movedMemo] = newTaggedMemos[sourceTagIndex].memos.splice(
+        source.index,
+        1
+      );
+      newTaggedMemos[destinationTagIndex].memos.splice(
+        destination.index,
+        0,
+        movedMemo
+      );
+
+      updateTaggedMemos(newTaggedMemos);
     };
 
     return (

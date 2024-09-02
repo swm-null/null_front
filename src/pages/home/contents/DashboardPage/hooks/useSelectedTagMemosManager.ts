@@ -87,6 +87,20 @@ const useSelectedTagMemosManager = (
     [queryClient, tags]
   );
 
+  const updateTaggedMemos = useCallback(
+    (
+      newTaggedMemos: { tag: Tag; childTags: Tag[] | null; memos: Memo[] }[]
+    ) => {
+      setTaggedMemos(newTaggedMemos);
+
+      queryClient.setQueryData(
+        ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
+        newTaggedMemos
+      );
+    },
+    [queryClient, tags]
+  );
+
   const deleteViewMemo = useCallback(
     (tag: Tag, memoId: string) => {
       queryClient.setQueryData(
@@ -134,6 +148,7 @@ const useSelectedTagMemosManager = (
   return {
     taggedMemos,
     updateViewMemo,
+    updateTaggedMemos,
     deleteViewMemo,
     revertViewMemo,
   };
