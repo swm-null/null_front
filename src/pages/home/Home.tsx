@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { DesktopHome, MobileHome } from './components';
 import { DashboardPage, SearchHistoryPage, UploadDataPage } from './contents';
 import { useSideBarOpenCloseButtonAnimation } from './sidebar';
@@ -88,6 +89,7 @@ const Home = () => {
           {pageContent({ useHeaderAnimation: true })}
         </DesktopHome>
       )}
+      <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>
   );
 };

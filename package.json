@@ -17,6 +17,7 @@
     "@mui/material": "^5.16.7",
     "@mui/styled-engine": "^5.15.14",
     "@tanstack/react-query": "^5.51.1",
+    "@tanstack/react-query-devtools": "^5.52.1",
     "@types/lodash": "^4.17.7",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.14",
