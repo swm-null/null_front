@@ -121,32 +121,30 @@ const DashboardPage = ({
     };
 
     return (
-      <div className="flex flex-1 overflow-hidden pb-4 px-4">
-        <div className="flex gap-4 overflow-x-scroll no-scrollbar">
-          <DragDropContext onDragEnd={onDragEnd}>
-            {taggedMemos.map(({ tag, childTags, memos }) => {
-              if (memos.length === 0) {
-                // FIXME: 원래 있으면 안되는 오류임
-                // throw new Error(`Memos should not be empty for tag: ${tag}`);
-                return null;
-              }
+      <div className="flex flex-1 h-full gap-4 overflow-x-scroll">
+        <DragDropContext onDragEnd={onDragEnd}>
+          {taggedMemos.map(({ tag, childTags, memos }) => {
+            if (memos.length === 0) {
+              // FIXME: 원래 있으면 안되는 오류임
+              // throw new Error(`Memos should not be empty for tag: ${tag}`);
+              return null;
+            }
 
-              if (!childTags) {
-                throw new Error(`Child tags are missing for tag: ${tag}`);
-              }
+            if (!childTags) {
+              throw new Error(`Child tags are missing for tag: ${tag}`);
+            }
 
-              return (
-                <TaggedMemosList
-                  tag={tag}
-                  childTags={childTags}
-                  memos={memos}
-                  handleTagClick={() => addTagToStack(tag)}
-                  handleMemoClick={handleMemoClick}
-                />
-              );
-            })}
-          </DragDropContext>
-        </div>
+            return (
+              <TaggedMemosList
+                tag={tag}
+                childTags={childTags}
+                memos={memos}
+                handleTagClick={() => addTagToStack(tag)}
+                handleMemoClick={handleMemoClick}
+              />
+            );
+          })}
+        </DragDropContext>
       </div>
     );
   };
@@ -177,7 +175,7 @@ const DashboardPage = ({
         ))}
       </CurrentTagPath>
 
-      {renderTaggedMemosList()}
+      <div className="flex-1 overflow-hidden">{renderTaggedMemosList()}</div>
 
       {/* 메모 수정 창 */}
       <MemoEditModal

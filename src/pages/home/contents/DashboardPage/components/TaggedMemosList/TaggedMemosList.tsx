@@ -19,18 +19,18 @@ const TaggedMemosList = ({
   handleMemoClick,
 }: TaggedMemosListProps) => {
   return (
-    <div className="w-[360px] flex-shrink-0 py-2">
+    <div className="min-w-[360px] w-[360px] flex flex-col overflow-hidden py-2">
       <ListHeader
         tag={tag}
         childTags={childTags}
         handleTagClick={handleTagClick}
       />
 
-      <div className="overflow-y-auto no-scrollbar max-h-[calc(100vh-200px)] py-2">
+      <div className="flex-1 overflow-y-auto pt-2">
         <Droppable droppableId={tag.id.toString()} type="MEMO">
           {(provided) => (
             <div
-              className="grid grid-cols-1 gap-4"
+              className="grid grid-cols-1 gap-2"
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
