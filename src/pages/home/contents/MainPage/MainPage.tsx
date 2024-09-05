@@ -8,18 +8,13 @@ import { oatmealUrl } from 'assets/images';
 import { CreateMemoAnswer } from './components/CreateMemoAnswer';
 import { HistoryIcon } from 'assets/icons';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
+import ExampleBox from './components/ExampleBox/ExampleBox';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const [mode, setMode] = useState<Mode>('search');
-  const {
-    status,
-    createAnswer,
-    searchAnswer,
-    tryCreateMemoAndSetStatus,
-    trySearchMemoAndSetStatus,
-  } = useCreateSearchNoteManager(mode);
+  const createSearchNoteManager = useCreateSearchNoteManager(mode);
 
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -33,9 +28,9 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
 
   const handleButtonClick = (message: string) => {
     if (mode === 'create') {
-      tryCreateMemoAndSetStatus(message, setMessage);
+      createSearchNoteManager.tryCreateMemoAndSetStatus(message, setMessage);
     } else {
-      trySearchMemoAndSetStatus(message, setMessage);
+      createSearchNoteManager.trySearchMemoAndSetStatus(message, setMessage);
     }
   };
 
@@ -46,50 +41,41 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     t('pages.main.example4'),
   ];
 
-  const renderExampleContentByMode = () => {
-    return (
-      <div className="flex justify-center items-center mt-4">
-        <ResponsiveMasonry
-          columnsCountBreakPoints={{ 350: 2, 750: 3, 900: 4 }}
-          className="w-full"
-        >
-          <Masonry gutter="10px">
-            {buttonData.map((text, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24 cursor-pointer"
-                onClick={() => handleButtonClick(text)}
-                style={{ width: '100%', boxSizing: 'border-box' }}
-              >
-                {text}
-              </div>
-            ))}
-          </Masonry>
-        </ResponsiveMasonry>
-      </div>
-    );
-  };
+  const renderExampleContentByMode = () => (
+    <div className="flex justify-center items-center mt-4">
+      <ResponsiveMasonry
+        columnsCountBreakPoints={{ 350: 2, 750: 3, 900: 4 }}
+        className="w-full"
+      >
+        <Masonry gutter="10px">
+          {buttonData.map((text, _) => (
+            <ExampleBox text={text} onClick={() => handleButtonClick(text)} />
+          ))}
+        </Masonry>
+      </ResponsiveMasonry>
+    </div>
+  );
 
   const renderResultContentByMode = () => {
     return (
       <div className="mt-4 px-2 pt-3 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem] mr-3">
         <div className="box-border h-full overflow-auto no-scrollbar">
-          {mode === 'create' && createAnswer ? (
+          {mode === 'create' && createSearchNoteManager.createAnswer ? (
             <CreateMemoAnswer
               color="transparent"
-              key={createAnswer.id}
-              memo={createAnswer}
+              key={createSearchNoteManager.createAnswer.id}
+              memo={createSearchNoteManager.createAnswer}
             />
-          ) : mode === 'search' && searchAnswer ? (
+          ) : mode === 'search' && createSearchNoteManager.searchAnswer ? (
             <SearchConversation
-              key={searchAnswer.id}
-              data={searchAnswer}
+              key={createSearchNoteManager.searchAnswer.id}
+              data={createSearchNoteManager.searchAnswer}
               chatBotImageUrl={oatmealUrl}
               chatBotName={t('pages.search.ai.name')}
             />
           ) : null}
         </div>
-        {mode === 'search' && searchAnswer ? (
+        {mode === 'search' && createSearchNoteManager.searchAnswer ? (
           <div
             className="flex gap-2 items-center justify-end mt-5 cursor-pointer"
             onClick={navigateToHistory}

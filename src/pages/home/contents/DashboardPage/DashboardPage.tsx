@@ -1,23 +1,11 @@
 import { useState } from 'react';
 import { DragDropContext } from '@hello-pangea/dnd';
 import { useTranslation } from 'react-i18next';
-import {
-  SIDEBAR_HEADER_ANIMATION_DURATION,
-  TAG_INVALID_CHARS_PATTERN,
-} from 'pages/home/constants';
-import {
-  AnimatedHeader,
-  MemosList,
-  UneditableMemo,
-  UneditableTag,
-} from 'pages/home/contents/_components';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
 import { CurrentTagPath, MemoEditModal, TaggedMemosList } from './components';
-import {
-  useSelectedTagMemosManager,
-  useTagsManager,
-  useDragAndDropManager,
-} from './hooks';
+import * as Constants from 'pages/home/constants';
+import * as Components from 'pages/home/contents/_components';
+import * as Hooks from './hooks';
 
 const DashboardPage = ({
   headerLeftMarginToggle = false,
@@ -27,16 +15,16 @@ const DashboardPage = ({
   headerLeftMargin?: number;
 }) => {
   const { t } = useTranslation();
-  const { selectedTag, tags, handleTagClick, clickAllTags } = useTagsManager();
-  const {
-    taggedMemos,
-    updateViewMemo,
-    updateTaggedMemos,
-    deleteViewMemo,
-    revertViewMemo,
-  } = useSelectedTagMemosManager(tags, selectedTag);
 
-  const { onDragEnd } = useDragAndDropManager(taggedMemos, updateTaggedMemos);
+  const tagsManager = Hooks.useTagsManager();
+  const tagMemosManager = Hooks.useSelectedTagMemosManager(
+    tagsManager.tags,
+    tagsManager.selectedTag
+  );
+  const { onDragEnd } = Hooks.useDragAndDropManager(
+    tagMemosManager.taggedMemos,
+    tagMemosManager.updateTaggedMemos
+  );
 
   const [open, setOpen] = useState(false);
   const [selectedMemo, setSelectedMemo] = useState<Memo>();
@@ -49,20 +37,20 @@ const DashboardPage = ({
   // 자식 태그 리스트에 있는 태그 클릭 시, stack에 추가
   const addTagToStack = (tag: Tag) => {
     setTagStack((prevStack) => [...prevStack, tag]);
-    handleTagClick(tag);
+    tagsManager.handleTagClick(tag);
   };
 
   // 모든 메모 태그 클릭 시 수행되는 코드
   const handleAllTags = () => {
     setTagStack([]);
-    clickAllTags();
+    tagsManager.clickAllTags();
   };
 
   // tag stack에서 특정 index의 태그 클릭 시 수행되는 코드
   const selectTagAtIndex = (index: number) => {
     setTagStack((prevStack) => prevStack.slice(0, index + 1));
     const tag = tagStack[index];
-    handleTagClick(tag);
+    tagsManager.handleTagClick(tag);
   };
 
   const handleClose = () => {
@@ -79,21 +67,21 @@ const DashboardPage = ({
 
   const renderTaggedMemosList = () => {
     // 아무 메모, 아무 태그가 없는 경우
-    if (taggedMemos.length === 0) {
+    if (tagMemosManager.taggedMemos.length === 0) {
       return null;
     }
 
     // 선택된 태그가 가장 마지막 단계의 태그인 경우
-    if (taggedMemos.length === 1) {
-      const taggedMemo = taggedMemos[0];
+    if (tagMemosManager.taggedMemos.length === 1) {
+      const taggedMemo = tagMemosManager.taggedMemos[0];
 
       return (
         <div className="px-4">
-          <MemosList>
+          <Components.MemosList>
             {taggedMemo.memos.map((memo, _) => (
-              <UneditableMemo memo={memo} />
+              <Components.UneditableMemo memo={memo} />
             ))}
-          </MemosList>
+          </Components.MemosList>
         </div>
       );
     }
@@ -101,7 +89,7 @@ const DashboardPage = ({
     return (
       <div className="flex flex-1 h-full gap-4 overflow-x-scroll">
         <DragDropContext onDragEnd={onDragEnd}>
-          {taggedMemos.map(({ tag, childTags, memos }) => {
+          {tagMemosManager.taggedMemos.map(({ tag, childTags, memos }) => {
             if (memos.length === 0) {
               // FIXME: 원래 있으면 안되는 오류임
               // throw new Error(`Memos should not be empty for tag: ${tag}`);
@@ -130,11 +118,11 @@ const DashboardPage = ({
 
   return (
     <div className="flex flex-col h-screen text-gray2 overflow-hidden px-4">
-      <AnimatedHeader
+      <Components.AnimatedHeader
         text={t('pages.dashboard.header')}
         leftMarginToggle={headerLeftMarginToggle}
         leftMargin={headerLeftMargin}
-        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
+        animationDuration={Constants.SIDEBAR_HEADER_ANIMATION_DURATION}
       />
 
       <CurrentTagPath
@@ -142,13 +130,13 @@ const DashboardPage = ({
         tagStack={tagStack}
         onTagClickAtIndex={selectTagAtIndex}
         onAllTagClick={handleAllTags}
-        invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+        invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
       >
-        {tags.map((tag, index) => (
-          <UneditableTag
+        {tagsManager.tags.map((tag, index) => (
+          <Components.UneditableTag
             key={index}
             text={tag.name}
-            invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+            invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
             onClick={() => addTagToStack(tag)}
           />
         ))}
@@ -163,9 +151,9 @@ const DashboardPage = ({
         selectedMemo={selectedMemo}
         selectedMemoTag={selectedMemoTag}
         selectedMemoIndex={selectedMemoIndex}
-        updateViewMemo={updateViewMemo}
-        deleteViewMemo={deleteViewMemo}
-        revertViewMemo={revertViewMemo}
+        updateViewMemo={tagMemosManager.updateViewMemo}
+        deleteViewMemo={tagMemosManager.deleteViewMemo}
+        revertViewMemo={tagMemosManager.revertViewMemo}
       />
     </div>
   );

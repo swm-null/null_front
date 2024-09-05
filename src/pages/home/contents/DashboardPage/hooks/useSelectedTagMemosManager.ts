@@ -1,12 +1,7 @@
 import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  getChildTags,
-  getSelectedTagMemos,
-  isGetMemosResponse,
-  isGetTagsResponse,
-} from 'utils/auth';
-import { Memo, Tag } from '../../_interfaces';
+import { Memo, Tag } from 'pages/home/contents/_interfaces';
+import * as Api from 'utils/auth';
 
 const useSelectedTagMemosManager = (
   tags: Tag[] | null,
@@ -18,8 +13,8 @@ const useSelectedTagMemosManager = (
   >([]);
 
   const fetchSelectedTagMemos = async (tagId: string) => {
-    const response = await getSelectedTagMemos(tagId);
-    if (isGetMemosResponse(response)) {
+    const response = await Api.getSelectedTagMemos(tagId);
+    if (Api.isGetMemosResponse(response)) {
       return response.memos;
     } else {
       return [];
@@ -27,8 +22,8 @@ const useSelectedTagMemosManager = (
   };
 
   const fetchChildTags = async (tagId: string) => {
-    const response = await getChildTags(tagId);
-    if (isGetTagsResponse(response)) {
+    const response = await Api.getChildTags(tagId);
+    if (Api.isGetTagsResponse(response)) {
       return response.tags;
     } else {
       return [];
