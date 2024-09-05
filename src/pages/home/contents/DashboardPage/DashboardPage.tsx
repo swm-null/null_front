@@ -144,7 +144,6 @@ const DashboardPage = ({
 
       {renderTaggedMemosList()}
 
-      {/* 메모 수정 창 */}
       <MemoEditModal
         open={open}
         handleClose={handleClose}
