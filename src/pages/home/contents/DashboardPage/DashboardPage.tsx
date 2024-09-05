@@ -11,7 +11,7 @@ import {
   UneditableMemo,
   UneditableTag,
 } from 'pages/home/contents/_components';
-import { Memo, Tag } from 'pages/home/contents//_interfaces';
+import { Memo, Tag } from 'pages/home/contents/_interfaces';
 import { CurrentTagPath, MemoEditModal, TaggedMemosList } from './components';
 import {
   useSelectedTagMemosManager,
