@@ -17,14 +17,15 @@ const MemoSectionList = ({
   addTagToStack,
   handleMemoClick,
 }: MemoSectionListProps) => {
-  const isTagMemosEmpty = () => memoSectionListData.length === 0;
-  const hasSingleTaggedMemo = () => memoSectionListData.length === 1;
+  const isMemoSectionEmpty = () => memoSectionListData.length === 0;
+  const hasSingleMemoSection = () => memoSectionListData.length === 1;
 
-  if (isTagMemosEmpty()) {
+  if (isMemoSectionEmpty()) {
+    // 처음 유저가 서비스를 사용해서 메모와 태그가 아예 없는 경우
     return null;
   }
 
-  if (hasSingleTaggedMemo()) {
+  if (hasSingleMemoSection()) {
     const taggedMemo = memoSectionListData[0];
 
     return (

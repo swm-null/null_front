@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
 
 const KakaoDropzone = () => {
+  const { t } = useTranslation();
+
   const [kakaoCsvFiles, setKakaoCsvFiles] = useState<File[]>([]);
   const { acceptedFiles, getRootProps } = useDropzone({
     accept: {
@@ -27,7 +30,7 @@ const KakaoDropzone = () => {
   };
 
   const acceptedFileItems = kakaoCsvFiles?.map((file) => (
-    <div key={file.name} className="flex items-center mt-1">
+    <div key={file.name} className="flex items-center">
       <p className="inline items-center">
         {file.name} - {file.size} bytes
       </p>
@@ -36,7 +39,7 @@ const KakaoDropzone = () => {
         className="bg-gray2 text-white rounded-lg px-3 py-1"
         onClick={() => handleRemoveFile(file)}
       >
-        삭제
+        {t('pages.uploadData.kakaoAcceptedFiles.deleteButton')}
       </button>
     </div>
   ));
@@ -47,14 +50,14 @@ const KakaoDropzone = () => {
         {...getRootProps({ className: 'dropzone' })}
         className="bg-[#F0F0F0] py-10"
       >
-        <p className="text-center">
-          파일을 여기로 드래그 앤 드롭하거나 클릭하여 파일을 선택하세요.
-        </p>
-        <p className="text-center">*.csv 파일만 전송 가능합니다.</p>
+        <p className="text-center">{t('pages.uploadData.dropzone.text1')}</p>
+        <p className="text-center">{t('pages.uploadData.dropzone.text2')}</p>
       </div>
       {kakaoCsvFiles.length !== 0 && (
         <aside>
-          <h4>카카오톡 데이터 파일</h4>
+          <p className="mt-5 mb-1">
+            {t('pages.uploadData.kakaoAcceptedFiles.header')}
+          </p>
           <ul>{acceptedFileItems}</ul>
         </aside>
       )}
