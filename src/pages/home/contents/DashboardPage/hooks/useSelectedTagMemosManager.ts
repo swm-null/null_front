@@ -8,7 +8,7 @@ const useSelectedTagMemosManager = (
   selectedTag: Tag | null
 ) => {
   const queryClient = useQueryClient();
-  const [taggedMemos, setTaggedMemos] = useState<
+  const [memoSectionListByTag, setMemoSectionListByTag] = useState<
     { tag: Tag; childTags: Tag[] | null; memos: Memo[] }[]
   >([]);
 
@@ -58,7 +58,7 @@ const useSelectedTagMemosManager = (
     refetchOnWindowFocus: true,
   });
 
-  const updateViewMemo = useCallback(
+  const updateMemoFromMemoSectionListByTag = useCallback(
     (tag: Tag, newMemo: Memo) => {
       queryClient.setQueryData(
         ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
@@ -78,21 +78,7 @@ const useSelectedTagMemosManager = (
     [queryClient, tags]
   );
 
-  const updateTaggedMemos = useCallback(
-    (
-      newTaggedMemos: { tag: Tag; childTags: Tag[] | null; memos: Memo[] }[]
-    ) => {
-      setTaggedMemos(newTaggedMemos);
-
-      queryClient.setQueryData(
-        ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
-        newTaggedMemos
-      );
-    },
-    [queryClient, tags]
-  );
-
-  const deleteViewMemo = useCallback(
+  const deleteMemoFromMemoSectionListByTag = useCallback(
     (tag: Tag, memoId: string) => {
       queryClient.setQueryData(
         ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
@@ -110,7 +96,7 @@ const useSelectedTagMemosManager = (
     [queryClient, tags]
   );
 
-  const revertViewMemo = useCallback(
+  const revertMemoFromMemoSectionListByTag = useCallback(
     (tag: Tag, index: number, memo: Memo) => {
       queryClient.setQueryData(
         ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
@@ -133,21 +119,20 @@ const useSelectedTagMemosManager = (
   );
 
   useEffect(() => {
-    if (JSON.stringify(fetchedMemos) !== JSON.stringify(taggedMemos)) {
-      setTaggedMemos(fetchedMemos);
+    if (JSON.stringify(fetchedMemos) !== JSON.stringify(memoSectionListByTag)) {
+      setMemoSectionListByTag(fetchedMemos);
     }
-  }, [fetchedMemos, taggedMemos]);
+  }, [fetchedMemos, memoSectionListByTag]);
 
   useEffect(() => {
     refetch();
   }, [tags, refetch]);
 
   return {
-    taggedMemos,
-    updateViewMemo,
-    updateTaggedMemos,
-    deleteViewMemo,
-    revertViewMemo,
+    memoSectionListByTag,
+    updateMemoFromMemoSectionListByTag,
+    deleteMemoFromMemoSectionListByTag,
+    revertMemoFromMemoSectionListByTag,
   };
 };
 

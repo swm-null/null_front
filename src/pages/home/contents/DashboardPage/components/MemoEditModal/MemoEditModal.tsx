@@ -9,9 +9,9 @@ interface MemoEditModalProps {
   selectedMemo?: Memo;
   selectedMemoTag?: Tag;
   selectedMemoIndex?: number;
-  updateViewMemo: (tag: Tag, memo: Memo) => void;
-  deleteViewMemo: (tag: Tag, memoId: string) => void;
-  revertViewMemo: (tag: Tag, index: number, memo: Memo) => void;
+  updateMemo: (tag: Tag, memo: Memo) => void;
+  deleteMemo: (tag: Tag, memoId: string) => void;
+  revertMemo: (tag: Tag, index: number, memo: Memo) => void;
 }
 
 const MemoEditModal: React.FC<MemoEditModalProps> = ({
@@ -20,9 +20,9 @@ const MemoEditModal: React.FC<MemoEditModalProps> = ({
   selectedMemo,
   selectedMemoTag,
   selectedMemoIndex,
-  updateViewMemo,
-  deleteViewMemo,
-  revertViewMemo,
+  updateMemo,
+  deleteMemo,
+  revertMemo,
 }) => {
   return (
     <Modal open={open} onClose={handleClose}>
@@ -33,16 +33,10 @@ const MemoEditModal: React.FC<MemoEditModalProps> = ({
               key={selectedMemoIndex}
               memo={selectedMemo}
               editable
-              softUpdateMemo={(memo) => updateViewMemo(selectedMemoTag, memo)}
-              softDeleteMemo={(memoId) =>
-                deleteViewMemo(selectedMemoTag, memoId)
-              }
+              softUpdateMemo={(memo) => updateMemo(selectedMemoTag, memo)}
+              softDeleteMemo={(memoId) => deleteMemo(selectedMemoTag, memoId)}
               softRevertMemo={(selectedMemo) =>
-                revertViewMemo(
-                  selectedMemoTag,
-                  selectedMemoIndex!,
-                  selectedMemo
-                )
+                revertMemo(selectedMemoTag, selectedMemoIndex!, selectedMemo)
               }
             />
           ) : null}

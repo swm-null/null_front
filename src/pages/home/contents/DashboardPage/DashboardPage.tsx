@@ -65,7 +65,7 @@ const DashboardPage = ({
       />
 
       <MemoSectionList
-        memoSectionListData={tagMemosManager.taggedMemos}
+        memoSectionListData={tagMemosManager.memoSectionListByTag}
         addTagToStack={handleChildTagClick}
         handleMemoClick={handleMemoClickAndOpenModal}
       />
@@ -76,9 +76,9 @@ const DashboardPage = ({
         selectedMemo={selectedMemo}
         selectedMemoTag={selectedMemoTag}
         selectedMemoIndex={selectedMemoIndex}
-        updateViewMemo={tagMemosManager.updateViewMemo}
-        deleteViewMemo={tagMemosManager.deleteViewMemo}
-        revertViewMemo={tagMemosManager.revertViewMemo}
+        updateMemo={tagMemosManager.updateMemoFromMemoSectionListByTag}
+        deleteMemo={tagMemosManager.deleteMemoFromMemoSectionListByTag}
+        revertMemo={tagMemosManager.revertMemoFromMemoSectionListByTag}
       />
     </div>
   );
