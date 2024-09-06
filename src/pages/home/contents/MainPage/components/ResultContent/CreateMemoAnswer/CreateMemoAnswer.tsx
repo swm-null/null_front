@@ -1,10 +1,10 @@
 import { Memo } from 'pages/home/contents/_interfaces';
 import { useState } from 'react';
 import { deleteMemo, isValidResponse } from 'utils/auth';
-import { MemoText } from '../../../_components/memo/EditableMemo/MemoText';
 import { DeleteIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
 import { TagManager } from 'pages/home/contents/_components/memo/EditableMemo/TagManager';
+import { MemoText } from 'pages/home/contents/_components/memo/EditableMemo/MemoText';
 
 const CreateMemoAnswer = ({
   memo,

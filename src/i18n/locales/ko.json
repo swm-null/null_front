@@ -74,10 +74,6 @@
       "addMemoButton": "카카오톡 데이터로 메모 추가하기"
     },
     "main": {
-      "example1": "라면 레시피 메모 보여줘",
-      "example2": "민지 전화번호 알려줘",
-      "example3": "맛집 내가 저번에 적은 거 뭐더라",
-      "example4": "나 신발 사야하는데 사이즈 알려줘",
       "searchHistory": "검색 기록"
     }
   }
