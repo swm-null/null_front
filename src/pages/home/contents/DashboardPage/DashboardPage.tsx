@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { DragDropContext } from '@hello-pangea/dnd';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
 import { CurrentTagPath, MemoEditModal, TaggedMemosList } from './components';
@@ -20,10 +19,6 @@ const DashboardPage = ({
   const tagMemosManager = Hooks.useSelectedTagMemosManager(
     tagsManager.tags,
     tagsManager.selectedTag
-  );
-  const { onDragEnd } = Hooks.useDragAndDropManager(
-    tagMemosManager.taggedMemos,
-    tagMemosManager.updateTaggedMemos
   );
 
   const [open, setOpen] = useState(false);
@@ -66,13 +61,14 @@ const DashboardPage = ({
   };
 
   const renderTaggedMemosList = () => {
-    // 아무 메모, 아무 태그가 없는 경우
-    if (tagMemosManager.taggedMemos.length === 0) {
+    const isTagMemosEmpty = () => tagMemosManager.taggedMemos.length === 0;
+    const hasSingleTaggedMemo = () => tagMemosManager.taggedMemos.length === 1;
+
+    if (isTagMemosEmpty()) {
       return null;
     }
 
-    // 선택된 태그가 가장 마지막 단계의 태그인 경우
-    if (tagMemosManager.taggedMemos.length === 1) {
+    if (hasSingleTaggedMemo()) {
       const taggedMemo = tagMemosManager.taggedMemos[0];
 
       return (
@@ -88,30 +84,28 @@ const DashboardPage = ({
 
     return (
       <div className="flex flex-1 h-full gap-4 overflow-x-scroll">
-        <DragDropContext onDragEnd={onDragEnd}>
-          {tagMemosManager.taggedMemos.map(({ tag, childTags, memos }) => {
-            if (memos.length === 0) {
-              // FIXME: 원래 있으면 안되는 오류임
-              // throw new Error(`Memos should not be empty for tag: ${tag}`);
-              return null;
-            }
+        {tagMemosManager.taggedMemos.map(({ tag, childTags, memos }) => {
+          if (memos.length === 0) {
+            // FIXME: 원래 있으면 안되는 오류임
+            // throw new Error(`Memos should not be empty for tag: ${tag}`);
+            return null;
+          }
 
-            if (!childTags) {
-              throw new Error(`Child tags are missing for tag: ${tag}`);
-            }
+          if (!childTags) {
+            throw new Error(`Child tags are missing for tag: ${tag}`);
+          }
 
-            return (
-              <TaggedMemosList
-                key={tag.id}
-                tag={tag}
-                childTags={childTags}
-                memos={memos}
-                handleTagClick={() => addTagToStack(tag)}
-                handleMemoClick={handleMemoClick}
-              />
-            );
-          })}
-        </DragDropContext>
+          return (
+            <TaggedMemosList
+              key={tag.id}
+              tag={tag}
+              childTags={childTags}
+              memos={memos}
+              handleTagClick={() => addTagToStack(tag)}
+              handleMemoClick={handleMemoClick}
+            />
+          );
+        })}
       </div>
     );
   };

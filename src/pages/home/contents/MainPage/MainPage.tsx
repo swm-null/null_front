@@ -14,6 +14,9 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const [mode, setMode] = useState<Mode>('search');
+  const isCreateMode = () => mode === 'create';
+  const isSearchMode = () => mode === 'search';
+
   const createSearchNoteManager = useCreateSearchNoteManager(mode);
 
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -27,7 +30,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   };
 
   const handleButtonClick = (message: string) => {
-    if (mode === 'create') {
+    if (isCreateMode()) {
       createSearchNoteManager.tryCreateMemoAndSetStatus(message, setMessage);
     } else {
       createSearchNoteManager.trySearchMemoAndSetStatus(message, setMessage);
@@ -60,13 +63,13 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     return (
       <div className="mt-4 px-2 pt-3 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem] mr-3">
         <div className="box-border h-full overflow-auto no-scrollbar">
-          {mode === 'create' && createSearchNoteManager.createAnswer ? (
+          {isCreateMode() && createSearchNoteManager.createAnswer ? (
             <CreateMemoAnswer
               color="transparent"
               key={createSearchNoteManager.createAnswer.id}
               memo={createSearchNoteManager.createAnswer}
             />
-          ) : mode === 'search' && createSearchNoteManager.searchAnswer ? (
+          ) : isSearchMode() && createSearchNoteManager.searchAnswer ? (
             <SearchConversation
               key={createSearchNoteManager.searchAnswer.id}
               data={createSearchNoteManager.searchAnswer}
@@ -75,7 +78,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
             />
           ) : null}
         </div>
-        {mode === 'search' && createSearchNoteManager.searchAnswer ? (
+        {isSearchMode() && createSearchNoteManager.searchAnswer ? (
           <div
             className="flex gap-2 items-center justify-end mt-5 cursor-pointer"
             onClick={navigateToHistory}
@@ -98,10 +101,11 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
           placeholder={t('pages.add.inputPlaceholder')}
           onButtonClick={() => handleButtonClick(message)}
         />
-        {status === 'default' &&
-          mode === 'search' &&
+        {createSearchNoteManager.status === 'default' &&
+          isSearchMode() &&
           renderExampleContentByMode()}
-        {status === 'success' && renderResultContentByMode()}
+        {createSearchNoteManager.status === 'success' &&
+          renderResultContentByMode()}
       </div>
     </div>
   );
