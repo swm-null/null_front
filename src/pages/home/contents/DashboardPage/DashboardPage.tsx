@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
-import { CurrentTagPath, MemoEditModal, TaggedMemosList } from './components';
+import { CurrentTagPath, MemoEditModal, MemoSectionList } from './components';
 import * as Constants from 'pages/home/constants';
 import * as Components from 'pages/home/contents/_components';
 import * as Hooks from './hooks';
@@ -21,7 +21,7 @@ const DashboardPage = ({
     tagsManager.selectedTag
   );
 
-  const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [selectedMemo, setSelectedMemo] = useState<Memo>();
   const [selectedMemoTag, setSelectedMemoTag] = useState<Tag>();
   const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
@@ -48,66 +48,16 @@ const DashboardPage = ({
     tagsManager.handleTagClick(tag);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleModalClose = () => {
+    setModalOpen(false);
     setSelectedMemo(undefined);
   };
 
-  const handleMemoClick = (memo: Memo, tag: Tag, index: number) => {
-    setOpen(true);
+  const handleMemoClickAndOpenModal = (memo: Memo, tag: Tag, index: number) => {
+    setModalOpen(true);
     setSelectedMemo(memo);
     setSelectedMemoTag(tag);
     setSelectedMemoIndex(index);
-  };
-
-  const renderTaggedMemosList = () => {
-    const isTagMemosEmpty = () => tagMemosManager.taggedMemos.length === 0;
-    const hasSingleTaggedMemo = () => tagMemosManager.taggedMemos.length === 1;
-
-    if (isTagMemosEmpty()) {
-      return null;
-    }
-
-    if (hasSingleTaggedMemo()) {
-      const taggedMemo = tagMemosManager.taggedMemos[0];
-
-      return (
-        <div className="px-4">
-          <Components.MemosList>
-            {taggedMemo.memos.map((memo, _) => (
-              <Components.UneditableMemo memo={memo} />
-            ))}
-          </Components.MemosList>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex flex-1 h-full gap-4 overflow-x-scroll">
-        {tagMemosManager.taggedMemos.map(({ tag, childTags, memos }) => {
-          if (memos.length === 0) {
-            // FIXME: 원래 있으면 안되는 오류임
-            // throw new Error(`Memos should not be empty for tag: ${tag}`);
-            return null;
-          }
-
-          if (!childTags) {
-            throw new Error(`Child tags are missing for tag: ${tag}`);
-          }
-
-          return (
-            <TaggedMemosList
-              key={tag.id}
-              tag={tag}
-              childTags={childTags}
-              memos={memos}
-              handleTagClick={() => addTagToStack(tag)}
-              handleMemoClick={handleMemoClick}
-            />
-          );
-        })}
-      </div>
-    );
   };
 
   return (
@@ -136,11 +86,15 @@ const DashboardPage = ({
         ))}
       </CurrentTagPath>
 
-      {renderTaggedMemosList()}
+      <MemoSectionList
+        memoSectionListData={tagMemosManager.taggedMemos}
+        addTagToStack={addTagToStack}
+        handleMemoClick={handleMemoClickAndOpenModal}
+      />
 
       <MemoEditModal
-        open={open}
-        handleClose={handleClose}
+        open={modalOpen}
+        handleClose={handleModalClose}
         selectedMemo={selectedMemo}
         selectedMemoTag={selectedMemoTag}
         selectedMemoIndex={selectedMemoIndex}

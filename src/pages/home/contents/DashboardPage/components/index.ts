@@ -1,3 +1,3 @@
 export * from './CurrentTagPath';
-export * from './TaggedMemosList';
+export * from './MemoSectionList';
 export * from './MemoEditModal';

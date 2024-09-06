@@ -3,7 +3,7 @@ import { Memo, Tag } from 'pages/home/contents/_interfaces';
 import { DraggableMemo } from './DraggableMemo';
 import { ListHeader } from './ListHeader';
 
-interface TaggedMemosListProps {
+interface MemoSectionProps {
   tag: Tag;
   childTags: Tag[];
   memos: Memo[];
@@ -11,13 +11,13 @@ interface TaggedMemosListProps {
   handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
 }
 
-const TaggedMemosList = ({
+const MemoSection = ({
   tag,
   childTags,
   memos,
   handleTagClick,
   handleMemoClick,
-}: TaggedMemosListProps) => {
+}: MemoSectionProps) => {
   return (
     <div className="min-w-[360px] w-[360px] flex flex-col overflow-hidden py-2">
       <ListHeader
@@ -52,4 +52,4 @@ const TaggedMemosList = ({
   );
 };
 
-export default TaggedMemosList;
+export default MemoSection;
