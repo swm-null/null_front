@@ -1,4 +1,4 @@
-import { TextField, Button, Box } from '@mui/material';
+import { Button, Box } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 function CopyTextField({ text }: { text: string }) {
@@ -19,16 +19,7 @@ function CopyTextField({ text }: { text: string }) {
         maxWidth: '300px',
       }}
     >
-      <TextField
-        variant="standard"
-        placeholder="Enter text"
-        value={text}
-        sx={{ flexGrow: 1 }}
-        InputProps={{
-          disableUnderline: true,
-          readOnly: true,
-        }}
-      />
+      <p className="flex flex-1">{text}</p>
       <Button sx={{ minWidth: 'auto', marginLeft: '8px' }} onClick={handleCopy}>
         <ContentCopyIcon />
       </Button>
