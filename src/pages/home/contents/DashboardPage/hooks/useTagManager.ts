@@ -35,13 +35,20 @@ const useTagsManager = () => {
       selectedTag ? fetchChildTags(selectedTag.id) : fetchAllTags(),
   });
 
-  const handleTagClick = (tag: Tag | null) => {
-    setSelectedTag(tag);
+  /**
+   * @param tag Tag: 특정 태그, null: 모든 메모
+   */
+  const handleTagOrAllTagsClick = (tag: Tag | null) => {
     if (tag) {
-      queryClient.invalidateQueries({ queryKey: ['tags', tag.id] });
+      clickTag(tag);
     } else {
-      queryClient.invalidateQueries({ queryKey: ['tags', 'root'] });
+      clickAllTags();
     }
+  };
+
+  const clickTag = (tag: Tag) => {
+    setSelectedTag(tag);
+    queryClient.invalidateQueries({ queryKey: ['tags', tag.id] });
   };
 
   const clickAllTags = () => {
@@ -52,8 +59,7 @@ const useTagsManager = () => {
   return {
     tags,
     selectedTag,
-    handleTagClick,
-    clickAllTags,
+    handleTagOrAllTagsClick,
     isLoading,
     isError,
   };

@@ -26,26 +26,11 @@ const DashboardPage = ({
   const [selectedMemoTag, setSelectedMemoTag] = useState<Tag>();
   const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
 
-  // 클릭한 태그 경로
   const [tagStack, setTagStack] = useState<Tag[]>([]);
 
-  // 자식 태그 리스트에 있는 태그 클릭 시, stack에 추가
-  const addTagToStack = (tag: Tag) => {
+  const handleChildTagClick = (tag: Tag) => {
     setTagStack((prevStack) => [...prevStack, tag]);
-    tagsManager.handleTagClick(tag);
-  };
-
-  // 모든 메모 태그 클릭 시 수행되는 코드
-  const handleAllTags = () => {
-    setTagStack([]);
-    tagsManager.clickAllTags();
-  };
-
-  // tag stack에서 특정 index의 태그 클릭 시 수행되는 코드
-  const selectTagAtIndex = (index: number) => {
-    setTagStack((prevStack) => prevStack.slice(0, index + 1));
-    const tag = tagStack[index];
-    tagsManager.handleTagClick(tag);
+    tagsManager.handleTagOrAllTagsClick(tag);
   };
 
   const handleModalClose = () => {
@@ -71,24 +56,17 @@ const DashboardPage = ({
 
       <CurrentTagPath
         allTagText={t('pages.dashboard.allMemoButton')}
+        tags={tagsManager.tags}
         tagStack={tagStack}
-        onTagClickAtIndex={selectTagAtIndex}
-        onAllTagClick={handleAllTags}
+        setTagStack={setTagStack}
+        handleTagOrAllTagsClick={tagsManager.handleTagOrAllTagsClick}
+        handleChildTagClick={handleChildTagClick}
         invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
-      >
-        {tagsManager.tags.map((tag, index) => (
-          <Components.UneditableTag
-            key={index}
-            text={tag.name}
-            invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
-            onClick={() => addTagToStack(tag)}
-          />
-        ))}
-      </CurrentTagPath>
+      />
 
       <MemoSectionList
         memoSectionListData={tagMemosManager.taggedMemos}
-        addTagToStack={addTagToStack}
+        addTagToStack={handleChildTagClick}
         handleMemoClick={handleMemoClickAndOpenModal}
       />
 
