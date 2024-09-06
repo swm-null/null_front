@@ -13,6 +13,9 @@ const UploadDataPage = ({
 }) => {
   const { t } = useTranslation();
 
+  // TODO: 서버에 메일을 요청하는 api 추가되면 변경
+  const serverMail = 'test@oatnote.io';
+
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
       <AnimatedHeader
@@ -24,7 +27,7 @@ const UploadDataPage = ({
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden gap-2">
         <div>
           <p>{t('pages.uploadData.copyEmailInstruction')}</p>
-          <CopyTextField text="test@oatnote.io" />
+          <CopyTextField text={serverMail} />
         </div>
 
         {/* TODO: 튜토리얼 추가하기 */}
