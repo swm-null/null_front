@@ -1,10 +1,10 @@
-import { Memo } from 'pages/home/contents/_interfaces';
 import { useState } from 'react';
 import { deleteMemo, isValidResponse } from 'utils/auth';
 import { DeleteIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
-import { TagManager } from 'pages/home/contents/_components/memo/EditableMemo/TagManager';
-import { MemoText } from 'pages/home/contents/_components/memo/EditableMemo/MemoText';
+import { format } from 'date-fns';
+import { TagManager, MemoText } from 'pages/home/contents/_components';
+import { Memo } from 'pages/home/contents/_interfaces';
 
 const CreateMemoAnswer = ({
   memo,
@@ -21,9 +21,11 @@ const CreateMemoAnswer = ({
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
 }) => {
+  const { t } = useTranslation();
+
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
-  const { t } = useTranslation();
+
   const handleDeleteMemo = async () => {
     softDeleteMemo && softDeleteMemo(memo.id);
 
@@ -34,33 +36,8 @@ const CreateMemoAnswer = ({
     }
   };
 
-  const getRandomDate = () => {
-    const startDate = new Date('2024-01-01T00:00:00');
-    const endDate = new Date(Date.now());
-
-    const getRandomDateInRange = (startDate: Date, endDate: Date): Date => {
-      // 타임스탬프 범위
-      const startTimestamp = startDate.getTime();
-      const endTimestamp = endDate.getTime();
-
-      // 랜덤 타임스탬프 생성
-      const randomTimestamp =
-        Math.random() * (endTimestamp - startTimestamp) + startTimestamp;
-
-      return new Date(randomTimestamp);
-    };
-
-    return formatDate(getRandomDateInRange(startDate, endDate));
-  };
-
   const formatDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1; // getMonth()는 0부터 시작하므로 1을 더합니다.
-    const day = date.getDate();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-
-    return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
+    return format(date, t('memo.dateFormat'));
   };
 
   return (
@@ -71,13 +48,8 @@ const CreateMemoAnswer = ({
       />
       <div className="w-full">
         <div className="flex flex-1 px-2 items-center">
-          <p>오트노트</p>
           <div className="flex flex-1" />
-          <p>
-            {memo.updated_at
-              ? formatDate(new Date(memo.updated_at))
-              : getRandomDate()}
-          </p>
+          <p>{formatDate(new Date(memo.updated_at))}</p>
           <button
             className="text-right justify-self-end mt-2 rounded-full py-1 px-2"
             onClick={handleDeleteMemo}
