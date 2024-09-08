@@ -6,8 +6,8 @@ import { CreateMemoAnswer } from './CreateMemoAnswer';
 import { Memo, MemoSearchConversation } from 'pages/home/contents/_interfaces';
 
 interface ResultContentProps {
-  createAnswer: Memo;
-  searchAnswer: MemoSearchConversation;
+  createAnswer?: Memo;
+  searchAnswer?: MemoSearchConversation;
   status: string;
   isSearchMode: boolean;
   navigateToHistory: () => void;
