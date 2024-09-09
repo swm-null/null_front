@@ -1,8 +1,8 @@
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
-import { ListHeader } from './ListHeader';
+import { DashboardMemoSectionHeader } from './DashboardMemoSectionHeader';
 import { UneditableMemo } from 'pages/home/contents/_components';
 
-interface MemoSectionProps {
+interface DashboardMemoSectionProps {
   tag: Tag;
   childTags: Tag[];
   memos: Memo[];
@@ -10,16 +10,16 @@ interface MemoSectionProps {
   handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
 }
 
-const MemoSection = ({
+const DashboardMemoSection = ({
   tag,
   childTags,
   memos,
   handleTagClick,
   handleMemoClick,
-}: MemoSectionProps) => {
+}: DashboardMemoSectionProps) => {
   return (
     <div className="min-w-[360px] w-[360px] flex flex-col overflow-hidden py-2">
-      <ListHeader
+      <DashboardMemoSectionHeader
         tag={tag}
         childTags={childTags}
         handleTagClick={handleTagClick}
@@ -39,4 +39,4 @@ const MemoSection = ({
   );
 };
 
-export default MemoSection;
+export default DashboardMemoSection;

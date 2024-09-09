@@ -1,8 +1,8 @@
 import * as Components from 'pages/home/contents/_components';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
-import { MemoSection } from './MemoSection';
+import { DashboardMemoSection } from './DashboardMemoSection';
 
-interface MemoSectionListProps {
+interface DashboardMemoSectionProps {
   memoSectionListData: Array<{
     tag: Tag;
     childTags: Tag[] | null;
@@ -12,11 +12,11 @@ interface MemoSectionListProps {
   handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
 }
 
-const MemoSectionList = ({
+const DashboardMemoSectionList = ({
   memoSectionListData,
   addTagToStack,
   handleMemoClick,
-}: MemoSectionListProps) => {
+}: DashboardMemoSectionProps) => {
   const isMemoSectionEmpty = () => memoSectionListData.length === 0;
   const hasSingleMemoSection = () => memoSectionListData.length === 1;
 
@@ -51,7 +51,7 @@ const MemoSectionList = ({
         }
 
         return (
-          <MemoSection
+          <DashboardMemoSection
             key={tag.id}
             tag={tag}
             childTags={childTags}
@@ -65,4 +65,4 @@ const MemoSectionList = ({
   );
 };
 
-export default MemoSectionList;
+export default DashboardMemoSectionList;

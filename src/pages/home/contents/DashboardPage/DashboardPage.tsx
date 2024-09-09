@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
-import { CurrentTagPath, MemoEditModal, MemoSectionList } from './components';
+import { AnimatedHeader } from 'pages/home/contents/_components';
+import * as Components from './components';
 import * as Constants from 'pages/home/constants';
-import * as Components from 'pages/home/contents/_components';
 import * as Hooks from './hooks';
 
 const DashboardPage = ({
@@ -47,14 +47,14 @@ const DashboardPage = ({
 
   return (
     <div className="flex flex-col h-screen text-gray2 overflow-hidden px-4">
-      <Components.AnimatedHeader
+      <AnimatedHeader
         text={t('pages.dashboard.header')}
         leftMarginToggle={headerLeftMarginToggle}
         leftMargin={headerLeftMargin}
         animationDuration={Constants.SIDEBAR_HEADER_ANIMATION_DURATION}
       />
 
-      <CurrentTagPath
+      <Components.CurrentTagPath
         allTagText={t('pages.dashboard.allMemoButton')}
         tags={tagsManager.tags}
         tagStack={tagStack}
@@ -64,13 +64,13 @@ const DashboardPage = ({
         invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
       />
 
-      <MemoSectionList
+      <Components.DashboardMemoSectionList
         memoSectionListData={tagMemosManager.memoSectionListByTag}
         addTagToStack={handleChildTagClick}
         handleMemoClick={handleMemoClickAndOpenModal}
       />
 
-      <MemoEditModal
+      <Components.MemoEditModal
         open={modalOpen}
         handleClose={handleModalClose}
         selectedMemo={selectedMemo}

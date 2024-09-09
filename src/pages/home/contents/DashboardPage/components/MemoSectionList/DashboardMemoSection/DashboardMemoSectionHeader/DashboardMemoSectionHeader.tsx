@@ -3,13 +3,17 @@ import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/contents/_interfaces';
 import { RightIcon } from 'assets/icons';
 
-interface ListHeaderProps {
+interface DashboardMemoSectionHeaderProps {
   tag: Tag;
   childTags: Tag[];
   handleTagClick: () => void;
 }
 
-const ListHeader = ({ tag, childTags, handleTagClick }: ListHeaderProps) => {
+const DashboardMemoSectionHeader = ({
+  tag,
+  childTags,
+  handleTagClick,
+}: DashboardMemoSectionHeaderProps) => {
   return (
     <div className="bg-[#989898] rounded-t-2xl flex flex-row justify-between items-stretch overflow-hidden">
       <div className="grid w-full flex-col px-3 py-4">
@@ -34,4 +38,4 @@ const ListHeader = ({ tag, childTags, handleTagClick }: ListHeaderProps) => {
   );
 };
 
-export default ListHeader;
+export default DashboardMemoSectionHeader;
