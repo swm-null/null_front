@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { AnimatedHeader } from 'pages/home/contents/_components';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
-import { KakaoDropzone } from './KakaoDropzone';
+import { KakaoDropzone } from './components/KakaoDropzone';
+import { CopyTextField } from './components';
 
 const UploadDataPage = ({
   headerLeftMarginToggle = false,
@@ -12,6 +13,9 @@ const UploadDataPage = ({
 }) => {
   const { t } = useTranslation();
 
+  // TODO: 서버에 메일을 요청하는 api 추가되면 변경
+  const serverMail = 'test@oatnote.io';
+
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
       <AnimatedHeader
@@ -20,7 +24,17 @@ const UploadDataPage = ({
         leftMargin={headerLeftMargin}
         animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
       />
-      <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden">
+      <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden gap-2">
+        <p>{t('pages.uploadData.emailInstruction.header')}</p>
+        <p>{t('pages.uploadData.emailInstruction.text1')}</p>
+        <CopyTextField text={serverMail} />
+
+        {/* TODO: 튜토리얼 추가하기 */}
+        <p>{t('pages.uploadData.emailInstruction.text2')}</p>
+        <p className="mb-5">{t('pages.uploadData.emailInstruction.text3')}</p>
+
+        <p>{t('pages.uploadData.uploadFileInstruction.header')}</p>
+        <p>{t('pages.uploadData.uploadFileInstruction.text')}</p>
         <div className="flex flex-col flex-1">
           <KakaoDropzone />
         </div>

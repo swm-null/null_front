@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getChildTags, getRootTags, isGetTagsResponse } from 'utils/auth';
-import { Tag } from '../../_interfaces';
+import { Tag } from 'pages/home/contents/_interfaces';
 
 const useTagsManager = () => {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
@@ -35,13 +35,20 @@ const useTagsManager = () => {
       selectedTag ? fetchChildTags(selectedTag.id) : fetchAllTags(),
   });
 
-  const handleTagClick = (tag: Tag | null) => {
-    setSelectedTag(tag);
+  /**
+   * @param tag Tag: 특정 태그, null: 모든 메모
+   */
+  const handleTagOrAllTagsClick = (tag: Tag | null) => {
     if (tag) {
-      queryClient.invalidateQueries({ queryKey: ['tags', tag.id] });
+      clickTag(tag);
     } else {
-      queryClient.invalidateQueries({ queryKey: ['tags', 'root'] });
+      clickAllTags();
     }
+  };
+
+  const clickTag = (tag: Tag) => {
+    setSelectedTag(tag);
+    queryClient.invalidateQueries({ queryKey: ['tags', tag.id] });
   };
 
   const clickAllTags = () => {
@@ -52,8 +59,7 @@ const useTagsManager = () => {
   return {
     tags,
     selectedTag,
-    handleTagClick,
-    clickAllTags,
+    handleTagOrAllTagsClick,
     isLoading,
     isError,
   };

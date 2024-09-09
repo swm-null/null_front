@@ -1,85 +1,138 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  getAllMemos,
-  getSelectedTagMemos,
-  isGetMemosResponse,
-} from 'utils/auth';
-import { Memo, Tag } from '../../_interfaces';
+import { Memo, Tag } from 'pages/home/contents/_interfaces';
+import * as Api from 'utils/auth';
 
-const useSelectedTagMemosManager = (selectedTag: Tag | null) => {
+const useSelectedTagMemosManager = (
+  tags: Tag[] | null,
+  selectedTag: Tag | null
+) => {
   const queryClient = useQueryClient();
+  const [memoSectionListByTag, setMemoSectionListByTag] = useState<
+    { tag: Tag; childTags: Tag[] | null; memos: Memo[] }[]
+  >([]);
 
-  const { data: viewMemos = [], refetch } = useQuery({
-    queryKey: ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
-    queryFn: () =>
-      selectedTag ? fetchSelectedTagMemos(selectedTag.id) : fetchAllMemos(),
+  const fetchSelectedTagMemos = async (tagId: string) => {
+    const response = await Api.getSelectedTagMemos(tagId);
+    if (Api.isGetMemosResponse(response)) {
+      return response.memos;
+    } else {
+      return [];
+    }
+  };
+
+  const fetchChildTags = async (tagId: string) => {
+    const response = await Api.getChildTags(tagId);
+    if (Api.isGetTagsResponse(response)) {
+      return response.tags;
+    } else {
+      return [];
+    }
+  };
+
+  const { data: fetchedMemos = [], refetch } = useQuery({
+    queryKey: useMemo(
+      () => [
+        'memos',
+        tags?.length ? tags.map((tag) => tag.id) : selectedTag?.id,
+      ],
+      [tags, selectedTag]
+    ),
+    queryFn: async () => {
+      if (tags && tags.length > 0) {
+        const tagMemos = await Promise.all(
+          tags.map(async (tag) => {
+            const memos = await fetchSelectedTagMemos(tag.id);
+            const childTags = await fetchChildTags(tag.id);
+            return { tag, childTags, memos };
+          })
+        );
+        return tagMemos;
+      } else {
+        if (selectedTag === null) return [];
+        const memos = await fetchSelectedTagMemos(selectedTag.id);
+        return [{ tag: selectedTag, childTags: null, memos }];
+      }
+    },
     staleTime: 0,
     refetchOnWindowFocus: true,
   });
 
-  const fetchSelectedTagMemos = async (tagId: string) => {
-    const response = await getSelectedTagMemos(tagId);
-    if (isGetMemosResponse(response)) {
-      return response.memos;
-    } else {
-      return [];
-    }
-  };
-
-  const fetchAllMemos = async () => {
-    const response = await getAllMemos();
-    if (isGetMemosResponse(response)) {
-      return response.memos;
-    } else {
-      return [];
-    }
-  };
-
-  const updateViewMemo = useCallback(
-    (newMemo: Memo) => {
+  const updateMemoFromMemoSectionListByTag = useCallback(
+    (tag: Tag, newMemo: Memo) => {
       queryClient.setQueryData(
-        ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
-        (prev: Memo[] = []) =>
-          prev.map((memo) => (memo.id === newMemo.id ? newMemo : memo))
+        ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
+        (prev: { tag: Tag; memos: Memo[] }[] = []) =>
+          prev.map((taggedMemo) =>
+            taggedMemo.tag.id === tag.id
+              ? {
+                  ...taggedMemo,
+                  memos: taggedMemo.memos.map((memo) =>
+                    memo.id === newMemo.id ? newMemo : memo
+                  ),
+                }
+              : taggedMemo
+          )
       );
     },
-    [queryClient, selectedTag]
+    [queryClient, tags]
   );
 
-  const deleteViewMemo = useCallback(
-    (memoId: string) => {
+  const deleteMemoFromMemoSectionListByTag = useCallback(
+    (tag: Tag, memoId: string) => {
       queryClient.setQueryData(
-        ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
-        (prev: Memo[] = []) => prev.filter((memo) => memo.id !== memoId)
+        ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
+        (prev: { tag: Tag; memos: Memo[] }[] = []) =>
+          prev.map((taggedMemo) =>
+            taggedMemo.tag.id === tag.id
+              ? {
+                  ...taggedMemo,
+                  memos: taggedMemo.memos.filter((memo) => memo.id !== memoId),
+                }
+              : taggedMemo
+          )
       );
     },
-    [queryClient, selectedTag]
+    [queryClient, tags]
   );
 
-  const revertViewMemo = useCallback(
-    (index: number, memo: Memo) => {
+  const revertMemoFromMemoSectionListByTag = useCallback(
+    (tag: Tag, index: number, memo: Memo) => {
       queryClient.setQueryData(
-        ['memos', selectedTag ? selectedTag.id : 'ALL_MEMOS'],
-        (prev: Memo[] = []) => {
-          const newMemos = [...prev];
-          newMemos.splice(index, 0, memo);
-          return newMemos;
-        }
+        ['memos', tags ? tags.map((tag) => tag.id) : 'NO_TAGS'],
+        (prev: { tag: Tag; memos: Memo[] }[] = []) =>
+          prev.map((taggedMemo) =>
+            taggedMemo.tag.id === tag.id
+              ? {
+                  ...taggedMemo,
+                  memos: [
+                    ...taggedMemo.memos.slice(0, index),
+                    memo,
+                    ...taggedMemo.memos.slice(index),
+                  ],
+                }
+              : taggedMemo
+          )
       );
     },
-    [queryClient, selectedTag]
+    [queryClient, tags]
   );
 
   useEffect(() => {
+    if (JSON.stringify(fetchedMemos) !== JSON.stringify(memoSectionListByTag)) {
+      setMemoSectionListByTag(fetchedMemos);
+    }
+  }, [fetchedMemos, memoSectionListByTag]);
+
+  useEffect(() => {
     refetch();
-  }, [selectedTag, refetch]);
+  }, [tags, refetch]);
 
   return {
-    viewMemos,
-    updateViewMemo,
-    deleteViewMemo,
-    revertViewMemo,
+    memoSectionListByTag,
+    updateMemoFromMemoSectionListByTag,
+    deleteMemoFromMemoSectionListByTag,
+    revertMemoFromMemoSectionListByTag,
   };
 };
 

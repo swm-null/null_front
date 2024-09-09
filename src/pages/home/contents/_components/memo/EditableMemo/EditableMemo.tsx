@@ -1,16 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { TagManager } from './TagManager';
-import { MemoText } from './MemoText';
+import { MemoText, TagManager } from 'pages/home/contents/_components';
 import { Memo } from 'pages/home/contents/_interfaces';
-import {
-  deleteMemo,
-  updateMemo,
-  isUpdateMemoResponse,
-  isValidResponse,
-} from 'utils/auth';
-import { useTranslation } from 'react-i18next';
+import * as Api from 'utils/auth';
 import { DeleteIcon } from 'assets/icons';
 
 const EditableMemo = ({
@@ -37,17 +32,11 @@ const EditableMemo = ({
   const updateMemoSubject = useRef(new Subject<Memo>()).current;
   const { t } = useTranslation();
 
-  // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
-  useEffect(() => {
-    setMessage(memo.content);
-    setTags(memo.tags);
-  }, [memo]);
-
   const handleDeleteMemo = async () => {
     softDeleteMemo && softDeleteMemo(memo.id);
 
-    const response = await deleteMemo(memo.id);
-    if (!isValidResponse(response)) {
+    const response = await Api.deleteMemo(memo.id);
+    if (!Api.isValidResponse(response)) {
       alert(t('pages.memo.deleteErrorMessage'));
       softRevertMemo && softRevertMemo(memo);
     }
@@ -68,14 +57,24 @@ const EditableMemo = ({
     }
   };
 
+  const formatDate = (date: Date): string => {
+    return format(date, t('memo.dateFormat'));
+  };
+
+  // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
+  useEffect(() => {
+    setMessage(memo.content);
+    setTags(memo.tags);
+  }, [memo]);
+
   useEffect(() => {
     const subscription = updateMemoSubject
       .pipe(debounceTime(500))
       .subscribe(async (newMemo: Memo) => {
         softUpdateMemo && softUpdateMemo(newMemo);
 
-        const response = await updateMemo(newMemo.id, newMemo.content);
-        if (!isUpdateMemoResponse(response)) {
+        const response = await Api.updateMemo(newMemo.id, newMemo.content);
+        if (!Api.isUpdateMemoResponse(response)) {
           alert(t('pages.memo.updateErrorMessage'));
         }
       });
@@ -87,15 +86,10 @@ const EditableMemo = ({
 
   return (
     <div
-      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md `}
+      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md min-h-72`}
     >
-      <p className="text-center">2024년 8월 7일 10:19</p>
-      <MemoText
-        message={message}
-        setMessage={setMessage}
-        editable={editable}
-        // handleBlur={tryUpdateMemo}
-      />
+      <p className="text-center">{formatDate(new Date(memo.updated_at))}</p>
+      <MemoText message={message} setMessage={setMessage} editable={editable} />
       <TagManager tags={tags} setTags={setTags} editable={editable} />
       {editable && (
         <div className="flex gap-2">
@@ -110,16 +104,16 @@ const EditableMemo = ({
           <button
             className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
             onClick={() => {
-              console.log('태그 재생성');
+              console.log(t('memo.tagRebuild'));
             }}
           >
-            태그 재생성
+            {t('memo.tagRebuild')}
           </button>
           <button
             className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
             onClick={tryUpdateMemo}
           >
-            저장
+            {t('memo.save')}
           </button>
         </div>
       )}

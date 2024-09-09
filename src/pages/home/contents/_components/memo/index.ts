@@ -1,3 +1,5 @@
 export * from './EditableMemo';
-export * from './UneditableMemo';
 export * from './MemosList';
+export * from './MemoText';
+export * from './TagManager';
+export * from './UneditableMemo';
