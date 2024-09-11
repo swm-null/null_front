@@ -22,7 +22,7 @@ const MemoTextAreaWithAIButton = ({
   });
 
   return (
-    <div className="flex items-start rounded-3xl border-[0.12rem] px-4 py-2 overflow-hidden">
+    <div className="flex flex-shrink-0 items-start rounded-3xl border-[0.12rem] px-4 py-2 overflow-hidden">
       <SearchIcon className="w-5 h-5 mt-[2px]" />
       <TextareaAutosize
         value={value}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import * as Component from './components';
 import { Mode } from 'pages/home/contents/_interfaces';
 import { useCreateSearchNoteManager } from './hook';
+import { memos } from './test/dummyData';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
@@ -49,21 +50,16 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
           placeholder={t('pages.add.inputPlaceholder')}
           onButtonClick={() => handleButtonClick(message)}
         />
-        {createSearchNoteManager.status === 'default' && isSearchMode() && (
-          <Component.ExampleContents
+        {isSearchMode() && (
+          <Component.SearchMemoContents
+            status={createSearchNoteManager.status}
+            searchAnswer={createSearchNoteManager.searchAnswer}
+            navigateToHistory={navigateToHistory}
             buttonData={buttonData}
             handleButtonClick={handleButtonClick}
           />
         )}
-        {createSearchNoteManager.status === 'success' && (
-          <Component.ResultContent
-            createAnswer={createSearchNoteManager.createAnswer}
-            searchAnswer={createSearchNoteManager.searchAnswer}
-            status={createSearchNoteManager.status}
-            isSearchMode={isSearchMode()}
-            navigateToHistory={navigateToHistory}
-          />
-        )}
+        {isCreateMode() && <Component.CreateMemoContents memos={memos} />}
       </div>
     </div>
   );

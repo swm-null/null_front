@@ -1,0 +1,14 @@
+<svg
+    className="ml-1 w-4 h-4 cursor-pointer"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+>
+    <path
+    d="M5 5L19 19M5 19L19 5"
+    stroke="#6A5344"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    ></path>
+</svg>

@@ -1,4 +1,4 @@
 export * from './MemoTextAreaWithAIButton';
 export * from './ModeToggle';
-export * from './ExampleContents';
-export * from './ResultContent';
+export * from './SearchMemoContents';
+export * from './CreateMemoContents';
