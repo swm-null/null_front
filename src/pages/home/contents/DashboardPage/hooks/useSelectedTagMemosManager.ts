@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, useMemo } from 'react';
-import { catchError, forkJoin, from, lastValueFrom, map, of } from 'rxjs';
+import { forkJoin, from, lastValueFrom, map } from 'rxjs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
 import * as Api from 'utils/auth';
@@ -43,17 +43,9 @@ const useSelectedTagMemosManager = (
 
   const fetchMemosByTag = (tagId: string) => {
     return from(Api.getMemosByTag(tagId)).pipe(
-      map((response) => {
-        if (Api.isGetMemosResponse(response)) {
-          return response.memos;
-        } else {
-          throw new Error('서버에서 올바른 응답을 받지 못했습니다.');
-        }
-      }),
-      catchError((error) => {
-        alert(error.message || '메모를 불러오는 중 오류가 발생했습니다.');
-        return of([]);
-      })
+      map((response) =>
+        Api.isGetMemosResponse(response) ? response.memos : []
+      )
     );
   };
 
