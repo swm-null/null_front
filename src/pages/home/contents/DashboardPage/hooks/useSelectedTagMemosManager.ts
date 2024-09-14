@@ -70,16 +70,17 @@ const useSelectedTagMemosManager = (
   const updateMemoFromMemoSectionListByTag = useCallback(
     (tag: Tag, newMemo: Memo) =>
       updateMemoState((prev) =>
-        prev.map((taggedMemo) =>
-          taggedMemo.tag.id === tag.id
-            ? {
-                ...taggedMemo,
-                memos: taggedMemo.memos.map((memo) =>
-                  memo.id === newMemo.id ? newMemo : memo
-                ),
-              }
-            : taggedMemo
-        )
+        prev.map((taggedMemo) => {
+          if (taggedMemo.tag.id !== tag.id) {
+            return taggedMemo;
+          }
+          return {
+            ...taggedMemo,
+            memos: taggedMemo.memos.map((memo) =>
+              memo.id === newMemo.id ? newMemo : memo
+            ),
+          };
+        })
       ),
     [tags]
   );
@@ -87,14 +88,16 @@ const useSelectedTagMemosManager = (
   const deleteMemoFromMemoSectionListByTag = useCallback(
     (tag: Tag, memoId: string) =>
       updateMemoState((prev) =>
-        prev.map((taggedMemo) =>
-          taggedMemo.tag.id === tag.id
-            ? {
-                ...taggedMemo,
-                memos: taggedMemo.memos.filter((memo) => memo.id !== memoId),
-              }
-            : taggedMemo
-        )
+        prev.map((taggedMemo) => {
+          if (taggedMemo.tag.id !== tag.id) {
+            return taggedMemo;
+          }
+
+          return {
+            ...taggedMemo,
+            memos: taggedMemo.memos.filter((memo) => memo.id !== memoId),
+          };
+        })
       ),
     [tags]
   );
@@ -102,18 +105,20 @@ const useSelectedTagMemosManager = (
   const revertMemoFromMemoSectionListByTag = useCallback(
     (tag: Tag, index: number, memo: Memo) =>
       updateMemoState((prev) =>
-        prev.map((taggedMemo) =>
-          taggedMemo.tag.id === tag.id
-            ? {
-                ...taggedMemo,
-                memos: [
-                  ...taggedMemo.memos.slice(0, index),
-                  memo,
-                  ...taggedMemo.memos.slice(index),
-                ],
-              }
-            : taggedMemo
-        )
+        prev.map((taggedMemo) => {
+          if (taggedMemo.tag.id !== tag.id) {
+            return taggedMemo;
+          }
+
+          return {
+            ...taggedMemo,
+            memos: [
+              ...taggedMemo.memos.slice(0, index),
+              memo,
+              ...taggedMemo.memos.slice(index),
+            ],
+          };
+        })
       ),
     [tags]
   );
