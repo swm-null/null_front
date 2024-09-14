@@ -35,7 +35,6 @@ const MobileHome = ({
         style={{ position: 'absolute', right: 0, top: 0, bottom: 0, left: 0 }}
       >
         {children}
-        {/* 불투명한 배경을 클릭했을 때 메뉴바 닫기 */}
         <motion.div
           className="absolute top-0 left-0 w-full h-full"
           onClick={() => onOpenButtonClick(false)}
