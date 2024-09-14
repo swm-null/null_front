@@ -4,21 +4,25 @@ import { usePressEnterFetch } from './hook';
 import { SearchIcon } from 'assets/icons';
 import { cameraUrl, mikeUrl } from 'assets/images';
 
-interface MemoTextAreaWithAIButtonProps {
+interface MemoTextAreaWithMikeAndCameraButtonProps {
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onButtonClick: () => void;
+  onSubmit: () => void;
+  onMikeButtonClick: () => void;
+  onCameraButtonClick: () => void;
 }
 
-const MemoTextAreaWithAIButton = ({
+const MemoTextAreaWithMikeAndCameraButton = ({
   value,
   placeholder,
   onChange,
-  onButtonClick,
-}: MemoTextAreaWithAIButtonProps) => {
+  onSubmit,
+  onMikeButtonClick,
+  onCameraButtonClick,
+}: MemoTextAreaWithMikeAndCameraButtonProps) => {
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleSubmit: onButtonClick,
+    handleSubmit: onSubmit,
   });
 
   return (
@@ -34,10 +38,18 @@ const MemoTextAreaWithAIButton = ({
         className="flex-1 flex-shrink-0 focus:outline-none resize-none mr-4 ml-2"
       />
 
-      <img src={mikeUrl} className="w-6 h-6 mr-1" />
-      <img src={cameraUrl} className="w-6 h-6" />
+      <img
+        src={mikeUrl}
+        className="w-6 h-6 mr-1 cursor-pointer"
+        onClick={onMikeButtonClick}
+      />
+      <img
+        src={cameraUrl}
+        className="w-6 h-6 cursor-pointer"
+        onClick={onCameraButtonClick}
+      />
     </div>
   );
 };
 
-export default MemoTextAreaWithAIButton;
+export default MemoTextAreaWithMikeAndCameraButton;
