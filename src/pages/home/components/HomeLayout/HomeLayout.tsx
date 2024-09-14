@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { useSideBarOpenCloseButtonAnimation } from 'pages/home/sidebar';
 import { DesktopHome, MobileHome } from './devices';
-import { PageContents } from './PageContents';
+import { PageRouter } from './PageRouter';
+import { useNavigate } from 'react-router-dom';
 
 const MOBILE_DEVICE_WIDTH = 770;
 const HomeLayout = () => {
@@ -11,7 +12,11 @@ const HomeLayout = () => {
   );
   const [isOpen, setIsOpen] = useState(true);
   const scope = useSideBarOpenCloseButtonAnimation(isOpen);
-  const [currentPage, setCurrentPage] = useState<string>('main');
+  const navigate = useNavigate();
+
+  const handleNavigation = (page: string) => {
+    navigate(`/${page}`);
+  };
 
   useEffect(() => {
     const resize$ = fromEvent(window, 'resize').pipe(
@@ -38,13 +43,12 @@ const HomeLayout = () => {
       isOpen={isOpen}
       onOpenButtonClick={setIsOpen}
       scope={scope}
-      setCurrentPage={setCurrentPage}
+      setCurrentPage={handleNavigation}
     >
-      <PageContents
+      <PageRouter
         isOpen={isOpen}
         useHeaderAnimation={false}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        setCurrentPage={handleNavigation}
       />
     </MobileHome>
   ) : (
@@ -52,13 +56,12 @@ const HomeLayout = () => {
       isOpen={isOpen}
       onOpenButtonClick={setIsOpen}
       scope={scope}
-      setCurrentPage={setCurrentPage}
+      setCurrentPage={handleNavigation}
     >
-      <PageContents
+      <PageRouter
         isOpen={isOpen}
         useHeaderAnimation={true}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        setCurrentPage={handleNavigation}
       />
     </DesktopHome>
   );
