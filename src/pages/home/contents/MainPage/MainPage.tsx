@@ -55,7 +55,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         <Component.MemoTextAreaWithMicAndCameraButton
           value={message}
           onChange={handleMessageChange}
-          placeholder={t('pages.add.inputPlaceholder')}
+          placeholder={t('pages.create.inputPlaceholder')}
           onSubmit={() => handleSubmit(message)}
           onMicButtonClick={handleMicButtonClick}
           onCameraButtonClick={handleCameraButtonClick}
