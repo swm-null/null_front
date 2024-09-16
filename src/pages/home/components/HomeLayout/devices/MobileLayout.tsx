@@ -3,7 +3,7 @@ import { AnimationScope, motion } from 'framer-motion';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import { SideBar, SideBarOpenCloseButton } from 'pages/home/sidebar';
 
-interface MobileHomeProps {
+interface MobileLayoutProps {
   isOpen: boolean;
   onOpenButtonClick: (toggle: boolean) => void;
   setCurrentPage: (page: string) => void;
@@ -11,13 +11,13 @@ interface MobileHomeProps {
   scope: AnimationScope<any>;
 }
 
-const MobileHome = ({
+const MobileLayout = ({
   isOpen,
   onOpenButtonClick,
   setCurrentPage,
   children,
   scope,
-}: MobileHomeProps) => {
+}: MobileLayoutProps) => {
   return (
     <div ref={scope} className="flex w-full h-full">
       <SideBarOpenCloseButton handleClick={() => onOpenButtonClick(!isOpen)} />
@@ -53,4 +53,4 @@ const MobileHome = ({
   );
 };
 
-export default MobileHome;
+export default MobileLayout;

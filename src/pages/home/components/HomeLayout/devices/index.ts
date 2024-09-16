@@ -1,2 +1,2 @@
-export { default as DesktopHome } from './DesktopHome';
-export { default as MobileHome } from './MobileHome';
+export { default as DesktopLayout } from './DesktopLayout';
+export { default as MobileLayout } from './MobileLayout';

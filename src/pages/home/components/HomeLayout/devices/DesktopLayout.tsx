@@ -3,7 +3,7 @@ import { AnimationScope, motion } from 'framer-motion';
 import { SideBar, SideBarOpenCloseButton } from 'pages/home/sidebar';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 
-interface DesktopHomeProps {
+interface DesktopLayoutProps {
   isOpen: boolean;
   onOpenButtonClick: (toggle: boolean) => void;
   setCurrentPage: (page: string) => void;
@@ -11,13 +11,13 @@ interface DesktopHomeProps {
   scope: AnimationScope<any>;
 }
 
-const DesktopHome = ({
+const DesktopLayout = ({
   isOpen,
   onOpenButtonClick,
   setCurrentPage,
   children,
   scope,
-}: DesktopHomeProps) => {
+}: DesktopLayoutProps) => {
   return (
     <div ref={scope} className="flex w-full h-full">
       <SideBarOpenCloseButton handleClick={() => onOpenButtonClick(!isOpen)} />
@@ -37,4 +37,4 @@ const DesktopHome = ({
   );
 };
 
-export default DesktopHome;
+export default DesktopLayout;

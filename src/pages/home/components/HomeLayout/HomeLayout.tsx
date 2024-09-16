@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { useSideBarOpenCloseButtonAnimation } from 'pages/home/sidebar';
-import { DesktopHome, MobileHome } from './devices';
+import { DesktopLayout, MobileLayout } from './devices';
 import { PageRouter } from './PageRouter';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const HomeLayout = () => {
   }, []);
 
   return isSmallScreen ? (
-    <MobileHome
+    <MobileLayout
       isOpen={isOpen}
       onOpenButtonClick={setIsOpen}
       scope={scope}
@@ -50,9 +50,9 @@ const HomeLayout = () => {
         useHeaderAnimation={false}
         setCurrentPage={handleNavigation}
       />
-    </MobileHome>
+    </MobileLayout>
   ) : (
-    <DesktopHome
+    <DesktopLayout
       isOpen={isOpen}
       onOpenButtonClick={setIsOpen}
       scope={scope}
@@ -63,7 +63,7 @@ const HomeLayout = () => {
         useHeaderAnimation={true}
         setCurrentPage={handleNavigation}
       />
-    </DesktopHome>
+    </DesktopLayout>
   );
 };
 
