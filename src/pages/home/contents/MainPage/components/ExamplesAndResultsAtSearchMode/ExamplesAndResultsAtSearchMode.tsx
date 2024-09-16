@@ -2,7 +2,7 @@ import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
 import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
 
-interface SearchMemoContentProps {
+interface ExamplesAndResultsAtSearchModeProps {
   status: string;
   searchAnswer?: MemoSearchConversation;
   navigateToHistory: () => void;
@@ -10,13 +10,13 @@ interface SearchMemoContentProps {
   handleButtonClick: (message: string) => void;
 }
 
-const SearchMemoContent = ({
+const ExamplesAndResultsAtSearchMode = ({
   status,
   searchAnswer,
   navigateToHistory,
   buttonData,
   handleButtonClick,
-}: SearchMemoContentProps) => {
+}: ExamplesAndResultsAtSearchModeProps) => {
   if (status === 'default') {
     return (
       <ExampleContents
@@ -36,4 +36,4 @@ const SearchMemoContent = ({
   return null;
 };
 
-export default SearchMemoContent;
+export default ExamplesAndResultsAtSearchMode;

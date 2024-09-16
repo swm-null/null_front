@@ -61,7 +61,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
           onCameraButtonClick={handleCameraButtonClick}
         />
         {isSearchMode() && (
-          <Component.SearchMemoContents
+          <Component.ExamplesAndResultsAtSearchMode
             status={createSearchNoteManager.status}
             searchAnswer={createSearchNoteManager.searchAnswer}
             navigateToHistory={navigateToHistory}
@@ -69,7 +69,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
             handleButtonClick={handleSubmit}
           />
         )}
-        {isCreateMode() && <Component.CreateMemoContents memos={memos} />}
+        {isCreateMode() && <Component.CreatedMemoList memos={memos} />}
       </div>
     </div>
   );

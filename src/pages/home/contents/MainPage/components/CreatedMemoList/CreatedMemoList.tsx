@@ -1,7 +1,7 @@
 import { Memo } from 'pages/home/contents/_interfaces';
 import { CreateMemoCard } from './CreateMemoCard';
 
-const CreateMemoResult = ({
+const CreatedMemoList = ({
   memos,
   softDeleteMemo,
   softRevertMemo,
@@ -24,4 +24,4 @@ const CreateMemoResult = ({
   );
 };
 
-export default CreateMemoResult;
+export default CreatedMemoList;
