@@ -32,7 +32,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     }
   };
 
-  const handleMikeButtonClick = () => {
+  const handleMicButtonClick = () => {
     // TODO: 음성 인식 기능이 추가되면 코드 작성하기
   };
 
@@ -52,12 +52,12 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     <div className="py-16 px-4 flex h-full justify-center">
       <div className="max-w-[700px] flex flex-col flex-1 overflow-hidden text-gray2">
         <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
-        <Component.MemoTextAreaWithMikeAndCameraButton
+        <Component.MemoTextAreaWithMicAndCameraButton
           value={message}
           onChange={handleMessageChange}
           placeholder={t('pages.add.inputPlaceholder')}
           onSubmit={() => handleSubmit(message)}
-          onMikeButtonClick={handleMikeButtonClick}
+          onMicButtonClick={handleMicButtonClick}
           onCameraButtonClick={handleCameraButtonClick}
         />
         {isSearchMode() && (

@@ -2,25 +2,25 @@ import { ChangeEvent } from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { usePressEnterFetch } from './hook';
 import { SearchIcon } from 'assets/icons';
-import { cameraUrl, mikeUrl } from 'assets/images';
+import { cameraUrl, micUrl } from 'assets/images';
 
-interface MemoTextAreaWithMikeAndCameraButtonProps {
+interface MemoTextAreaWithMicAndCameraButtonProps {
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
-  onMikeButtonClick: () => void;
+  onMicButtonClick: () => void;
   onCameraButtonClick: () => void;
 }
 
-const MemoTextAreaWithMikeAndCameraButton = ({
+const MemoTextAreaWithMicAndCameraButton = ({
   value,
   placeholder,
   onChange,
   onSubmit,
-  onMikeButtonClick,
+  onMicButtonClick,
   onCameraButtonClick,
-}: MemoTextAreaWithMikeAndCameraButtonProps) => {
+}: MemoTextAreaWithMicAndCameraButtonProps) => {
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleSubmit: onSubmit,
   });
@@ -39,9 +39,9 @@ const MemoTextAreaWithMikeAndCameraButton = ({
       />
 
       <img
-        src={mikeUrl}
+        src={micUrl}
         className="w-6 h-6 mr-1 cursor-pointer"
-        onClick={onMikeButtonClick}
+        onClick={onMicButtonClick}
       />
       <img
         src={cameraUrl}
@@ -52,4 +52,4 @@ const MemoTextAreaWithMikeAndCameraButton = ({
   );
 };
 
-export default MemoTextAreaWithMikeAndCameraButton;
+export default MemoTextAreaWithMicAndCameraButton;
