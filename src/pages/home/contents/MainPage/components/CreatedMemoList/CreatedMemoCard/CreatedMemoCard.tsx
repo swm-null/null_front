@@ -6,7 +6,7 @@ import { Memo } from 'pages/home/contents/_interfaces';
 import { BookIcon, DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 
-const CreateMemoCard = ({
+const CreatedMemoCard = ({
   memo,
   softDeleteMemo,
   softRevertMemo,
@@ -59,4 +59,4 @@ const CreateMemoCard = ({
   );
 };
 
-export default CreateMemoCard;
+export default CreatedMemoCard;
