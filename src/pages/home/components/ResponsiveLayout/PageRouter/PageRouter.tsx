@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import * as Page from 'pages/home/contents';
 
 const PageRouter = ({
@@ -35,6 +35,7 @@ const PageRouter = ({
         path="/uploadData"
         element={<Page.UploadDataPage {...commonProps} />}
       />
+      <Route path="*" element={<Navigate to="/main" />} />
     </Routes>
   );
 };
