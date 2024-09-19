@@ -1,4 +1,4 @@
 export * from './MemoTextAreaWithMicAndCameraButton';
 export * from './ModeToggle';
-export * from './ExamplesAndResultsAtSearchMode';
+export * from './ExamplesOrResultsAtSearchMode';
 export * from './CreatedMemoList';
