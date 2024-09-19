@@ -1,1 +1,1 @@
-export * from './HomeLayout';
+export * from './ResponsiveLayout';

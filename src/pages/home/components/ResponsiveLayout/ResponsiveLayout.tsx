@@ -6,7 +6,7 @@ import { PageRouter } from './PageRouter';
 import { useNavigate } from 'react-router-dom';
 
 const MOBILE_DEVICE_WIDTH = 770;
-const HomeLayout = () => {
+const ResponsiveLayout = () => {
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(
     window.innerWidth <= MOBILE_DEVICE_WIDTH
   );
@@ -67,4 +67,4 @@ const HomeLayout = () => {
   );
 };
 
-export default HomeLayout;
+export default ResponsiveLayout;

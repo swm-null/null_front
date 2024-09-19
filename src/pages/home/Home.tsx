@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { HomeLayout } from './components';
+import { ResponsiveLayout } from './components';
 
 const queryClient = new QueryClient();
 
 const Home = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <HomeLayout />
+      <ResponsiveLayout />
       <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>
   );
