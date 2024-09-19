@@ -1,9 +1,12 @@
-import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
+import {
+  MemoSearchConversation,
+  Status,
+} from 'pages/home/contents/_interfaces';
 import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
 
 interface ExamplesAndResultsAtSearchModeProps {
-  status: string;
+  status: Status;
   searchAnswer?: MemoSearchConversation;
   navigateToHistory: () => void;
   buttonData: string[];
