@@ -5,7 +5,7 @@ import {
 import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
 
-interface ExamplesAndResultsAtSearchModeProps {
+interface ExamplesOrResultsAtSearchModeProps {
   status: Status;
   searchAnswer?: MemoSearchConversation;
   navigateToHistory: () => void;
@@ -13,13 +13,13 @@ interface ExamplesAndResultsAtSearchModeProps {
   handleButtonClick: (message: string) => void;
 }
 
-const ExamplesAndResultsAtSearchMode = ({
+const ExamplesOrResultsAtSearchMode = ({
   status,
   searchAnswer,
   navigateToHistory,
   buttonData,
   handleButtonClick,
-}: ExamplesAndResultsAtSearchModeProps) => {
+}: ExamplesOrResultsAtSearchModeProps) => {
   if (status === 'default') {
     return (
       <ExampleContents
@@ -39,4 +39,4 @@ const ExamplesAndResultsAtSearchMode = ({
   return null;
 };
 
-export default ExamplesAndResultsAtSearchMode;
+export default ExamplesOrResultsAtSearchMode;

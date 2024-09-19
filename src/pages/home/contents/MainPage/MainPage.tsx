@@ -61,7 +61,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
           onCameraButtonClick={handleCameraButtonClick}
         />
         {isSearchMode() && (
-          <Component.ExamplesAndResultsAtSearchMode
+          <Component.ExamplesOrResultsAtSearchMode
             status={createSearchNoteManager.status}
             searchAnswer={createSearchNoteManager.searchAnswer}
             navigateToHistory={navigateToHistory}
