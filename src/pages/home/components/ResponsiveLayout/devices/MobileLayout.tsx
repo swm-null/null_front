@@ -3,7 +3,7 @@ import { AnimationScope, motion } from 'framer-motion';
 import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import { SideBar, SideBarOpenCloseButton } from 'pages/home/sidebar';
 
-interface MobileHomeProps {
+interface MobileLayoutProps {
   isOpen: boolean;
   onOpenButtonClick: (toggle: boolean) => void;
   setCurrentPage: (page: string) => void;
@@ -11,13 +11,13 @@ interface MobileHomeProps {
   scope: AnimationScope<any>;
 }
 
-const MobileHome = ({
+const MobileLayout = ({
   isOpen,
   onOpenButtonClick,
   setCurrentPage,
   children,
   scope,
-}: MobileHomeProps) => {
+}: MobileLayoutProps) => {
   return (
     <div ref={scope} className="flex w-full h-full">
       <SideBarOpenCloseButton handleClick={() => onOpenButtonClick(!isOpen)} />
@@ -35,7 +35,6 @@ const MobileHome = ({
         style={{ position: 'absolute', right: 0, top: 0, bottom: 0, left: 0 }}
       >
         {children}
-        {/* 불투명한 배경을 클릭했을 때 메뉴바 닫기 */}
         <motion.div
           className="absolute top-0 left-0 w-full h-full"
           onClick={() => onOpenButtonClick(false)}
@@ -54,4 +53,4 @@ const MobileHome = ({
   );
 };
 
-export default MobileHome;
+export default MobileLayout;

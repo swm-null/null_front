@@ -9,7 +9,6 @@ interface SideBarProps {
 const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
   return (
     <div className={`h-screen bg-gray-100 flex flex-col`}>
-      {/* TODO: tailwind에서 동적 데이터 지원하는지 확인 */}
       <div
         className={`p-4 flex flex-col flex-1`}
         style={{ width: sideBarWidth }}
@@ -18,7 +17,7 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           <div className="flex justify-center">
             <button
               className="my-4 flex py-2 px-6 text-white bg-gray-500 rounded-full"
-              onClick={() => setCurrentPage('main')}
+              onClick={() => setCurrentPage('')}
             >
               Oat Note
             </button>
@@ -26,7 +25,7 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           <SideBarButton
             icon={<HistoryIcon className="w-5 h-5 self-center mr-2" />}
             label="History"
-            onClick={() => setCurrentPage('searchHistory')}
+            onClick={() => setCurrentPage('history')}
           />
           <SideBarButton
             icon={
