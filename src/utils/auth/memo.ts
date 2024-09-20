@@ -160,10 +160,10 @@ export const getAllMemos = async (): Promise<
   }
 };
 
-export const getSelectedTagMemos = async (
+export const getMemosByTag = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
-  const method = 'getSelectedTagMemos';
+  const method = 'getMemosBySelectedTags';
   const endpoint = `${LOCALHOST}/memos/tags/${tagId}`;
 
   try {
