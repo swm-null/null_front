@@ -18,7 +18,7 @@ const PageRouter = ({
   return (
     <Routes>
       <Route
-        path="/main"
+        path="/"
         element={
           <Page.MainPage navigateToHistory={() => setCurrentPage('/history')} />
         }
@@ -35,7 +35,7 @@ const PageRouter = ({
         path="/uploadData"
         element={<Page.UploadDataPage {...commonProps} />}
       />
-      <Route path="*" element={<Navigate to="/main" />} />
+      <Route path="/*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

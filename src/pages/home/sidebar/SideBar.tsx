@@ -17,7 +17,7 @@ const SideBar = ({ setCurrentPage, sideBarWidth = 250 }: SideBarProps) => {
           <div className="flex justify-center">
             <button
               className="my-4 flex py-2 px-6 text-white bg-gray-500 rounded-full"
-              onClick={() => setCurrentPage('main')}
+              onClick={() => setCurrentPage('')}
             >
               Oat Note
             </button>
