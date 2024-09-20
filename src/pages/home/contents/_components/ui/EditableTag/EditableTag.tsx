@@ -1,3 +1,4 @@
+import { CloseIcon } from 'assets/icons';
 import { FormEvent, useRef } from 'react';
 
 interface EditableTagProps {
@@ -49,11 +50,11 @@ const EditableTag = ({
 
   return (
     <div
-      className={`inline-flex flex-shrink-0 self-start items-center px-2 py-1 ${color ? `bg-[${color}]` : 'bg-gray1'} rounded-xl ${onClick && 'cursor-pointer'}`}
+      className={`inline-flex flex-shrink-0 self-start items-center px-3 py-1 ${color ? `bg-[${color}]` : 'bg-[#F7DBC2]'} rounded-2xl ${onClick && 'cursor-pointer'}`}
       onClick={onClick}
     >
       <span
-        className="focus:outline-none break-words"
+        className="focus:outline-none break-words text-[#6A5344]"
         contentEditable={editable}
         ref={ref}
         suppressContentEditableWarning
@@ -61,23 +62,7 @@ const EditableTag = ({
       >
         {text}
       </span>
-      {editable && onDelete && (
-        <svg
-          className="ml-1 w-4 h-4 cursor-pointer"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          onClick={onDelete}
-        >
-          <path
-            d="M5 5L19 19M5 19L19 5"
-            stroke="#828282"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-        </svg>
-      )}
+      {editable && onDelete && <CloseIcon onClick={onDelete} />}
     </div>
   );
 };

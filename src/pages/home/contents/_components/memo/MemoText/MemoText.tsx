@@ -18,7 +18,7 @@ const MemoText = ({
 
   return (
     <TextareaAutosize
-      className="p-2 mb-1 w-full bg-transparent focus:outline-none resize-none rounded-xl"
+      className="w-full bg-transparent focus:outline-none resize-none text-[#111111]"
       value={message}
       onChange={handleChange}
       onBlur={handleBlur}
