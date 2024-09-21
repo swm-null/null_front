@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 import { BottomNavBar } from './BottomNavBar';
 
-interface MobileHomeProps {
+interface MobileLayoutProps {
   setCurrentPage: (page: string) => void;
   children: ReactNode;
 }
 
-const MobileHome = ({ setCurrentPage, children }: MobileHomeProps) => {
+const MobileLayout = ({ setCurrentPage, children }: MobileLayoutProps) => {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex-grow overflow-y-auto">{children}</div>
@@ -15,4 +15,4 @@ const MobileHome = ({ setCurrentPage, children }: MobileHomeProps) => {
   );
 };
 
-export default MobileHome;
+export default MobileLayout;

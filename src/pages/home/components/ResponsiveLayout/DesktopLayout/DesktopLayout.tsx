@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 import { LeftSideBar } from './LeftSideBar';
 
-interface DesktopHomeProps {
+interface DesktopLayoutProps {
   setCurrentPage: (page: string) => void;
   children: ReactNode;
 }
 
-const DesktopHome = ({ setCurrentPage, children }: DesktopHomeProps) => {
+const DesktopLayout = ({ setCurrentPage, children }: DesktopLayoutProps) => {
   return (
     <div className="flex w-full h-full">
       <div
@@ -25,4 +25,4 @@ const DesktopHome = ({ setCurrentPage, children }: DesktopHomeProps) => {
   );
 };
 
-export default DesktopHome;
+export default DesktopLayout;

@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { useNavigate } from 'react-router-dom';
 import { PageRouter } from './PageRouter';
-import { MobileHome } from './MobileHome';
-import { DesktopHome } from './DesktopHome';
+import { MobileLayout } from './MobileLayout';
+import { DesktopLayout } from './DesktopLayout';
 
 const MOBILE_DEVICE_WIDTH = 770;
 const ResponsiveLayout = () => {
@@ -38,21 +38,21 @@ const ResponsiveLayout = () => {
   }, []);
 
   return isSmallScreen ? (
-    <MobileHome setCurrentPage={handleNavigation}>
+    <MobileLayout setCurrentPage={handleNavigation}>
       <PageRouter
         isOpen={isOpen}
         useHeaderAnimation={false}
         setCurrentPage={handleNavigation}
       />
-    </MobileHome>
+    </MobileLayout>
   ) : (
-    <DesktopHome setCurrentPage={handleNavigation}>
+    <DesktopLayout setCurrentPage={handleNavigation}>
       <PageRouter
         isOpen={isOpen}
         useHeaderAnimation={true}
         setCurrentPage={handleNavigation}
       />
-    </DesktopHome>
+    </DesktopLayout>
   );
 };
 
