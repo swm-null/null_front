@@ -1,31 +1,34 @@
 import * as Icon from 'assets/icons';
+import { useTranslation } from 'react-i18next';
 
 interface BottomNavBarProps {
   setCurrentPage: (page: string) => void;
 }
 
 const BottomNavBar = ({ setCurrentPage }: BottomNavBarProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="fixed w-full bottom-0">
       <div className="flex rounded-full shadow-lg mb-6 mx-4 px-4 bg-[#F5ECE0] border-[1px] border-[#E2BCA6] justify-between items-center">
         <BottomNavButton
           icon={<Icon.HomeIcon />}
-          label="메인"
+          label={t('pages.sidebar.main')}
           onClick={() => setCurrentPage('main')}
         />
         <BottomNavButton
           icon={<Icon.DashboardIcon />}
-          label="대시보드"
+          label={t('pages.sidebar.dashboard')}
           onClick={() => setCurrentPage('dashboard')}
         />
         <BottomNavButton
           icon={<Icon.HistoryIcon />}
-          label="기록"
+          label={t('pages.sidebar.searchHistory')}
           onClick={() => setCurrentPage('searchHistory')}
         />
         <BottomNavButton
           icon={<Icon.ExportIcon />}
-          label="불러오기"
+          label={t('pages.sidebar.uploadData')}
           onClick={() => setCurrentPage('uploadData')}
         />
       </div>

@@ -1,33 +1,36 @@
 import { useState } from 'react';
 import * as Icon from 'assets/icons';
+import { useTranslation } from 'react-i18next';
 
 interface LeftSideBarProps {
   setCurrentPage: (page: string) => void;
 }
 
 const LeftSideBar = ({ setCurrentPage }: LeftSideBarProps) => {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`p-4 h-full flex flex-col flex-1 items-start justify-center gap-[14px]`}
     >
       <SidebarTooltipButton
         icon={<Icon.HomeIcon />}
-        label="메인"
+        label={t('pages.sidebar.main')}
         onClick={() => setCurrentPage('main')}
       />
       <SidebarTooltipButton
         icon={<Icon.HistoryIcon />}
-        label="기록"
+        label={t('pages.sidebar.dashboard')}
         onClick={() => setCurrentPage('searchHistory')}
       />
       <SidebarTooltipButton
         icon={<Icon.DashboardIcon />}
-        label="대시보드"
+        label={t('pages.sidebar.searchHistory')}
         onClick={() => setCurrentPage('dashboard')}
       />
       <SidebarTooltipButton
         icon={<Icon.ExportIcon />}
-        label="불러오기"
+        label={t('pages.sidebar.uploadData')}
         onClick={() => setCurrentPage('uploadData')}
       />
     </div>
