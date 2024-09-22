@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
-import { useSideBarOpenCloseButtonAnimation } from 'pages/home/sidebar';
-import { DesktopLayout, MobileLayout } from './devices';
-import { PageRouter } from './PageRouter';
 import { useNavigate } from 'react-router-dom';
+import { PageRouter } from './PageRouter';
+import { MobileLayout } from './MobileLayout';
+import { DesktopLayout } from './DesktopLayout';
 
 const MOBILE_DEVICE_WIDTH = 770;
 const ResponsiveLayout = () => {
@@ -11,7 +11,6 @@ const ResponsiveLayout = () => {
     window.innerWidth <= MOBILE_DEVICE_WIDTH
   );
   const [isOpen, setIsOpen] = useState(true);
-  const scope = useSideBarOpenCloseButtonAnimation(isOpen);
   const navigate = useNavigate();
 
   const handleNavigation = (page: string) => {
@@ -39,12 +38,7 @@ const ResponsiveLayout = () => {
   }, []);
 
   return isSmallScreen ? (
-    <MobileLayout
-      isOpen={isOpen}
-      onOpenButtonClick={setIsOpen}
-      scope={scope}
-      setCurrentPage={handleNavigation}
-    >
+    <MobileLayout setCurrentPage={handleNavigation}>
       <PageRouter
         isOpen={isOpen}
         useHeaderAnimation={false}
@@ -52,12 +46,7 @@ const ResponsiveLayout = () => {
       />
     </MobileLayout>
   ) : (
-    <DesktopLayout
-      isOpen={isOpen}
-      onOpenButtonClick={setIsOpen}
-      scope={scope}
-      setCurrentPage={handleNavigation}
-    >
+    <DesktopLayout setCurrentPage={handleNavigation}>
       <PageRouter
         isOpen={isOpen}
         useHeaderAnimation={true}

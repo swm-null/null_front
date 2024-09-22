@@ -1,10 +1,6 @@
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 68 68" preserveAspectRatio="xMidYMid meet">
-
-    <g transform="translate(0,68) scale(0.1,-0.1)" fill="currentColor" stroke="none">
-    <path d="M15 657 c-3 -7 -4 -87 -3 -177 l3 -165 145 0 145 0 0 175 0 175 -143 3 c-110 2 -144 0 -147 -11z m235 -167 l0 -120 -90 0 -90 0 0 120 0 120 90 0 90 0 0 -120z"/>
-    <path d="M374 657 c-2 -7 -3 -60 -2 -118 l3 -104 145 0 145 0 0 115 0 115 -143 3 c-112 2 -144 0 -148 -11z m236 -107 l0 -60 -90 0 -90 0 0 60 0 60 90 0 90 0 0 -60z"/>
-    <path d="M375 357 c-3 -7 -4 -87 -3 -177 l3 -165 145 0 145 0 0 175 0 175 -143 3 c-110 2 -144 0 -147 -11z m235 -167 l0 -120 -90 0 -90 0 0 120 0 120 90 0 90 0 0 -120z"/>
-    <path d="M14 237 c-2 -7 -3 -60 -2 -118 l3 -104 145 0 145 0 0 115 0 115 -143 3 c-112 2 -144 0 -148 -11z m236 -107 l0 -60 -90 0 -90 0 0 60 0 60 90 0 90 0 0 -60z"/>
-    </g>
-    </svg>
-    
+<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M1 2.5C1 1.67157 1.67157 1 2.5 1H6.5C7.32843 1 8 1.67157 8 2.5V5.5C8 6.32843 7.32843 7 6.5 7H2.5C1.67157 7 1 6.32843 1 5.5V2.5Z" stroke="#6A5344" stroke-width="1.8" stroke-linejoin="round"/>
+<rect x="11.5" y="13.5" width="7" height="6" rx="1.5" stroke="#6A5344" stroke-width="1.8" stroke-linejoin="round"/>
+<rect x="1" y="10.5" width="7" height="9" rx="1.5" stroke="#6A5344" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M11.5 2.5C11.5 1.67157 12.1716 1 13 1H17C17.8284 1 18.5 1.67157 18.5 2.5V8.5C18.5 9.32843 17.8284 10 17 10H13C12.1716 10 11.5 9.32843 11.5 8.5V2.5Z" stroke="#6A5344" stroke-width="1.8" stroke-linejoin="round"/>
+</svg>
