@@ -49,7 +49,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   ];
 
   return (
-    <div className="py-16 px-4 flex h-full justify-center">
+    <div className="bg-custom-gradient-basic py-16 px-4 flex h-full justify-center">
       <div className="max-w-[700px] flex flex-col flex-1 overflow-hidden text-gray2">
         <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
         <Component.MemoTextAreaWithMicAndCameraButton

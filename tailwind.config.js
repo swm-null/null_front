@@ -40,6 +40,10 @@ export default {
         '9/10': '90%',
         full: '100%',
       },
+      backgroundImage: {
+        'custom-gradient-basic':
+          'linear-gradient(270deg, #FFF3C7 0%, #FFDBB1 49%, #F7CABB 100%)',
+      },
     },
   },
   plugins: [],
