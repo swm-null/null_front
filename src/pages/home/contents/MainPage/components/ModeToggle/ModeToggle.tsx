@@ -14,12 +14,12 @@ const ModeToggle = ({ mode, onModeChange }: ModeToggleProps) => {
       <ModeToggleButton
         selected={mode === 'search'}
         onModeChange={() => onModeChange('search')}
-        text={t('pages.main.search')}
+        text={t('pages.main.mode.search')}
       />
       <ModeToggleButton
         selected={mode === 'create'}
         onModeChange={() => onModeChange('create')}
-        text={t('pages.main.create')}
+        text={t('pages.main.mode.create')}
       />
     </div>
   );
