@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Component from './components';
 import { Mode } from 'pages/home/contents/_interfaces';
@@ -18,7 +18,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     setMessage(e.target.value);
   };
 
-  const handleModeChange = (_: MouseEvent<HTMLElement>, newMode: Mode) => {
+  const handleModeChange = (newMode: Mode) => {
     if (newMode !== null) {
       setMode(newMode);
     }
