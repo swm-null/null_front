@@ -9,7 +9,7 @@ interface ExamplesOrResultsAtSearchModeProps {
   status: Status;
   searchAnswer?: MemoSearchConversation;
   navigateToHistory: () => void;
-  buttonData: string[];
+  buttonData: [string, string, string, string];
   handleButtonClick: (message: string) => void;
 }
 

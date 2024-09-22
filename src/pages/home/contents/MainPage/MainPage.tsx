@@ -41,7 +41,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   };
 
   // TODO: 나중에는 서버에서 요청해서 가져올 예정
-  const buttonData = [
+  const buttonData: [string, string, string, string] = [
     '라면 레시피 메모 보여줘',
     '민지 전화번호 알려줘',
     '맛집 내가 저번에 적은 거 뭐더라',

@@ -1,17 +1,21 @@
+import { ElementType } from 'react';
+
 const ExampleBox = ({
   text,
+  icon: Icon,
   onClick,
 }: {
   text: string;
+  icon: ElementType;
   onClick: () => void;
 }) => {
   return (
     <div
-      className="flex items-center justify-center px-4 py-2 bg-white rounded-lg shadow-md border border-gray-200 min-h-24 cursor-pointer"
+      className="flex flex-col items-start px-5 py-6 bg-[#FFF6E3CC] rounded-lg shadow-md border border-gray-200 min-h-24 cursor-pointer"
       onClick={onClick}
-      style={{ width: '100%', boxSizing: 'border-box' }}
     >
-      {text}
+      <Icon className="mb-2" />
+      <p>{text}</p>
     </div>
   );
 };
