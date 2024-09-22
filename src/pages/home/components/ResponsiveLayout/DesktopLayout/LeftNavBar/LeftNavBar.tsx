@@ -2,17 +2,15 @@ import { useState } from 'react';
 import * as Icon from 'assets/icons';
 import { useTranslation } from 'react-i18next';
 
-interface LeftSideBarProps {
+interface LeftNavBarProps {
   setCurrentPage: (page: string) => void;
 }
 
-const LeftSideBar = ({ setCurrentPage }: LeftSideBarProps) => {
+const LeftNavBar = ({ setCurrentPage }: LeftNavBarProps) => {
   const { t } = useTranslation();
 
   return (
-    <div
-      className={`p-4 h-full flex flex-col flex-1 items-start justify-center gap-[14px]`}
-    >
+    <div className="p-4 h-full flex flex-col flex-1 items-start justify-center gap-[14px]">
       <SidebarTooltipButton
         icon={<Icon.HomeIcon />}
         label={t('pages.sidebar.main')}
@@ -50,7 +48,8 @@ const SidebarTooltipButton = ({
 
   return (
     <div
-      className={`transition-all duration-300 ease-in-out inline-flex items-center bg-[#F5ECE0] text-[#5D4037] shadow-lg rounded-full cursor-pointer min-w-[48px] h-[48px] px-4`}
+      className="min-w-[48px] h-[48px] px-4 bg-[#F5ECE0] text-[#5D4037] 
+        inline-flex items-center shadow-lg rounded-full cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={onClick}
@@ -61,4 +60,4 @@ const SidebarTooltipButton = ({
   );
 };
 
-export default LeftSideBar;
+export default LeftNavBar;

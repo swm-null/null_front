@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { LeftSideBar } from './LeftSideBar';
+import { LeftNavBar } from './LeftNavBar';
 
 interface DesktopLayoutProps {
   setCurrentPage: (page: string) => void;
@@ -13,7 +13,7 @@ const DesktopLayout = ({ setCurrentPage, children }: DesktopLayoutProps) => {
         className="overflow-x-hidden z-20 items-center justify-center"
         style={{ position: 'absolute', left: 0, top: 0, bottom: 0 }}
       >
-        <LeftSideBar setCurrentPage={setCurrentPage} />
+        <LeftNavBar setCurrentPage={setCurrentPage} />
       </div>
       <div
         className="flex flex-col h-screen overflow-x-hidden z-10"
