@@ -26,7 +26,7 @@ const MemoTextAreaWithMicAndCameraButton = ({
 
   return (
     <div
-      className="flex flex-shrink-0 px-4 py-3 items-center rounded-3xl overflow-hidden
+      className="flex flex-shrink-0 px-4 py-3 items-start rounded-3xl overflow-hidden
         bg-[#FFF6E3CC] border-[1px] border-[#E3BFA4] font-regular"
     >
       <SearchIcon />
