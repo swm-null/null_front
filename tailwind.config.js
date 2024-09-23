@@ -44,6 +44,9 @@ export default {
         'custom-gradient-basic':
           'linear-gradient(270deg, #FFF3C7 0%, #FFDBB1 49%, #F7CABB 100%)',
       },
+      fontWeight: {
+        regular: 400,
+      },
     },
   },
   plugins: [],

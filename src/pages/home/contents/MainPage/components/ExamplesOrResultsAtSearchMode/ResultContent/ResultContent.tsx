@@ -14,24 +14,23 @@ const ResultContent = ({
   navigateToHistory,
 }: ResultContentProps) => {
   const { t } = useTranslation();
+  if (!searchAnswer) return;
 
   return (
-    <div className="mt-6 mr-3 px-2 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem]  bg-[#FFF6E3CC] text-[#111111]">
-      {searchAnswer && (
-        <>
-          <SearchConversation
-            key={searchAnswer.id}
-            data={searchAnswer}
-            chatBotImageUrl={oatmealUrl}
-            chatBotName={t('pages.search.ai.name')}
-          />
-          <HistoryButton
-            onClick={navigateToHistory}
-            text={t('pages.main.searchHistory')}
-          />
-        </>
-      )}
-    </div>
+    <>
+      <div className="mt-5 mr-3 px-2 py-6 max-h-[70%] w-full rounded-xl border-[0.12rem] bg-[#FFF6E3CC]">
+        <SearchConversation
+          key={searchAnswer.id}
+          data={searchAnswer}
+          chatBotImageUrl={oatmealUrl}
+          chatBotName={t('pages.search.ai.name')}
+        />
+      </div>
+      <HistoryButton
+        onClick={navigateToHistory}
+        text={t('pages.main.searchHistory')}
+      />
+    </>
   );
 };
 
@@ -43,7 +42,7 @@ const HistoryButton = ({
   text: string;
 }) => (
   <div
-    className="flex gap-2 items-center justify-end cursor-pointer"
+    className="flex gap-2 mt-2 items-center justify-end cursor-pointer"
     onClick={onClick}
   >
     <HistoryIcon />

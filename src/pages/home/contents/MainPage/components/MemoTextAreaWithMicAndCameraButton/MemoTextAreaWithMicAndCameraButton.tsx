@@ -25,16 +25,20 @@ const MemoTextAreaWithMicAndCameraButton = ({
   });
 
   return (
-    <div className="flex flex-shrink-0 items-center rounded-3xl bg-[#FFF6E3CC] border-[1px] border-[#0000001A] px-4 py-3 overflow-hidden ">
+    <div
+      className="flex flex-shrink-0 px-4 py-3 items-center rounded-3xl overflow-hidden
+      bg-[#FFF6E3CC] border-[1px] border-[#0000001A] font-regular"
+    >
       <SearchIcon />
       <TextareaAutosize
+        className="flex-1 flex-shrink-0 focus:outline-none resize-none mr-4 ml-2 bg-transparent min-h-9 content-center 
+          text-[#111111] placeholder-custom"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         onKeyDown={handlePressEnterFetch}
         minRows={1}
         maxRows={20}
-        className="flex-1 flex-shrink-0 focus:outline-none resize-none mr-4 ml-2 bg-transparent min-h-9 content-center"
       />
       <MicIcon className="cursor-pointer mr-1" onClick={onMicButtonClick} />
       <CameraIcon className="cursor-pointer" onClick={onCameraButtonClick} />

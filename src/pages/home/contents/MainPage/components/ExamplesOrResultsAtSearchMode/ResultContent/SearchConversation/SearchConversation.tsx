@@ -35,7 +35,7 @@ const UserQuestionAndAIHeader = ({
   imageUrl: string;
 }) => {
   return (
-    <div className="flex items-end mt-6">
+    <div className="flex items-end">
       <div className="flex items-center">
         <BookIcon />
         <p className="ml-2 text-lg font-semibold">{name}</p>
