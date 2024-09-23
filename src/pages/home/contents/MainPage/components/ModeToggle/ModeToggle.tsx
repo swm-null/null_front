@@ -12,13 +12,13 @@ const ModeToggle = ({ mode, onModeChange }: ModeToggleProps) => {
 
   return (
     <div className="flex gap-2 mb-4">
-      <ModeToggleButton
+      <ModeButton
         selected={mode === 'create'}
         icon={<AddIcon className="ml-1 mr-2" />}
         onModeChange={() => onModeChange('create')}
         text={t('pages.main.mode.create')}
       />
-      <ModeToggleButton
+      <ModeButton
         selected={mode === 'search'}
         icon={<SearchIcon className="w-5 h-5 my-[6px] mr-1" />}
         onModeChange={() => onModeChange('search')}
@@ -28,19 +28,19 @@ const ModeToggle = ({ mode, onModeChange }: ModeToggleProps) => {
   );
 };
 
-interface ModeToggleButtonProps {
+interface ModeButtonProps {
   selected: boolean;
   icon: React.ReactNode;
   onModeChange: () => void;
   text: string;
 }
 
-const ModeToggleButton = ({
+const ModeButton = ({
   selected,
   icon,
   onModeChange,
   text,
-}: ModeToggleButtonProps) => (
+}: ModeButtonProps) => (
   <button
     onClick={onModeChange}
     className={` py-1 px-4 rounded-full inline-flex items-center border-[1px] font-bold border-[#E3BFA4] cursor-pointer 
