@@ -1,11 +1,11 @@
 import { ElementType } from 'react';
 
 const ExampleBox = ({
-  text,
+  exampleText,
   icon: Icon,
   onClick,
 }: {
-  text: string;
+  exampleText: string;
   icon: ElementType;
   onClick: () => void;
 }) => {
@@ -15,7 +15,7 @@ const ExampleBox = ({
       onClick={onClick}
     >
       <Icon className="mb-2" />
-      <p>{text}</p>
+      <p>{exampleText}</p>
     </div>
   );
 };
