@@ -20,11 +20,13 @@ const PageRouter = ({
       <Route
         path="/"
         element={
-          <Page.MainPage navigateToHistory={() => setCurrentPage('/history')} />
+          <Page.MainPage
+            navigateToHistory={() => setCurrentPage('searchHistory')}
+          />
         }
       />
       <Route
-        path="/history"
+        path="/searchHistory"
         element={<Page.SearchHistoryPage {...commonProps} />}
       />
       <Route

@@ -17,14 +17,14 @@ const LeftNavBar = ({ setCurrentPage }: LeftNavBarProps) => {
         onClick={() => setCurrentPage('main')}
       />
       <SidebarTooltipButton
-        icon={<Icon.HistoryIcon />}
+        icon={<Icon.DashboardIcon />}
         label={t('pages.sidebar.dashboard')}
-        onClick={() => setCurrentPage('searchHistory')}
+        onClick={() => setCurrentPage('dashboard')}
       />
       <SidebarTooltipButton
-        icon={<Icon.DashboardIcon />}
+        icon={<Icon.HistoryIcon />}
         label={t('pages.sidebar.searchHistory')}
-        onClick={() => setCurrentPage('dashboard')}
+        onClick={() => setCurrentPage('searchHistory')}
       />
       <SidebarTooltipButton
         icon={<Icon.ExportIcon />}
