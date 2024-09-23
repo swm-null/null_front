@@ -8,7 +8,7 @@ import { memos } from './test/dummyData';
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
-  const [mode, setMode] = useState<Mode>('search');
+  const [mode, setMode] = useState<Mode>('create');
   const isCreateMode = () => mode === 'create';
   const isSearchMode = () => mode === 'search';
 
