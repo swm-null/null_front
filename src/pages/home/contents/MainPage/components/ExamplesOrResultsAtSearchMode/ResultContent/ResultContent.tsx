@@ -1,8 +1,8 @@
-import { SearchConversation } from 'pages/home/contents/_components';
 import { oatmealUrl } from 'assets/images';
 import { HistoryIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
+import { SearchConversation } from './SearchConversation';
 
 interface ResultContentProps {
   searchAnswer?: MemoSearchConversation;
@@ -16,28 +16,39 @@ const ResultContent = ({
   const { t } = useTranslation();
 
   return (
-    <div className="mt-4 px-2 pt-3 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem] mr-3">
-      {searchAnswer ? (
+    <div className="mt-6 mr-3 px-2 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem]  bg-[#FFF6E3CC] text-[#111111]">
+      {searchAnswer && (
         <>
-          <div className="box-border h-full overflow-auto no-scrollbar">
-            <SearchConversation
-              key={searchAnswer.id}
-              data={searchAnswer}
-              chatBotImageUrl={oatmealUrl}
-              chatBotName={t('pages.search.ai.name')}
-            />
-          </div>
-          <div
-            className="flex gap-2 items-center justify-end mt-5 cursor-pointer"
+          <SearchConversation
+            key={searchAnswer.id}
+            data={searchAnswer}
+            chatBotImageUrl={oatmealUrl}
+            chatBotName={t('pages.search.ai.name')}
+          />
+          <HistoryButton
             onClick={navigateToHistory}
-          >
-            <HistoryIcon />
-            <p>{t('pages.main.history')}</p>
-          </div>
+            text={t('pages.main.searchHistory')}
+          />
         </>
-      ) : null}
+      )}
     </div>
   );
 };
+
+const HistoryButton = ({
+  onClick,
+  text,
+}: {
+  onClick: () => void;
+  text: string;
+}) => (
+  <div
+    className="flex gap-2 items-center justify-end cursor-pointer"
+    onClick={onClick}
+  >
+    <HistoryIcon />
+    <p>{text}</p>
+  </div>
+);
 
 export default ResultContent;
