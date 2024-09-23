@@ -11,7 +11,7 @@ const ExampleContent = ({
   const icons = [ExIcon1, ExIcon2, ExIcon3, ExIcon4];
 
   return (
-    <div className="flex justify-center items-center mt-4">
+    <div className="flex justify-center items-center mt-4 font-medium">
       <div
         className="grid w-full gap-4"
         style={{

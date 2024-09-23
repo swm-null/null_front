@@ -15,7 +15,7 @@ const SearchConversation = ({
   chatBotImageUrl: string;
 }) => {
   return (
-    <div key={data.id} className="px-7 h-full">
+    <div key={data.id} className="px-6 h-full">
       <UserQuestionAndAIHeader
         contentText={data.query}
         name={chatBotName}
@@ -43,7 +43,7 @@ const UserQuestionAndAIHeader = ({
       <div className="flex flex-1" />
       <div
         className="inline-block self-end bg-[#FFE5C1] rounded-xl rounded-br-none py-2 px-4 
-        overflow-hidden max-w-3/4 border-[1px] border-[#0000000D]"
+        overflow-hidden max-w-3/4 border-[1px] border-[#F2DAB7]"
       >
         <p className="inline text-right whitespace-pre-line break-words">
           {contentText}

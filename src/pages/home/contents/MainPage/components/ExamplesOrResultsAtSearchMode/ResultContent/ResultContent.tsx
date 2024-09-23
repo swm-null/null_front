@@ -18,7 +18,10 @@ const ResultContent = ({
 
   return (
     <>
-      <div className="mt-5 mr-3 px-2 py-6 max-h-[70%] w-full rounded-xl border-[0.12rem] bg-[#FFF6E3CC]">
+      <div
+        className="mt-4 mr-3 px-2 py-6 max-h-[70%] w-full rounded-xl border-[1px] 
+          border-[#E3BFA4] bg-[#FFF6E3CC] font-regular"
+      >
         <SearchConversation
           key={searchAnswer.id}
           data={searchAnswer}
@@ -46,7 +49,7 @@ const HistoryButton = ({
     onClick={onClick}
   >
     <HistoryIcon />
-    <p>{text}</p>
+    <p className="text-[#6A5344]">{text}</p>
   </div>
 );
 

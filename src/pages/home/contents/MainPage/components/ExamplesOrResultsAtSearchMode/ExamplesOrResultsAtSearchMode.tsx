@@ -18,7 +18,7 @@ const ExamplesOrResultsAtSearchMode = ({
   handleButtonClick,
 }: ExamplesOrResultsAtSearchModeProps) => {
   return (
-    <div className="text-[#111111] font-regular">
+    <div className="text-[#111111]">
       {status === 'default' ? (
         <ExampleContents
           buttonData={buttonData}
