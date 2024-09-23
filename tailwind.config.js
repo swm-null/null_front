@@ -47,6 +47,9 @@ export default {
       fontWeight: {
         regular: 400,
       },
+      boxShadow: {
+        custom: '0px 4px 20px 0px #2C1B0B14',
+      },
     },
   },
   plugins: [],

@@ -11,7 +11,8 @@ const ExampleBox = ({
 }) => {
   return (
     <div
-      className="flex flex-col items-start px-5 py-6 bg-[#FFF6E3CC] rounded-lg shadow-md border border-gray-200 min-h-24 cursor-pointer"
+      className="flex flex-col items-start px-5 py-6 rounded-2xl min-h-24 cursor-pointer
+        bg-[#FFF6E3CC] border-[1px] border-[#E3BFA5] shadow-custom"
       onClick={onClick}
     >
       <Icon className="mb-2" />

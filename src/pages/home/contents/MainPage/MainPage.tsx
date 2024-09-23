@@ -52,10 +52,10 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   return (
     // FIXME: pt 지금은 그냥 직접 구해서 넣었는데, 나중에 어떻게 하면 저거 자동으로 구할지 상의해보기
     // 50vh - (토글+여백+TextArea 기본 높이) - 사이드바 절반 높이
-    <div className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center">
-      <div className="max-w-[700px] flex flex-col flex-1 overflow-hidden text-gray2">
+    <div className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center overflow-visible">
+      <div className="max-w-[700px] flex flex-col flex-1 text-gray2 overflow-visible">
         <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
-        <div className="overflow-scroll no-scrollbar">
+        <div className="overflow-scroll min-h-full no-scrollbar">
           <Component.MemoTextAreaWithMicAndCameraButton
             value={message}
             onChange={handleMessageChange}

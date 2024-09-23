@@ -26,8 +26,8 @@ const MemoTextAreaWithMicAndCameraButton = ({
 
   return (
     <div
-      className="flex flex-shrink-0 px-4 py-3 items-start rounded-3xl overflow-hidden
-        bg-[#FFF6E3CC] border-[1px] border-[#E3BFA4] font-regular"
+      className="flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden
+        bg-[#FFF6E3CC] border-[1px] border-[#E3BFA4] font-regular shadow-custom"
     >
       <SearchIcon />
       <TextareaAutosize
