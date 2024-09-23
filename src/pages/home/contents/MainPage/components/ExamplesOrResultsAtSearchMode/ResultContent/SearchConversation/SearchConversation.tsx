@@ -8,47 +8,39 @@ import {
 const SearchConversation = ({
   data,
   chatBotName,
-  chatBotImageUrl,
 }: {
   data: MemoSearchConversation;
   chatBotName: string;
-  chatBotImageUrl: string;
 }) => {
   return (
     <div key={data.id} className="px-6 h-full">
-      <UserQuestionAndAIHeader
-        contentText={data.query}
-        name={chatBotName}
-        imageUrl={chatBotImageUrl}
-      />
+      <div className="flex items-end">
+        <AIInfo name={chatBotName} />
+        <UserQuestion contentText={data.query} />
+      </div>
       <AIAnswer content={data.answer} />
     </div>
   );
 };
 
-const UserQuestionAndAIHeader = ({
-  contentText,
-  name,
-}: {
-  contentText: string;
-  name: string;
-  imageUrl: string;
-}) => {
+const AIInfo = ({ name }: { name: string }) => {
   return (
-    <div className="flex items-end">
-      <div className="flex items-center">
-        <BookIcon />
-        <p className="ml-2 text-lg font-semibold">{name}</p>
-      </div>
-      <div className="flex flex-1" />
-      <div
-        className="inline-block self-end bg-[#FFE5C1] rounded-xl rounded-br-none py-2 px-4 
-        overflow-hidden max-w-3/4 border-[1px] border-[#F2DAB7]"
-      >
-        <p className="inline text-right whitespace-pre-line break-words">
-          {contentText}
-        </p>
-      </div>
+    <div className="flex items-center">
+      <BookIcon />
+      <p className="ml-2 text-lg font-semibold">{name}</p>
+    </div>
+  );
+};
+
+const UserQuestion = ({ contentText }: { contentText: string }) => {
+  return (
+    <div
+      className="inline-block self-end bg-[#FFE5C1] rounded-xl rounded-br-none py-2 px-4 
+        overflow-hidden max-w-3/4 border-[1px] border-[#F2DAB7] ml-auto"
+    >
+      <p className="inline text-right whitespace-pre-line break-words">
+        {contentText}
+      </p>
     </div>
   );
 };

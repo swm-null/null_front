@@ -1,4 +1,3 @@
-import { oatmealUrl } from 'assets/images';
 import { HistoryIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
@@ -25,7 +24,6 @@ const ResultContent = ({
         <SearchConversation
           key={searchAnswer.id}
           data={searchAnswer}
-          chatBotImageUrl={oatmealUrl}
           chatBotName={t('pages.search.ai.name')}
         />
       </div>

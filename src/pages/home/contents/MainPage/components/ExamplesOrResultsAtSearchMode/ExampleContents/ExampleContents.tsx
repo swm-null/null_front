@@ -21,7 +21,7 @@ const ExampleContent = ({
         {buttonData.map((text, index) => (
           <ExampleBox
             key={index}
-            text={text}
+            exampleText={text}
             icon={icons[index]}
             onClick={() => handleButtonClick(text)}
           />
