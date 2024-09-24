@@ -11,7 +11,7 @@ const ModeToggle = ({ mode, onModeChange }: ModeToggleProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="flex gap-2 mx-5">
       <ModeButton
         selected={mode === 'create'}
         icon={<AddIcon className="ml-1 mr-2" />}

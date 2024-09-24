@@ -11,9 +11,9 @@ const ExampleContent = ({
   const icons = [ExIcon1, ExIcon2, ExIcon3, ExIcon4];
 
   return (
-    <div className="flex justify-center items-center mt-4 font-medium overflow-visible">
+    <div className="flex justify-center items-center font-medium overflow-visible">
       <div
-        className="grid w-full gap-4 overflow-visible"
+        className="grid w-full gap-4 overflow-visible pt-[10px] pb-5 px-5"
         style={{
           gridTemplateColumns: 'repeat(auto-fill, minmax(155px, 1fr))',
         }}
