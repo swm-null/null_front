@@ -17,14 +17,14 @@ const LeftNavBar = ({ setCurrentPage }: LeftNavBarProps) => {
         onClick={() => setCurrentPage('main')}
       />
       <SidebarTooltipButton
-        icon={<Icon.HistoryIcon />}
+        icon={<Icon.DashboardIcon />}
         label={t('pages.sidebar.dashboard')}
-        onClick={() => setCurrentPage('searchHistory')}
+        onClick={() => setCurrentPage('dashboard')}
       />
       <SidebarTooltipButton
-        icon={<Icon.DashboardIcon />}
+        icon={<Icon.HistoryIcon />}
         label={t('pages.sidebar.searchHistory')}
-        onClick={() => setCurrentPage('dashboard')}
+        onClick={() => setCurrentPage('searchHistory')}
       />
       <SidebarTooltipButton
         icon={<Icon.ExportIcon />}
@@ -48,7 +48,7 @@ const SidebarTooltipButton = ({
 
   return (
     <div
-      className="min-w-[48px] h-[48px] px-4 bg-[#F5ECE0] text-[#5D4037] 
+      className="min-w-[48px] h-[48px] px-[14px] bg-[#F5ECE0] text-[#5D4037] 
         inline-flex items-center shadow-lg rounded-full cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

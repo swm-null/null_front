@@ -1,8 +1,7 @@
 import { ChangeEvent } from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { usePressEnterFetch } from './hook';
-import { SearchIcon } from 'assets/icons';
-import { cameraUrl, micUrl } from 'assets/images';
+import { CameraIcon, MicIcon, SearchIcon } from 'assets/icons';
 
 interface MemoTextAreaWithMicAndCameraButtonProps {
   value: string;
@@ -26,28 +25,25 @@ const MemoTextAreaWithMicAndCameraButton = ({
   });
 
   return (
-    <div className="flex flex-shrink-0 items-start rounded-3xl border-[0.12rem] px-4 py-2 overflow-hidden">
-      <SearchIcon className="w-5 h-5 mt-[2px]" />
-      <TextareaAutosize
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        onKeyDown={handlePressEnterFetch}
-        minRows={1}
-        maxRows={20}
-        className="flex-1 flex-shrink-0 focus:outline-none resize-none mr-4 ml-2"
-      />
-
-      <img
-        src={micUrl}
-        className="w-6 h-6 mr-1 cursor-pointer"
-        onClick={onMicButtonClick}
-      />
-      <img
-        src={cameraUrl}
-        className="w-6 h-6 cursor-pointer"
-        onClick={onCameraButtonClick}
-      />
+    <div className="px-5 pt-5 pb-[10px]">
+      <div
+        className="flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden
+        bg-[#FFF6E3CC] border-[1px] border-[#E3BFA4] font-regular shadow-custom"
+      >
+        <SearchIcon />
+        <TextareaAutosize
+          className="flex-1 flex-shrink-0 focus:outline-none resize-none mr-4 ml-2 min-h-9 content-center 
+          text-[#111111] bg-transparent placeholder-custom"
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          onKeyDown={handlePressEnterFetch}
+          minRows={1}
+          maxRows={20}
+        />
+        <MicIcon className="cursor-pointer mr-1" onClick={onMicButtonClick} />
+        <CameraIcon className="cursor-pointer" onClick={onCameraButtonClick} />
+      </div>
     </div>
   );
 };

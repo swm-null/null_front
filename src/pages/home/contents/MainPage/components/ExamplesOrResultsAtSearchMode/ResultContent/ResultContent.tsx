@@ -1,8 +1,7 @@
-import { SearchConversation } from 'pages/home/contents/_components';
-import { oatmealUrl } from 'assets/images';
 import { HistoryIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
+import { SearchConversation } from './SearchConversation';
 
 interface ResultContentProps {
   searchAnswer?: MemoSearchConversation;
@@ -14,30 +13,42 @@ const ResultContent = ({
   navigateToHistory,
 }: ResultContentProps) => {
   const { t } = useTranslation();
+  if (!searchAnswer) return;
 
   return (
-    <div className="mt-4 px-2 pt-3 pb-4 max-h-[70%] w-full rounded-xl border-[0.12rem] mr-3">
-      {searchAnswer ? (
-        <>
-          <div className="box-border h-full overflow-auto no-scrollbar">
-            <SearchConversation
-              key={searchAnswer.id}
-              data={searchAnswer}
-              chatBotImageUrl={oatmealUrl}
-              chatBotName={t('pages.search.ai.name')}
-            />
-          </div>
-          <div
-            className="flex gap-2 items-center justify-end mt-5 cursor-pointer"
-            onClick={navigateToHistory}
-          >
-            <HistoryIcon />
-            <p>{t('pages.main.history')}</p>
-          </div>
-        </>
-      ) : null}
-    </div>
+    <>
+      <div
+        className="mt-4 mr-3 px-2 py-6 max-h-[70%] w-full rounded-xl border-[1px] 
+          border-[#E3BFA4] bg-[#FFF6E3CC] font-regular"
+      >
+        <SearchConversation
+          key={searchAnswer.id}
+          data={searchAnswer}
+          chatBotName={t('pages.search.ai.name')}
+        />
+      </div>
+      <HistoryButton
+        onClick={navigateToHistory}
+        text={t('pages.main.searchHistory')}
+      />
+    </>
   );
 };
+
+const HistoryButton = ({
+  onClick,
+  text,
+}: {
+  onClick: () => void;
+  text: string;
+}) => (
+  <div
+    className="flex gap-2 mt-2 items-center justify-end cursor-pointer"
+    onClick={onClick}
+  >
+    <HistoryIcon />
+    <p className="text-[#6A5344]">{text}</p>
+  </div>
+);
 
 export default ResultContent;

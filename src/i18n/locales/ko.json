@@ -37,6 +37,13 @@
       "searchHistory": "기록",
       "uploadData": "불러오기"
     },
+    "main": {
+      "mode": {
+        "create": "추가",
+        "search": "검색"
+      },
+      "searchHistory": "검색 기록"
+    },
     "create": {
       "header": "메모 추가하기",
       "inputPlaceholder": "입력 프롬프트",
@@ -95,9 +102,6 @@
         "deleteButton": "삭제"
       },
       "createMemoButton": "카카오톡 데이터로 메모 추가하기"
-    },
-    "main": {
-      "searchHistory": "검색 기록"
     }
   }
 }
