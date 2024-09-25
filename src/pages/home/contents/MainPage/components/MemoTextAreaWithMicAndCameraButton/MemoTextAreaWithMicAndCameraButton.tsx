@@ -33,6 +33,7 @@ const MemoTextAreaWithMicAndCameraButton = ({
         <SearchIcon />
         <TextareaAutosize
           className="flex-1 flex-shrink-0 focus:outline-none resize-none min-h-9 content-center 
+
           text-[#111111] bg-transparent placeholder-custom"
           value={value}
           onChange={onChange}
