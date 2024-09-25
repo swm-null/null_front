@@ -55,7 +55,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     <div className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center">
       <div className="max-w-[740px] flex flex-col flex-1 text-gray2">
         <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
-        <div className="overflow-scroll no-scrollbar">
+        <div className="overflow-scroll no-scrollbar p-4 gap-4 flex flex-col">
           <Component.MemoTextAreaWithMicAndCameraButton
             value={message}
             onChange={handleMessageChange}

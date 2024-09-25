@@ -25,14 +25,14 @@ const MemoTextAreaWithMicAndCameraButton = ({
   });
 
   return (
-    <div className="px-5 pt-5 pb-[10px]">
-      <div
-        className="flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden
+    <div
+      className="flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden gap-4
         bg-[#FFF6E3CC] border-[1px] border-[#E3BFA4] font-regular shadow-custom"
-      >
+    >
+      <div className="flex flex-1 gap-2">
         <SearchIcon />
         <TextareaAutosize
-          className="flex-1 flex-shrink-0 focus:outline-none resize-none mr-4 ml-2 min-h-9 content-center 
+          className="flex-1 flex-shrink-0 focus:outline-none resize-none min-h-9 content-center 
           text-[#111111] bg-transparent placeholder-custom"
           value={value}
           onChange={onChange}
@@ -41,7 +41,9 @@ const MemoTextAreaWithMicAndCameraButton = ({
           minRows={1}
           maxRows={20}
         />
-        <MicIcon className="cursor-pointer mr-1" onClick={onMicButtonClick} />
+      </div>
+      <div className="flex gap-1">
+        <MicIcon className="cursor-pointer" onClick={onMicButtonClick} />
         <CameraIcon className="cursor-pointer" onClick={onCameraButtonClick} />
       </div>
     </div>

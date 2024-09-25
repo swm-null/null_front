@@ -13,7 +13,7 @@ const ExampleContent = ({
   return (
     <div className="flex justify-center items-center font-medium overflow-visible">
       <div
-        className="grid w-full gap-4 overflow-visible pt-[10px] pb-5 px-5"
+        className="grid w-full gap-4 overflow-visible"
         style={{
           gridTemplateColumns: 'repeat(auto-fill, minmax(155px, 1fr))',
         }}
