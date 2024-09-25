@@ -5,6 +5,7 @@ import { CameraIcon, MicIcon, SearchIcon } from 'assets/icons';
 
 interface MemoTextAreaWithMicAndCameraButtonProps {
   value: string;
+  iconVisible: boolean;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
@@ -14,6 +15,7 @@ interface MemoTextAreaWithMicAndCameraButtonProps {
 
 const MemoTextAreaWithMicAndCameraButton = ({
   value,
+  iconVisible,
   placeholder,
   onChange,
   onSubmit,
@@ -30,7 +32,7 @@ const MemoTextAreaWithMicAndCameraButton = ({
         bg-[#FFF6E3CC] border-[1px] border-[#E3BFA4] font-regular shadow-custom"
     >
       <div className="flex flex-1 gap-2">
-        <SearchIcon />
+        {iconVisible && <SearchIcon />}
         <TextareaAutosize
           className="flex-1 flex-shrink-0 focus:outline-none resize-none min-h-9 content-center 
             text-[#111111] bg-transparent placeholder-custom"
