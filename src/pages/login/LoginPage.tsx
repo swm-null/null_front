@@ -39,11 +39,6 @@ const LoginPage = () => {
           />
         </div>
 
-        {/* <SocialLogins
-          kakaoLabel={t('login.socialLogin.kakao')}
-          appleLabel={t('login.socialLogin.apple')}
-          googleLabel={t('login.socialLogin.google')}
-        /> */}
         <LoginSignUpButton
           label={t('login.loginButton')}
           onClick={handleLogin}
