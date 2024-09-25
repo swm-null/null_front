@@ -101,7 +101,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100 py-8">
+    <div className="bg-custom-gradient-basic flex justify-center items-center h-screen bg-gray-100 py-8">
       <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg overflow-y-auto">
         <div className="mb-6">
           <label

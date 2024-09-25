@@ -24,7 +24,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100 py-8">
+    <div className="bg-custom-gradient-basic flex justify-center items-center h-screen bg-gray-100 py-8">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         <div className="mb-6">
           <CustomInput
