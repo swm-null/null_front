@@ -1,16 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { AnimatedHeader } from 'pages/home/contents/_components';
+import { Header } from 'pages/home/contents/_components';
 import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
-import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
 import { SearchScrollView, SearchConversation } from './components';
 
-const SearchHistoryPage = ({
-  headerLeftMarginToggle = false,
-  headerLeftMargin = 0,
-}: {
-  headerLeftMarginToggle?: boolean;
-  headerLeftMargin?: number;
-}) => {
+const SearchHistoryPage = ({}: {}) => {
   const { t } = useTranslation();
   const searchConversations: MemoSearchConversation[] = JSON.parse(
     localStorage.getItem('search_queries') || '[]'
@@ -22,12 +15,7 @@ const SearchHistoryPage = ({
 
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
-      <AnimatedHeader
-        text={t('pages.search.header')}
-        leftMarginToggle={headerLeftMarginToggle}
-        leftMargin={headerLeftMargin}
-        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
-      />
+      <Header headerText={t('pages.search.header')} />
       <div className="flex flex-col flex-1 overflow-hidden px-4">
         <SearchScrollView searchConversations={searchConversations}>
           {searchConversations.map((searchConversation) => (

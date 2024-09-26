@@ -10,7 +10,6 @@ const ResponsiveLayout = () => {
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(
     window.innerWidth <= MOBILE_DEVICE_WIDTH
   );
-  const [isOpen, setIsOpen] = useState(true);
   const navigate = useNavigate();
 
   const handleNavigation = (page: string) => {
@@ -26,10 +25,6 @@ const ResponsiveLayout = () => {
 
     const subscription = resize$.subscribe((nowScreen) => {
       setIsSmallScreen(nowScreen);
-
-      if (nowScreen) {
-        setIsOpen(false);
-      }
     });
 
     return () => {
@@ -39,19 +34,11 @@ const ResponsiveLayout = () => {
 
   return isSmallScreen ? (
     <MobileLayout setCurrentPage={handleNavigation}>
-      <PageRouter
-        isOpen={isOpen}
-        useHeaderAnimation={false}
-        setCurrentPage={handleNavigation}
-      />
+      <PageRouter setCurrentPage={handleNavigation} />
     </MobileLayout>
   ) : (
     <DesktopLayout setCurrentPage={handleNavigation}>
-      <PageRouter
-        isOpen={isOpen}
-        useHeaderAnimation={true}
-        setCurrentPage={handleNavigation}
-      />
+      <PageRouter setCurrentPage={handleNavigation} />
     </DesktopLayout>
   );
 };

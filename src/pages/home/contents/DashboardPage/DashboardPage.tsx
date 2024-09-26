@@ -1,18 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
-import { AnimatedHeader } from 'pages/home/contents/_components';
+import { Header } from 'pages/home/contents/_components';
 import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
 
-const DashboardPage = ({
-  headerLeftMarginToggle = false,
-  headerLeftMargin = 0,
-}: {
-  headerLeftMarginToggle?: boolean;
-  headerLeftMargin?: number;
-}) => {
+const DashboardPage = ({}: {}) => {
   const { t } = useTranslation();
 
   const tagsManager = Hooks.useTagsManager();
@@ -47,12 +41,7 @@ const DashboardPage = ({
 
   return (
     <div className="flex flex-col h-screen text-gray2 overflow-hidden px-4">
-      <AnimatedHeader
-        text={t('pages.dashboard.header')}
-        leftMarginToggle={headerLeftMarginToggle}
-        leftMargin={headerLeftMargin}
-        animationDuration={Constants.SIDEBAR_HEADER_ANIMATION_DURATION}
-      />
+      <Header headerText={t('pages.dashboard.header')} />
 
       <Components.CurrentTagPath
         allTagText={t('pages.dashboard.allMemoButton')}

@@ -1,16 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { AnimatedHeader } from 'pages/home/contents/_components';
-import { SIDEBAR_HEADER_ANIMATION_DURATION } from 'pages/home/constants';
+import { Header } from 'pages/home/contents/_components';
 import { KakaoDropzone } from './components/KakaoDropzone';
 import { CopyTextField } from './components';
 
-const UploadDataPage = ({
-  headerLeftMarginToggle = false,
-  headerLeftMargin = 0,
-}: {
-  headerLeftMarginToggle?: boolean;
-  headerLeftMargin?: number;
-}) => {
+const UploadDataPage = ({}: {}) => {
   const { t } = useTranslation();
 
   // TODO: 서버에 메일을 요청하는 api 추가되면 변경
@@ -18,12 +11,7 @@ const UploadDataPage = ({
 
   return (
     <div className="flex flex-col flex-1 h-screen text-gray2">
-      <AnimatedHeader
-        text={t('pages.uploadData.header')}
-        leftMarginToggle={headerLeftMarginToggle}
-        leftMargin={headerLeftMargin}
-        animationDuration={SIDEBAR_HEADER_ANIMATION_DURATION}
-      />
+      <Header headerText={t('pages.uploadData.header')} />
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden gap-2">
         <p>{t('pages.uploadData.emailInstruction.header')}</p>
         <p>{t('pages.uploadData.emailInstruction.text1')}</p>
