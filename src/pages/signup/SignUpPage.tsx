@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { LoginSignUpButton, HiddenInput } from 'pages/components';
 import { EmailInput } from './components';
-import { isValidResponse, signup } from 'utils/auth';
+import { isValidResponse, signup } from 'api';
 
 const SignUpPage = () => {
   const { t } = useTranslation();

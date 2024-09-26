@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
-import * as Api from 'utils/auth';
+import * as Api from 'api';
 import * as Interface from 'pages/home/contents/_interfaces';
 
 const MAX_SEARCH_QUERIES = 100;

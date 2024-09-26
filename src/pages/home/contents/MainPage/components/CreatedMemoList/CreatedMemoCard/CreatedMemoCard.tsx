@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { deleteMemo, isValidResponse } from 'utils/auth';
+import { deleteMemo, isValidResponse } from 'api';
 import { MemoText, TagManager } from 'pages/home/contents/_components';
 import { Memo } from 'pages/home/contents/_interfaces';
 import { BookIcon, DeleteIcon } from 'assets/icons';
