@@ -62,7 +62,7 @@
     },
     "search": {
       "header": "메모 검색하기",
-      "inputPlaceholder": "입력 프롬프트",
+      "inputPlaceholder": "메모 검색...",
       "ai": {
         "name": "오트노트",
         "url": "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
