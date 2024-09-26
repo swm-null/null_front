@@ -42,12 +42,12 @@ export const createMemo = async (
   inputImageUrls?: string[]
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = 'createMemo';
-  const endpoint = `${LOCALHOST}/memos`;
+  const endpoint = `${LOCALHOST}/memo`;
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
-    withCredentials: true,
   };
   try {
     const response = await axios.post(
@@ -70,8 +70,10 @@ export const createMemo = async (
       created_at,
       updated_at,
     } as cuMemoResponse;
+    console.log(responseInfo);
     return responseInfo;
   } catch (error) {
+    console.log(error);
     return errorHandler(error, method);
   }
 };
@@ -88,8 +90,8 @@ export const updateMemo = async (
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
-    withCredentials: true,
   };
   try {
     const response = await axios.put(endpoint, data, config);
@@ -119,8 +121,8 @@ export const deleteMemo = async (
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
-    withCredentials: true,
   };
   try {
     const response = await axios.delete(endpoint, config);
@@ -153,7 +155,9 @@ export const getAllMemos = async (): Promise<
   const endpoint = `${LOCALHOST}/memos`;
 
   try {
-    const response = await axios.get(endpoint, { withCredentials: true });
+    const response = await axios.get(endpoint, {
+      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
+    });
     const responseInfo = {
       method,
       status: response.status,
@@ -172,7 +176,9 @@ export const getMemosByTag = async (
   const endpoint = `${LOCALHOST}/memos/tags/${tagId}`;
 
   try {
-    const response = await axios.get(endpoint, { withCredentials: true });
+    const response = await axios.get(endpoint, {
+      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
+    });
     const responseInfo = {
       method,
       status: response.status,
@@ -193,10 +199,12 @@ export const getAllTags = async (): Promise<
   getTagsResponse | errorResponse
 > => {
   const method = 'getChildTags';
-  const endpoint = `${LOCALHOST}/tags`;
+  const endpoint = `${LOCALHOST}/tags?parentTagId=@`;
 
   try {
-    const response = await axios.get(endpoint, { withCredentials: true });
+    const response = await axios.get(endpoint, {
+      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
+    });
     const responseInfo = {
       method,
       status: response.status,
@@ -216,7 +224,9 @@ export const getChildTags = async (
   const endpoint = `${LOCALHOST}/tags/${tagId}/childTags`;
 
   try {
-    const response = await axios.get(endpoint, { withCredentials: true });
+    const response = await axios.get(endpoint, {
+      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
+    });
     const responseInfo = {
       method,
       status: response.status,
@@ -231,10 +241,12 @@ export const getChildTags = async (
 
 export const getRootTags = async (): Promise<validResponse | errorResponse> => {
   const method = 'getRootTags';
-  const endpoint = `${LOCALHOST}/tags/root`;
+  const endpoint = `${LOCALHOST}/childTags`;
 
   try {
-    const response = await axios.get(endpoint, { withCredentials: true });
+    const response = await axios.get(endpoint, {
+      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
+    });
     const responseInfo = {
       method,
       status: response.status,
