@@ -12,7 +12,7 @@ export const login = async (
   password: string
 ): Promise<loginResponse | errorResponse> => {
   const method = 'login';
-  const endpoint = `${LOCALHOST}/users/login`;
+  const endpoint = `${LOCALHOST}/user/login`;
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -38,10 +38,11 @@ export const login = async (
 
 export const signup = async (
   email: string,
-  password: string
+  password: string,
+  confirmPassword: string
 ): Promise<validResponse | errorResponse> => {
   const method = 'signup';
-  const endpoint = `${LOCALHOST}/users/register`;
+  const endpoint = `${LOCALHOST}/user/register`;
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ export const signup = async (
   try {
     const response = await axios.post(
       endpoint,
-      JSON.stringify({ email, password }),
+      JSON.stringify({ email, password, confirm_password: confirmPassword }),
       config
     );
     const responseInfo = {

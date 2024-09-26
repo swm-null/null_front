@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Memo, MemoSearchAnswer, Tag } from 'pages/home/contents/_interfaces';
 import { errorHandler, LOCALHOST } from './errorHandler';
 import { errorResponse, validResponse } from './types';
+import Cookies from 'js-cookie';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 
@@ -13,6 +14,7 @@ export const searchMemo = async (
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
   };
   try {
@@ -45,6 +47,7 @@ export const createMemo = async (
     headers: {
       'Content-Type': 'application/json',
     },
+    withCredentials: true,
   };
   try {
     const response = await axios.post(
@@ -86,6 +89,7 @@ export const updateMemo = async (
     headers: {
       'Content-Type': 'application/json',
     },
+    withCredentials: true,
   };
   try {
     const response = await axios.put(endpoint, data, config);
@@ -116,6 +120,7 @@ export const deleteMemo = async (
     headers: {
       'Content-Type': 'application/json',
     },
+    withCredentials: true,
   };
   try {
     const response = await axios.delete(endpoint, config);
@@ -148,7 +153,7 @@ export const getAllMemos = async (): Promise<
   const endpoint = `${LOCALHOST}/memos`;
 
   try {
-    const response = await axios.get(endpoint);
+    const response = await axios.get(endpoint, { withCredentials: true });
     const responseInfo = {
       method,
       status: response.status,
@@ -167,7 +172,7 @@ export const getMemosByTag = async (
   const endpoint = `${LOCALHOST}/memos/tags/${tagId}`;
 
   try {
-    const response = await axios.get(endpoint);
+    const response = await axios.get(endpoint, { withCredentials: true });
     const responseInfo = {
       method,
       status: response.status,
@@ -191,7 +196,7 @@ export const getAllTags = async (): Promise<
   const endpoint = `${LOCALHOST}/tags`;
 
   try {
-    const response = await axios.get(endpoint);
+    const response = await axios.get(endpoint, { withCredentials: true });
     const responseInfo = {
       method,
       status: response.status,
@@ -211,7 +216,7 @@ export const getChildTags = async (
   const endpoint = `${LOCALHOST}/tags/${tagId}/childTags`;
 
   try {
-    const response = await axios.get(endpoint);
+    const response = await axios.get(endpoint, { withCredentials: true });
     const responseInfo = {
       method,
       status: response.status,
@@ -229,7 +234,7 @@ export const getRootTags = async (): Promise<validResponse | errorResponse> => {
   const endpoint = `${LOCALHOST}/tags/root`;
 
   try {
-    const response = await axios.get(endpoint);
+    const response = await axios.get(endpoint, { withCredentials: true });
     const responseInfo = {
       method,
       status: response.status,

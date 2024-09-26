@@ -79,7 +79,11 @@ const SignUpPage = () => {
       return;
     }
 
-    const response = await signup(`${email.emailId}@${email.domain}`, password);
+    const response = await signup(
+      `${email.emailId}@${email.domain}`,
+      password,
+      confirmPassword
+    );
     if (isValidResponse(response)) {
       navigate(-1);
     }
