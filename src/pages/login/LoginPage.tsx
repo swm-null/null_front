@@ -14,7 +14,6 @@ const LoginPage = () => {
   const handleLogin = async () => {
     const response = await login(email, password);
     if (isLoginResponse(response)) {
-      console.log(response);
       Cookies.set('access_token', response.access_token, {});
       Cookies.set('refresh_token', response.refresh_token, {});
       navigate('/home');
