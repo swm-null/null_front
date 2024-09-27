@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Component from './components';
-import { Mode } from 'pages/home/contents/_interfaces';
+import { Mode } from './interfaces';
 import { useCreateSearchNoteManager } from './hook';
-import { memos } from './test/dummyData';
+import { memos } from './dummy/data';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();

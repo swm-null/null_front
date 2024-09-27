@@ -2,10 +2,10 @@ import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoginSignUpButton, CustomInput, HiddenInput } from 'pages/components';
+import { LoginSignupButton, CustomInput, HiddenInput } from 'pages/components';
 import { isLoginResponse, login } from 'api';
 
-const LoginPage = () => {
+const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
@@ -22,8 +22,8 @@ const LoginPage = () => {
     }
   };
 
-  const handleSignUp = () => {
-    navigate('/signUp');
+  const handleSignup = () => {
+    navigate('/signup');
   };
 
   return (
@@ -42,7 +42,7 @@ const LoginPage = () => {
           />
         </div>
 
-        <LoginSignUpButton
+        <LoginSignupButton
           label={t('login.loginButton')}
           onClick={handleLogin}
           bgColor="#3B82F6"
@@ -50,9 +50,9 @@ const LoginPage = () => {
           additionalClasses="mb-4 text-white"
         />
 
-        <LoginSignUpButton
-          label={t('login.signUpButton')}
-          onClick={handleSignUp}
+        <LoginSignupButton
+          label={t('login.signupButton')}
+          onClick={handleSignup}
           bgColor="#E5E7EB"
           hoverColor="#D1D5DB"
         />
@@ -61,4 +61,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;

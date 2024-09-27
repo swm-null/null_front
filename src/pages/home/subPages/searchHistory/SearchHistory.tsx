@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { Header } from 'pages/home/contents/_components';
-import { MemoSearchConversation } from 'pages/home/contents/_interfaces';
-import { SearchScrollView, SearchConversation } from './components';
+import { Header, SearchConversation } from 'pages/home/subPages/components';
+import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
+import { SearchScrollView } from './components';
 
 const SearchHistoryPage = ({}: {}) => {
   const { t } = useTranslation();

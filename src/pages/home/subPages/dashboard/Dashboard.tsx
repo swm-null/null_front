@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Memo, Tag } from 'pages/home/contents/_interfaces';
-import { Header } from 'pages/home/contents/_components';
+import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { Header } from 'pages/home/subPages/components';
 import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';

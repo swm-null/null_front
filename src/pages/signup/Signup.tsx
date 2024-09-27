@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { LoginSignUpButton, HiddenInput } from 'pages/components';
+import { LoginSignupButton, HiddenInput } from 'pages/components';
 import { EmailInput } from './components';
 import { isValidResponse, signup } from 'api';
 
-const SignUpPage = () => {
+const Signup = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -49,17 +49,17 @@ const SignUpPage = () => {
     const newErrors = { email: '', password: '', confirmPassword: '' };
 
     if (isEmailInputTouched && !validateEmail()) {
-      newErrors.email = t('signUp.invalidEmail');
+      newErrors.email = t('signup.invalidEmail');
       isValid = false;
     }
 
     if (isPasswordInputTouched && !validatePassword()) {
-      newErrors.password = t('signUp.invalidPassword');
+      newErrors.password = t('signup.invalidPassword');
       isValid = false;
     }
 
     if (isConfirmPasswordInputTouched && !validateConfirmPassword()) {
-      newErrors.confirmPassword = t('signUp.passwordsDoNotMatch');
+      newErrors.confirmPassword = t('signup.passwordsDoNotMatch');
       isValid = false;
     }
 
@@ -118,7 +118,7 @@ const SignUpPage = () => {
             htmlFor="emailId"
             className="block mb-2 text-sm font-medium text-gray-700"
           >
-            {t('signUp.email')}
+            {t('signup.email')}
           </label>
           <EmailInput value={email} onChange={handleEmailChange} />
           {isEmailInputTouched && errors.email && (
@@ -126,14 +126,14 @@ const SignUpPage = () => {
           )}
 
           <HiddenInput
-            label={t('signUp.password')}
+            label={t('signup.password')}
             value={password}
             setValue={handlePasswordChange}
             errorMessage={isPasswordInputTouched ? errors.password : ''}
           />
 
           <HiddenInput
-            label={t('signUp.confirmPassword')}
+            label={t('signup.confirmPassword')}
             value={confirmPassword}
             setValue={handleConfirmPasswordChange}
             errorMessage={
@@ -141,8 +141,8 @@ const SignUpPage = () => {
             }
           />
         </div>
-        <LoginSignUpButton
-          label={t('signUp.signUpButton')}
+        <LoginSignupButton
+          label={t('signup.signUpButton')}
           onClick={handleSignUp}
           bgColor="#3B82F6"
           hoverColor="#2563EB"
@@ -154,4 +154,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default Signup;

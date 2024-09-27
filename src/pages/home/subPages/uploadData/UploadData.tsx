@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Header } from 'pages/home/contents/_components';
+import { Header } from 'pages/home/subPages/components';
 import { KakaoDropzone } from './components/KakaoDropzone';
 import { CopyTextField } from './components';
 
-const UploadDataPage = ({}: {}) => {
+const UploadData = ({}: {}) => {
   const { t } = useTranslation();
 
   // TODO: 서버에 메일을 요청하는 api 추가되면 변경
@@ -37,4 +37,4 @@ const UploadDataPage = ({}: {}) => {
   );
 };
 
-export default UploadDataPage;
+export default UploadData;

@@ -1,1 +1,1 @@
-export { default as UploadDataPage } from './UploadData';
+export { default as UploadData } from './UploadData';

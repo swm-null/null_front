@@ -1,1 +1,1 @@
-export { default as SearchHistoryPage } from './SearchHistory';
+export { default as SearchHistory } from './SearchHistory';

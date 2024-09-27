@@ -8,25 +8,23 @@ export const getSubPagesData = (
     {
       path: '',
       element: (
-        <Page.MainPage
-          navigateToHistory={() => setCurrentPage('searchHistory')}
-        />
+        <Page.Main navigateToHistory={() => setCurrentPage('searchHistory')} />
       ),
       title: 'main',
     },
     {
       path: 'searchHistory',
-      element: <Page.SearchHistoryPage />,
+      element: <Page.SearchHistory />,
       title: 'searchHistory',
     },
     {
       path: 'dashboard',
-      element: <Page.DashboardPage />,
+      element: <Page.Dashboard />,
       title: 'dashboard',
     },
     {
       path: 'uploadData',
-      element: <Page.UploadDataPage />,
+      element: <Page.UploadData />,
       title: 'uploadData',
     },
   ];
