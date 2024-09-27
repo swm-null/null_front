@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
-import { useNavigate } from 'react-router-dom';
-import { PageRouter } from './PageRouter';
 import { MobileLayout } from './MobileLayout';
 import { DesktopLayout } from './DesktopLayout';
 
 const MOBILE_DEVICE_WIDTH = 770;
-const ResponsiveLayout = () => {
+const ResponsiveLayout = ({
+  children,
+  handleNavigation,
+}: {
+  children: ReactNode;
+  handleNavigation: (page: string) => void;
+}) => {
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(
     window.innerWidth <= MOBILE_DEVICE_WIDTH
   );
-  const navigate = useNavigate();
-
-  const handleNavigation = (page: string) => {
-    navigate(`/${page}`);
-  };
 
   useEffect(() => {
     const resize$ = fromEvent(window, 'resize').pipe(
@@ -33,13 +32,9 @@ const ResponsiveLayout = () => {
   }, []);
 
   return isSmallScreen ? (
-    <MobileLayout setCurrentPage={handleNavigation}>
-      <PageRouter setCurrentPage={handleNavigation} />
-    </MobileLayout>
+    <MobileLayout setCurrentPage={handleNavigation}>{children}</MobileLayout>
   ) : (
-    <DesktopLayout setCurrentPage={handleNavigation}>
-      <PageRouter setCurrentPage={handleNavigation} />
-    </DesktopLayout>
+    <DesktopLayout setCurrentPage={handleNavigation}>{children}</DesktopLayout>
   );
 };
 
