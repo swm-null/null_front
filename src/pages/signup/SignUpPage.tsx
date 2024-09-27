@@ -17,11 +17,11 @@ const SignUpPage = () => {
     password: '',
     confirmPassword: '',
   });
-  const [isInputTouched, setIsInputTouched] = useState({
-    email: false,
-    password: false,
-    confirmPassword: false,
-  });
+  const [isEmailInputTouched, setIsEmailInputTouched] = useState(false);
+  const [isPasswordInputTouched, setIsPasswordInputTouched] = useState(false);
+  const [isConfirmPasswordInputTouched, setIsConfirmPasswordInputTouched] =
+    useState(false);
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const validateEmail = () => {
@@ -48,17 +48,17 @@ const SignUpPage = () => {
     let isValid = true;
     const newErrors = { email: '', password: '', confirmPassword: '' };
 
-    if (isInputTouched.email && !validateEmail()) {
+    if (isEmailInputTouched && !validateEmail()) {
       newErrors.email = t('signUp.invalidEmail');
       isValid = false;
     }
 
-    if (isInputTouched.password && !validatePassword()) {
+    if (isPasswordInputTouched && !validatePassword()) {
       newErrors.password = t('signUp.invalidPassword');
       isValid = false;
     }
 
-    if (isInputTouched.confirmPassword && !validateConfirmPassword()) {
+    if (isConfirmPasswordInputTouched && !validateConfirmPassword()) {
       newErrors.confirmPassword = t('signUp.passwordsDoNotMatch');
       isValid = false;
     }
@@ -69,7 +69,13 @@ const SignUpPage = () => {
 
   useEffect(() => {
     const isValid = !getFormValidAndSetErrors();
-    if (!Object.values(isInputTouched).includes(false)) {
+    if (
+      ![
+        isEmailInputTouched,
+        isPasswordInputTouched,
+        isConfirmPasswordInputTouched,
+      ].includes(false)
+    ) {
       setIsButtonDisabled(isValid);
     }
   }, [email, password, confirmPassword]);
@@ -91,17 +97,17 @@ const SignUpPage = () => {
 
   const handleEmailChange = (newEmail: { emailId: string; domain: string }) => {
     setEmail(newEmail);
-    setIsInputTouched((prev) => ({ ...prev, email: true }));
+    setIsEmailInputTouched(true);
   };
 
   const handlePasswordChange = (newPassword: string) => {
     setPassword(newPassword);
-    setIsInputTouched((prev) => ({ ...prev, password: true }));
+    setIsPasswordInputTouched(true);
   };
 
   const handleConfirmPasswordChange = (newConfirmPassword: string) => {
     setConfirmPassword(newConfirmPassword);
-    setIsInputTouched((prev) => ({ ...prev, confirmPassword: true }));
+    setIsConfirmPasswordInputTouched(true);
   };
 
   return (
@@ -115,7 +121,7 @@ const SignUpPage = () => {
             {t('signUp.email')}
           </label>
           <EmailInput value={email} onChange={handleEmailChange} />
-          {isInputTouched.email && errors.email && (
+          {isEmailInputTouched && errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
 
@@ -123,7 +129,7 @@ const SignUpPage = () => {
             label={t('signUp.password')}
             value={password}
             setValue={handlePasswordChange}
-            errorMessage={isInputTouched.password ? errors.password : ''}
+            errorMessage={isPasswordInputTouched ? errors.password : ''}
           />
 
           <HiddenInput
@@ -131,7 +137,7 @@ const SignUpPage = () => {
             value={confirmPassword}
             setValue={handleConfirmPasswordChange}
             errorMessage={
-              isInputTouched.confirmPassword ? errors.confirmPassword : ''
+              isConfirmPasswordInputTouched ? errors.confirmPassword : ''
             }
           />
         </div>
