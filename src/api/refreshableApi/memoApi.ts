@@ -9,7 +9,7 @@ interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 export const searchMemo = async (
   inputContent: string
 ): Promise<searchMemoResponse | errorResponse> => {
-  const method = 'searchMemo';
+  const method = searchMemo.name;
   const endpoint = `${API_BASE_URL}/memos/search`;
   const config = {
     headers: {
@@ -41,7 +41,7 @@ export const createMemo = async (
   inputContent: string,
   inputImageUrls?: string[]
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = 'createMemo';
+  const method = createMemo.name;
   const endpoint = `${API_BASE_URL}/memo`;
   const config = {
     headers: {
@@ -82,7 +82,7 @@ export const updateMemo = async (
   id: string,
   content: string
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = 'editMemo';
+  const method = updateMemo.name;
   const endpoint = `${API_BASE_URL}/memos/${id}`;
   const data = JSON.stringify({
     content: content,
@@ -116,7 +116,7 @@ export const updateMemo = async (
 export const deleteMemo = async (
   id: string
 ): Promise<validResponse | errorResponse> => {
-  const method = 'deleteMemo';
+  const method = deleteMemo.name;
   const endpoint = `${API_BASE_URL}/memos/${id}`;
   const config = {
     headers: {
@@ -151,7 +151,7 @@ interface getMemosResponse extends validResponse {
 export const getAllMemos = async (): Promise<
   getMemosResponse | errorResponse
 > => {
-  const method = 'getAllMemos';
+  const method = getAllMemos.name;
   const endpoint = `${API_BASE_URL}/memos`;
 
   try {
@@ -172,7 +172,7 @@ export const getAllMemos = async (): Promise<
 export const getMemosByTag = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
-  const method = 'getMemosBySelectedTags';
+  const method = getMemosByTag.name;
   const endpoint = `${API_BASE_URL}/memos/tags/${tagId}`;
 
   try {

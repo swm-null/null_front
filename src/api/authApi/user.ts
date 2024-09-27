@@ -12,7 +12,7 @@ export const login = async (
   email: string,
   password: string
 ): Promise<loginResponse | errorResponse> => {
-  const method = 'login';
+  const method = login.name;
   const endpoint = `${API_BASE_URL}/user/login`;
   const config = {
     headers: {
@@ -43,7 +43,7 @@ export const signup = async (
   password: string,
   confirmPassword: string
 ): Promise<validResponse | errorResponse> => {
-  const method = 'signup';
+  const method = signup.name;
   const endpoint = `${API_BASE_URL}/user/register`;
   const config = {
     headers: {

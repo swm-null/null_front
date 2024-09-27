@@ -11,7 +11,7 @@ interface getTagsResponse extends validResponse {
 export const getAllTags = async (): Promise<
   getTagsResponse | errorResponse
 > => {
-  const method = 'getChildTags';
+  const method = getAllTags.name;
   const endpoint = `${API_BASE_URL}/tags?parentTagId=@`;
 
   try {
@@ -33,7 +33,7 @@ export const getAllTags = async (): Promise<
 export const getChildTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
-  const method = 'getChildTags';
+  const method = getChildTags.name;
   const endpoint = `${API_BASE_URL}/tags/${tagId}/childTags`;
 
   try {
@@ -53,7 +53,7 @@ export const getChildTags = async (
 };
 
 export const getRootTags = async (): Promise<validResponse | errorResponse> => {
-  const method = 'getRootTags';
+  const method = getRootTags.name;
   const endpoint = `${API_BASE_URL}/childTags`;
 
   try {

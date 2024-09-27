@@ -11,7 +11,7 @@ interface tokenResponse {
 export const refresh = async (
   refresh_token: string
 ): Promise<tokenResponse | errorResponse> => {
-  const method = 'login';
+  const method = refresh.name;
   const endpoint = `${API_BASE_URL}/user/refresh`;
   const config = {
     headers: {
