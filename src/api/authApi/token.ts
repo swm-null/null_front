@@ -1,5 +1,5 @@
 import { errorResponse } from 'api/interface';
-import { API_BASE_URL, errorHandler } from 'api/utils';
+import { errorHandler, getMethodName } from 'api/utils';
 import saveToken from './saveToken';
 import authApi from './_api';
 
@@ -11,8 +11,8 @@ interface tokenResponse {
 export const refresh = async (
   refresh_token: string
 ): Promise<tokenResponse | errorResponse> => {
-  const method = refresh.name;
-  const endpoint = `${API_BASE_URL}/user/refresh`;
+  const method = getMethodName();
+  const endpoint = '/user/refresh';
   try {
     const response = await authApi.post(
       endpoint,

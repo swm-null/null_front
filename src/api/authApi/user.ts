@@ -1,5 +1,5 @@
 import { errorResponse, validResponse } from '../interface';
-import { errorHandler, API_BASE_URL } from '../utils';
+import { errorHandler, getMethodName } from '../utils';
 import authApi from './_api';
 import saveToken from './saveToken';
 
@@ -12,8 +12,8 @@ export const login = async (
   email: string,
   password: string
 ): Promise<loginResponse | errorResponse> => {
-  const method = login.name;
-  const endpoint = `${API_BASE_URL}/user/login`;
+  const method = getMethodName();
+  const endpoint = '/user/login';
   try {
     const response = await authApi.post(
       endpoint,
@@ -37,8 +37,8 @@ export const signup = async (
   password: string,
   confirmPassword: string
 ): Promise<validResponse | errorResponse> => {
-  const method = signup.name;
-  const endpoint = `${API_BASE_URL}/user/register`;
+  const method = getMethodName();
+  const endpoint = '/user/register';
   try {
     const response = await authApi.post(
       endpoint,
