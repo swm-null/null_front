@@ -1,10 +1,11 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { usePressEnterFetch } from './hook';
 import { CameraIcon, MicIcon, SearchIcon } from 'assets/icons';
 
 interface MemoTextAreaWithMicAndCameraButtonProps {
   value: string;
+  iconVisible: boolean;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
@@ -14,6 +15,7 @@ interface MemoTextAreaWithMicAndCameraButtonProps {
 
 const MemoTextAreaWithMicAndCameraButton = ({
   value,
+  iconVisible,
   placeholder,
   onChange,
   onSubmit,
@@ -23,19 +25,30 @@ const MemoTextAreaWithMicAndCameraButton = ({
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleSubmit: onSubmit,
   });
+  const [focus, setFocus] = useState(false);
+  const getBackgroundColor = () => {
+    if (focus) {
+      return 'bg-[#FFF6E3]';
+    } else {
+      return 'bg-[#FFF6E3CC]';
+    }
+  };
 
   return (
     <div
-      className="flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden gap-4
-        bg-[#FFF6E3CC] border-[1px] border-[#E3BFA4] font-regular shadow-custom"
+      className={`flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden gap-4
+        ${getBackgroundColor()}
+        border-[1px] border-[#E3BFA4] font-regular shadow-custom`}
     >
       <div className="flex flex-1 gap-2">
-        <SearchIcon />
+        {iconVisible && <SearchIcon />}
         <TextareaAutosize
           className="flex-1 flex-shrink-0 focus:outline-none resize-none min-h-9 content-center 
-          text-[#111111] bg-transparent placeholder-custom"
+            text-[#111111] bg-transparent placeholder-custom"
           value={value}
           onChange={onChange}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
           placeholder={placeholder}
           onKeyDown={handlePressEnterFetch}
           minRows={1}

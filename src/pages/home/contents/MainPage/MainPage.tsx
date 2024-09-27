@@ -58,8 +58,13 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         <div className="overflow-scroll no-scrollbar p-4 gap-4 flex flex-col">
           <Component.MemoTextAreaWithMicAndCameraButton
             value={message}
+            iconVisible={isSearchMode()}
             onChange={handleMessageChange}
-            placeholder={t('pages.create.inputPlaceholder')}
+            placeholder={
+              isCreateMode()
+                ? t('pages.create.inputPlaceholder')
+                : t('pages.search.inputPlaceholder')
+            }
             onSubmit={() => handleSubmit(message)}
             onMicButtonClick={handleMicButtonClick}
             onCameraButtonClick={handleCameraButtonClick}

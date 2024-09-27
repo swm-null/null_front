@@ -11,7 +11,7 @@ const CreatedMemoList = ({
   softRevertMemo?: (memo: Memo) => void;
 }) => {
   return (
-    <div className="overflow-y-scroll no-scrollbar mt-4 flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {memos.map((memo) => (
         <CreatedMemoCard
           key={memo.id}
