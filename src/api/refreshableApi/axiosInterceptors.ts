@@ -4,15 +4,14 @@ import { isTokenResponse, refresh } from '../authApi/token';
 
 let isRefreshing = false;
 axios.interceptors.response.use(async (res) => {
-  // 액세스 토큰 만료
-  if (res.status === 401) {
-    // 리프레시 시도
+  const isAccessTokenExpired = (status: number) => status === 401;
+  if (isAccessTokenExpired(res.status)) {
     const refresh_token = Cookies.get('refresh_token');
     if (refresh_token) {
       if (!isRefreshing) {
         isRefreshing = true;
         try {
-          const response = await refresh(refresh_token); // 토큰 갱신 요청
+          const response = await refresh(refresh_token);
           if (isTokenResponse(response)) {
             const newAccessToken = response.access_token;
             axios.defaults.headers.common['Authorization'] =
