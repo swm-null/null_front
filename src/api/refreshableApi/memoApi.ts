@@ -1,4 +1,4 @@
-import { Memo, MemoSearchAnswer } from 'pages/home/contents/_interfaces';
+import { Memo, MemoSearchAnswer } from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, API_BASE_URL, getMethodName } from '../utils';
 import refreshableApi from './_api';
