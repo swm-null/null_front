@@ -24,11 +24,13 @@ const ExamplesOrResultsAtSearchMode = ({
           buttonData={buttonData}
           handleButtonClick={handleButtonClick}
         />
-      ) : (
+      ) : status === 'success' ? (
         <ResultContent
           searchAnswer={searchAnswer}
           navigateToHistory={navigateToHistory}
         />
+      ) : (
+        <></>
       )}
     </div>
   );

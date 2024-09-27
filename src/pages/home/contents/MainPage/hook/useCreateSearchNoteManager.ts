@@ -68,7 +68,6 @@ const useCreateSearchNoteManager = (mode: Interface.Mode) => {
     if (message.trim()) {
       setMessage('');
       setStatus('loading');
-      setSearchAnswer(undefined);
       try {
         const answer = await getSearchResponse(message);
         const newSearchAnswer = {
