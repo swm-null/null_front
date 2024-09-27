@@ -10,16 +10,10 @@ export const searchMemo = async (
 ): Promise<searchMemoResponse | errorResponse> => {
   const method = searchMemo.name;
   const endpoint = '/memos/search';
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   try {
     const response = await refreshableApi.post(
       endpoint,
-      JSON.stringify({ content: inputContent }),
-      config
+      JSON.stringify({ content: inputContent })
     );
     const responseInfo = {
       method,
@@ -41,19 +35,13 @@ export const createMemo = async (
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = createMemo.name;
   const endpoint = `${API_BASE_URL}/memo`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   try {
     const response = await refreshableApi.post(
       endpoint,
       JSON.stringify({
         content: inputContent,
         image_urls: inputImageUrls ? inputImageUrls : [],
-      }),
-      config
+      })
     );
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
@@ -84,13 +72,8 @@ export const updateMemo = async (
   const data = JSON.stringify({
     content: content,
   });
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   try {
-    const response = await refreshableApi.put(endpoint, data, config);
+    const response = await refreshableApi.put(endpoint, data);
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
     const responseInfo = {
@@ -114,13 +97,8 @@ export const deleteMemo = async (
 ): Promise<validResponse | errorResponse> => {
   const method = deleteMemo.name;
   const endpoint = `/memos/${id}`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   try {
-    const response = await refreshableApi.delete(endpoint, config);
+    const response = await refreshableApi.delete(endpoint);
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
     const responseInfo = {

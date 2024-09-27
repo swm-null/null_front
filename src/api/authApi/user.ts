@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, API_BASE_URL } from '../utils';
+import authApi from './_api';
 import saveToken from './saveToken';
 
 interface loginResponse {
@@ -14,16 +14,10 @@ export const login = async (
 ): Promise<loginResponse | errorResponse> => {
   const method = login.name;
   const endpoint = `${API_BASE_URL}/user/login`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   try {
-    const response = await axios.post(
+    const response = await authApi.post(
       endpoint,
-      JSON.stringify({ email, password }),
-      config
+      JSON.stringify({ email, password })
     );
     const responseInfo = {
       method,
@@ -45,16 +39,10 @@ export const signup = async (
 ): Promise<validResponse | errorResponse> => {
   const method = signup.name;
   const endpoint = `${API_BASE_URL}/user/register`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   try {
-    const response = await axios.post(
+    const response = await authApi.post(
       endpoint,
-      JSON.stringify({ email, password, confirm_password: confirmPassword }),
-      config
+      JSON.stringify({ email, password, confirm_password: confirmPassword })
     );
     const responseInfo = {
       method,

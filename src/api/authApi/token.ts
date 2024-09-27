@@ -1,7 +1,7 @@
 import { errorResponse } from 'api/interface';
 import { API_BASE_URL, errorHandler } from 'api/utils';
-import axios from 'axios';
 import saveToken from './saveToken';
+import authApi from './_api';
 
 interface tokenResponse {
   access_token: string;
@@ -13,16 +13,10 @@ export const refresh = async (
 ): Promise<tokenResponse | errorResponse> => {
   const method = refresh.name;
   const endpoint = `${API_BASE_URL}/user/refresh`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
   try {
-    const response = await axios.post(
+    const response = await authApi.post(
       endpoint,
-      JSON.stringify({ refresh_token }),
-      config
+      JSON.stringify({ refresh_token })
     );
     const responseInfo = {
       method,
