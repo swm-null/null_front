@@ -1,7 +1,7 @@
 import { Tag } from 'pages/home/contents/_interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, getMethodName } from '../utils';
-import refreshableApi from './_api';
+import { refreshableApi } from './_api';
 
 interface getTagsResponse extends validResponse {
   tags: Tag[];

@@ -1,7 +1,7 @@
 import { Memo, MemoSearchAnswer } from 'pages/home/contents/_interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, API_BASE_URL, getMethodName } from '../utils';
-import refreshableApi from './_api';
+import { refreshableApi } from './_api';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 
@@ -55,10 +55,8 @@ export const createMemo = async (
       created_at,
       updated_at,
     } as cuMemoResponse;
-    console.log(responseInfo);
     return responseInfo;
   } catch (error) {
-    console.log(error);
     return errorHandler(error, method);
   }
 };
