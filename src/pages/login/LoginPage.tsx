@@ -42,7 +42,7 @@ const LoginPage = () => {
           />
         </div>
 
-        <LoginSignUpButton
+        <LoginSignupButton
           label={t('login.loginButton')}
           onClick={handleLogin}
           bgColor="#3B82F6"
@@ -50,7 +50,7 @@ const LoginPage = () => {
           additionalClasses="mb-4 text-white"
         />
 
-        <LoginSignUpButton
+        <LoginSignupButton
           label={t('login.signUpButton')}
           onClick={handleSignUp}
           bgColor="#E5E7EB"
