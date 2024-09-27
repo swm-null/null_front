@@ -1,8 +1,7 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Tag } from 'pages/home/contents/_interfaces';
 import { errorResponse, validResponse } from '../interface';
-import { errorHandler, API_BASE_URL } from '../utils';
+import { errorHandler } from '../utils';
+import refreshableApi from './_api';
 
 interface getTagsResponse extends validResponse {
   tags: Tag[];
@@ -12,12 +11,10 @@ export const getAllTags = async (): Promise<
   getTagsResponse | errorResponse
 > => {
   const method = getAllTags.name;
-  const endpoint = `${API_BASE_URL}/tags?parentTagId=@`;
+  const endpoint = `/tags?parentTagId=@`;
 
   try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
@@ -34,12 +31,10 @@ export const getChildTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
   const method = getChildTags.name;
-  const endpoint = `${API_BASE_URL}/tags/${tagId}/childTags`;
+  const endpoint = `/tags/${tagId}/childTags`;
 
   try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
@@ -54,12 +49,10 @@ export const getChildTags = async (
 
 export const getRootTags = async (): Promise<validResponse | errorResponse> => {
   const method = getRootTags.name;
-  const endpoint = `${API_BASE_URL}/childTags`;
+  const endpoint = '/childTags';
 
   try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,

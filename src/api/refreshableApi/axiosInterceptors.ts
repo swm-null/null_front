@@ -1,9 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { isTokenResponse, refresh } from '../authApi/token';
+import refreshableApi from './_api';
 
 let isRefreshing = false;
-axios.interceptors.response.use(async (res) => {
+refreshableApi.interceptors.response.use(async (res) => {
   const isAccessTokenExpired = (status: number) => status === 401;
   if (isAccessTokenExpired(res.status)) {
     const refresh_token = Cookies.get('refresh_token');

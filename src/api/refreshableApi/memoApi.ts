@@ -1,8 +1,7 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Memo, MemoSearchAnswer } from 'pages/home/contents/_interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, API_BASE_URL } from '../utils';
+import refreshableApi from './_api';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 
@@ -10,15 +9,14 @@ export const searchMemo = async (
   inputContent: string
 ): Promise<searchMemoResponse | errorResponse> => {
   const method = searchMemo.name;
-  const endpoint = `${API_BASE_URL}/memos/search`;
+  const endpoint = '/memos/search';
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
   };
   try {
-    const response = await axios.post(
+    const response = await refreshableApi.post(
       endpoint,
       JSON.stringify({ content: inputContent }),
       config
@@ -46,11 +44,10 @@ export const createMemo = async (
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
   };
   try {
-    const response = await axios.post(
+    const response = await refreshableApi.post(
       endpoint,
       JSON.stringify({
         content: inputContent,
@@ -83,18 +80,17 @@ export const updateMemo = async (
   content: string
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = updateMemo.name;
-  const endpoint = `${API_BASE_URL}/memos/${id}`;
+  const endpoint = `/memos/${id}`;
   const data = JSON.stringify({
     content: content,
   });
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
   };
   try {
-    const response = await axios.put(endpoint, data, config);
+    const response = await refreshableApi.put(endpoint, data, config);
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
     const responseInfo = {
@@ -117,15 +113,14 @@ export const deleteMemo = async (
   id: string
 ): Promise<validResponse | errorResponse> => {
   const method = deleteMemo.name;
-  const endpoint = `${API_BASE_URL}/memos/${id}`;
+  const endpoint = `/memos/${id}`;
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
     },
   };
   try {
-    const response = await axios.delete(endpoint, config);
+    const response = await refreshableApi.delete(endpoint, config);
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
     const responseInfo = {
@@ -152,12 +147,10 @@ export const getAllMemos = async (): Promise<
   getMemosResponse | errorResponse
 > => {
   const method = getAllMemos.name;
-  const endpoint = `${API_BASE_URL}/memos`;
+  const endpoint = `/memos`;
 
   try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
@@ -173,12 +166,10 @@ export const getMemosByTag = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
   const method = getMemosByTag.name;
-  const endpoint = `${API_BASE_URL}/memos/tags/${tagId}`;
+  const endpoint = `/memos/tags/${tagId}`;
 
   try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
