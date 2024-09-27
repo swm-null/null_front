@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LoginSignUpButton, CustomInput, HiddenInput } from 'pages/components';
+import { LoginSignupButton, CustomInput, HiddenInput } from 'pages/components';
 import { isLoginResponse, login } from 'api';
 
 const LoginPage = () => {
@@ -16,7 +16,7 @@ const LoginPage = () => {
     if (isLoginResponse(response)) {
       Cookies.set('access_token', response.access_token, {});
       Cookies.set('refresh_token', response.refresh_token, {});
-      navigate('/home');
+      navigate('/');
     } else {
       alert(response.exceptionMessage);
     }
