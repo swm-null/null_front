@@ -26,6 +26,7 @@ export const login = async (
       refresh_token: response.data.refresh_token,
     } as loginResponse;
     saveToken(responseInfo.access_token, responseInfo.refresh_token);
+    console.log(responseInfo);
     return responseInfo;
   } catch (error) {
     return errorHandler(error, method);
