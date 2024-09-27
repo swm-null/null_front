@@ -70,10 +70,8 @@ export const createMemo = async (
       created_at,
       updated_at,
     } as cuMemoResponse;
-    console.log(responseInfo);
     return responseInfo;
   } catch (error) {
-    console.log(error);
     return errorHandler(error, method);
   }
 };
