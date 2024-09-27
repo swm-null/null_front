@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { errorResponse } from './types';
-
-export const LOCALHOST = import.meta.env.VITE_LOCALHOST;
+import { errorResponse } from '../interface';
 
 export const errorHandler = (error: unknown, method: string): errorResponse => {
   let errorInfo;

@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { errorHandler, LOCALHOST } from './errorHandler';
-import { errorResponse, validResponse } from './types';
+import { errorResponse, validResponse } from '../interface';
+import { errorHandler, API_BASE_URL } from '../utils';
+import authApi from './_api';
+import saveToken from './saveToken';
 
 interface loginResponse {
   access_token: string;
@@ -11,18 +12,12 @@ export const login = async (
   email: string,
   password: string
 ): Promise<loginResponse | errorResponse> => {
-  const method = 'login';
-  const endpoint = `${LOCALHOST}/users/login`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+  const method = login.name;
+  const endpoint = `${API_BASE_URL}/user/login`;
   try {
-    const response = await axios.post(
+    const response = await authApi.post(
       endpoint,
-      JSON.stringify({ email, password }),
-      config
+      JSON.stringify({ email, password })
     );
     const responseInfo = {
       method,
@@ -30,6 +25,7 @@ export const login = async (
       access_token: response.data.access_token,
       refresh_token: response.data.refresh_token,
     } as loginResponse;
+    saveToken(responseInfo.access_token, responseInfo.refresh_token);
     return responseInfo;
   } catch (error) {
     return errorHandler(error, method);
@@ -38,20 +34,15 @@ export const login = async (
 
 export const signup = async (
   email: string,
-  password: string
+  password: string,
+  confirmPassword: string
 ): Promise<validResponse | errorResponse> => {
-  const method = 'signup';
-  const endpoint = `${LOCALHOST}/users/register`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+  const method = signup.name;
+  const endpoint = `${API_BASE_URL}/user/register`;
   try {
-    const response = await axios.post(
+    const response = await authApi.post(
       endpoint,
-      JSON.stringify({ email, password }),
-      config
+      JSON.stringify({ email, password, confirm_password: confirmPassword })
     );
     const responseInfo = {
       method,
