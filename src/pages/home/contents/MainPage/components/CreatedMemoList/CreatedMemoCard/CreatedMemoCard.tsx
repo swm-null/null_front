@@ -16,14 +16,17 @@ const CreatedMemoCardHeader = ({
   handleDeleteMemo: () => {};
 }) => {
   return (
-    <div className="flex items-center">
-      <BookIcon />
-      <p className="pl-2 text-[#6A5344] font-extrabold select-none">{aiName}</p>
-      <div className="flex-1" />
-      <p className="text-[#6A5344] select-none">{updatedAt}</p>
-      <button className="rounded-full py-1 px-2">
-        <DeleteIcon onClick={handleDeleteMemo} />
-      </button>
+    <div className="flex">
+      <div className="flex gap-2 items-center mr-auto">
+        <BookIcon />
+        <p className="text-[#6A5344] font-extrabold select-none">{aiName}</p>
+      </div>
+      <div className="flex gap-2 items-center">
+        <p className="text-[#6A5344] select-none">{updatedAt}</p>
+        <button className="rounded-full">
+          <DeleteIcon onClick={handleDeleteMemo} />
+        </button>
+      </div>
     </div>
   );
 };
@@ -56,15 +59,17 @@ const CreatedMemoCard = ({
   const formatDate = (date: Date): string => format(date, t('memo.dateFormat'));
 
   return (
-    <div className="flex items-start p-4 bg-[#FFF6E3] border-[1.5px] border-[#DBBFAD] rounded-xl">
-      <div className="w-full">
+    <div className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border-[1.5px] border-[#DBBFAD] rounded-xl shadow-custom">
+      <div className="flex flex-col w-full gap-5">
         <CreatedMemoCardHeader
           aiName={t('pages.search.ai.name')}
           updatedAt={formatDate(new Date(memo.updated_at))}
           handleDeleteMemo={handleDeleteMemo}
         />
-        <TagManager tags={tags} setTags={setTags} editable />
-        <MemoText message={message} setMessage={setMessage} />
+        <div className="flex flex-col gap-9">
+          <TagManager tags={tags} setTags={setTags} editable />
+          <MemoText message={message} setMessage={setMessage} />
+        </div>
       </div>
     </div>
   );
