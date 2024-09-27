@@ -1,5 +1,5 @@
 import { errorResponse, validResponse } from '../interface';
-import { errorHandler } from '../utils';
+import { errorHandler, getMethodName } from '../utils';
 import authApi from './_api';
 import saveToken from './saveToken';
 
@@ -12,7 +12,7 @@ export const login = async (
   email: string,
   password: string
 ): Promise<loginResponse | errorResponse> => {
-  const method = login.name;
+  const method = getMethodName();
   const endpoint = '/user/login';
   try {
     const response = await authApi.post(
@@ -37,7 +37,7 @@ export const signup = async (
   password: string,
   confirmPassword: string
 ): Promise<validResponse | errorResponse> => {
-  const method = signup.name;
+  const method = getMethodName();
   const endpoint = '/user/register';
   try {
     const response = await authApi.post(

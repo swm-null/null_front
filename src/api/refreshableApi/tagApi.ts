@@ -1,6 +1,6 @@
 import { Tag } from 'pages/home/contents/_interfaces';
 import { errorResponse, validResponse } from '../interface';
-import { errorHandler } from '../utils';
+import { errorHandler, getMethodName } from '../utils';
 import refreshableApi from './_api';
 
 interface getTagsResponse extends validResponse {
@@ -10,7 +10,7 @@ interface getTagsResponse extends validResponse {
 export const getAllTags = async (): Promise<
   getTagsResponse | errorResponse
 > => {
-  const method = getAllTags.name;
+  const method = getMethodName();
   const endpoint = `/tags?parentTagId=@`;
 
   try {
@@ -30,7 +30,7 @@ export const getAllTags = async (): Promise<
 export const getChildTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
-  const method = getChildTags.name;
+  const method = getMethodName();
   const endpoint = `/tags/${tagId}/childTags`;
 
   try {
@@ -48,7 +48,7 @@ export const getChildTags = async (
 };
 
 export const getRootTags = async (): Promise<validResponse | errorResponse> => {
-  const method = getRootTags.name;
+  const method = getMethodName();
   const endpoint = '/childTags';
 
   try {

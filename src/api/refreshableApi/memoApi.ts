@@ -1,6 +1,6 @@
 import { Memo, MemoSearchAnswer } from 'pages/home/contents/_interfaces';
 import { errorResponse, validResponse } from '../interface';
-import { errorHandler, API_BASE_URL } from '../utils';
+import { errorHandler, API_BASE_URL, getMethodName } from '../utils';
 import refreshableApi from './_api';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
@@ -8,7 +8,7 @@ interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 export const searchMemo = async function (
   inputContent: string
 ): Promise<searchMemoResponse | errorResponse> {
-  const method = searchMemo.name;
+  const method = getMethodName();
   const endpoint = '/memos/search';
   try {
     const response = await refreshableApi.post(
@@ -33,7 +33,7 @@ export const createMemo = async (
   inputContent: string,
   inputImageUrls?: string[]
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = createMemo.name;
+  const method = getMethodName();
   const endpoint = `${API_BASE_URL}/memo`;
   try {
     const response = await refreshableApi.post(
@@ -67,7 +67,7 @@ export const updateMemo = async (
   id: string,
   content: string
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = updateMemo.name;
+  const method = getMethodName();
   const endpoint = `/memos/${id}`;
   const data = JSON.stringify({
     content: content,
@@ -95,7 +95,7 @@ export const updateMemo = async (
 export const deleteMemo = async (
   id: string
 ): Promise<validResponse | errorResponse> => {
-  const method = deleteMemo.name;
+  const method = getMethodName();
   const endpoint = `/memos/${id}`;
   try {
     const response = await refreshableApi.delete(endpoint);
@@ -124,7 +124,7 @@ interface getMemosResponse extends validResponse {
 export const getAllMemos = async (): Promise<
   getMemosResponse | errorResponse
 > => {
-  const method = getAllMemos.name;
+  const method = getMethodName();
   const endpoint = `/memos`;
 
   try {
@@ -143,7 +143,7 @@ export const getAllMemos = async (): Promise<
 export const getMemosByTag = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
-  const method = getMemosByTag.name;
+  const method = getMethodName();
   const endpoint = `/memos/tags/${tagId}`;
 
   try {
