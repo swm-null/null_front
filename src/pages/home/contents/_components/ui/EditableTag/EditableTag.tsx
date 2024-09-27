@@ -50,11 +50,12 @@ const EditableTag = ({
 
   return (
     <div
-      className={`inline-flex flex-shrink-0 self-start items-center px-3 py-1 ${color ? `bg-[${color}]` : 'bg-[#F7DBC2]'} rounded-2xl ${onClick && 'cursor-pointer'}`}
+      className={`inline-flex flex-shrink-0 self-start items-center px-3 py-[5.5px] gap-[5px]
+        ${color ? `bg-[${color}]` : 'bg-[#F7DBC2]'} rounded-2xl ${onClick && 'cursor-pointer'}`}
       onClick={onClick}
     >
       <span
-        className="focus:outline-none break-words text-[#6A5344]"
+        className="focus:outline-none whitespace-nowrap text-[#6A5344] text-xs"
         contentEditable={editable}
         ref={ref}
         suppressContentEditableWarning
@@ -62,7 +63,9 @@ const EditableTag = ({
       >
         {text}
       </span>
-      {editable && onDelete && <CloseIcon onClick={onDelete} />}
+      {editable && onDelete && (
+        <CloseIcon className="w-3 h-3" onClick={onDelete} />
+      )}
     </div>
   );
 };

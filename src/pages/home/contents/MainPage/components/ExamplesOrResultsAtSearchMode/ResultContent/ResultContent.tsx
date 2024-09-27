@@ -18,7 +18,7 @@ const ResultContent = ({
   return (
     <>
       <div
-        className="px-2 py-6 max-h-[70%] w-full rounded-xl border-[1px] 
+        className="px-2 py-6 w-full rounded-xl border-[1px] 
           border-[#E3BFA4] bg-[#FFF6E3CC] font-regular"
       >
         <SearchConversation

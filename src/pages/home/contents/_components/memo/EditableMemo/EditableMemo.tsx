@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MemoText, TagManager } from 'pages/home/contents/_components';
 import { Memo } from 'pages/home/contents/_interfaces';
-import * as Api from 'utils/auth';
+import * as Api from 'api';
 import { DeleteIcon } from 'assets/icons';
 
 const EditableMemo = ({

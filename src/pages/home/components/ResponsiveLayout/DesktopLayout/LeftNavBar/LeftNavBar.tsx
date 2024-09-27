@@ -48,14 +48,14 @@ const SidebarTooltipButton = ({
 
   return (
     <div
-      className="min-w-[48px] h-[48px] px-[14px] bg-[#F5ECE0] text-[#5D4037] 
+      className="min-w-12 h-12 px-[14px] bg-[#F5ECE0] text-[#5D4037] gap-4
         inline-flex items-center shadow-lg rounded-full cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={onClick}
     >
-      <div className="flex items-center justify-center h-[56px]">{icon}</div>
-      {hovered && <span className="ml-4 whitespace-nowrap">{label}</span>}
+      <div className="flex items-center justify-center">{icon}</div>
+      {hovered && <span className="whitespace-nowrap">{label}</span>}
     </div>
   );
 };

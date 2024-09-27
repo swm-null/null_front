@@ -1,27 +1,19 @@
-import axios from 'axios';
-import { Memo, MemoSearchAnswer, Tag } from 'pages/home/contents/_interfaces';
-import { errorHandler, LOCALHOST } from './errorHandler';
-import { errorResponse, validResponse } from './types';
-import Cookies from 'js-cookie';
+import { Memo, MemoSearchAnswer } from 'pages/home/contents/_interfaces';
+import { errorResponse, validResponse } from '../interface';
+import { errorHandler, API_BASE_URL } from '../utils';
+import refreshableApi from './_api';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 
-export const searchMemo = async (
+export const searchMemo = async function (
   inputContent: string
-): Promise<searchMemoResponse | errorResponse> => {
-  const method = 'searchMemo';
-  const endpoint = `${LOCALHOST}/memos/search`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
-    },
-  };
+): Promise<searchMemoResponse | errorResponse> {
+  const method = searchMemo.name;
+  const endpoint = '/memos/search';
   try {
-    const response = await axios.post(
+    const response = await refreshableApi.post(
       endpoint,
-      JSON.stringify({ content: inputContent }),
-      config
+      JSON.stringify({ content: inputContent })
     );
     const responseInfo = {
       method,
@@ -41,22 +33,15 @@ export const createMemo = async (
   inputContent: string,
   inputImageUrls?: string[]
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = 'createMemo';
-  const endpoint = `${LOCALHOST}/memo`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
-    },
-  };
+  const method = createMemo.name;
+  const endpoint = `${API_BASE_URL}/memo`;
   try {
-    const response = await axios.post(
+    const response = await refreshableApi.post(
       endpoint,
       JSON.stringify({
         content: inputContent,
         image_urls: inputImageUrls ? inputImageUrls : [],
-      }),
-      config
+      })
     );
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
@@ -70,8 +55,10 @@ export const createMemo = async (
       created_at,
       updated_at,
     } as cuMemoResponse;
+    console.log(responseInfo);
     return responseInfo;
   } catch (error) {
+    console.log(error);
     return errorHandler(error, method);
   }
 };
@@ -80,19 +67,13 @@ export const updateMemo = async (
   id: string,
   content: string
 ): Promise<cuMemoResponse | errorResponse> => {
-  const method = 'editMemo';
-  const endpoint = `${LOCALHOST}/memos/${id}`;
+  const method = updateMemo.name;
+  const endpoint = `/memos/${id}`;
   const data = JSON.stringify({
     content: content,
   });
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
-    },
-  };
   try {
-    const response = await axios.put(endpoint, data, config);
+    const response = await refreshableApi.put(endpoint, data);
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
     const responseInfo = {
@@ -114,16 +95,10 @@ export const updateMemo = async (
 export const deleteMemo = async (
   id: string
 ): Promise<validResponse | errorResponse> => {
-  const method = 'deleteMemo';
-  const endpoint = `${LOCALHOST}/memos/${id}`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('access_token')}`,
-    },
-  };
+  const method = deleteMemo.name;
+  const endpoint = `/memos/${id}`;
   try {
-    const response = await axios.delete(endpoint, config);
+    const response = await refreshableApi.delete(endpoint);
     const { id, content, tags, image_urls, created_at, updated_at } =
       response.data.memo;
     const responseInfo = {
@@ -149,13 +124,11 @@ interface getMemosResponse extends validResponse {
 export const getAllMemos = async (): Promise<
   getMemosResponse | errorResponse
 > => {
-  const method = 'getAllMemos';
-  const endpoint = `${LOCALHOST}/memos`;
+  const method = getAllMemos.name;
+  const endpoint = `/memos`;
 
   try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
@@ -170,85 +143,16 @@ export const getAllMemos = async (): Promise<
 export const getMemosByTag = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
-  const method = 'getMemosBySelectedTags';
-  const endpoint = `${LOCALHOST}/memos/tags/${tagId}`;
+  const method = getMemosByTag.name;
+  const endpoint = `/memos/tags/${tagId}`;
 
   try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
       message: '특정 태그의 메모 가져오는 것을 성공했습니다.',
       memos: response.data,
-    };
-    return responseInfo;
-  } catch (error) {
-    return errorHandler(error, method);
-  }
-};
-
-interface getTagsResponse extends validResponse {
-  tags: Tag[];
-}
-
-export const getAllTags = async (): Promise<
-  getTagsResponse | errorResponse
-> => {
-  const method = 'getChildTags';
-  const endpoint = `${LOCALHOST}/tags?parentTagId=@`;
-
-  try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
-    const responseInfo = {
-      method,
-      status: response.status,
-      message: '모든 태그를 가져오는 것을 성공했습니다.',
-      tags: response.data,
-    };
-    return responseInfo;
-  } catch (error) {
-    return errorHandler(error, method);
-  }
-};
-
-export const getChildTags = async (
-  tagId: string
-): Promise<getTagsResponse | errorResponse> => {
-  const method = 'getChildTags';
-  const endpoint = `${LOCALHOST}/tags/${tagId}/childTags`;
-
-  try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
-    const responseInfo = {
-      method,
-      status: response.status,
-      message: '특정 태그의 자식 태그를 가져오는 것을 성공했습니다.',
-      tags: response.data,
-    };
-    return responseInfo;
-  } catch (error) {
-    return errorHandler(error, method);
-  }
-};
-
-export const getRootTags = async (): Promise<validResponse | errorResponse> => {
-  const method = 'getRootTags';
-  const endpoint = `${LOCALHOST}/childTags`;
-
-  try {
-    const response = await axios.get(endpoint, {
-      headers: { Authorization: `Bearer ${Cookies.get('access_token')}` },
-    });
-    const responseInfo = {
-      method,
-      status: response.status,
-      tags: response.data,
     };
     return responseInfo;
   } catch (error) {
@@ -291,10 +195,4 @@ export const isGetMemosResponse = (
   response: getMemosResponse | errorResponse
 ): response is getMemosResponse => {
   return isValidResponse(response as getMemosResponse);
-};
-
-export const isGetTagsResponse = (
-  response: getTagsResponse | errorResponse
-): response is getTagsResponse => {
-  return (response as getTagsResponse).tags !== undefined;
 };

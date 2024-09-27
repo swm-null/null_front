@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getChildTags, getRootTags, isGetTagsResponse } from 'utils/auth';
 import { Tag } from 'pages/home/contents/_interfaces';
+import { getChildTags, getRootTags, isGetTagsResponse } from 'api';
 
 const useTagsManager = () => {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);

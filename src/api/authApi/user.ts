@@ -1,6 +1,7 @@
-import axios from 'axios';
-import { errorHandler, LOCALHOST } from './errorHandler';
-import { errorResponse, validResponse } from './types';
+import { errorResponse, validResponse } from '../interface';
+import { errorHandler } from '../utils';
+import authApi from './_api';
+import saveToken from './saveToken';
 
 interface loginResponse {
   access_token: string;
@@ -11,18 +12,12 @@ export const login = async (
   email: string,
   password: string
 ): Promise<loginResponse | errorResponse> => {
-  const method = 'login';
-  const endpoint = `${LOCALHOST}/user/login`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+  const method = login.name;
+  const endpoint = '/user/login';
   try {
-    const response = await axios.post(
+    const response = await authApi.post(
       endpoint,
-      JSON.stringify({ email, password }),
-      config
+      JSON.stringify({ email, password })
     );
     const responseInfo = {
       method,
@@ -30,6 +25,7 @@ export const login = async (
       access_token: response.data.access_token,
       refresh_token: response.data.refresh_token,
     } as loginResponse;
+    saveToken(responseInfo.access_token, responseInfo.refresh_token);
     return responseInfo;
   } catch (error) {
     return errorHandler(error, method);
@@ -41,18 +37,12 @@ export const signup = async (
   password: string,
   confirmPassword: string
 ): Promise<validResponse | errorResponse> => {
-  const method = 'signup';
-  const endpoint = `${LOCALHOST}/user/register`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
+  const method = signup.name;
+  const endpoint = '/user/register';
   try {
-    const response = await axios.post(
+    const response = await authApi.post(
       endpoint,
-      JSON.stringify({ email, password, confirm_password: confirmPassword }),
-      config
+      JSON.stringify({ email, password, confirm_password: confirmPassword })
     );
     const responseInfo = {
       method,

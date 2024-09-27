@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState, useMemo } from 'react';
 import { forkJoin, from, lastValueFrom, map } from 'rxjs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Memo, Tag } from 'pages/home/contents/_interfaces';
-import * as Api from 'utils/auth';
+import * as Api from 'api';
 
 const useSelectedTagMemosManager = (
   tags: Tag[] | null,

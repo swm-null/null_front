@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoginSignUpButton, CustomInput, HiddenInput } from 'pages/components';
-import { isLoginResponse, login } from 'utils/auth/user';
+import { isLoginResponse, login } from 'api';
 
 const LoginPage = () => {
   const navigate = useNavigate();
