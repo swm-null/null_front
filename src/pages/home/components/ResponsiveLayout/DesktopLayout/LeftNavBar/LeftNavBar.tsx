@@ -14,7 +14,7 @@ const LeftNavBar = ({ setCurrentPage }: LeftNavBarProps) => {
       <SidebarTooltipButton
         icon={<Icon.HomeIcon />}
         label={t('pages.sidebar.main')}
-        onClick={() => setCurrentPage('main')}
+        onClick={() => setCurrentPage('')}
       />
       <SidebarTooltipButton
         icon={<Icon.DashboardIcon />}

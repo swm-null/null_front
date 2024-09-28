@@ -16,7 +16,7 @@ const Login = () => {
     if (isLoginResponse(response)) {
       Cookies.set('access_token', response.access_token, {});
       Cookies.set('refresh_token', response.refresh_token, {});
-      navigate('/home');
+      navigate('/');
     } else {
       alert(response.exceptionMessage);
     }

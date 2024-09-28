@@ -14,7 +14,7 @@ const BottomNavBar = ({ setCurrentPage }: BottomNavBarProps) => {
         <BottomNavButton
           icon={<Icon.HomeIcon />}
           label={t('pages.sidebar.main')}
-          onClick={() => setCurrentPage('main')}
+          onClick={() => setCurrentPage('')}
         />
         <BottomNavButton
           icon={<Icon.DashboardIcon />}
