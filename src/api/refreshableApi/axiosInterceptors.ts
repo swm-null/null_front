@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { isTokenResponse, refresh } from '../authApi/token';
-import refreshableApi from './_api';
+import { refreshableApi } from './_api';
 
 let isRefreshing = false;
 refreshableApi.interceptors.response.use(async (res) => {
