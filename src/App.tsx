@@ -2,12 +2,15 @@ import { BrowserRouter } from 'react-router-dom';
 import 'i18n';
 import './index.css';
 import { Router } from 'pages';
+import { AlertDialog } from 'utils/dialog';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
+    <AlertDialog>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </AlertDialog>
   );
 };
 
