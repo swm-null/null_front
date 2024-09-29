@@ -1,4 +1,4 @@
-import { Tag } from 'pages/home/contents/_interfaces';
+import { Tag } from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, getMethodName } from '../utils';
 import { refreshableApi } from './_api';

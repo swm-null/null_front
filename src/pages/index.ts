@@ -1,3 +1,1 @@
-export * from './login';
-export * from './signup';
-export * from './home';
+export { default as Router } from './router';
