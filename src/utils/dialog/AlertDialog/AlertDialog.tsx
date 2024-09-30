@@ -1,48 +1,15 @@
-import { useState, useEffect, useCallback, ReactNode } from 'react';
+import { useContext } from 'react';
 import { Dialog } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { AlertContext } from 'utils/context';
 
-type AlertState = {
-  message: string;
-  onClose: () => void;
-};
-
-const AlertDialog = ({ children }: { children: ReactNode }) => {
-  const [alertState, setAlertState] = useState<AlertState | null>(null);
+const AlertDialog = () => {
+  const { alertState } = useContext(AlertContext);
   const { t } = useTranslation();
   const isOpen = Boolean(alertState);
 
-  const alert = (message?: string): Promise<undefined> =>
-    new Promise((resolve) => {
-      setAlertState({
-        message: message || '',
-        onClose: () => {
-          setAlertState(null);
-          resolve(undefined);
-        },
-      });
-    });
-
-  const handleEscape = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && alertState) {
-        alertState.onClose();
-      }
-    },
-    [alertState]
-  );
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [handleEscape]);
-
   return (
-    <AlertContext.Provider value={{ alert }}>
-      {children}
+    <>
       {isOpen && (
         <Dialog
           open={isOpen}
@@ -58,7 +25,7 @@ const AlertDialog = ({ children }: { children: ReactNode }) => {
           />
         </Dialog>
       )}
-    </AlertContext.Provider>
+    </>
   );
 };
 
