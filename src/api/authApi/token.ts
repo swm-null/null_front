@@ -1,7 +1,7 @@
 import { errorResponse } from 'api/interface';
 import { errorHandler, getMethodName } from 'api/utils';
 import saveToken from './saveToken';
-import authApi from './_api';
+import { authApi } from './_api';
 
 interface tokenResponse {
   access_token: string;

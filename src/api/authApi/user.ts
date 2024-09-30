@@ -1,6 +1,6 @@
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, getMethodName } from '../utils';
-import authApi from './_api';
+import { authApi } from './_api';
 import saveToken from './saveToken';
 
 interface loginResponse {
