@@ -19,15 +19,10 @@ refreshableApi.interceptors.response.use(undefined, async (error) => {
   const isAccessTokenExpired = (status: number) => status === 401;
   const isRefreshTokenExpired = (status: number) => status === 403;
 
-  const errorStatus = error.response.status;
   const { alert } = useContext(AlertContext);
   const { t } = useTranslation();
 
-  const onAlertClick = async (message: string, page: string) => {
-    await alert(message);
-    window.location.href = `/${page}`;
-  };
-
+  const errorStatus = error.response.status;
   if (isAccessTokenExpired(errorStatus)) {
     const refresh_token = Cookies.get('refresh_token');
     if (refresh_token) {
@@ -49,7 +44,9 @@ refreshableApi.interceptors.response.use(undefined, async (error) => {
       }
     }
   } else if (isRefreshTokenExpired(errorStatus)) {
-    onAlertClick(t('utils.auth.sessionExpired'), 'login');
+    alert(t('utils.auth.sessionExpired')).then(() => {
+      window.location.href = '/login';
+    });
   }
   return error;
 });

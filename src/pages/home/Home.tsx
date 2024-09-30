@@ -16,9 +16,10 @@ const Home = () => {
   const { t } = useTranslation();
   const { alert } = useContext(AlertContext);
 
-  const onAlertClick = async (message: string, page: string) => {
-    await alert(message);
-    handleNavigation(page);
+  const onAlertClick = (message: string, page: string) => {
+    alert(message).then(() => {
+      handleNavigation(page);
+    });
   };
 
   const handleNavigation = (page: string) => {
