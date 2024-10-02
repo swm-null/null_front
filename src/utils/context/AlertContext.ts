@@ -7,12 +7,12 @@ type AlertState = {
 
 type Type = {
   alert: (message?: string) => Promise<undefined>;
-  alertState: AlertState | null; // alertState 추가
+  alertState: AlertState | null;
 };
 
 const AlertContext = createContext<Type>({
   alert: () => new Promise((_, reject) => reject()),
-  alertState: null, // 기본값
+  alertState: null,
 });
 
 export default AlertContext;
