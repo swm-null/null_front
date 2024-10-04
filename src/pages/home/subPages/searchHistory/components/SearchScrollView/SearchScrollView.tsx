@@ -5,9 +5,11 @@ import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
 const SearchScrollView = ({
   searchConversations,
   children,
+  searchTextArea,
 }: {
   searchConversations: MemoSearchConversation[];
   children: ReactNode;
+  searchTextArea: ReactNode;
 }) => {
   const scrollDirectionRef = useRef<HTMLDivElement>(null);
   const {
@@ -33,7 +35,10 @@ const SearchScrollView = ({
       <div className="flex flex-col overflow-y-scroll no-scrollbar flex-1 w-full">
         <div ref={endOfScrollViewObserverRef} />
         <div ref={scrollDirectionRef} />
-        <div className="flex gap-[0.62rem] flex-col p-4">{children}</div>
+        <div className="flex flex-col gap-5 p-4">
+          {searchTextArea}
+          <div className="flex gap-[0.62rem] flex-col">{children}</div>
+        </div>
       </div>
     </div>
   );

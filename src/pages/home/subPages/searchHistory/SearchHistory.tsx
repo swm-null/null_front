@@ -25,21 +25,23 @@ const SearchHistoryPage = ({}: {}) => {
         <div className="px-4">
           <Header headerText={t('pages.searchHistory.header')} />
         </div>
-        <SearchScrollView searchConversations={searchConversations}>
-          <>
+        <SearchScrollView
+          searchConversations={searchConversations}
+          searchTextArea={
             <MemoSearchTextArea
               value={message}
               onChange={handleMessageChange}
               placeholder={t('pages.searchHistory.inputPlaceholder')}
               onSubmit={() => handleSubmit(message)}
             />
-            {searchConversations.map((searchConversation) => (
-              <SearchHistoryAccordion
-                key={searchConversation.id}
-                data={searchConversation}
-              />
-            ))}
-          </>
+          }
+        >
+          {searchConversations.map((searchConversation) => (
+            <SearchHistoryAccordion
+              key={searchConversation.id}
+              data={searchConversation}
+            />
+          ))}
         </SearchScrollView>
       </div>
     </div>
