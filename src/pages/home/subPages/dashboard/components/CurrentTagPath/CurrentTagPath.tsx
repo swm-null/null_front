@@ -3,6 +3,7 @@ import { Breadcrumbs } from '@mui/material';
 import { UneditableTag } from 'pages/home/subPages/components';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
+import { TagPathButton } from './TagPathButton';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -35,20 +36,18 @@ const CurrentTagPath = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="flex flex-col w-full gap-4">
       <Breadcrumbs separator={<RightIcon />} aria-label="breadcrumb">
-        <UneditableTag
+        <TagPathButton
           key="all"
           text={allTagText}
-          color="transparent"
           invalidCharsPattern={invalidCharsPattern}
           onClick={handleAllTagsClick}
         />
         {tagStack.map((tag, index) => (
-          <UneditableTag
+          <TagPathButton
             key={tag.id}
             text={tag.name}
-            color="transparent"
             invalidCharsPattern={invalidCharsPattern}
             onClick={
               index !== tagStack.length - 1
@@ -59,12 +58,14 @@ const CurrentTagPath = ({
         ))}
       </Breadcrumbs>
 
-      <div className="mt-2 flex flex-1 overflow-hidden overflow-x-scroll no-scrollbar gap-1">
+      <div className="flex flex-1 overflow-hidden overflow-x-scroll no-scrollbar gap-1">
         {tags.map((tag, index) => (
           <UneditableTag
             key={index}
-            text={tag.name}
-            color="#FFF6E3CC"
+            text={`#${tag.name}`}
+            color="peach1-transparent"
+            fontColor="brown1"
+            border
             invalidCharsPattern={invalidCharsPattern}
             onClick={() => handleChildTagClick(tag)}
           />
