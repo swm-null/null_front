@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { deleteMemo, isValidResponse } from 'api';
 import { MemoText, UneditableTag } from 'pages/home/subPages/components';
@@ -24,13 +24,6 @@ const UneditableMemo = ({
 
   const [message, setMessage] = useState(memo.content);
   const [tags] = useState(memo.tags);
-  const [isDragging, setIsDragging] = useState(false);
-  const mouseDownTime = useRef<number | null>(null);
-
-  const handleMouseDown = () => {
-    mouseDownTime.current = Date.now();
-    setIsDragging(false);
-  };
 
   const handleDeleteMemo = async () => {
     softDeleteMemo && softDeleteMemo(memo.id);
@@ -50,7 +43,6 @@ const UneditableMemo = ({
     <div
       className={`relative flex p-4 min-h-[115px] flex-col bg-white border-[1.5px] gap-[0.88rem]
         ${border ? `border-shadow0` : ''} rounded-2xl`}
-      onMouseDown={handleMouseDown}
       onClick={onClick}
     >
       <div className="flex flex-col gap-2">
@@ -73,7 +65,7 @@ const UneditableMemo = ({
       </div>
 
       <div className="flex flex-1 items-center">
-        <p className="text-[#9A9A9A] font-normal">
+        <p className="text-[#9A9A9A] font-medium">
           {formatDate(new Date(memo.updated_at))}
         </p>
 

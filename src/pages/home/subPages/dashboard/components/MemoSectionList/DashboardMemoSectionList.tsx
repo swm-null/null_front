@@ -31,7 +31,11 @@ const DashboardMemoSectionList = ({
     return (
       <Components.MemosList>
         {taggedMemo.memos.map((memo, index) => (
-          <Components.UneditableMemo key={index} memo={memo} />
+          <Components.UneditableMemo
+            key={index}
+            memo={memo}
+            onClick={() => handleMemoClick(memo, taggedMemo.tag, index)}
+          />
         ))}
       </Components.MemosList>
     );
