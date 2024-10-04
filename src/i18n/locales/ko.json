@@ -97,6 +97,10 @@
       },
       "searchButton": "검색"
     },
+    "searchHistory": {
+      "header": "History",
+      "inputPlaceholder": "What are you looking for?"
+    },
     "uploadData": {
       "header": "카카오톡 나와의 채팅 데이터 가져오기",
       "emailInstruction": {
