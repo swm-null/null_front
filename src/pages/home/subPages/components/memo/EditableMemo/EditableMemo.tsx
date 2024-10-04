@@ -11,18 +11,14 @@ import { DeleteIcon } from 'assets/icons';
 const EditableMemo = ({
   memo,
   editable = false,
-  color,
+  border,
   softUpdateMemo,
   softDeleteMemo,
   softRevertMemo,
 }: {
   memo: Memo;
   editable?: boolean;
-  /**
-   * 메모에 적용하고 싶은 배경색을 string으로 전달
-   * ex) #000000, tailwind에 적용되어있는 color
-   */
-  color?: string;
+  border?: boolean;
   softUpdateMemo?: (newMemo: Memo) => void;
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
@@ -86,7 +82,8 @@ const EditableMemo = ({
 
   return (
     <div
-      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md min-h-72`}
+      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] rounded-md min-h-72 
+        ${border ? `border-shadow0` : 'border-gray1'}`}
     >
       <p className="text-center">{formatDate(new Date(memo.updated_at))}</p>
       <MemoText message={message} setMessage={setMessage} editable={editable} />

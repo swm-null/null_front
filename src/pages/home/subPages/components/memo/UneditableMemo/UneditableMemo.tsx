@@ -9,17 +9,13 @@ import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 const UneditableMemo = ({
   memo,
-  color,
+  border,
   onClick,
   softDeleteMemo,
   softRevertMemo,
 }: {
   memo: Memo;
-  /**
-   * 메모에 적용하고 싶은 배경색을 string으로 전달
-   * ex) #000000, tailwind에 적용되어있는 color
-   */
-  color?: string;
+  border?: boolean;
   onClick?: () => void;
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
@@ -34,22 +30,6 @@ const UneditableMemo = ({
   const handleMouseDown = () => {
     mouseDownTime.current = Date.now();
     setIsDragging(false);
-  };
-
-  const handleMouseMove = () => {
-    if (
-      mouseDownTime.current !== null &&
-      Date.now() - mouseDownTime.current > 100
-    ) {
-      setIsDragging(true);
-    }
-  };
-
-  const handleMouseUp = () => {
-    mouseDownTime.current = null;
-    if (!isDragging && onClick) {
-      onClick();
-    }
   };
 
   const handleDeleteMemo = async () => {
@@ -69,10 +49,9 @@ const UneditableMemo = ({
   return (
     <div
       className={`relative flex p-4 min-h-[115px] flex-col bg-white border-[1.5px] gap-[0.88rem]
-        ${color ? `border-[${color}]` : 'border-gray1'} rounded-2xl`}
+        ${border ? `border-shadow0` : ''} rounded-2xl`}
       onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
+      onClick={onClick}
     >
       <div className="flex flex-col gap-2">
         <div className="flex items-center">
