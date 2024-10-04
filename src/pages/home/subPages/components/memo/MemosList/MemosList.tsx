@@ -56,7 +56,7 @@ const MemosList = ({ children }: MemosListProps) => {
         <ResponsiveMasonry
           columnsCountBreakPoints={getColumnsCountBreakPoints()}
         >
-          <Masonry gutter="16px">{children}</Masonry>
+          <Masonry gutter="0.75rem">{children}</Masonry>
         </ResponsiveMasonry>
       ) : null}
     </div>

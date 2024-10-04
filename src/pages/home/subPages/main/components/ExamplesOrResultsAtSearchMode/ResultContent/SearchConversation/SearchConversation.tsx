@@ -53,7 +53,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswer }) => {
       </div>
       <div className="flex flex-col w-full">
         {content.memos && (
-          <div className="mt-[6px] px-8 text-center max-h-60 overflow-y-auto no-scrollbar">
+          <div className="mt-[6px] text-center max-h-60 overflow-y-auto no-scrollbar">
             <MemosList>
               {content.memos?.map((memo) => (
                 <div key={memo.id} className="inline rounded-lg min-w-72">
