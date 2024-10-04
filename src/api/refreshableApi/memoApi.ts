@@ -142,7 +142,7 @@ export const getMemosByTag = async (
   tagId: string
 ): Promise<getMemosResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/memos/tags/${tagId}`;
+  const endpoint = `/tag/memos?tagId=${tagId}&sortOrder=LATEST`;
 
   try {
     const response = await refreshableApi.get(endpoint);
@@ -150,7 +150,7 @@ export const getMemosByTag = async (
       method,
       status: response.status,
       message: '특정 태그의 메모 가져오는 것을 성공했습니다.',
-      memos: response.data,
+      memos: response.data.memos,
     };
     return responseInfo;
   } catch (error) {

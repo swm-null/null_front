@@ -7,31 +7,11 @@ interface getTagsResponse extends validResponse {
   tags: Tag[];
 }
 
-export const getAllTags = async (): Promise<
-  getTagsResponse | errorResponse
-> => {
-  const method = getMethodName();
-  const endpoint = `/tags?parentTagId=@`;
-
-  try {
-    const response = await refreshableApi.get(endpoint);
-    const responseInfo = {
-      method,
-      status: response.status,
-      message: '모든 태그를 가져오는 것을 성공했습니다.',
-      tags: response.data,
-    };
-    return responseInfo;
-  } catch (error) {
-    return errorHandler(error, method);
-  }
-};
-
 export const getChildTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/tags/${tagId}/childTags`;
+  const endpoint = `/childTags?parentTagId=${tagId}`;
 
   try {
     const response = await refreshableApi.get(endpoint);
@@ -53,6 +33,7 @@ export const getRootTags = async (): Promise<validResponse | errorResponse> => {
 
   try {
     const response = await refreshableApi.get(endpoint);
+    console.log(response);
     const responseInfo = {
       method,
       status: response.status,
