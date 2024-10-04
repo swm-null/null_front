@@ -21,8 +21,10 @@ const SearchHistoryPage = ({}: {}) => {
 
   return (
     <div className="flex flex-col flex-1 h-screen bg-custom-gradient-basic">
-      <div className="max-w-[740px] pt-24 pb-16 w-full flex flex-col flex-1 text-gray2 overflow-hidden self-center">
-        <Header headerText={t('pages.searchHistory.header')} />
+      <div className="max-w-[740px] pt-24 pb-16 w-full flex flex-col flex-1 overflow-hidden self-center">
+        <div className="px-4">
+          <Header headerText={t('pages.searchHistory.header')} />
+        </div>
         <SearchScrollView searchConversations={searchConversations}>
           <>
             <MemoSearchTextArea

@@ -42,13 +42,14 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
     >
       <div className="px-5 py-4 gap-[0.87rem] flex justify-between items-center">
         <DownIcon
+          className="text-brown1"
           style={{
             transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
             transition: 'transform 0.3s ease',
           }}
         />
-        <span className="text-base font-semibold">{data.query}</span>
-        <p className="ml-auto text-base font-regular">date</p>
+        <p className="text-base font-semibold text-brown2">{data.query}</p>
+        <p className="ml-auto text-base font-regular text-brown2">date</p>
       </div>
 
       <div
@@ -60,7 +61,9 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
         }}
       >
         <div className="flex flex-col flex-1 gap-4 px-5 pb-5">
-          <p className="pr-2 pl-9 font-regular">{data.answer.text}</p>
+          <p className="pr-2 pl-9 font-regular text-brown2">
+            {data.answer.text}
+          </p>
           <MemosList>
             {data.answer.memos?.map((memo) => (
               <UneditableMemo key={memo.id} memo={memo} />
