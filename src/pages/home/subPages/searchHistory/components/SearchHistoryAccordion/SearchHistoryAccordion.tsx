@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
 import { DownIcon } from 'assets/icons';
+import { MemosList, UneditableMemo } from 'pages/home/subPages/components';
 
 const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDragging, setIsDragging] = useState(false); // useState로 드래그 상태 관리
   const contentRef = useRef<HTMLDivElement>(null);
   const mouseDownTime = useRef<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleMouseDown = () => {
     mouseDownTime.current = Date.now();
-    setIsDragging(false);
   };
 
   const handleMouseMove = () => {
@@ -25,27 +25,16 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
   const handleMouseUp = () => {
     mouseDownTime.current = null;
     if (!isDragging) {
-      setIsOpen(!isOpen);
+      setIsOpen((prev) => !prev);
     }
   };
-
-  useEffect(() => {
-    if (isOpen) {
-      contentRef.current?.style.setProperty(
-        'height',
-        `${contentRef.current.scrollHeight}px`
-      );
-    } else {
-      contentRef.current?.style.setProperty('height', '0px');
-    }
-  }, [isOpen]);
 
   return (
     <div
       className="rounded-2xl cursor-pointer overflow-hidden border border-shadow0 shadow-custom"
       style={{
         backgroundColor: isOpen ? '#FFF6E3' : '#FFF6E366',
-        transition: 'background-color 0.3s ease', // 배경색 전환 애니메이션
+        transition: 'background-color 0.3s ease',
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -58,20 +47,25 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
             transition: 'transform 0.3s ease',
           }}
         />
-        <span className="text-lg font-bold">{data.query}</span>
-        <p className="ml-auto">date</p>
+        <span className="text-base font-semibold">{data.query}</span>
+        <p className="ml-auto text-base font-regular">date</p>
       </div>
 
       <div
         ref={contentRef}
         style={{
-          height: '0px',
+          maxHeight: isOpen ? `${contentRef.current?.scrollHeight}px` : '0px',
           overflow: 'hidden',
-          transition: 'height 0.3s ease',
+          transition: 'max-height 0.3s ease',
         }}
       >
-        <div className="pr-4 pb-4 pl-[3.75rem]">
-          <p>{data.answer.text}</p>
+        <div className="flex flex-col flex-1 gap-4 px-5 pb-5">
+          <p className="pr-2 pl-9 font-regular">{data.answer.text}</p>
+          <MemosList>
+            {data.answer.memos?.map((memo) => (
+              <UneditableMemo key={memo.id} memo={memo} />
+            ))}
+          </MemosList>
         </div>
       </div>
     </div>
