@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { deleteMemo, isValidResponse } from 'api';
-import { MemoText } from 'pages/home/subPages/components';
+import { MemoText, UneditableTag } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
+import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 const UneditableMemo = ({
   memo,
@@ -67,27 +68,41 @@ const UneditableMemo = ({
 
   return (
     <div
-      className={`p-2 min-h-[115px] flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md`}
+      className={`relative flex p-4 min-h-[115px] flex-col bg-white border-[1.5px] gap-[0.88rem]
+        ${color ? `border-[${color}]` : 'border-gray1'} rounded-2xl`}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      <MemoText message={message} setMessage={setMessage} />
-      <div className="flex flex-wrap gap-1 px-2 pb-10">
-        {tags.map((tag, index) => (
-          <p key={index} className="break-all">{`#${tag.name}`}</p>
-        ))}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center">
+          <div className="flex flex-1 gap-1">
+            {tags.map((tag, index) => (
+              <UneditableTag
+                key={index}
+                text={`#${tag.name}`}
+                invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+                color="peach0"
+                fontColor="brown0"
+              />
+            ))}
+          </div>
+          {/* TODO: pin 기능 나오면 추가 */}
+          {/* <PinIcon className="ml-auto" /> */}
+        </div>
+        <MemoText message={message} setMessage={setMessage} />
       </div>
 
-      <div className="flex flex-1 px-2 items-center">
-        <p>{formatDate(new Date(memo.updated_at))}</p>
+      <div className="flex flex-1 items-center">
+        <p className="text-[#9A9A9A] font-normal">
+          {formatDate(new Date(memo.updated_at))}
+        </p>
 
-        <div className="flex flex-1" />
         <button
-          className="text-right justify-self-end mt-2 rounded-full py-1 px-2"
+          className="text-right justify-self-end ml-auto rounded-full"
           onClick={handleDeleteMemo}
         >
-          <DeleteIcon className="border-gray2" />
+          <DeleteIcon className="stroke-[#9A9A9A] w-[1.125rem] h-[1.125rem]" />
         </button>
       </div>
     </div>
