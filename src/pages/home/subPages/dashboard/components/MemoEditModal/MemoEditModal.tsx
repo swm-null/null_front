@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal } from '@mui/material';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { EditableMemo } from 'pages/home/subPages/components';
@@ -14,7 +13,7 @@ interface MemoEditModalProps {
   revertMemo: (tag: Tag, index: number, memo: Memo) => void;
 }
 
-const MemoEditModal: React.FC<MemoEditModalProps> = ({
+const MemoEditModal = ({
   open,
   handleClose,
   selectedMemo,
@@ -23,10 +22,13 @@ const MemoEditModal: React.FC<MemoEditModalProps> = ({
   updateMemo,
   deleteMemo,
   revertMemo,
-}) => {
+}: MemoEditModalProps) => {
   return (
     <Modal open={open} onClose={handleClose}>
-      <div className="fixed inset-0 flex items-center justify-center p-4">
+      <div
+        className="fixed inset-0 flex items-center justify-center p-4"
+        onClick={handleClose}
+      >
         <div className="bg-white w-full max-w-4xl rounded-lg shadow-lg">
           {selectedMemo && selectedMemoTag ? (
             <EditableMemo
