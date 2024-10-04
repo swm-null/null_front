@@ -18,15 +18,15 @@ const DashboardMemoSection = ({
   handleMemoClick,
 }: DashboardMemoSectionProps) => {
   return (
-    <div className="min-w-[360px] w-[360px] rounded-2xl overflow-hidden bg-[#FFF6E366]">
+    <div className="flex flex-col min-w-[360px] w-[360px] rounded-2xl overflow-hidden bg-[#FFF6E366] border border-[#0000001A]">
       <DashboardMemoSectionHeader
         tag={tag}
         childTags={childTags}
         handleTagClick={handleTagClick}
       />
 
-      <div className="flex-1 h-full overflow-hidden pt-2">
-        <div className="overflow-scroll gap-2 px-2">
+      <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-[#0000001A]">
+        <div className="flex flex-col flex-1 gap-[0.88rem]">
           {memos.map((memo, index) => (
             <UneditableMemo
               memo={memo}
