@@ -40,24 +40,25 @@ const DashboardPage = ({}: {}) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-custom-gradient-basic text-gray2 overflow-hidden px-4">
+    <div className="flex flex-col h-full bg-custom-gradient-basic text-gray2 overflow-hidden px-4 pb-4">
       <Header headerText={t('pages.dashboard.header')} />
 
-      <Components.CurrentTagPath
-        allTagText={t('pages.dashboard.allMemoButton')}
-        tags={tagsManager.tags}
-        tagStack={tagStack}
-        setTagStack={setTagStack}
-        handleTagOrAllTagsClick={tagsManager.handleTagOrAllTagsClick}
-        handleChildTagClick={handleChildTagClick}
-        invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
-      />
-
-      <Components.DashboardMemoSectionList
-        memoSectionListData={tagMemosManager.memoSectionListByTag}
-        addTagToStack={handleChildTagClick}
-        handleMemoClick={handleMemoClickAndOpenModal}
-      />
+      <div className="w-full h-full flex flex-col max-w-[1102px] self-center mx-[10.56rem]">
+        <Components.CurrentTagPath
+          allTagText={t('pages.dashboard.allMemoButton')}
+          tags={tagsManager.tags}
+          tagStack={tagStack}
+          setTagStack={setTagStack}
+          handleTagOrAllTagsClick={tagsManager.handleTagOrAllTagsClick}
+          handleChildTagClick={handleChildTagClick}
+          invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
+        />
+        <Components.DashboardMemoSectionList
+          memoSectionListData={tagMemosManager.memoSectionListByTag}
+          addTagToStack={handleChildTagClick}
+          handleMemoClick={handleMemoClickAndOpenModal}
+        />
+      </div>
 
       <Components.MemoEditModal
         open={modalOpen}

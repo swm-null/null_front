@@ -35,7 +35,7 @@ const CurrentTagPath = ({
   };
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full">
       <Breadcrumbs separator={<RightIcon />} aria-label="breadcrumb">
         <UneditableTag
           key="all"
@@ -64,6 +64,7 @@ const CurrentTagPath = ({
           <UneditableTag
             key={index}
             text={tag.name}
+            color="#FFF6E3CC"
             invalidCharsPattern={invalidCharsPattern}
             onClick={() => handleChildTagClick(tag)}
           />

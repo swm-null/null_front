@@ -1,7 +1,7 @@
 import { UneditableTag } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/subPages/interfaces';
-import { RightIcon } from 'assets/icons';
+import { DeleteIcon, EditIcon, RightIcon } from 'assets/icons';
 
 interface DashboardMemoSectionHeaderProps {
   tag: Tag;
@@ -15,24 +15,27 @@ const DashboardMemoSectionHeader = ({
   handleTagClick,
 }: DashboardMemoSectionHeaderProps) => {
   return (
-    <div className="bg-[#989898] rounded-t-2xl flex flex-row justify-between items-stretch overflow-hidden">
-      <div className="grid w-full flex-col px-3 py-4">
-        <p className="mb-2 text-[#3e3e3e]">{tag.name}</p>
-        <div className="flex gap-2 overflow-x-scroll no-scrollbar">
-          {childTags.map((childTag, index) => (
-            <UneditableTag
-              key={index}
-              text={childTag.name}
-              invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-            />
-          ))}
+    <div className="flex w-full px-3 py-4 flex-col bg-[#FFF6E380]">
+      <div className="flex w-full">
+        <p className="text-[#3e3e3e]">{tag.name}</p>
+        <EditIcon />
+        <DeleteIcon />
+        <div
+          className="ml-auto flex items-center cursor-pointer"
+          onClick={handleTagClick}
+        >
+          <RightIcon color="black" height={35} width={35} />
         </div>
       </div>
-      <div
-        className="bg-[#5D5D5D] flex items-center cursor-pointer"
-        onClick={handleTagClick}
-      >
-        <RightIcon color="white" height={35} width={35} />
+      <div className="flex gap-2 overflow-x-scroll no-scrollbar">
+        {childTags.map((childTag, index) => (
+          <UneditableTag
+            key={index}
+            text={childTag.name}
+            color="#FFFFFF"
+            invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+          />
+        ))}
       </div>
     </div>
   );
