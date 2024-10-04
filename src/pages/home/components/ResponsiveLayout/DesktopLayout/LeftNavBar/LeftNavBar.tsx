@@ -10,7 +10,7 @@ const LeftNavBar = ({ setCurrentPage }: LeftNavBarProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="p-4 h-full flex flex-col flex-1 items-start justify-center gap-[14px]">
+    <div className="p-4 flex flex-col items-start justify-center gap-[14px]">
       <SidebarTooltipButton
         icon={<Icon.HomeIcon />}
         label={t('pages.sidebar.main')}

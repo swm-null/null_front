@@ -9,10 +9,7 @@ interface DesktopLayoutProps {
 const DesktopLayout = ({ setCurrentPage, children }: DesktopLayoutProps) => {
   return (
     <div className="flex w-full h-full">
-      <div
-        className="overflow-x-hidden z-20 items-center justify-center"
-        style={{ position: 'absolute', left: 0, top: 0, bottom: 0 }}
-      >
+      <div className="flex overflow-x-hidden z-20 items-center justify-center self-center">
         <LeftNavBar setCurrentPage={setCurrentPage} />
       </div>
       <div
