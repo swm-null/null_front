@@ -42,7 +42,7 @@ const DashboardMemoSectionList = ({
   }
 
   return (
-    <div className="flex flex-1 gap-4 overflow-x-scroll">
+    <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar">
       {memoSectionListData.map(({ tag, childTags, memos }) => {
         if (memos.length === 0) {
           return null;

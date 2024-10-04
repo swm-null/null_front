@@ -26,7 +26,7 @@ const DashboardMemoSection = ({
       />
 
       <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-[#0000001A]">
-        <div className="flex flex-col flex-1 gap-[0.88rem]">
+        <div className="flex flex-col flex-1 gap-[0.4rem]">
           {memos.map((memo, index) => (
             <UneditableMemo
               memo={memo}
