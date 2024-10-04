@@ -33,7 +33,6 @@ export const getRootTags = async (): Promise<validResponse | errorResponse> => {
 
   try {
     const response = await refreshableApi.get(endpoint);
-    console.log(response);
     const responseInfo = {
       method,
       status: response.status,
