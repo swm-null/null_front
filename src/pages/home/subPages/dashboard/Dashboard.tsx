@@ -40,7 +40,7 @@ const DashboardPage = ({}: {}) => {
   };
 
   return (
-    <div className="flex flex-col h-screen text-gray2 overflow-hidden px-4">
+    <div className="flex flex-col h-screen bg-custom-gradient-basic text-gray2 overflow-hidden px-4">
       <Header headerText={t('pages.dashboard.header')} />
 
       <Components.CurrentTagPath
