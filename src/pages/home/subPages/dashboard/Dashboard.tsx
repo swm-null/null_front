@@ -43,7 +43,7 @@ const DashboardPage = ({}: {}) => {
     <div className="flex flex-col h-full bg-custom-gradient-basic text-gray2 overflow-hidden px-4 pb-4">
       <Header headerText={t('pages.dashboard.header')} />
 
-      <div className="w-full h-full flex flex-col max-w-[1102px] self-center mx-[10.56rem] overflow-hidden">
+      <div className="w-full h-full flex flex-col max-w-[1102px] self-center mx-[10.56rem] overflow-hidden gap-[1.88rem]">
         <Components.CurrentTagPath
           allTagText={t('pages.dashboard.allMemoButton')}
           tags={tagsManager.tags}

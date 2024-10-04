@@ -29,18 +29,16 @@ const DashboardMemoSectionList = ({
     const taggedMemo = memoSectionListData[0];
 
     return (
-      <div className="px-4">
-        <Components.MemosList>
-          {taggedMemo.memos.map((memo, index) => (
-            <Components.UneditableMemo key={index} memo={memo} />
-          ))}
-        </Components.MemosList>
-      </div>
+      <Components.MemosList>
+        {taggedMemo.memos.map((memo, index) => (
+          <Components.UneditableMemo key={index} memo={memo} />
+        ))}
+      </Components.MemosList>
     );
   }
 
   return (
-    <div className="flex flex-1 gap-4 overflow-x-scroll pt-4 pb-4">
+    <div className="flex flex-1 gap-4 overflow-x-scroll">
       {memoSectionListData.map(({ tag, childTags, memos }) => {
         if (memos.length === 0) {
           return null;
