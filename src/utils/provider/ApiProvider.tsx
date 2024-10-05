@@ -64,20 +64,20 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     if (accessToken && isTokenValid(accessToken)) {
       return accessToken;
     } else {
-      return getAccessTokenByRefreshOrAlert();
+      return getNewAccessToken();
     }
   };
 
-  const getAccessTokenByRefreshOrAlert = async () => {
+  const getNewAccessToken = async () => {
     const refreshToken = Cookies.get('refresh_token');
     if (refreshToken) {
-      return tryGetAccessTokenByRefreshOrAlert(refreshToken);
+      return getAccessTokenByRefresh(refreshToken);
     } else {
       alertLoginRequired();
     }
   };
 
-  const tryGetAccessTokenByRefreshOrAlert = async (refreshToken: string) => {
+  const getAccessTokenByRefresh = async (refreshToken: string) => {
     if (isRefreshing) {
       return new Promise((resolve) => {
         addRefreshSubscriber((newToken) => resolve(newToken));
@@ -139,7 +139,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
       const originalRequest = error.config;
 
       if (isAccessTokenExpired(errorStatus, errorCode)) {
-        const newAccessToken = await getAccessTokenByRefreshOrAlert();
+        const newAccessToken = await getNewAccessToken();
         if (newAccessToken) {
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return refreshableApi(originalRequest);
