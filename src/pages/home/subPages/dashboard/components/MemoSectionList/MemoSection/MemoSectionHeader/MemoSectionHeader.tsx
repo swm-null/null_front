@@ -3,17 +3,17 @@ import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { DeleteIcon, EditIcon, RightIcon } from 'assets/icons';
 
-interface DashboardMemoSectionHeaderProps {
+interface MemoSectionHeaderProps {
   tag: Tag;
   childTags: Tag[];
   handleTagClick: () => void;
 }
 
-const DashboardMemoSectionHeader = ({
+const MemoSectionHeader = ({
   tag,
   childTags,
   handleTagClick,
-}: DashboardMemoSectionHeaderProps) => {
+}: MemoSectionHeaderProps) => {
   return (
     <div className="flex w-full px-3 py-4 flex-col bg-[#FFF6E380] gap-4">
       <div className="flex w-full items-center gap-3">
@@ -45,4 +45,4 @@ const DashboardMemoSectionHeader = ({
   );
 };
 
-export default DashboardMemoSectionHeader;
+export default MemoSectionHeader;

@@ -1,8 +1,8 @@
 import * as Components from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
-import { DashboardMemoSection } from './DashboardMemoSection';
+import { MemoSection } from './MemoSection';
 
-interface DashboardMemoSectionProps {
+interface MemoSectionProps {
   memoSectionListData: Array<{
     tag: Tag;
     childTags: Tag[] | null;
@@ -12,11 +12,11 @@ interface DashboardMemoSectionProps {
   handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
 }
 
-const DashboardMemoSectionList = ({
+const MemoSectionList = ({
   memoSectionListData,
   addTagToStack,
   handleMemoClick,
-}: DashboardMemoSectionProps) => {
+}: MemoSectionProps) => {
   const isMemoSectionEmpty = () => memoSectionListData.length === 0;
   const hasSingleMemoSection = () => memoSectionListData.length === 1;
 
@@ -29,15 +29,17 @@ const DashboardMemoSectionList = ({
     const taggedMemo = memoSectionListData[0];
 
     return (
-      <Components.MemosList>
-        {taggedMemo.memos.map((memo, index) => (
-          <Components.UneditableMemo
-            key={index}
-            memo={memo}
-            onClick={() => handleMemoClick(memo, taggedMemo.tag, index)}
-          />
-        ))}
-      </Components.MemosList>
+      <div className="flex flex-1 bg-[#FFF6E366] p-4 rounded-2xl">
+        <Components.MemosList>
+          {taggedMemo.memos.map((memo, index) => (
+            <Components.UneditableMemo
+              key={index}
+              memo={memo}
+              onClick={() => handleMemoClick(memo, taggedMemo.tag, index)}
+            />
+          ))}
+        </Components.MemosList>
+      </div>
     );
   }
 
@@ -53,7 +55,7 @@ const DashboardMemoSectionList = ({
         }
 
         return (
-          <DashboardMemoSection
+          <MemoSection
             key={tag.id}
             tag={tag}
             childTags={childTags}
@@ -67,4 +69,4 @@ const DashboardMemoSectionList = ({
   );
 };
 
-export default DashboardMemoSectionList;
+export default MemoSectionList;

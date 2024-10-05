@@ -1,8 +1,8 @@
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
-import { DashboardMemoSectionHeader } from './DashboardMemoSectionHeader';
+import { MemoSectionHeader } from './MemoSectionHeader';
 import { UneditableMemo } from 'pages/home/subPages/components';
 
-interface DashboardMemoSectionProps {
+interface MemoSectionProps {
   tag: Tag;
   childTags: Tag[];
   memos: Memo[];
@@ -10,16 +10,16 @@ interface DashboardMemoSectionProps {
   handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
 }
 
-const DashboardMemoSection = ({
+const MemoSection = ({
   tag,
   childTags,
   memos,
   handleTagClick,
   handleMemoClick,
-}: DashboardMemoSectionProps) => {
+}: MemoSectionProps) => {
   return (
     <div className="flex flex-col min-w-[360px] w-[360px] rounded-2xl overflow-hidden bg-[#FFF6E366] border border-[#0000001A]">
-      <DashboardMemoSectionHeader
+      <MemoSectionHeader
         tag={tag}
         childTags={childTags}
         handleTagClick={handleTagClick}
@@ -39,4 +39,4 @@ const DashboardMemoSection = ({
   );
 };
 
-export default DashboardMemoSection;
+export default MemoSection;
