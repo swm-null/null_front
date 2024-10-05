@@ -1,18 +1,24 @@
 import { useEffect, useContext, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
 import { AlertDialog, AlertContext, ApiContext } from 'utils';
 import { isTokenResponse, refresh, authApi, refreshableApi } from 'api';
+import { jwtDecode } from 'jwt-decode';
 
 const ApiProvider = ({ children }: { children: ReactNode }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [sessionExpired, setSessionExpired] = useState(false);
+  const [redirectLogin, setRedirectLogin] = useState(false);
   const { alert } = useContext(AlertContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   let refreshSubscribers: Array<(token: string) => void> = [];
+
+  const isTokenExpired = (status: number) => status === 401;
+  const isAccessTokenExpired = (status: number, code: string) =>
+    isTokenExpired(status) && code === '0003';
+  const isRefreshTokenExpired = (status: number, code: string) =>
+    isTokenExpired(status) && code === '0004';
 
   const onAccessTokenFetched = (accessToken: string) => {
     refreshSubscribers.forEach((callback) => callback(accessToken));
@@ -37,101 +43,119 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     return decoded.exp > currentTime;
   };
 
-  const checkTokenWithAlert = async (token?: string) => {
-    if (!token) {
-      handleSessionExpired('utils.auth.loginRequired');
-    } else if (!isTokenValid(token)) {
-      handleSessionExpired('utils.auth.sessionExpired');
-    }
-  };
-
-  const handleSessionExpired = (messageKey: string) => {
-    alert(t(messageKey)).then(() => {
-      setSessionExpired(true);
+  const alertLoginRequired = () => {
+    alert(t('loginRequired')).then(() => {
+      setRedirectLogin(true);
     });
   };
 
-  const checkTokenFromCookieWithAlert = async () => {
-    const token = Cookies.get('access_token');
-    await checkTokenWithAlert(token);
+  const alertSessionExpired = () => {
+    alert(t('sessionExpired')).then(() => {
+      setRedirectLogin(true);
+    });
   };
 
-  useEffect(() => {
-    if (sessionExpired) {
-      navigate('/login');
-    }
-  }, [sessionExpired]);
+  const checkTokenFromCookie = async () => {
+    await getAccessToken();
+  };
 
-  refreshableApi.interceptors.request.use((config) => {
+  const getAccessToken = async () => {
     const accessToken = Cookies.get('access_token');
-    checkTokenWithAlert(accessToken);
-
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    if (accessToken && isTokenValid(accessToken)) {
+      return accessToken;
+    } else {
+      return getAccessTokenByRefreshOrAlert();
     }
-    return config;
-  });
+  };
 
-  refreshableApi.interceptors.response.use(
-    (res) => {
-      setSessionExpired(false);
-      return res;
-    },
-    async (error) => {
-      const errorStatus = error.response.status;
-      const originalRequest = error.config;
-      const refresh_token = Cookies.get('refresh_token');
-
-      const isAccessTokenExpired = (status: number) => status === 401;
-      const isRefreshTokenExpired = (status: number) => status === 403;
-
-      if (isAccessTokenExpired(errorStatus) && refresh_token) {
-        return handleAccessTokenExpiration(originalRequest, refresh_token);
-      } else if (isRefreshTokenExpired(errorStatus)) {
-        handleSessionExpired('utils.auth.sessionExpired');
-      } else {
-        return Promise.reject(error);
-      }
+  const getAccessTokenByRefreshOrAlert = async () => {
+    const refreshToken = Cookies.get('refresh_token');
+    if (refreshToken) {
+      return tryGetAccessTokenByRefreshOrAlert(refreshToken);
+    } else {
+      alertLoginRequired();
     }
-  );
+  };
 
-  const handleAccessTokenExpiration = async (
-    originalRequest: any,
-    refresh_token: string
-  ) => {
+  const tryGetAccessTokenByRefreshOrAlert = async (refreshToken: string) => {
     if (isRefreshing) {
       return new Promise((resolve) => {
-        addRefreshSubscriber((newToken) => {
-          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
-          resolve(refreshableApi(originalRequest));
-        });
+        addRefreshSubscriber((newToken) => resolve(newToken));
       });
     }
 
     setIsRefreshing(true);
     try {
-      const response = await refresh(refresh_token);
+      const response = await refresh(refreshToken);
       if (isTokenResponse(response)) {
         const newAccessToken = response.access_token;
-        refreshableApi.defaults.headers.common['Authorization'] =
-          `Bearer ${newAccessToken}`;
         onAccessTokenFetched(newAccessToken);
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        return refreshableApi(originalRequest);
+        Cookies.set('access_token', newAccessToken);
+        return newAccessToken;
       } else {
         throw new Error('Invalid token response');
       }
     } catch (error) {
-      handleSessionExpired('utils.auth.sessionExpired');
-      return Promise.reject(error);
+      if (error instanceof Error) {
+        const errorResponse = (error as any).response;
+        const errorStatus = errorResponse?.status;
+        const errorCode = errorResponse?.data?.code;
+
+        if (isRefreshTokenExpired(errorStatus, errorCode)) {
+          alertSessionExpired();
+        }
+      }
     } finally {
       setIsRefreshing(false);
     }
   };
 
+  useEffect(() => {
+    if (redirectLogin) {
+      navigate('/login');
+    }
+  }, [redirectLogin]);
+
+  refreshableApi.interceptors.request.use(async (config) => {
+    const accessToken = await getAccessToken();
+
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    } else {
+      alertSessionExpired();
+    }
+
+    return config;
+  });
+
+  refreshableApi.interceptors.response.use(
+    (res) => {
+      setRedirectLogin(false);
+      return res;
+    },
+    async (error) => {
+      const errorStatus = error.response.status;
+      const errorCode = error.response.data.code;
+      const originalRequest = error.config;
+
+      if (isAccessTokenExpired(errorStatus, errorCode)) {
+        const newAccessToken = await getAccessTokenByRefreshOrAlert();
+        if (newAccessToken) {
+          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          return refreshableApi(originalRequest);
+        }
+      } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
+        alertSessionExpired();
+      } else {
+        await alert('utils.auth.serverError');
+        return Promise.reject(error);
+      }
+    }
+  );
+
   return (
     <ApiContext.Provider
-      value={{ authApi, refreshableApi, checkTokenFromCookieWithAlert }}
+      value={{ authApi, refreshableApi, checkTokenFromCookie }}
     >
       {children}
       <AlertDialog />

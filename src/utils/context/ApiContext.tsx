@@ -3,13 +3,13 @@ import { createContext } from 'react';
 type ApiContextType = {
   authApi: any;
   refreshableApi: any;
-  checkTokenFromCookieWithAlert: () => void;
+  checkTokenFromCookie: () => void;
 };
 
 const ApiContext = createContext<ApiContextType>({
   authApi: null,
   refreshableApi: null,
-  checkTokenFromCookieWithAlert: () => {},
+  checkTokenFromCookie: () => {},
 });
 
 export default ApiContext;

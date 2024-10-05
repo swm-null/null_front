@@ -9,7 +9,7 @@ import { ApiContext } from 'utils';
 const queryClient = new QueryClient();
 
 const Home = () => {
-  const { checkTokenFromCookieWithAlert } = useContext(ApiContext);
+  const { checkTokenFromCookie } = useContext(ApiContext);
   const navigate = useNavigate();
 
   const handleNavigation = (page: string) => {
@@ -17,7 +17,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    checkTokenFromCookieWithAlert();
+    checkTokenFromCookie();
   }, []);
 
   return (
