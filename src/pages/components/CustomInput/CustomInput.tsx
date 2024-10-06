@@ -25,7 +25,10 @@ const CustomInput = ({
   return (
     <div className="relative w-full">
       <p className="block mb-2 text-sm font-medium text-gray-700">{label}</p>
-      <div className="flex items-center w-full border bg-white border-gray-300 rounded-lg py-2 px-2">
+      <div
+        className="flex items-center w-full bg-white border 
+        border-black border-opacity-10 bg-clip-padding rounded-lg py-2 px-2"
+      >
         <input
           type={isHidden ? 'password' : 'text'}
           id={label}
