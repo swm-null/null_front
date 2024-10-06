@@ -43,13 +43,13 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     return decoded.exp > currentTime;
   };
 
-  const alertLoginRequired = () => {
+  const alertLoginRequiredThenRedirect = () => {
     alert(t('loginRequired')).then(() => {
       setRedirectLogin(true);
     });
   };
 
-  const alertSessionExpired = () => {
+  const alertSessionExpiredThenRedirect = () => {
     alert(t('sessionExpired')).then(() => {
       setRedirectLogin(true);
     });
@@ -73,7 +73,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     if (refreshToken) {
       return getAccessTokenByRefresh(refreshToken);
     } else {
-      alertLoginRequired();
+      alertLoginRequiredThenRedirect();
     }
   };
 
@@ -102,7 +102,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
         const errorCode = errorResponse?.data?.code;
 
         if (isRefreshTokenExpired(errorStatus, errorCode)) {
-          alertSessionExpired();
+          alertSessionExpiredThenRedirect();
         }
       }
     } finally {
@@ -123,7 +123,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     } else {
-      alertSessionExpired();
+      alertSessionExpiredThenRedirect();
     }
 
     return config;
@@ -141,7 +141,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
         return refreshableApi(originalRequest);
       }
     } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
-      alertSessionExpired();
+      alertSessionExpiredThenRedirect();
     } else {
       await alert('utils.auth.serverError');
       return Promise.reject(error);
