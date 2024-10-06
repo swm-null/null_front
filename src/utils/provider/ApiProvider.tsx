@@ -119,13 +119,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
 
   refreshableApi.interceptors.request.use(async (config) => {
     const accessToken = await getAccessToken();
-
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-    } else {
-      alertSessionExpiredThenRedirect();
-    }
-
+    config.headers['Authorization'] = `Bearer ${accessToken}`;
     return config;
   });
 
