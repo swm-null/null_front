@@ -16,15 +16,20 @@ interface UneditableTagProps {
    * tag font에 적용하고 싶은 색을 전달
    * default: black
    */
-  fontColor?: 'brown0' | 'brown1' | 'black';
+  fontColor?: 'brown0' | 'brown2' | 'black';
   /**
    * tag의 border-radius 크기를 string으로 전달
    * 'small', 'large'와 같이 사용
    * default: large
    */
   radius?: 'small' | 'large';
-  border?: boolean;
+  border?: 0 | 5 | 10;
+  shadow?: boolean;
   onClick?: () => void;
+  /**
+   * 추가적인 className을 설정할 수 있는 prop
+   */
+  className?: string;
 }
 
 const UneditableTag = ({
@@ -34,7 +39,9 @@ const UneditableTag = ({
   fontColor,
   radius,
   border,
+  shadow,
   onClick,
+  className,
 }: UneditableTagProps) => {
   return (
     <EditableTag
@@ -44,7 +51,9 @@ const UneditableTag = ({
       fontColor={fontColor}
       radius={radius}
       border={border}
+      shadow={shadow}
       onClick={onClick}
+      className={className}
     />
   );
 };

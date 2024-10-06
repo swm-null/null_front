@@ -18,20 +18,27 @@ const MemoSection = ({
   handleMemoClick,
 }: MemoSectionProps) => {
   return (
-    <div className="flex flex-col min-w-[360px] w-[360px] rounded-2xl overflow-hidden bg-[#FFF6E366] border border-[#0000001A]">
+    <div
+      className="flex flex-col w-auto rounded-2xl overflow-hidden flex-shrink-0
+      bg-[#FFF6E366] border border-black border-opacity-10 bg-clip-padding shadow-custom backdrop-blur-lg"
+    >
       <MemoSectionHeader
         tag={tag}
         childTags={childTags}
         handleTagClick={handleTagClick}
       />
 
-      <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-[#0000001A]">
+      <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10 bg-clip-padding">
         <div className="flex flex-col flex-1 gap-[0.4rem]">
           {memos.map((memo, index) => (
-            <UneditableMemo
-              memo={memo}
-              onClick={() => handleMemoClick(memo, tag, index)}
-            />
+            <div className="flex flex-col w-[244px]">
+              <UneditableMemo
+                memo={memo}
+                shadow
+                border
+                onClick={() => handleMemoClick(memo, tag, index)}
+              />
+            </div>
           ))}
         </div>
       </div>

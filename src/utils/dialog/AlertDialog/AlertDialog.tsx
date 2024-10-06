@@ -43,7 +43,7 @@ const AlarmContent = ({
   onClose,
 }: AlarmContentProps) => {
   return (
-    <div className="relative w-full p-5 rounded-lg shadow-lg flex flex-col gap-5 sm:w-400px">
+    <div className="relative w-full p-5 rounded-lg shadow-custom backdrop-blur-lg flex flex-col gap-5 sm:w-400px">
       <p className="text-lg font-bold">{title}</p>
       <p className="text-sm">{message}</p>
       <button className="ml-auto px-3 py-1 text-sm" onClick={onClose}>

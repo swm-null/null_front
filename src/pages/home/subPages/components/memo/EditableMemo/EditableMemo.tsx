@@ -16,6 +16,7 @@ const EditableMemo = ({
   softUpdateMemo,
   softDeleteMemo,
   softRevertMemo,
+  handleSave,
 }: {
   memo: Memo;
   editable?: boolean;
@@ -23,6 +24,7 @@ const EditableMemo = ({
   softUpdateMemo?: (newMemo: Memo) => void;
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
+  handleSave: () => void;
 }) => {
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
@@ -53,6 +55,7 @@ const EditableMemo = ({
     if (memo.content !== newMemo.content) {
       updateMemoSubject.next(newMemo);
     }
+    handleSave();
   };
 
   const formatDate = (date: Date): string => {
@@ -88,16 +91,19 @@ const EditableMemo = ({
 
   return (
     <div
-      className={`p-7 flex flex-col first-letter:flex-col bg-[#FFF6E3] border-[1.5px] rounded-md min-h-72 gap-8 
-      ${border ? `border-shadow0` : 'border-gray1'}`}
+      className={`p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-md gap-8 
+        ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
       <div className="flex flex-1 flex-col gap-[1.14rem]">
         <div className="flex gap-[1.44rem] items-center">
           <PinIcon className="mr-auto" width={'1.5rem'} height={'1.5rem'} />
-          <p className="text-center font-medium font-brown1">
+          <p className="text-center font-medium text-sm text-brown2">
             {formatDate(new Date(memo.updated_at))}
           </p>
-          <DeleteIcon className="border-gray2" onClick={handleDeleteMemo} />
+          <DeleteIcon
+            className="text-brown2 w-5 h-5"
+            onClick={handleDeleteMemo}
+          />
         </div>
 
         <div className="flex mb-auto flex-col flex-1">
@@ -115,17 +121,20 @@ const EditableMemo = ({
           <div className="flex ml-auto gap-6 items-center">
             <div className="flex gap-[0.62rem] items-center">
               <Checkbox
+                className="w-5 h-5"
                 checked={tagRebuild}
-                onChange={() => setTagRebuild(!tagRebuild)}
+                onClick={() => setTagRebuild(!tagRebuild)}
                 disableRipple
                 icon={<NotCheckedIcon />}
                 checkedIcon={<CheckedIcon />}
                 sx={{ padding: 0 }}
               />
-              <p className="text-brown1 font-medium">{t('memo.tagRebuild')}</p>
+              <p className="text-brown2 font-medium text-sm">
+                {t('memo.tagRebuild')}
+              </p>
             </div>
             <button
-              className="flex text-brown1 font-medium rounded-full"
+              className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] rounded-[30px] border border-[#917360]"
               onClick={tryUpdateMemo}
             >
               {t('memo.save')}

@@ -10,12 +10,14 @@ import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 const UneditableMemo = ({
   memo,
   border,
+  shadow,
   onClick,
   softDeleteMemo,
   softRevertMemo,
 }: {
   memo: Memo;
   border?: boolean;
+  shadow?: boolean;
   onClick?: () => void;
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
@@ -41,8 +43,8 @@ const UneditableMemo = ({
 
   return (
     <div
-      className={`relative flex p-4 min-h-[115px] flex-col bg-white border-[1.5px] gap-[0.88rem]
-        ${border ? `border-shadow0` : ''} rounded-2xl`}
+      className={`relative flex p-4 min-h-[115px] flex-col bg-white gap-[0.88rem]
+        ${border ? 'border border-black border-opacity-10 bg-clip-padding' : ''} rounded-2xl ${shadow ? 'shadow-custom backdrop-blur-lg' : ''}`}
       onClick={onClick}
     >
       <div className="flex flex-col gap-2">
@@ -55,6 +57,8 @@ const UneditableMemo = ({
                 invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
                 color="peach0"
                 fontColor="brown0"
+                radius="small"
+                border={0}
               />
             ))}
           </div>
@@ -65,7 +69,7 @@ const UneditableMemo = ({
       </div>
 
       <div className="flex flex-1 items-center">
-        <p className="text-[#9A9A9A] font-medium">
+        <p className="text-gray2 font-medium text-[10px]">
           {formatDate(new Date(memo.updated_at))}
         </p>
 
@@ -73,7 +77,7 @@ const UneditableMemo = ({
           className="text-right justify-self-end ml-auto rounded-full"
           onClick={handleDeleteMemo}
         >
-          <DeleteIcon className="stroke-[#9A9A9A] w-[1.125rem] h-[1.125rem]" />
+          <DeleteIcon className="text-gray2 w-[1.125rem] h-[1.125rem]" />
         </button>
       </div>
     </div>

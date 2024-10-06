@@ -51,7 +51,10 @@ const MemosList = ({ children }: MemosListProps) => {
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col flex-1 overflow-x-hidden">
+    <div
+      ref={containerRef}
+      className="flex flex-col flex-1 overflow-x-hidden p-4"
+    >
       {children ? (
         <ResponsiveMasonry
           columnsCountBreakPoints={getColumnsCountBreakPoints()}

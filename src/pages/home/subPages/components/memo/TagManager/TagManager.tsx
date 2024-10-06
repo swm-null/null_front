@@ -43,6 +43,7 @@ const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
           text={tag.name}
           editable={editable}
           color="peach2"
+          border={0}
           onTextChange={(text) => updateTag(index, text)}
           onDelete={() => deleteTag(index)}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}

@@ -29,12 +29,14 @@ const MemoSectionList = ({
     const taggedMemo = memoSectionListData[0];
 
     return (
-      <div className="flex flex-1 bg-[#FFF6E366] p-4 rounded-2xl">
+      <div className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg">
         <Components.MemosList>
           {taggedMemo.memos.map((memo, index) => (
             <Components.UneditableMemo
               key={index}
               memo={memo}
+              shadow
+              border
               onClick={() => handleMemoClick(memo, taggedMemo.tag, index)}
             />
           ))}
@@ -44,7 +46,7 @@ const MemoSectionList = ({
   }
 
   return (
-    <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar">
+    <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2">
       {memoSectionListData.map(({ tag, childTags, memos }) => {
         if (memos.length === 0) {
           return null;

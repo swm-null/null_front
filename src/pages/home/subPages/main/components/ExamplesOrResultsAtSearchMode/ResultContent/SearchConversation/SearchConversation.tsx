@@ -36,7 +36,7 @@ const UserQuestion = ({ contentText }: { contentText: string }) => {
   return (
     <div
       className="inline-block self-end bg-[#FFE5C1] rounded-xl rounded-br-none py-2 px-4 
-        overflow-hidden max-w-3/4 border-[1px] border-[#F2DAB7] ml-auto"
+        overflow-hidden max-w-3/4 border-[1px] border-black border-opacity-10 bg-clip-padding ml-auto"
     >
       <p className="inline text-right whitespace-pre-line break-words">
         {contentText}

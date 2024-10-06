@@ -36,7 +36,7 @@ const KakaoDropzone = () => {
       </p>
       <div className="flex-grow"></div>
       <button
-        className="bg-gray2 text-white rounded-lg px-3 py-1"
+        className="bg-gray3 text-white rounded-lg px-3 py-1"
         onClick={() => handleRemoveFile(file)}
       >
         {t('pages.uploadData.kakaoAcceptedFiles.deleteButton')}
