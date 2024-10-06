@@ -1,153 +1,143 @@
-import { useState, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { LoginSignupButton, HiddenInput } from 'pages/components';
-import { EmailInput } from './components';
+import { LoginSignupButton, HiddenInput, CustomInput } from 'pages/components';
+import { EmailCheckForm, CodeSendForm } from './components';
+import * as Hooks from './hooks';
 import { isValidResponse, signup } from 'api';
+import { useNavigate } from 'react-router-dom';
+import { AlertContext } from 'utils';
 
 const Signup = () => {
   const { t } = useTranslation();
+  const { alert } = useContext(AlertContext);
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState({ emailId: '', domain: '' });
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
+  const [name, setName] = useState('');
+  const [isSignupButtonDisabled, setIsSignupButtonDisabled] = useState(true);
+
+  const emailManager = Hooks.useEmailManager();
+  const passwordManager = Hooks.usePasswordManager();
+  const codeManager = Hooks.useCodeManager(emailManager.isEmailChecked);
+  const validationManager = Hooks.useValidationManager({
+    email: emailManager.email,
+    password: passwordManager.password,
+    confirmPassword: passwordManager.confirmPassword,
+    name: name,
+    code: codeManager.code,
   });
+
   const [isEmailInputTouched, setIsEmailInputTouched] = useState(false);
   const [isPasswordInputTouched, setIsPasswordInputTouched] = useState(false);
   const [isConfirmPasswordInputTouched, setIsConfirmPasswordInputTouched] =
     useState(false);
-
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-
-  const validateEmail = () => {
-    const emailIdRegex = /^[a-zA-Z0-9._%+-]+$/;
-    const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    const isValidEmailId = emailIdRegex.test(email.emailId);
-    const isValidDomain = domainRegex.test(email.domain);
-
-    return isValidEmailId && isValidDomain;
-  };
-
-  const validatePassword = () => {
-    const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    return passwordRegex.test(password);
-  };
-
-  const validateConfirmPassword = () => {
-    return password === confirmPassword;
-  };
-
-  const getFormValidAndSetErrors = () => {
-    let isValid = true;
-    const newErrors = { email: '', password: '', confirmPassword: '' };
-
-    if (isEmailInputTouched && !validateEmail()) {
-      newErrors.email = t('signup.invalidEmail');
-      isValid = false;
-    }
-
-    if (isPasswordInputTouched && !validatePassword()) {
-      newErrors.password = t('signup.invalidPassword');
-      isValid = false;
-    }
-
-    if (isConfirmPasswordInputTouched && !validateConfirmPassword()) {
-      newErrors.confirmPassword = t('signup.passwordsDoNotMatch');
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  useEffect(() => {
-    const isValid = !getFormValidAndSetErrors();
-    if (
-      ![
-        isEmailInputTouched,
-        isPasswordInputTouched,
-        isConfirmPasswordInputTouched,
-      ].includes(false)
-    ) {
-      setIsButtonDisabled(isValid);
-    }
-  }, [email, password, confirmPassword]);
-
-  const handleSignUp = async () => {
-    if (!getFormValidAndSetErrors()) {
-      return;
-    }
-
-    const response = await signup(
-      `${email.emailId}@${email.domain}`,
-      password,
-      confirmPassword
-    );
-    if (isValidResponse(response)) {
-      navigate(-1);
-    }
-  };
+  const [isCodeInputTouched, setIsCodeInputTouched] = useState(false);
 
   const handleEmailChange = (newEmail: { emailId: string; domain: string }) => {
-    setEmail(newEmail);
+    emailManager.handleEmailChange(newEmail);
     setIsEmailInputTouched(true);
   };
 
   const handlePasswordChange = (newPassword: string) => {
-    setPassword(newPassword);
+    passwordManager.handlePasswordChange(newPassword);
     setIsPasswordInputTouched(true);
   };
 
   const handleConfirmPasswordChange = (newConfirmPassword: string) => {
-    setConfirmPassword(newConfirmPassword);
+    passwordManager.handleConfirmPasswordChange(newConfirmPassword);
     setIsConfirmPasswordInputTouched(true);
   };
 
-  return (
-    <div className="bg-custom-gradient-basic flex justify-center items-center h-screen bg-gray-100 py-8">
-      <form className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg overflow-y-auto">
-        <div className="mb-6">
-          <label
-            htmlFor="emailId"
-            className="block mb-2 text-sm font-medium text-gray-700"
-          >
-            {t('signup.email')}
-          </label>
-          <EmailInput value={email} onChange={handleEmailChange} />
-          {isEmailInputTouched && errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-          )}
+  const handleCodeChange = (newCode: string) => {
+    codeManager.handleCodeChange(newCode);
+    setIsCodeInputTouched(true);
+  };
 
+  useEffect(() => {
+    if (
+      isEmailInputTouched &&
+      isPasswordInputTouched &&
+      isConfirmPasswordInputTouched &&
+      isCodeInputTouched
+    ) {
+      const isValid =
+        validationManager.isEmailValid &&
+        validationManager.isPasswordValid &&
+        validationManager.isConfirmPasswordValid &&
+        validationManager.isNameValid &&
+        validationManager.isCodeValid;
+      const essentialApiSent =
+        emailManager.isEmailChecked && codeManager.isCodeSent;
+      setIsSignupButtonDisabled(!isValid || !essentialApiSent);
+    }
+  }, [
+    emailManager.email,
+    passwordManager.password,
+    passwordManager.confirmPassword,
+    codeManager.code,
+    isEmailInputTouched,
+    isPasswordInputTouched,
+    isConfirmPasswordInputTouched,
+    isCodeInputTouched,
+  ]);
+
+  const handleSignUp = async () => {
+    if (isSignupButtonDisabled) {
+      return;
+    }
+
+    const response = await signup(
+      `${emailManager.email.emailId}@${emailManager.email.domain}`,
+      passwordManager.password,
+      passwordManager.confirmPassword,
+      name,
+      codeManager.code
+    );
+    if (isValidResponse(response)) {
+      alert(t('signup.signupSuccess')).then(() => {
+        navigate(-1);
+      });
+    } else {
+      alert(response.exceptionMessage);
+    }
+  };
+
+  return (
+    <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
+      <form className="bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
+        <div className="flex flex-col mb-6 gap-3">
+          <EmailCheckForm
+            email={emailManager.email}
+            handleEmailChange={handleEmailChange}
+            handleCheckEmail={emailManager.handleCheckEmail}
+            isEmailInputTouched={isEmailInputTouched}
+            success={emailManager.success}
+            error={emailManager.error}
+          />
           <HiddenInput
             label={t('signup.password')}
-            value={password}
+            value={passwordManager.password}
             setValue={handlePasswordChange}
-            errorMessage={isPasswordInputTouched ? errors.password : ''}
+            errorMessage={passwordManager.passwordError}
           />
-
           <HiddenInput
             label={t('signup.confirmPassword')}
-            value={confirmPassword}
+            value={passwordManager.confirmPassword}
             setValue={handleConfirmPasswordChange}
-            errorMessage={
-              isConfirmPasswordInputTouched ? errors.confirmPassword : ''
-            }
+            errorMessage={passwordManager.confirmPasswordError}
+          />
+          <CustomInput label="name" value={name} setValue={setName} />
+          <CodeSendForm
+            code={codeManager.code}
+            handleCodeChange={handleCodeChange}
+            handleSendCode={codeManager.handleSendCode}
+            success={codeManager.success}
+            error={codeManager.error}
           />
         </div>
         <LoginSignupButton
-          label={t('signup.signUpButton')}
+          label={t('signup.signupButton')}
           onClick={handleSignUp}
-          bgColor="#3B82F6"
-          hoverColor="#2563EB"
-          additionalClasses="bg-[#3B82F6] text-white"
-          disabled={isButtonDisabled}
+          disabled={isSignupButtonDisabled}
         />
       </form>
     </div>
