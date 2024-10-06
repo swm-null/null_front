@@ -1,9 +1,10 @@
 import * as Interface from 'pages/home/subPages/interfaces';
 import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
+import { Status } from '../../interfaces';
 
 interface ExamplesOrResultsAtSearchModeProps {
-  status: Interface.Status;
+  status: Status;
   searchAnswer?: Interface.MemoSearchConversation;
   navigateToHistory: () => void;
   buttonData: [string, string, string, string];

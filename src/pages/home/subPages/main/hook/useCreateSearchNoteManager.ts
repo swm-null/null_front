@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
+import { Mode, Status } from '../interfaces';
 
 const MAX_SEARCH_QUERIES = 100;
 
-const useCreateSearchNoteManager = (mode: Interface.Mode) => {
+const useCreateSearchNoteManager = (mode: Mode) => {
   const [createAnswer, setCreateAnswer] = useState<Interface.Memo>();
   const [searchAnswer, setSearchAnswer] =
     useState<Interface.MemoSearchConversation>();
-  const [status, setStatus] = useState<Interface.Status>('default');
+  const [status, setStatus] = useState<Status>('default');
 
   useEffect(() => {
     setStatus('default'); // mode가 변경될 때마다 status를 초기화

@@ -1,6 +1,6 @@
 import { AddIcon, SearchIcon } from 'assets/icons';
-import { Mode } from 'pages/home/subPages/interfaces';
 import { useTranslation } from 'react-i18next';
+import { Mode } from '../../interfaces';
 
 interface ModeToggleProps {
   mode: Mode;
