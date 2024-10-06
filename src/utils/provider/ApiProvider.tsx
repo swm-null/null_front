@@ -112,6 +112,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (redirectLogin) {
+      setRedirectLogin(false);
       navigate('/login');
     }
   }, [redirectLogin]);
@@ -128,30 +129,24 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     return config;
   });
 
-  refreshableApi.interceptors.response.use(
-    (res) => {
-      setRedirectLogin(false);
-      return res;
-    },
-    async (error) => {
-      const errorStatus = error.response.status;
-      const errorCode = error.response.data.code;
-      const originalRequest = error.config;
+  refreshableApi.interceptors.response.use(undefined, async (error) => {
+    const errorStatus = error.response.status;
+    const errorCode = error.response.data.code;
+    const originalRequest = error.config;
 
-      if (isAccessTokenExpired(errorStatus, errorCode)) {
-        const newAccessToken = await getNewAccessToken();
-        if (newAccessToken) {
-          originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-          return refreshableApi(originalRequest);
-        }
-      } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
-        alertSessionExpired();
-      } else {
-        await alert('utils.auth.serverError');
-        return Promise.reject(error);
+    if (isAccessTokenExpired(errorStatus, errorCode)) {
+      const newAccessToken = await getNewAccessToken();
+      if (newAccessToken) {
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        return refreshableApi(originalRequest);
       }
+    } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
+      alertSessionExpired();
+    } else {
+      await alert('utils.auth.serverError');
+      return Promise.reject(error);
     }
-  );
+  });
 
   return (
     <ApiContext.Provider
