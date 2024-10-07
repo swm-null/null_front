@@ -125,7 +125,11 @@ const Signup = () => {
             setValue={handleConfirmPasswordChange}
             errorMessage={passwordManager.confirmPasswordError}
           />
-          <CustomInput label="name" value={name} setValue={setName} />
+          <CustomInput
+            label={t('signup.name')}
+            value={name}
+            setValue={setName}
+          />
           <CodeSendForm
             code={codeManager.code}
             handleCodeChange={handleCodeChange}
