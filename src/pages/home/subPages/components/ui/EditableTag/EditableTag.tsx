@@ -98,7 +98,7 @@ const EditableTag = ({
   onTextChange,
   onDelete,
   onClick,
-  className, // 추가된 부분
+  className,
 }: EditableTagProps) => {
   const ref = useRef<HTMLSpanElement>(null);
 
