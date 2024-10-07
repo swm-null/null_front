@@ -44,13 +44,13 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const alertLoginRequiredThenRedirect = () => {
-    alert(t('loginRequired')).then(() => {
+    alert(t('utils.auth.loginRequired')).then(() => {
       setRedirectLogin(true);
     });
   };
 
   const alertSessionExpiredThenRedirect = () => {
-    alert(t('sessionExpired')).then(() => {
+    alert(t('utils.auth.sessionExpired')).then(() => {
       setRedirectLogin(true);
     });
   };

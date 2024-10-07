@@ -27,7 +27,8 @@ const UploadData = ({}: {}) => {
           <KakaoDropzone />
         </div>
         <button
-          className="mt-2 bg-gray3 text-white rounded-lg py-2 px-6"
+          type="button"
+          className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6"
           onClick={() => {}}
         >
           {t('pages.uploadData.createMemoButton')}

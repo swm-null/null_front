@@ -27,9 +27,9 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-custom-gradient-basic flex justify-center items-center h-screen bg-gray-100 py-8">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-        <div className="mb-6">
+    <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
+      <div className="flex flex-col bg-[#FFF6E3CC] p-8 shadow-custom w-full max-w-lg rounded-2xl gap-6">
+        <div className="flex flex-col gap-2">
           <CustomInput
             label={t('login.email')}
             value={email}
@@ -42,20 +42,16 @@ const Login = () => {
           />
         </div>
 
-        <LoginSignupButton
-          label={t('login.loginButton')}
-          onClick={handleLogin}
-          bgColor="#3B82F6"
-          hoverColor="#2563EB"
-          additionalClasses="mb-4 text-white"
-        />
-
-        <LoginSignupButton
-          label={t('login.signupButton')}
-          onClick={handleSignup}
-          bgColor="#E5E7EB"
-          hoverColor="#D1D5DB"
-        />
+        <div className="flex gap-2 flex-col">
+          <LoginSignupButton
+            label={t('login.loginButton')}
+            onClick={handleLogin}
+          />
+          <LoginSignupButton
+            label={t('login.signupButton')}
+            onClick={handleSignup}
+          />
+        </div>
       </div>
     </div>
   );

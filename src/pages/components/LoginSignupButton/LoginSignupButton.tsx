@@ -1,8 +1,6 @@
 interface LoginSignupButtonProps {
   label: string;
   onClick: () => void;
-  bgColor: string;
-  hoverColor: string;
   additionalClasses?: string;
   disabled?: boolean;
 }
@@ -10,17 +8,19 @@ interface LoginSignupButtonProps {
 const LoginSignupButton = ({
   label,
   onClick,
-  bgColor,
-  hoverColor,
   additionalClasses = '',
   disabled = false,
 }: LoginSignupButtonProps) => {
+  const hoverColor = '#F2BBA0';
+  const bgColor = '#F4CDB1';
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`w-full py-2 rounded-lg focus:outline-none ${additionalClasses}
-      ${disabled ? 'opacity-50 bg-[#A0A0A0]' : `bg-[${bgColor}]`}`}
+      className={`w-full py-2 rounded-lg focus:outline-none ${additionalClasses} 
+        bg-[#F4CDB1] border border-black border-opacity-10 bg-clip-padding text-[#6A5344]
+        ${disabled ? 'opacity-50' : ''}`}
       onMouseOver={(e) =>
         !disabled && (e.currentTarget.style.backgroundColor = hoverColor)
       }
