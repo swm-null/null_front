@@ -25,9 +25,7 @@ const CurrentTagPath = ({
   handleChildTagClick,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
-  const [sortOption, setSortOption] = useState<'latest' | 'oldest' | 'name'>(
-    'latest'
-  );
+  const [sortOption, setSortOption] = useState<'latest' | 'oldest'>('latest');
 
   const handleAllTagsClick = () => {
     setTagStack([]);

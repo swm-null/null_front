@@ -11,13 +11,13 @@ export default function SortToggle({
   sortOption,
   setSortOption,
 }: {
-  sortOption: 'latest' | 'oldest' | 'name';
-  setSortOption: (sortOption: 'latest' | 'oldest' | 'name') => void;
+  sortOption: 'latest' | 'oldest';
+  setSortOption: (sortOption: 'latest' | 'oldest') => void;
 }) {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setSortOption(event.target.value as 'latest' | 'oldest' | 'name');
+    setSortOption(event.target.value as 'latest' | 'oldest');
   };
 
   return (
@@ -51,7 +51,6 @@ export default function SortToggle({
       >
         <MenuItem value="latest">{t('pages.dashboard.toggle.latest')}</MenuItem>
         <MenuItem value="oldest">{t('pages.dashboard.toggle.oldest')}</MenuItem>
-        <MenuItem value="name">{t('pages.dashboard.toggle.name')}</MenuItem>
       </Select>
     </FormControl>
   );
