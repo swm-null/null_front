@@ -1,23 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
-import { Mode, Status } from '../interfaces';
+import { Status } from '../interfaces';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
 
-const MAX_SEARCH_QUERIES = 100;
-
-const useCreateSearchMemoManager = (mode: Mode) => {
-  const [searchAnswer, setSearchAnswer] =
-    useState<Interface.MemoSearchConversation>();
-  const [status, setStatus] = useState<Status>('default');
+const useCreateMemoManager = ({
+  status,
+  setStatus,
+}: {
+  status: Status;
+  setStatus: (status: Status) => void;
+}) => {
   const queryClient = useQueryClient();
   const [page, setPage] = useState<number>(0);
-
-  useEffect(() => {
-    setStatus('default'); // mode가 변경될 때마다 status를 초기화
-  }, [mode]);
 
   const useMemoStack = () => {
     return useQuery({
@@ -27,7 +24,6 @@ const useCreateSearchMemoManager = (mode: Mode) => {
         if (!Api.isValidResponse(response)) {
           throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
         }
-        console.log(response);
         return response.memos;
       },
     });
@@ -62,7 +58,7 @@ const useCreateSearchMemoManager = (mode: Mode) => {
     Interface.Memo,
     AxiosError,
     string,
-    { optimisticMemoId: string; previousMemos: Interface.Memo[] | undefined }
+    { optimisticMemoId: string }
   >({
     mutationFn: createMemo,
     onMutate: async (newMessage: string) => {
@@ -84,7 +80,7 @@ const useCreateSearchMemoManager = (mode: Mode) => {
         [optimisticMemo, ...previousMemos]
       );
 
-      return { optimisticMemoId: optimisticMemo.id, previousMemos };
+      return { optimisticMemoId: optimisticMemo.id };
     },
     onError: ({ context }: any) => {
       const optimisticMemoId = context?.optimisticMemoId;
@@ -122,71 +118,11 @@ const useCreateSearchMemoManager = (mode: Mode) => {
     },
   });
 
-  const trySearchMemoAndSetStatus = async (
-    message: string,
-    setMessage: (message: string) => void
-  ) => {
-    if (message.trim()) {
-      setMessage('');
-      setStatus('loading');
-      try {
-        const answer = await getSearchResponse(message);
-        const newSearchAnswer = {
-          id: uuid_v4(),
-          query: message,
-          answer: answer,
-        };
-        saveSearchHistory(newSearchAnswer);
-        setSearchAnswer(newSearchAnswer);
-        setStatus('success');
-      } catch (error) {
-        setStatus('error');
-      }
-    }
-  };
-
-  const getSearchResponse = async (text: string) => {
-    const response = await Api.searchMemo(text);
-
-    if (!Api.isValidResponse(response)) {
-      return {
-        text: '검색을 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 검색해주세요',
-        memos: null,
-      };
-    }
-
-    if (Api.isSearchMemoResponse(response)) {
-      return {
-        text: response.text,
-        memos: response.memos,
-      };
-    }
-
-    throw new Error('Unexpected response format');
-  };
-
-  const saveSearchHistory = (
-    newSearchAnswer: Interface.MemoSearchConversation
-  ) => {
-    const searchConversations = JSON.parse(
-      localStorage.getItem('search_queries') || '[]'
-    );
-    searchConversations.unshift(newSearchAnswer);
-
-    if (searchConversations.length > MAX_SEARCH_QUERIES) {
-      searchConversations.length = MAX_SEARCH_QUERIES;
-    }
-
-    localStorage.setItem('search_queries', JSON.stringify(searchConversations));
-  };
-
   return {
     status,
-    searchAnswer,
     useMemoStack,
     tryCreateMemoAndSetStatus,
-    trySearchMemoAndSetStatus,
   };
 };
 
-export default useCreateSearchMemoManager;
+export default useCreateMemoManager;
