@@ -43,7 +43,6 @@ const MemosList = ({ children }: MemosListProps) => {
   const getColumnsCountBreakPoints = () => {
     const breakpoints: { [key: number]: number } = {};
 
-    // 전체 화면 크기와, masonry의 크기 비율에 맞춰, breakpoint를 설정
     breakpoints[Math.floor((viewWidth / containerWidth) * 300)] = 1;
     breakpoints[Math.floor((viewWidth / containerWidth) * 600)] = 2;
     breakpoints[Math.floor((viewWidth / containerWidth) * 900)] = 3;
@@ -54,13 +53,13 @@ const MemosList = ({ children }: MemosListProps) => {
   return (
     <div
       ref={containerRef}
-      className="flex flex-col flex-1 overflow-x-hidden mt-4"
+      className="flex flex-col flex-1 overflow-x-hidden p-4"
     >
       {children ? (
         <ResponsiveMasonry
           columnsCountBreakPoints={getColumnsCountBreakPoints()}
         >
-          <Masonry gutter="16px">{children}</Masonry>
+          <Masonry gutter="0.75rem">{children}</Masonry>
         </ResponsiveMasonry>
       ) : null}
     </div>

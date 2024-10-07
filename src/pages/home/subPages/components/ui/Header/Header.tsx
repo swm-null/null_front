@@ -1,7 +1,7 @@
 const Header = ({ headerText }: { headerText: string }) => {
   return (
-    <div className="flex px-4 py-4">
-      <p className="font-semibold text-lg">{headerText}</p>
+    <div className="flex py-[1.19rem]">
+      <p className="font-bold text-2xl text-[#6A5344E6]">{headerText}</p>
     </div>
   );
 };

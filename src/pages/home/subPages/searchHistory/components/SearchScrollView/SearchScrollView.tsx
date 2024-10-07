@@ -43,7 +43,7 @@ const SearchScrollView = ({
         unmountOnExit
       >
         <SvgIcon
-          className="absolute self-center bottom-2 rounded-full bg-white ring-slate-900/5 drop-shadow-lg cursor-pointer"
+          className="absolute self-center bottom-2 rounded-full bg-white ring-slate-900/5 drop-shadow-custom backdrop-blur-lg cursor-pointer"
           style={{ width: 40, height: 40 }}
           onClick={scrollToRecent}
         >

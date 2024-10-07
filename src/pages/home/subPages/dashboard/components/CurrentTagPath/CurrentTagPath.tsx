@@ -1,8 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Breadcrumbs } from '@mui/material';
 import { UneditableTag } from 'pages/home/subPages/components';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
+import { TagPathButton } from './TagPathButton';
+import { SortToggle } from './SortToggle';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -23,6 +25,8 @@ const CurrentTagPath = ({
   handleChildTagClick,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
+  const [sortOption, setSortOption] = useState<'latest' | 'oldest'>('latest');
+
   const handleAllTagsClick = () => {
     setTagStack([]);
     handleTagOrAllTagsClick(null);
@@ -35,20 +39,22 @@ const CurrentTagPath = ({
   };
 
   return (
-    <div className="w-full px-4">
-      <Breadcrumbs separator={<RightIcon />} aria-label="breadcrumb">
-        <UneditableTag
+    <div className="flex flex-col w-full">
+      <Breadcrumbs
+        className="px-4"
+        separator={<RightIcon />}
+        aria-label="breadcrumb"
+      >
+        <TagPathButton
           key="all"
           text={allTagText}
-          color="transparent"
           invalidCharsPattern={invalidCharsPattern}
           onClick={handleAllTagsClick}
         />
         {tagStack.map((tag, index) => (
-          <UneditableTag
+          <TagPathButton
             key={tag.id}
             text={tag.name}
-            color="transparent"
             invalidCharsPattern={invalidCharsPattern}
             onClick={
               index !== tagStack.length - 1
@@ -59,15 +65,25 @@ const CurrentTagPath = ({
         ))}
       </Breadcrumbs>
 
-      <div className="mt-2 flex flex-1 overflow-hidden overflow-x-scroll no-scrollbar gap-1">
-        {tags.map((tag, index) => (
-          <UneditableTag
-            key={index}
-            text={tag.name}
-            invalidCharsPattern={invalidCharsPattern}
-            onClick={() => handleChildTagClick(tag)}
-          />
-        ))}
+      <div className="flex flex-row">
+        <div className="flex flex-1 overflow-x-scroll overflow-visible no-scrollbar gap-1 p-4 pb-2">
+          {tags.map((tag, index) => (
+            <UneditableTag
+              key={index}
+              className="h-[27px] text-[12px]"
+              text={`#${tag.name}`}
+              color="peach1-transparent"
+              fontColor="brown2"
+              border={10}
+              shadow
+              invalidCharsPattern={invalidCharsPattern}
+              onClick={() => handleChildTagClick(tag)}
+            />
+          ))}
+        </div>
+        <div className="p-4 pb-2 ml-auto">
+          <SortToggle sortOption={sortOption} setSortOption={setSortOption} />
+        </div>
       </div>
     </div>
   );

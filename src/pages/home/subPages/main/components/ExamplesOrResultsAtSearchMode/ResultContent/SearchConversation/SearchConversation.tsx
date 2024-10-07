@@ -36,7 +36,7 @@ const UserQuestion = ({ contentText }: { contentText: string }) => {
   return (
     <div
       className="inline-block self-end bg-[#FFE5C1] rounded-xl rounded-br-none py-2 px-4 
-        overflow-hidden max-w-3/4 border-[1px] border-[#F2DAB7] ml-auto"
+        overflow-hidden max-w-3/4 border-[1px] border-black border-opacity-10 bg-clip-padding ml-auto"
     >
       <p className="inline text-right whitespace-pre-line break-words">
         {contentText}
@@ -53,7 +53,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswer }) => {
       </div>
       <div className="flex flex-col w-full">
         {content.memos && (
-          <div className="mt-[6px] px-8 text-center max-h-60 overflow-y-auto no-scrollbar">
+          <div className="mt-[6px] text-center max-h-60 overflow-y-auto no-scrollbar">
             <MemosList>
               {content.memos?.map((memo) => (
                 <div key={memo.id} className="inline rounded-lg min-w-72">

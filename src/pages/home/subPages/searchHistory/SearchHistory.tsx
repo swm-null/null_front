@@ -14,7 +14,7 @@ const SearchHistoryPage = ({}: {}) => {
   const chatBotImageUrl = t('pages.search.ai.url');
 
   return (
-    <div className="flex flex-col flex-1 h-screen text-gray2">
+    <div className="flex flex-col flex-1 h-screen text-gray3">
       <Header headerText={t('pages.search.header')} />
       <div className="flex flex-col flex-1 overflow-hidden px-4">
         <SearchScrollView searchConversations={searchConversations}>
