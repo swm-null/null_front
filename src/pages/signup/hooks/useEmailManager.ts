@@ -14,21 +14,25 @@ const useEmailManager = () => {
   const handleEmailChange = (newEmail: { emailId: string; domain: string }) => {
     setEmail(newEmail);
     setIsEmailChecked(false);
-    setSuccess('');
-    setError('');
   };
 
   const handleCheckEmail = async () => {
-    const emailString = `${email.emailId}@${email.domain}`;
-    const response = await checkEmail(emailString);
-    if (isValidResponse(response)) {
-      setIsEmailChecked(true);
-      setSuccess(t('signup.checkEmailSuccess'));
-      setError('');
-    } else if (response.exceptionCode === 1004) {
-      setSuccess('');
-      setError(t('signup.emailAlreadyExists'));
-    } else {
+    try {
+      const emailString = `${email.emailId}@${email.domain}`;
+      const response = await checkEmail(emailString);
+
+      if (isValidResponse(response)) {
+        setIsEmailChecked(true);
+        setSuccess(t('signup.checkEmailSuccess'));
+        setError('');
+      } else if (response.exceptionCode === 1004) {
+        setSuccess('');
+        setError(t('signup.emailAlreadyExists'));
+      } else {
+        setSuccess('');
+        setError(t('signup.signupErrorMessage'));
+      }
+    } catch (error) {
       setSuccess('');
       setError(t('signup.signupErrorMessage'));
     }

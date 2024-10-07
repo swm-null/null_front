@@ -21,15 +21,20 @@ const useCodeManager = (isEmailChecked: boolean) => {
       return;
     }
 
-    const response = await sendCode(code);
-    if (isValidResponse(response)) {
-      setSuccess(t('signup.codeSent'));
-      setError('');
-      setIsCodeSent(true);
-    } else {
+    try {
+      const response = await sendCode(code);
+      if (isValidResponse(response)) {
+        setSuccess(t('signup.codeSent'));
+        setError('');
+        setIsCodeSent(true);
+      } else {
+        setSuccess('');
+        setError(t('signup.codeSendFailed'));
+        setIsCodeSent(false);
+      }
+    } catch (error) {
       setSuccess('');
       setError(t('signup.codeSendFailed'));
-      setIsCodeSent(false);
     }
   };
 
