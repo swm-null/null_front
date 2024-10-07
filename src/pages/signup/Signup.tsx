@@ -17,7 +17,10 @@ const Signup = () => {
 
   const emailManager = Hooks.useEmailManager();
   const passwordManager = Hooks.usePasswordManager();
-  const codeManager = Hooks.useCodeManager(emailManager.isEmailChecked);
+  const codeManager = Hooks.useCodeManager(
+    emailManager.isEmailChecked,
+    emailManager.email
+  );
   const { isValid } = Hooks.useValidationManager({
     email: emailManager.email,
     password: passwordManager.password,
@@ -79,19 +82,24 @@ const Signup = () => {
       return;
     }
 
-    const response = await signup(
-      `${emailManager.email.emailId}@${emailManager.email.domain}`,
-      passwordManager.password,
-      passwordManager.confirmPassword,
-      name,
-      codeManager.code
-    );
-    if (isValidResponse(response)) {
-      alert(t('signup.signupSuccess')).then(() => {
-        navigate(-1);
-      });
-    } else {
-      alert(response.exceptionMessage);
+    try {
+      const response = await signup(
+        `${emailManager.email.emailId}@${emailManager.email.domain}`,
+        passwordManager.password,
+        passwordManager.confirmPassword,
+        name,
+        codeManager.code
+      );
+      if (isValidResponse(response)) {
+        alert(t('signup.signupSuccess')).then(() => {
+          navigate(-1);
+        });
+      } else {
+        console.log(response);
+        alert(response.exceptionMessage);
+      }
+    } catch {
+      alert();
     }
   };
 

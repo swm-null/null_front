@@ -3,7 +3,10 @@ import { sendCode } from 'api';
 import { isValidResponse } from 'api';
 import { useTranslation } from 'react-i18next';
 
-const useCodeManager = (isEmailChecked: boolean) => {
+const useCodeManager = (
+  isEmailChecked: boolean,
+  email: { emailId: string; domain: string }
+) => {
   const { t } = useTranslation();
 
   const [code, setCode] = useState('');
@@ -22,7 +25,8 @@ const useCodeManager = (isEmailChecked: boolean) => {
     }
 
     try {
-      const response = await sendCode(code);
+      const emailString = `${email.emailId}@${email.domain}`;
+      const response = await sendCode(emailString);
       if (isValidResponse(response)) {
         setSuccess(t('signup.codeSent'));
         setError('');
@@ -35,6 +39,7 @@ const useCodeManager = (isEmailChecked: boolean) => {
     } catch (error) {
       setSuccess('');
       setError(t('signup.codeSendFailed'));
+      setIsCodeSent(false);
     }
   };
 
