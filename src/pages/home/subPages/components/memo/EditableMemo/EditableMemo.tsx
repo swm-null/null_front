@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import * as Api from 'api';
-import { CheckedIcon, DeleteIcon, NotCheckedIcon, PinIcon } from 'assets/icons';
-import { Checkbox } from '@mui/material';
+import { MemoHeader } from './MemoHeader.tsx';
+import { TagRebuildCheckbox } from './TagRebuildCheckbox/index.ts';
 
 const EditableMemo = ({
   memo,
@@ -58,10 +57,6 @@ const EditableMemo = ({
     handleSave();
   };
 
-  const formatDate = (date: Date): string => {
-    return format(date, t('memo.dateFormatEdit'));
-  };
-
   // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
   useEffect(() => {
     setMessage(memo.content);
@@ -95,17 +90,11 @@ const EditableMemo = ({
         ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
       <div className="flex flex-1 flex-col gap-[1.14rem]">
-        <div className="flex gap-[1.44rem] items-center">
-          <PinIcon className="mr-auto" width={'1.5rem'} height={'1.5rem'} />
-          <p className="text-center font-medium text-sm text-brown2">
-            {formatDate(new Date(memo.updated_at))}
-          </p>
-          <DeleteIcon
-            className="text-brown2 w-5 h-5"
-            onClick={handleDeleteMemo}
-          />
-        </div>
-
+        <MemoHeader
+          updatedAt={memo.updated_at}
+          dateFormat={t('memo.dateFormatEdit')}
+          handleDeleteMemo={handleDeleteMemo}
+        />
         <div className="flex mb-auto flex-col flex-1">
           <MemoText
             message={message}
@@ -119,20 +108,11 @@ const EditableMemo = ({
         <div className="flex gap-2">
           <TagManager tags={tags} setTags={setTags} editable={editable} />
           <div className="flex ml-auto gap-6 items-center">
-            <div className="flex gap-[0.62rem] items-center">
-              <Checkbox
-                className="w-5 h-5"
-                checked={tagRebuild}
-                onClick={() => setTagRebuild(!tagRebuild)}
-                disableRipple
-                icon={<NotCheckedIcon />}
-                checkedIcon={<CheckedIcon />}
-                sx={{ padding: 0 }}
-              />
-              <p className="text-brown2 font-medium text-sm">
-                {t('memo.tagRebuild')}
-              </p>
-            </div>
+            <TagRebuildCheckbox
+              checked={tagRebuild}
+              setChecked={setTagRebuild}
+              label={t('memo.tagRebuild')}
+            />
             <button
               className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] rounded-[30px] border border-[#917360]"
               onClick={tryUpdateMemo}
