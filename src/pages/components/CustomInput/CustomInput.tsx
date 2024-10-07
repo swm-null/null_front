@@ -39,14 +39,14 @@ const CustomInput = ({
         {useHiddenToggle &&
           (isHidden ? (
             <EyeIcon
-              className="text-brown0 text-brown2"
+              className="text-brown2"
               width={25}
               height={25}
               onClick={toggleHidden}
             />
           ) : (
             <EyeOffIcon
-              className="text-brown0 text-brown2"
+              className="text-brown2"
               width={25}
               height={25}
               onClick={toggleHidden}
