@@ -1,7 +1,7 @@
 import * as Interface from 'pages/home/subPages/interfaces';
 import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
-import { Status } from '../../interfaces';
+import { Status } from 'pages/home/subPages/main/interfaces';
 
 interface ExamplesOrResultsAtSearchModeProps {
   status: Status;

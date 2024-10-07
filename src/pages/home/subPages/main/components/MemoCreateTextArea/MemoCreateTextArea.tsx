@@ -1,11 +1,29 @@
 import { ChangeEvent, useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
-import { usePressEnterFetch } from './hook';
-import { CameraIcon, MicIcon, SearchIcon } from 'assets/icons';
+import { CameraIcon, MicIcon } from 'assets/icons';
 
-interface MemoTextAreaWithMicAndCameraButtonProps {
+import { KeyboardEvent } from 'react';
+
+// Enter keyboard 동작 확인 시, submit 동작 수행
+// form 형식은 textarea 못 써서, keyboard 입력으로 직접 수행
+const usePressEnterFetch = ({ handleSubmit }: { handleSubmit: () => void }) => {
+  const handlePressEnterFetch = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
+    // shift + Enter는 해당 안되도록 체크 후 submit
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
+  return { handlePressEnterFetch };
+};
+
+interface MemoCreateTextAreaProps {
   value: string;
-  iconVisible: boolean;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
@@ -13,15 +31,14 @@ interface MemoTextAreaWithMicAndCameraButtonProps {
   onCameraButtonClick: () => void;
 }
 
-const MemoTextAreaWithMicAndCameraButton = ({
+const MemoCreateTextArea = ({
   value,
-  iconVisible,
   placeholder,
   onChange,
   onSubmit,
   onMicButtonClick,
   onCameraButtonClick,
-}: MemoTextAreaWithMicAndCameraButtonProps) => {
+}: MemoCreateTextAreaProps) => {
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleSubmit: onSubmit,
   });
@@ -41,7 +58,6 @@ const MemoTextAreaWithMicAndCameraButton = ({
         font-regular shadow-custom backdrop-blur-lg`}
     >
       <div className="flex flex-1 gap-2">
-        {iconVisible && <SearchIcon />}
         <TextareaAutosize
           className="flex-1 flex-shrink-0 focus:outline-none resize-none min-h-9 content-center 
             text-[#111111] bg-transparent placeholder-custom"
@@ -63,4 +79,4 @@ const MemoTextAreaWithMicAndCameraButton = ({
   );
 };
 
-export default MemoTextAreaWithMicAndCameraButton;
+export default MemoCreateTextArea;
