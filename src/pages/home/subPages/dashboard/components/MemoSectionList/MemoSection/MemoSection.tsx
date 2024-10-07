@@ -31,7 +31,7 @@ const MemoSection = ({
       <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10 bg-clip-padding">
         <div className="flex flex-col flex-1 gap-[0.4rem]">
           {memos.map((memo, index) => (
-            <div className="flex flex-col w-[244px]">
+            <div key={memo.id} className="flex flex-col w-[244px]">
               <UneditableMemo
                 memo={memo}
                 shadow
