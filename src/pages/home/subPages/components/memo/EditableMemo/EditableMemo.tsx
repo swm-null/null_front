@@ -1,34 +1,33 @@
 import { useState, useEffect, useRef } from 'react';
-import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { MemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import * as Api from 'api';
-import { DeleteIcon } from 'assets/icons';
+import { MemoHeader } from './MemoHeader.tsx';
+import { TagRebuildCheckbox } from './TagRebuildCheckbox/index.ts';
 
 const EditableMemo = ({
   memo,
   editable = false,
-  color,
+  border,
   softUpdateMemo,
   softDeleteMemo,
   softRevertMemo,
+  handleSave,
 }: {
   memo: Memo;
   editable?: boolean;
-  /**
-   * 메모에 적용하고 싶은 배경색을 string으로 전달
-   * ex) #000000, tailwind에 적용되어있는 color
-   */
-  color?: string;
+  border?: boolean;
   softUpdateMemo?: (newMemo: Memo) => void;
   softDeleteMemo?: (memoId: string) => void;
   softRevertMemo?: (memo: Memo) => void;
+  handleSave: () => void;
 }) => {
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
+  const [tagRebuild, setTagRebuild] = useState(false);
   const updateMemoSubject = useRef(new Subject<Memo>()).current;
   const { t } = useTranslation();
 
@@ -55,10 +54,7 @@ const EditableMemo = ({
     if (memo.content !== newMemo.content) {
       updateMemoSubject.next(newMemo);
     }
-  };
-
-  const formatDate = (date: Date): string => {
-    return format(date, t('memo.dateFormat'));
+    handleSave();
   };
 
   // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
@@ -73,7 +69,11 @@ const EditableMemo = ({
       .subscribe(async (newMemo: Memo) => {
         softUpdateMemo && softUpdateMemo(newMemo);
 
-        const response = await Api.updateMemo(newMemo.id, newMemo.content);
+        const response = await Api.updateMemo(
+          newMemo.id,
+          newMemo.content
+          // tagRebuild // TODO: 태그 재생성 기능 추가되면 구현
+        );
         if (!Api.isUpdateMemoResponse(response)) {
           alert(t('pages.memo.updateErrorMessage'));
         }
@@ -86,38 +86,40 @@ const EditableMemo = ({
 
   return (
     <div
-      className={`p-2 grid first-letter:flex-col bg-white border-[1.5px] ${color ? `border-[${color}]` : 'border-gray1'} rounded-md min-h-72`}
+      className={`p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-md gap-8 
+        ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
-      <p className="text-center">{formatDate(new Date(memo.updated_at))}</p>
-      <MemoText message={message} setMessage={setMessage} editable={editable} />
-      <TagManager tags={tags} setTags={setTags} editable={editable} />
+      <div className="flex flex-1 flex-col gap-[1.14rem]">
+        <MemoHeader
+          updatedAt={memo.updated_at}
+          dateFormat={t('memo.dateFormatEdit')}
+          handleDeleteMemo={handleDeleteMemo}
+        />
+        <div className="flex mb-auto flex-col flex-1">
+          <MemoText
+            message={message}
+            setMessage={setMessage}
+            editable={editable}
+          />
+        </div>
+      </div>
+
       {editable && (
         <div className="flex gap-2">
-          <button
-            type="button"
-            className="text-right justify-self-end mt-2 rounded-full py-1 px-2"
-            onClick={handleDeleteMemo}
-          >
-            <DeleteIcon className="border-gray2" />
-          </button>
-          <div className="flex flex-1" />
-
-          <button
-            type="button"
-            className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
-            onClick={() => {
-              console.log(t('memo.tagRebuild'));
-            }}
-          >
-            {t('memo.tagRebuild')}
-          </button>
-          <button
-            type="button"
-            className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
-            onClick={tryUpdateMemo}
-          >
-            {t('memo.save')}
-          </button>
+          <TagManager tags={tags} setTags={setTags} editable={editable} />
+          <div className="flex ml-auto gap-6 items-center">
+            <TagRebuildCheckbox
+              checked={tagRebuild}
+              setChecked={setTagRebuild}
+              label={t('memo.tagRebuild')}
+            />
+            <button
+              className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] rounded-[30px] border border-[#917360]"
+              onClick={tryUpdateMemo}
+            >
+              {t('memo.save')}
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -1,8 +1,8 @@
 import * as Components from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
-import { DashboardMemoSection } from './DashboardMemoSection';
+import { MemoSection } from './MemoSection';
 
-interface DashboardMemoSectionProps {
+interface MemoSectionProps {
   memoSectionListData: Array<{
     tag: Tag;
     childTags: Tag[] | null;
@@ -12,11 +12,11 @@ interface DashboardMemoSectionProps {
   handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
 }
 
-const DashboardMemoSectionList = ({
+const MemoSectionList = ({
   memoSectionListData,
   addTagToStack,
   handleMemoClick,
-}: DashboardMemoSectionProps) => {
+}: MemoSectionProps) => {
   const isMemoSectionEmpty = () => memoSectionListData.length === 0;
   const hasSingleMemoSection = () => memoSectionListData.length === 1;
 
@@ -29,10 +29,16 @@ const DashboardMemoSectionList = ({
     const taggedMemo = memoSectionListData[0];
 
     return (
-      <div className="px-4">
+      <div className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg">
         <Components.MemosList>
           {taggedMemo.memos.map((memo, index) => (
-            <Components.UneditableMemo key={index} memo={memo} />
+            <Components.UneditableMemo
+              key={index}
+              memo={memo}
+              shadow
+              border
+              onClick={() => handleMemoClick(memo, taggedMemo.tag, index)}
+            />
           ))}
         </Components.MemosList>
       </div>
@@ -40,10 +46,10 @@ const DashboardMemoSectionList = ({
   }
 
   return (
-    <div className="flex flex-1 h-full gap-4 overflow-x-scroll">
+    <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2">
       {memoSectionListData.map(({ tag, childTags, memos }) => {
         if (memos.length === 0) {
-          return null; // 빈 메모 리스트 처리
+          return null;
         }
 
         if (!childTags) {
@@ -51,7 +57,7 @@ const DashboardMemoSectionList = ({
         }
 
         return (
-          <DashboardMemoSection
+          <MemoSection
             key={tag.id}
             tag={tag}
             childTags={childTags}
@@ -65,4 +71,4 @@ const DashboardMemoSectionList = ({
   );
 };
 
-export default DashboardMemoSectionList;
+export default MemoSectionList;

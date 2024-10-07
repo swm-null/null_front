@@ -10,7 +10,7 @@ const BottomNavBar = ({ setCurrentPage }: BottomNavBarProps) => {
 
   return (
     <div className="fixed w-full bottom-0">
-      <div className="flex rounded-full shadow-lg mb-6 mx-4 px-4 bg-[#F5ECE0] border-[1px] border-[#E2BCA6] justify-between items-center">
+      <div className="flex rounded-full shadow-custom backdrop-blur-lg mb-6 mx-4 px-4 bg-[#F5ECE0] border border-black border-opacity-10 bg-clip-padding justify-between items-center">
         <BottomNavButton
           icon={<Icon.HomeIcon />}
           label={t('pages.sidebar.main')}

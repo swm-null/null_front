@@ -37,8 +37,8 @@ const MemoTextAreaWithMicAndCameraButton = ({
   return (
     <div
       className={`flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden gap-4
-        ${getBackgroundColor()}
-        border-[1px] border-[#E3BFA4] font-regular shadow-custom`}
+        ${getBackgroundColor()} border-[1px] border-black border-opacity-10 bg-clip-padding 
+        font-regular shadow-custom backdrop-blur-lg`}
     >
       <div className="flex flex-1 gap-2">
         {iconVisible && <SearchIcon />}

@@ -59,7 +59,10 @@ const CreatedMemoCard = ({
   const formatDate = (date: Date): string => format(date, t('memo.dateFormat'));
 
   return (
-    <div className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border-[1.5px] border-[#DBBFAD] rounded-xl shadow-custom">
+    <div
+      className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border border-black border-opacity-10 bg-clip-padding rounded-xl 
+      shadow-custom backdrop-blur-lg"
+    >
       <div className="flex flex-col w-full gap-5">
         <CreatedMemoCardHeader
           aiName={t('pages.search.ai.name')}

@@ -10,7 +10,7 @@ const UploadData = ({}: {}) => {
   const serverMail = 'test@oatnote.io';
 
   return (
-    <div className="flex flex-col flex-1 h-screen text-gray2">
+    <div className="flex flex-col flex-1 h-screen text-gray3">
       <Header headerText={t('pages.uploadData.header')} />
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden gap-2">
         <p>{t('pages.uploadData.emailInstruction.header')}</p>

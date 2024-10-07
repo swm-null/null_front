@@ -19,7 +19,7 @@ const ResultContent = ({
     <>
       <div
         className="px-2 py-6 w-full rounded-xl border-[1px] 
-          border-[#E3BFA4] bg-[#FFF6E3CC] font-regular"
+          border-black border-opacity-10 bg-clip-padding bg-[#FFF6E3CC] font-regular"
       >
         <SearchConversation
           key={searchAnswer.id}

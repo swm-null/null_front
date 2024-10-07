@@ -1,1 +1,1 @@
-export { default as DashboardMemoSectionList } from './DashboardMemoSectionList';
+export { default as MemoSectionList } from './MemoSectionList';

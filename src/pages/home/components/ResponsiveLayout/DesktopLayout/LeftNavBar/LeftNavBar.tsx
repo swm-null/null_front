@@ -10,7 +10,7 @@ const LeftNavBar = ({ setCurrentPage }: LeftNavBarProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="p-4 h-full flex flex-col flex-1 items-start justify-center gap-[14px]">
+    <div className="p-4 flex flex-col items-start justify-center gap-[14px]">
       <SidebarTooltipButton
         icon={<Icon.HomeIcon />}
         label={t('pages.sidebar.main')}
@@ -48,8 +48,8 @@ const SidebarTooltipButton = ({
 
   return (
     <div
-      className="min-w-12 h-12 px-[14px] bg-[#F5ECE0] text-[#5D4037] gap-4
-        inline-flex items-center shadow-lg rounded-full cursor-pointer"
+      className="min-w-12 h-12 px-[14px] bg-peach1 text-[#5D4037] gap-4
+        inline-flex items-center shadow-custom backdrop-blur-lg rounded-full cursor-pointer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={onClick}
