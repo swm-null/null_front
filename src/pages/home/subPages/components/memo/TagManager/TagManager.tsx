@@ -6,7 +6,7 @@ import { Tag } from 'pages/home/subPages/interfaces';
 
 interface TagManagerProps {
   tags: Tag[];
-  editable: boolean;
+  editable?: boolean;
   setTags: (tags: Tag[]) => void;
 }
 const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
@@ -36,7 +36,7 @@ const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1 flex-row items-center">
       {tags.map((tag, index) => (
         <EditableTag
           key={index}

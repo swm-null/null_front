@@ -30,7 +30,7 @@ const TagCreateInput = ({
 
   return (
     <div
-      className="flex flex-1 text-left focus:outline-none break-words self-center focus:self-center cursor:empty:before text-lg"
+      className="flex flex-auto text-left focus:outline-none break-words self-center focus:self-center cursor:empty:before text-[10px] self"
       ref={ref}
       contentEditable
       suppressContentEditableWarning
