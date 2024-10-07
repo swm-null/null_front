@@ -4,7 +4,6 @@ import * as Component from './components';
 import { Mode } from './interfaces';
 import { useCreateSearchNoteManager } from './hook';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
-import { memos } from './dummy/data';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
@@ -42,7 +41,6 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     // TODO: camera OCR 기능이 추가되면 코드 작성하기
   };
 
-  // TODO: 나중에는 서버에서 요청해서 가져올 예정
   const buttonData: [string, string, string, string] = [
     '라면 레시피 메모 보여줘',
     '민지 전화번호 알려줘',
@@ -60,7 +58,13 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         onMicButtonClick={handleMicButtonClick}
         onCameraButtonClick={handleCameraButtonClick}
       />
-      <Component.CreatedMemoList memos={memos} />
+      <Component.CreatedMemoList
+        memos={
+          createSearchNoteManager.createAnswer
+            ? [createSearchNoteManager.createAnswer]
+            : []
+        }
+      />
     </>
   );
 
@@ -83,14 +87,13 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   );
 
   return (
-    // FIXME: pt 지금은 그냥 직접 구해서 넣었는데, 나중에 어떻게 하면 저거 자동으로 구할지 상의해보기
-    // 50vh - (토글+여백+TextArea 기본 높이) - 사이드바 절반 높이
     <div className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center">
       <div className="max-w-[740px] flex flex-col flex-1 text-gray3">
         <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
         <div className="overflow-scroll no-scrollbar p-4 gap-4 flex flex-col">
-          {isCreateMode() && createModeContent}
-          {isSearchMode() && searchModeContent}
+          {isCreateMode()
+            ? createModeContent
+            : isSearchMode() && searchModeContent}
         </div>
       </div>
     </div>

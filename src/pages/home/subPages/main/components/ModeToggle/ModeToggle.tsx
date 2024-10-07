@@ -42,6 +42,7 @@ const ModeButton = ({
   text,
 }: ModeButtonProps) => (
   <button
+    type="button"
     onClick={onModeChange}
     className={` py-1 px-4 rounded-full inline-flex items-center border-[1px] font-bold border-black border-opacity-10 bg-clip-padding cursor-pointer 
           ${selected ? 'bg-[#FFF6E3] text-[#6A5344]' : 'bg-[#F4CDB1] text-[#846E62]'} `}
