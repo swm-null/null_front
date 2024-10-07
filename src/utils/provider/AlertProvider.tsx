@@ -3,7 +3,8 @@ import { AlertContext } from 'utils/context';
 
 type AlertState = {
   message: string;
-  onClose: () => void;
+  onConfirm: () => void;
+  onClose?: () => void;
 };
 
 const AlertProvider = ({ children }: { children: ReactNode }) => {
@@ -13,9 +14,25 @@ const AlertProvider = ({ children }: { children: ReactNode }) => {
     new Promise((resolve) => {
       setAlertState({
         message: message || '',
-        onClose: () => {
+        onConfirm: () => {
           setAlertState(null);
           resolve(undefined);
+        },
+      });
+    });
+
+  const confirmAlert = (message?: string): Promise<boolean> =>
+    new Promise((resolve) => {
+      setAlertState({
+        message: message || '',
+
+        onConfirm: () => {
+          setAlertState(null);
+          resolve(true);
+        },
+        onClose: () => {
+          setAlertState(null);
+          resolve(false);
         },
       });
     });
@@ -23,7 +40,7 @@ const AlertProvider = ({ children }: { children: ReactNode }) => {
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape' && alertState) {
-        alertState.onClose();
+        alertState.onConfirm();
       }
     },
     [alertState]
@@ -37,7 +54,7 @@ const AlertProvider = ({ children }: { children: ReactNode }) => {
   }, [handleEscape]);
 
   return (
-    <AlertContext.Provider value={{ alert, alertState }}>
+    <AlertContext.Provider value={{ alert, confirmAlert, alertState }}>
       {children}
     </AlertContext.Provider>
   );
