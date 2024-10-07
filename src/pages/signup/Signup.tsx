@@ -18,7 +18,7 @@ const Signup = () => {
   const emailManager = Hooks.useEmailManager();
   const passwordManager = Hooks.usePasswordManager();
   const codeManager = Hooks.useCodeManager(emailManager.isEmailChecked);
-  const validationManager = Hooks.useValidationManager({
+  const { isValid } = Hooks.useValidationManager({
     email: emailManager.email,
     password: passwordManager.password,
     confirmPassword: passwordManager.confirmPassword,
@@ -59,12 +59,6 @@ const Signup = () => {
       isConfirmPasswordInputTouched &&
       isCodeInputTouched
     ) {
-      const isValid =
-        validationManager.isEmailValid &&
-        validationManager.isPasswordValid &&
-        validationManager.isConfirmPasswordValid &&
-        validationManager.isNameValid &&
-        validationManager.isCodeValid;
       const essentialApiSent =
         emailManager.isEmailChecked && codeManager.isCodeSent;
       setIsSignupButtonDisabled(!isValid || !essentialApiSent);

@@ -44,12 +44,24 @@ const useValidationManager = ({
     return codeRegex.test(code);
   }, [code]);
 
-  return {
+  const isValid = useMemo(() => {
+    return (
+      isEmailValid &&
+      isPasswordValid &&
+      isConfirmPasswordValid &&
+      isNameValid &&
+      isCodeValid
+    );
+  }, [
     isEmailValid,
     isPasswordValid,
     isConfirmPasswordValid,
     isNameValid,
     isCodeValid,
+  ]);
+
+  return {
+    isValid,
   };
 };
 
