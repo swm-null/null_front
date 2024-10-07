@@ -13,7 +13,7 @@
   "memo": {
     "deleteErrorMessage": "메모 삭제에 실패했습니다. 다시 시도해 주세요.",
     "updateErrorMessage": "메모 업데이트에 실패했습니다. 다시 시도해 주세요.",
-    "dateFormat": "yyyy.mm.dd HH:mm",
+    "dateFormat": "yyyy.MM.dd HH:mm",
     "dateFormatEdit": "수정된 시간: yyyy년 mm월 dd일 HH:mm",
     "tagRebuild": "태그 재생성",
     "save": "저장"
