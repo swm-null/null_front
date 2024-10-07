@@ -94,6 +94,7 @@ const EditableMemo = ({
       {editable && (
         <div className="flex gap-2">
           <button
+            type="button"
             className="text-right justify-self-end mt-2 rounded-full py-1 px-2"
             onClick={handleDeleteMemo}
           >
@@ -102,6 +103,7 @@ const EditableMemo = ({
           <div className="flex flex-1" />
 
           <button
+            type="button"
             className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
             onClick={() => {
               console.log(t('memo.tagRebuild'));
@@ -110,6 +112,7 @@ const EditableMemo = ({
             {t('memo.tagRebuild')}
           </button>
           <button
+            type="button"
             className="text-right justify-self-end mt-2 text-gray2 rounded-full py-1 px-2"
             onClick={tryUpdateMemo}
           >

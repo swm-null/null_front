@@ -27,6 +27,7 @@ const UploadData = ({}: {}) => {
           <KakaoDropzone />
         </div>
         <button
+          type="button"
           className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6"
           onClick={() => {}}
         >

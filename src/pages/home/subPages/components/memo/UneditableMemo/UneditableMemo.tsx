@@ -84,6 +84,7 @@ const UneditableMemo = ({
 
         <div className="flex flex-1" />
         <button
+          type="button"
           className="text-right justify-self-end mt-2 rounded-full py-1 px-2"
           onClick={handleDeleteMemo}
         >
