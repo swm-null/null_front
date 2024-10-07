@@ -64,11 +64,13 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
           <p className="pr-2 pl-9 font-regular text-brown2">
             {data.answer.text}
           </p>
-          <MemosList>
-            {data.answer.memos?.map((memo) => (
-              <UneditableMemo key={memo.id} memo={memo} />
-            ))}
-          </MemosList>
+          {data.answer.memos?.length !== 0 && (
+            <MemosList>
+              {data.answer.memos?.map((memo) => (
+                <UneditableMemo key={memo.id} memo={memo} />
+              ))}
+            </MemosList>
+          )}
         </div>
       </div>
     </div>
