@@ -8,7 +8,7 @@ import * as Interface from 'pages/home/subPages/interfaces';
 
 const MAX_SEARCH_QUERIES = 100;
 
-const useCreateSearchNoteManager = (mode: Mode) => {
+const useCreateSearchMemoManager = (mode: Mode) => {
   const [searchAnswer, setSearchAnswer] =
     useState<Interface.MemoSearchConversation>();
   const [status, setStatus] = useState<Status>('default');
@@ -189,4 +189,4 @@ const useCreateSearchNoteManager = (mode: Mode) => {
   };
 };
 
-export default useCreateSearchNoteManager;
+export default useCreateSearchMemoManager;

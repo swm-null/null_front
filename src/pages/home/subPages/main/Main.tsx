@@ -2,14 +2,14 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Component from './components';
 import { Mode } from './interfaces';
-import { useCreateSearchNoteManager } from './hook';
+import { useCreateSearchMemoManager } from './hook';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const [mode, setMode] = useState<Mode>('create');
-  const createSearchNoteManager = useCreateSearchNoteManager(mode);
+  const createSearchNoteManager = useCreateSearchMemoManager(mode);
 
   const isCreateMode = () => mode === 'create';
   const isSearchMode = () => mode === 'search';

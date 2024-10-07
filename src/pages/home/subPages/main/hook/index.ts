@@ -1,1 +1,1 @@
-export { default as useCreateSearchNoteManager } from './useCreateSearchNoteManager';
+export { default as useCreateSearchMemoManager } from './useCreateSearchMemoManager';
