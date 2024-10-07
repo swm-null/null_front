@@ -59,11 +59,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         onCameraButtonClick={handleCameraButtonClick}
       />
       <Component.CreatedMemoList
-        memos={
-          createSearchNoteManager.createAnswer
-            ? [createSearchNoteManager.createAnswer]
-            : []
-        }
+        memos={createSearchNoteManager.useMemoStack().data || []}
       />
     </>
   );

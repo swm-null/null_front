@@ -1,20 +1,37 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
+import { Mode, Status } from '../interfaces';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
-import { Mode, Status } from '../interfaces';
 
 const MAX_SEARCH_QUERIES = 100;
 
 const useCreateSearchNoteManager = (mode: Mode) => {
-  const [createAnswer, setCreateAnswer] = useState<Interface.Memo>();
   const [searchAnswer, setSearchAnswer] =
     useState<Interface.MemoSearchConversation>();
   const [status, setStatus] = useState<Status>('default');
+  const queryClient = useQueryClient();
+  const [page, setPage] = useState<number>(0);
 
   useEffect(() => {
     setStatus('default'); // mode가 변경될 때마다 status를 초기화
   }, [mode]);
+
+  const useMemoStack = () => {
+    return useQuery({
+      queryKey: ['memos', page],
+      queryFn: async () => {
+        const response = await Api.getAllMemos(page);
+        if (!Api.isValidResponse(response)) {
+          throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
+        }
+        console.log(response);
+        return response.memos;
+      },
+    });
+  };
 
   const tryCreateMemoAndSetStatus = async (
     message: string,
@@ -23,9 +40,9 @@ const useCreateSearchNoteManager = (mode: Mode) => {
     if (message.trim()) {
       setMessage('');
       setStatus('loading');
+
       try {
-        const answer = await getCreateResponse(message);
-        setCreateAnswer(answer);
+        await mutateAsync(message);
         setStatus('success');
       } catch (error) {
         setStatus('error');
@@ -33,34 +50,77 @@ const useCreateSearchNoteManager = (mode: Mode) => {
     }
   };
 
-  const getCreateResponse = async (text: string): Promise<Interface.Memo> => {
-    const response = await Api.createMemo(text);
-
+  const createMemo = async (message: string): Promise<Interface.Memo> => {
+    const response = await Api.createMemo(message);
     if (!Api.isValidResponse(response)) {
-      return {
-        id: uuid_v4(),
-        content:
-          '추가를 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 시도해주세요',
-        tags: [],
-        image_urls: null,
-        updated_at: '',
-        created_at: '',
-      };
+      throw new Error('Memo Create Error');
     }
-
-    if (Api.isCreateMemoResponse(response)) {
-      return {
-        id: response.id,
-        content: response.content,
-        tags: response.tags,
-        image_urls: response.image_urls,
-        updated_at: response.updated_at,
-        created_at: response.created_at,
-      };
-    }
-
-    throw new Error('Unexpected response format');
+    return response;
   };
+
+  const { mutateAsync } = useMutation<
+    Interface.Memo,
+    AxiosError,
+    string,
+    { optimisticMemoId: string; previousMemos: Interface.Memo[] | undefined }
+  >({
+    mutationFn: createMemo,
+    onMutate: async (newMessage: string) => {
+      await queryClient.cancelQueries({ queryKey: ['memos', page] });
+      const previousMemos =
+        queryClient.getQueryData<Interface.Memo[]>(['memos', page]) || [];
+
+      const optimisticMemo: Interface.Memo = {
+        id: uuid_v4(),
+        content: newMessage,
+        image_urls: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        tags: [],
+      };
+
+      queryClient.setQueryData<Interface.Memo[]>(
+        ['memos', page],
+        [optimisticMemo, ...previousMemos]
+      );
+
+      return { optimisticMemoId: optimisticMemo.id, previousMemos };
+    },
+    onError: ({ context }: any) => {
+      const optimisticMemoId = context?.optimisticMemoId;
+      if (optimisticMemoId) {
+        queryClient.setQueryData<Interface.Memo[]>(
+          ['memos', page],
+          (oldMemos) =>
+            oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
+        );
+      }
+    },
+    onSettled: (data, _, __, context) => {
+      const optimisticMemoId = context?.optimisticMemoId;
+
+      if (data) {
+        const updatedMemo = {
+          id: data.id,
+          content: data.content,
+          image_urls: data.image_urls,
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+          tags: data.tags,
+        };
+
+        queryClient.setQueryData<Interface.Memo[]>(
+          ['memos', page],
+          (oldMemos) =>
+            oldMemos?.map((memo) =>
+              memo.id === optimisticMemoId ? updatedMemo : memo
+            ) || []
+        );
+      } else if (optimisticMemoId) {
+        queryClient.invalidateQueries({ queryKey: ['memos', page] });
+      }
+    },
+  });
 
   const trySearchMemoAndSetStatus = async (
     message: string,
@@ -69,7 +129,6 @@ const useCreateSearchNoteManager = (mode: Mode) => {
     if (message.trim()) {
       setMessage('');
       setStatus('loading');
-      setSearchAnswer(undefined);
       try {
         const answer = await getSearchResponse(message);
         const newSearchAnswer = {
@@ -123,8 +182,8 @@ const useCreateSearchNoteManager = (mode: Mode) => {
 
   return {
     status,
-    createAnswer,
     searchAnswer,
+    useMemoStack,
     tryCreateMemoAndSetStatus,
     trySearchMemoAndSetStatus,
   };

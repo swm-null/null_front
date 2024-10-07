@@ -5,6 +5,7 @@ import { MemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { BookIcon, DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
+import CircularProgress from '@mui/material/CircularProgress'; // MUI 로딩 컴포넌트 추가
 
 const CreatedMemoCardHeader = ({
   aiName,
@@ -13,7 +14,7 @@ const CreatedMemoCardHeader = ({
 }: {
   aiName: string;
   updatedAt: string;
-  handleDeleteMemo: () => {};
+  handleDeleteMemo: () => void;
 }) => {
   return (
     <div className="flex">
@@ -70,7 +71,16 @@ const CreatedMemoCard = ({
           handleDeleteMemo={handleDeleteMemo}
         />
         <div className="flex flex-col gap-9">
-          <TagManager tags={tags} setTags={setTags} editable />
+          {tags.length === 0 ? (
+            <div className="flex gap-3 text-sm">
+              <CircularProgress className="self-center" size={15} />
+              <p className="text-gray3 font-regular text-[11px]">
+                {t('pages.create.tagRebuilding')}
+              </p>
+            </div>
+          ) : (
+            <TagManager tags={tags} setTags={setTags} />
+          )}
           <MemoText message={message} setMessage={setMessage} />
         </div>
       </div>

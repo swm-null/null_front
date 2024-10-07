@@ -119,18 +119,18 @@ interface getMemosResponse extends validResponse {
   memos: Memo[];
 }
 
-export const getAllMemos = async (): Promise<
-  getMemosResponse | errorResponse
-> => {
+export const getAllMemos = async (
+  page: number
+): Promise<getMemosResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/memos`;
+  const endpoint = `/tag/memos?page=${page}&sortOrder=LATEST`;
 
   try {
     const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
-      memos: response.data,
+      memos: response.data.memos,
     } as getMemosResponse;
     return responseInfo;
   } catch (error) {
