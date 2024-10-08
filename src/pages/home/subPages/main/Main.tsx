@@ -86,7 +86,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
       />
       <Component.ExamplesOrResultsAtSearchMode
         status={status}
-        searchAnswer={searchMemoManager.searchAnswer}
+        searchConversation={searchMemoManager.searchConversation}
         navigateToHistory={navigateToHistory}
         buttonData={buttonData}
         handleButtonClick={handleSubmit}

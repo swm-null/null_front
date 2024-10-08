@@ -54,6 +54,75 @@ const useCreateMemoManager = ({
     return response;
   };
 
+  const createTemporaryMemo = async (content: string) => {
+    await queryClient.cancelQueries({ queryKey: ['memos', page] });
+    const previousMemos =
+      queryClient.getQueryData<Interface.Memo[]>(['memos', page]) || [];
+
+    const optimisticMemo: Interface.Memo = {
+      id: uuid_v4(),
+      content: content,
+      image_urls: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      tags: [],
+    };
+
+    queryClient.setQueryData<Interface.Memo[]>(
+      ['memos', page],
+      [optimisticMemo, ...previousMemos]
+    );
+
+    return { optimisticMemoId: optimisticMemo.id };
+  };
+
+  const deleteTemporaryMemo = (
+    _: AxiosError<unknown, any>,
+    __: string,
+    context: { optimisticMemoId: string } | undefined
+  ) => {
+    // TODO: 태그 생성하다 오류나면 어떻게 처리하지? 왠지 front에서 메모 재생성하기 기능이 있어야할 것 같은데
+    // 지금은 그냥 안보이게 설정함
+    const optimisticMemoId = context?.optimisticMemoId;
+    if (optimisticMemoId) {
+      queryClient.setQueryData<Interface.Memo[]>(
+        ['memos', page],
+        (oldMemos) =>
+          oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
+      );
+    }
+  };
+
+  const updateTemporaryMemoData = (
+    data: Interface.Memo | undefined,
+    _: AxiosError<unknown, any> | null,
+    __: string,
+    context: { optimisticMemoId: string } | undefined
+  ) => {
+    const optimisticMemoId = context?.optimisticMemoId;
+
+    if (data) {
+      const updatedMemo = {
+        id: data.id,
+        content: data.content,
+        image_urls: data.image_urls,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+        tags: data.tags,
+      };
+
+      queryClient.setQueryData<Interface.Memo[]>(
+        ['memos', page],
+        (oldMemos) =>
+          oldMemos?.map((memo) =>
+            memo.id === optimisticMemoId ? updatedMemo : memo
+          ) || []
+      );
+    } else if (optimisticMemoId) {
+      queryClient.invalidateQueries({ queryKey: ['memos', page] });
+    }
+  };
+
   const { mutateAsync } = useMutation<
     Interface.Memo,
     AxiosError,
@@ -61,61 +130,9 @@ const useCreateMemoManager = ({
     { optimisticMemoId: string }
   >({
     mutationFn: createMemo,
-    onMutate: async (newMessage: string) => {
-      await queryClient.cancelQueries({ queryKey: ['memos', page] });
-      const previousMemos =
-        queryClient.getQueryData<Interface.Memo[]>(['memos', page]) || [];
-
-      const optimisticMemo: Interface.Memo = {
-        id: uuid_v4(),
-        content: newMessage,
-        image_urls: null,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        tags: [],
-      };
-
-      queryClient.setQueryData<Interface.Memo[]>(
-        ['memos', page],
-        [optimisticMemo, ...previousMemos]
-      );
-
-      return { optimisticMemoId: optimisticMemo.id };
-    },
-    onError: ({ context }: any) => {
-      const optimisticMemoId = context?.optimisticMemoId;
-      if (optimisticMemoId) {
-        queryClient.setQueryData<Interface.Memo[]>(
-          ['memos', page],
-          (oldMemos) =>
-            oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
-        );
-      }
-    },
-    onSettled: (data, _, __, context) => {
-      const optimisticMemoId = context?.optimisticMemoId;
-
-      if (data) {
-        const updatedMemo = {
-          id: data.id,
-          content: data.content,
-          image_urls: data.image_urls,
-          created_at: data.created_at,
-          updated_at: data.updated_at,
-          tags: data.tags,
-        };
-
-        queryClient.setQueryData<Interface.Memo[]>(
-          ['memos', page],
-          (oldMemos) =>
-            oldMemos?.map((memo) =>
-              memo.id === optimisticMemoId ? updatedMemo : memo
-            ) || []
-        );
-      } else if (optimisticMemoId) {
-        queryClient.invalidateQueries({ queryKey: ['memos', page] });
-      }
-    },
+    onMutate: createTemporaryMemo,
+    onError: deleteTemporaryMemo,
+    onSettled: updateTemporaryMemoData,
   });
 
   return {

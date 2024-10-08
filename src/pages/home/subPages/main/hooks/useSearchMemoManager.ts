@@ -5,6 +5,7 @@ import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const MAX_SEARCH_QUERIES = 100;
 
@@ -15,8 +16,9 @@ const useSearchMemoManager = ({
   status: Status;
   setStatus: (status: Status) => void;
 }) => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [searchAnswer, setSearchAnswer] =
+  const [searchConversation, setSearchConversation] =
     useState<Interface.MemoSearchConversation>();
 
   const trySearchMemoAndSetStatus = async (
@@ -45,78 +47,77 @@ const useSearchMemoManager = ({
     return response;
   };
 
-  const { mutateAsync } = useMutation<
-    Interface.MemoSearchAnswer,
-    AxiosError,
-    string,
-    { conversationId: string; conversationQuery: string }
-  >({
-    mutationFn: searchMemo,
-    onMutate: async (query: string) => {
-      await queryClient.cancelQueries({
-        queryKey: ['searchHistory'],
-      });
-      const previousMemoSearchConversations =
-        queryClient.getQueryData<Interface.MemoSearchConversation[]>([
-          'searchHistory',
-        ]) || [];
+  const createTemporarySearchConversation = async (query: string) => {
+    await queryClient.cancelQueries({
+      queryKey: ['searchHistory'],
+    });
 
-      const optimisticSearchConversation: Interface.MemoSearchConversation = {
-        id: uuid_v4(),
-        query: query,
-        answer: null,
-      };
-      setSearchAnswer(optimisticSearchConversation);
+    const optimisticSearchConversation: Interface.MemoSearchConversation = {
+      id: uuid_v4(),
+      query: query,
+      answer: null,
+    };
+    setSearchConversation(optimisticSearchConversation);
+
+    return {
+      conversationId: optimisticSearchConversation.id,
+      conversationQuery: optimisticSearchConversation.query,
+    };
+  };
+
+  const createErrorAnswer = (
+    _: AxiosError<unknown, any>,
+    __: string,
+    context: { conversationId: string; conversationQuery: string } | undefined
+  ) => {
+    const conversationId = context?.conversationId;
+    const conversationQuery = context?.conversationQuery;
+
+    if (conversationId) {
+      const updatedSearchConversation = {
+        id: conversationId,
+        query: conversationQuery,
+        answer: {
+          text: t('utils.auth.serverError'),
+          memos: [],
+        },
+      } as Interface.MemoSearchConversation;
+
+      setSearchConversation(updatedSearchConversation);
+    }
+  };
+
+  const updateSearchConversationAndSaveSearchHistory = (
+    data: Interface.MemoSearchAnswer | undefined,
+    _: AxiosError<unknown, any> | null,
+    __: string,
+    context: { conversationId: string; conversationQuery: string } | undefined
+  ) => {
+    const conversationId = context?.conversationId;
+    const conversationQuery = context?.conversationQuery;
+
+    if (data) {
+      const updatedSearchConversation = {
+        id: conversationId,
+        query: conversationQuery,
+        answer: data,
+      } as Interface.MemoSearchConversation;
+
+      setSearchConversation(updatedSearchConversation);
+      // FIXME: searchHistory api연동되면 localhost에 저장하는 이 메소드 삭제.
+      saveSearchHistory(updatedSearchConversation);
 
       queryClient.setQueryData<Interface.MemoSearchConversation[]>(
         ['searchHistory'],
-        [optimisticSearchConversation, ...previousMemoSearchConversations]
+        (oldSearchHistories) =>
+          oldSearchHistories?.filter(
+            (oldSearchHistory) => oldSearchHistory.id !== conversationId
+          ) || []
       );
-
-      return {
-        conversationId: optimisticSearchConversation.id,
-        conversationQuery: optimisticSearchConversation.query,
-      };
-    },
-    onError: ({ context }: any) => {
-      const optimisticMemoId = context?.optimisticMemoId;
-      if (optimisticMemoId) {
-        queryClient.setQueryData<Interface.Memo[]>(
-          ['searchHistory'],
-          (oldMemos) =>
-            oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
-        );
-      }
-    },
-    onSettled: (data, _, __, context) => {
-      const conversationId = context?.conversationId;
-      const conversationQuery = context?.conversationQuery;
-
-      if (data) {
-        const updatedSearchAnswer = {
-          id: conversationId,
-          query: conversationQuery,
-          answer: data,
-        } as Interface.MemoSearchConversation;
-
-        setSearchAnswer(updatedSearchAnswer);
-        // FIXME: searchHistory api연동되면 localhost에 저장하는 이 메소드 삭제.
-        saveSearchHistory(updatedSearchAnswer);
-
-        queryClient.setQueryData<Interface.MemoSearchConversation[]>(
-          ['searchHistory'],
-          (oldSearchHistories) =>
-            oldSearchHistories?.map((oldSearchHistory) =>
-              oldSearchHistory.id === conversationId
-                ? updatedSearchAnswer
-                : oldSearchHistory
-            ) || []
-        );
-      } else if (conversationId) {
-        queryClient.invalidateQueries({ queryKey: ['searchHistory'] });
-      }
-    },
-  });
+    } else if (conversationId) {
+      queryClient.invalidateQueries({ queryKey: ['searchHistory'] });
+    }
+  };
 
   const saveSearchHistory = (
     newSearchAnswer: Interface.MemoSearchConversation
@@ -133,9 +134,21 @@ const useSearchMemoManager = ({
     localStorage.setItem('search_queries', JSON.stringify(searchConversations));
   };
 
+  const { mutateAsync } = useMutation<
+    Interface.MemoSearchAnswer,
+    AxiosError,
+    string,
+    { conversationId: string; conversationQuery: string }
+  >({
+    mutationFn: searchMemo,
+    onMutate: createTemporarySearchConversation,
+    onError: createErrorAnswer,
+    onSettled: updateSearchConversationAndSaveSearchHistory,
+  });
+
   return {
     status,
-    searchAnswer,
+    searchConversation,
     trySearchMemoAndSetStatus,
   };
 };
