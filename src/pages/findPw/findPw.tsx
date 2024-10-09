@@ -1,9 +1,13 @@
 import { useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoginSignupButton, HiddenInput, CustomInput } from 'pages/components';
+import {
+  LoginSignupButton,
+  HiddenInput,
+  CustomInput,
+  EmailButtonForm,
+} from 'pages/components';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils';
-import { EmailCheckForm } from 'pages/signup/components';
 
 const Signup = () => {
   const { t } = useTranslation();
@@ -19,7 +23,7 @@ const Signup = () => {
     confirmPassword: '',
   });
   const [code, setCode] = useState('');
-  const [success, setSucces] = useState('');
+  const [sendCodeSuccess, setSendCodeSuccess] = useState('');
   const [error, setError] = useState({
     email: '',
     password: '',
@@ -42,11 +46,15 @@ const Signup = () => {
     isEmailValid && isPasswordValid && isConfirmPasswordValid && isCodeValid;
 
   const handleEmailChange = (newEmail: { emailId: string; domain: string }) => {
+    if (!isEmailValid) {
+      setError((prev) => ({ ...prev, email: t('signup.invalidEmail') }));
+    }
     setEmail(newEmail);
   };
 
   const handlePasswordChange = (value: string) => {
-    if (isPasswordValid) {
+    if (!isPasswordValid) {
+      setError((prev) => ({ ...prev, password: t('signup.invalidPassword') }));
     }
     setResetPassword((prev) => ({
       ...prev,
@@ -55,6 +63,12 @@ const Signup = () => {
   };
 
   const handleConfirmPasswordChange = (value: string) => {
+    if (!isConfirmPasswordValid) {
+      setError((prev) => ({
+        ...prev,
+        password: t('signup.passwordsDoNotMatch'),
+      }));
+    }
     setResetPassword((prev) => ({
       ...prev,
       confirmPassword: value,
@@ -65,7 +79,10 @@ const Signup = () => {
     setCode(code);
   };
 
-  const handleSendCode = () => {};
+  const handleSendCode = () => {
+    setSendCodeSuccess(t('signup.codeSent'));
+    setError((prev) => ({ ...prev, email: '' }));
+  };
 
   return (
     <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
@@ -78,11 +95,12 @@ const Signup = () => {
               <p>{t('findPw.emailInfo')}</p>
             </div>
           </div>
-          <EmailCheckForm
+          <EmailButtonForm
             email={email}
+            buttonText={t('findPw.sendCode')}
             handleEmailChange={handleEmailChange}
-            handleCheckEmail={handleSendCode}
-            success={success}
+            handleClickButton={handleSendCode}
+            success={sendCodeSuccess}
             error={error.email}
           />
         </>
@@ -93,7 +111,6 @@ const Signup = () => {
               label={t('signup.code')}
               value={code}
               setValue={handleCodeChange}
-              errorMessage={error.code}
             />
             <HiddenInput
               label={t('signup.password')}

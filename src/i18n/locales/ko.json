@@ -65,6 +65,7 @@
     "header": "비밀번호 찾기",
     "instruction": "가입한 이메일을 입력해 주세요.",
     "emailInfo": "이메일을 통해 인증번호가 전송됩니다.",
+    "sendCode": "코드전송",
     "resetPwButton": "비밀번호 재설정하기"
   },
   "pages": {
