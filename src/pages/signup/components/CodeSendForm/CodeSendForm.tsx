@@ -5,8 +5,8 @@ interface CodeSendFormProps {
   code: string;
   handleCodeChange: (code: string) => void;
   handleSendCode: () => void;
-  success: string;
-  error: string;
+  success?: string;
+  error?: string;
 }
 
 const CodeSendForm = ({

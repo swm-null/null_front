@@ -33,6 +33,8 @@
     "loginButton": "Login",
     "signupButton": "Sign Up",
     "loginErrorMessage": "로그인 중에 오류가 발생했습니다. 다시 시도해 주세요.",
+    "findPw": "비밀번호를 잊어버리셨나요?",
+    "findPwButton": "비밀번호 찾기",
     "socialLogin": {
       "kakao": "카카오톡",
       "apple": "애플 아이디",
@@ -59,7 +61,12 @@
     "signupErrorMessage": "회원가입 중에 오류가 발생했습니다. 다시 시도해 주세요.",
     "signupSuccess": "회원가입이 완료되었습니다. 로그인 화면으로 이동합니다."
   },
-
+  "findPw": {
+    "header": "비밀번호 찾기",
+    "instruction": "가입한 이메일을 입력해 주세요.",
+    "emailInfo": "이메일을 통해 인증번호가 전송됩니다.",
+    "resetPwButton": "비밀번호 재설정하기"
+  },
   "pages": {
     "sidebar": {
       "main": "메인",

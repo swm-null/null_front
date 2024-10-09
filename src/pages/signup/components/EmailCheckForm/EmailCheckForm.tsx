@@ -5,7 +5,7 @@ interface EmailCheckFormProps {
   email: { emailId: string; domain: string };
   handleEmailChange: (newEmail: { emailId: string; domain: string }) => void;
   handleCheckEmail: () => void;
-  isEmailInputTouched: boolean;
+  isEmailInputTouched?: boolean;
   success: string;
   error: string;
 }

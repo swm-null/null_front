@@ -16,7 +16,20 @@ const useEmailManager = () => {
     setIsEmailChecked(false);
   };
 
+  const isValidEmailFormat = (emailId: string, domain: string) => {
+    const emailIdRegex = /^[a-zA-Z0-9._%+-]+$/;
+    const domainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailIdRegex.test(emailId) && domainRegex.test(domain);
+  };
+
   const handleCheckEmail = async () => {
+    if (!isValidEmailFormat(email.emailId, email.domain)) {
+      setError(t('signup.invalidEmail'));
+      return;
+    } else {
+      setError('');
+    }
+
     try {
       const emailString = `${email.emailId}@${email.domain}`;
       const response = await checkEmail(emailString);
@@ -25,7 +38,7 @@ const useEmailManager = () => {
         setIsEmailChecked(true);
         setSuccess(t('signup.checkEmailSuccess'));
         setError('');
-      } else if (response.exceptionCode === 1004) {
+      } else if (Number(response?.exceptionCode) === 1004) {
         setSuccess('');
         setError(t('signup.emailAlreadyExists'));
       } else {
