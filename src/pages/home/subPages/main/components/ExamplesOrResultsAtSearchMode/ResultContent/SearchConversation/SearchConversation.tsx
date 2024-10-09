@@ -15,7 +15,7 @@ const SearchConversation = ({
 }) => {
   return (
     <div key={data.id} className="px-6 h-full">
-      <div className="flex items-end">
+      <div className="flex items-start gap-4">
         <AIInfo name={chatBotName} />
         <UserQuestion contentText={data.query} />
       </div>
@@ -26,7 +26,7 @@ const SearchConversation = ({
 
 const AIInfo = ({ name }: { name: string }) => {
   return (
-    <div className="flex items-center">
+    <div className="flex flex-shrink-0 items-center">
       <BookIcon />
       <p className="ml-2 text-lg font-semibold">{name}</p>
     </div>

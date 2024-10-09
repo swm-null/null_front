@@ -5,6 +5,7 @@ import { MemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
+import { Skeleton } from '@mui/material';
 
 const CreatedMemoCardHeader = ({
   updatedAt,
@@ -65,7 +66,11 @@ const CreatedMemoCard = ({
           updatedAt={formatDate(new Date(memo.updated_at))}
           handleDeleteMemo={handleDeleteMemo}
         >
-          {tags.length !== 0 && <TagManager tags={tags} setTags={setTags} />}
+          {tags.length === 0 ? (
+            <Skeleton animation="wave" width={50} />
+          ) : (
+            <TagManager tags={tags} setTags={setTags} />
+          )}
         </CreatedMemoCardHeader>
         <MemoText message={message} setMessage={setMessage} />
       </div>
