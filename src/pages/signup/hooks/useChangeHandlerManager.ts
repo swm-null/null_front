@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useChangeHandler = () => {
+const useChangeHandlerManager = () => {
   const [email, setEmail] = useState<{ emailId: string; domain: string }>({
     emailId: '',
     domain: '',
@@ -51,4 +51,4 @@ const useChangeHandler = () => {
   };
 };
 
-export default useChangeHandler;
+export default useChangeHandlerManager;
