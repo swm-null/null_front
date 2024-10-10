@@ -1,15 +1,23 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Component from './components';
-import { Mode } from './interfaces';
-import { useCreateSearchNoteManager } from './hook';
+import { Mode, Status } from './interfaces';
+import { useCreateMemoManager, useSearchMemoManager } from './hooks';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const [mode, setMode] = useState<Mode>('create');
-  const createSearchNoteManager = useCreateSearchNoteManager(mode);
+  const [status, setStatus] = useState<Status>('default');
+  const createMemoManager = useCreateMemoManager({
+    status,
+    setStatus,
+  });
+  const searchMemoManager = useSearchMemoManager({
+    status,
+    setStatus,
+  });
 
   const isCreateMode = () => mode === 'create';
   const isSearchMode = () => mode === 'search';
@@ -27,9 +35,9 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
 
   const handleSubmit = (message: string) => {
     if (isCreateMode()) {
-      createSearchNoteManager.tryCreateMemoAndSetStatus(message, setMessage);
+      createMemoManager.tryCreateMemoAndSetStatus(message, setMessage);
     } else {
-      createSearchNoteManager.trySearchMemoAndSetStatus(message, setMessage);
+      searchMemoManager.trySearchMemoAndSetStatus(message, setMessage);
     }
   };
 
@@ -40,6 +48,10 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const handleCameraButtonClick = () => {
     // TODO: camera OCR 기능이 추가되면 코드 작성하기
   };
+
+  useEffect(() => {
+    setStatus('default'); // mode가 변경될 때마다 status를 초기화
+  }, [mode]);
 
   const buttonData: [string, string, string, string] = [
     '라면 레시피 메모 보여줘',
@@ -59,11 +71,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         onCameraButtonClick={handleCameraButtonClick}
       />
       <Component.CreatedMemoList
-        memos={
-          createSearchNoteManager.createAnswer
-            ? [createSearchNoteManager.createAnswer]
-            : []
-        }
+        memos={createMemoManager.useMemoStack().data || []}
       />
     </>
   );
@@ -77,8 +85,8 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         onSubmit={() => handleSubmit(message)}
       />
       <Component.ExamplesOrResultsAtSearchMode
-        status={createSearchNoteManager.status}
-        searchAnswer={createSearchNoteManager.searchAnswer}
+        status={status}
+        searchConversation={searchMemoManager.searchConversation}
         navigateToHistory={navigateToHistory}
         buttonData={buttonData}
         handleButtonClick={handleSubmit}

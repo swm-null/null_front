@@ -23,5 +23,5 @@ export interface MemoSearchConversation {
   /**
    * 메모 검색 질문에 대한 대답
    */
-  answer: MemoSearchAnswer;
+  answer: MemoSearchAnswer | null;
 }

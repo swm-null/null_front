@@ -5,7 +5,7 @@ import { Status } from 'pages/home/subPages/main/interfaces';
 
 interface ExamplesOrResultsAtSearchModeProps {
   status: Status;
-  searchAnswer?: Interface.MemoSearchConversation;
+  searchConversation?: Interface.MemoSearchConversation;
   navigateToHistory: () => void;
   buttonData: [string, string, string, string];
   handleButtonClick: (message: string) => void;
@@ -13,7 +13,7 @@ interface ExamplesOrResultsAtSearchModeProps {
 
 const ExamplesOrResultsAtSearchMode = ({
   status,
-  searchAnswer,
+  searchConversation,
   navigateToHistory,
   buttonData,
   handleButtonClick,
@@ -25,13 +25,11 @@ const ExamplesOrResultsAtSearchMode = ({
           buttonData={buttonData}
           handleButtonClick={handleButtonClick}
         />
-      ) : status === 'success' ? (
+      ) : (
         <ResultContent
-          searchAnswer={searchAnswer}
+          searchConversation={searchConversation}
           navigateToHistory={navigateToHistory}
         />
-      ) : (
-        <></>
       )}
     </div>
   );

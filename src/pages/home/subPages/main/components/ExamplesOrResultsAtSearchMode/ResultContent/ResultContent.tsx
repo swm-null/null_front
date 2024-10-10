@@ -4,16 +4,16 @@ import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
 import { SearchConversation } from './SearchConversation';
 
 interface ResultContentProps {
-  searchAnswer?: MemoSearchConversation;
+  searchConversation?: MemoSearchConversation;
   navigateToHistory: () => void;
 }
 
 const ResultContent = ({
-  searchAnswer,
+  searchConversation,
   navigateToHistory,
 }: ResultContentProps) => {
   const { t } = useTranslation();
-  if (!searchAnswer) return;
+  if (!searchConversation) return;
 
   return (
     <>
@@ -22,8 +22,8 @@ const ResultContent = ({
           border-black border-opacity-10 bg-clip-padding bg-[#FFF6E3CC] font-regular"
       >
         <SearchConversation
-          key={searchAnswer.id}
-          data={searchAnswer}
+          key={searchConversation.id}
+          data={searchConversation}
           chatBotName={t('pages.search.ai.name')}
         />
       </div>
