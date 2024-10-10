@@ -60,12 +60,12 @@ const Signup = () => {
       const emailString = `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`;
       const response = await sendCode(emailString);
       if (isValidResponse(response)) {
-        setCodeSuccess(t('signup.codeSent'));
+        setCodeSuccess(t('auth.codeSent'));
       } else {
-        validationManager.setCodeError(t('signup.codeSendFailed'));
+        validationManager.setCodeError(t('auth.codeSendFailed'));
       }
     } catch {
-      validationManager.setCodeError(t('signup.codeSendFailed'));
+      validationManager.setCodeError(t('auth.codeSendFailed'));
     }
   };
 
@@ -109,7 +109,7 @@ const Signup = () => {
             error={validationManager.error.email}
           />
           <Components.HiddenInput
-            label={t('signup.password')}
+            label={t('auth.password')}
             value={changeHandlerManager.password.password}
             setValue={(value) => {
               changeHandlerManager.handlePasswordChange(value);
@@ -118,7 +118,7 @@ const Signup = () => {
             errorMessage={validationManager.error.password}
           />
           <Components.HiddenInput
-            label={t('signup.confirmPassword')}
+            label={t('auth.confirmPassword')}
             value={changeHandlerManager.password.confirmPassword}
             setValue={(value) => {
               changeHandlerManager.handleConfirmPasswordChange(value);

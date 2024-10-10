@@ -7,7 +7,13 @@
     "auth": {
       "loginRequired": "로그인이 필요합니다. 로그인 페이지로 이동합니다.",
       "sessionExpired": "세션이 만료되었습니다. 다시 로그인 해주세요.",
-      "serverError": "서버에 문제가 발생했습니다. 나중에 다시 시도해 주세요."
+      "serverError": "서버에 문제가 발생했습니다. 나중에 다시 시도해 주세요.",
+
+      "code": "인증코드",
+      "password": "Password",
+      "confirmPassword": "Password 확인",
+      "codeSent": "인증코드를 이메일로 전송했습니다.",
+      "codeSendFailed": "유효한 이메일을 입력해주세요."
     }
   },
   "profile": {
@@ -44,16 +50,11 @@
   "signup": {
     "header": "회원가입",
     "email": "Email",
-    "password": "Password",
     "signupButton": "회원가입",
-    "confirmPassword": "Password 확인",
     "checkEmail": "중복확인",
     "name": "이름",
-    "code": "인증코드",
     "sendCode": "코드전송",
-    "codeSent": "인증코드를 이메일로 전송했습니다.",
     "noCheckEmail": "이메일 중복확인을 해주세요.",
-    "codeSendFailed": "유효한 이메일을 입력해주세요.",
     "checkEmailSuccess": "사용 가능한 이메일입니다.",
     "emailAlreadyExists": "이미 사용 중인 이메일입니다. 다른 이메일을 입력하세요.",
     "invalidEmail": "유효하지 않은 이메일 주소입니다.",

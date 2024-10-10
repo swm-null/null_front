@@ -30,12 +30,12 @@ const FindPw = () => {
       const emailString = `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`;
       const response = await sendCode(emailString);
       if (isValidResponse(response)) {
-        setEmailSuccess(t('signup.codeSent'));
+        setEmailSuccess(t('auth.codeSent'));
       } else {
-        alert(t('signup.codeSendFailed'));
+        alert(t('auth.codeSendFailed'));
       }
     } catch {
-      alert(t('signup.codeSendFailed'));
+      alert(t('auth.codeSendFailed'));
     }
   };
 
@@ -83,7 +83,7 @@ const FindPw = () => {
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <Components.CustomInput
-              label={t('signup.code')}
+              label={t('auth.code')}
               value={changeHandlerManager.code}
               setValue={(value) => {
                 changeHandlerManager.handleCodeChange(value);
@@ -92,7 +92,7 @@ const FindPw = () => {
               errorMessage={validationManager.error.code}
             />
             <Components.HiddenInput
-              label={t('signup.password')}
+              label={t('auth.password')}
               value={changeHandlerManager.password.password}
               setValue={(value) => {
                 changeHandlerManager.handlePasswordChange(value);
@@ -101,7 +101,7 @@ const FindPw = () => {
               errorMessage={validationManager.error.password}
             />
             <Components.HiddenInput
-              label={t('signup.confirmPassword')}
+              label={t('auth.confirmPassword')}
               value={changeHandlerManager.password.confirmPassword}
               setValue={(value) => {
                 changeHandlerManager.handleConfirmPasswordChange(value);
