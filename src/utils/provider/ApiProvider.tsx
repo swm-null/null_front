@@ -137,7 +137,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
       alertSessionExpiredThenRedirect();
     } else {
-      await alert('utils.auth.serverError');
+      await alert(t('utils.auth.serverError'));
       return Promise.reject(error);
     }
   });
