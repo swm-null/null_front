@@ -52,11 +52,14 @@
     "code": "인증코드",
     "sendCode": "코드전송",
     "codeSent": "인증코드를 이메일로 전송했습니다.",
+    "noCheckEmail": "이메일 중복확인을 해주세요.",
     "codeSendFailed": "유효한 이메일을 입력해주세요.",
     "checkEmailSuccess": "사용 가능한 이메일입니다.",
     "emailAlreadyExists": "이미 사용 중인 이메일입니다. 다른 이메일을 입력하세요.",
     "invalidEmail": "유효하지 않은 이메일 주소입니다.",
     "invalidPassword": "비밀번호는 8자 이상의 영어, 숫자, 특수기호의 조합이어야 합니다.",
+    "invalidName": "이름은 빈 문자열이 될 수 없습니다.",
+    "invalidCodeForm": "6자리의 숫자코드를 입력해주세요.",
     "passwordsDoNotMatch": "비밀번호가 일치하지 않습니다.",
     "signupErrorMessage": "회원가입 중에 오류가 발생했습니다. 다시 시도해 주세요.",
     "signupSuccess": "회원가입이 완료되었습니다. 로그인 화면으로 이동합니다."
@@ -66,7 +69,8 @@
     "instruction": "가입한 이메일을 입력해 주세요.",
     "emailInfo": "이메일을 통해 인증번호가 전송됩니다.",
     "sendCode": "코드전송",
-    "resetPwButton": "비밀번호 재설정하기"
+    "resetPwButton": "비밀번호 재설정하기",
+    "findPwSuccess": "비밀번호 변경이 완료되었습니다. 로그인 화면으로 이동합니다."
   },
   "pages": {
     "sidebar": {

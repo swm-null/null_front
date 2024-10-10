@@ -21,7 +21,7 @@ const EmailButtonForm = ({
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <p className="block text-sm font-medium text-gray-700">
         {t('signup.email')}
       </p>
@@ -40,7 +40,7 @@ const EmailButtonForm = ({
         {success && <p className="text-green-500 text-sm">{success}</p>}
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </div>
-    </>
+    </div>
   );
 };
 

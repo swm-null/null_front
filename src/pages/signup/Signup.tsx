@@ -1,82 +1,88 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  LoginSignupButton,
-  HiddenInput,
-  CustomInput,
-  EmailButtonForm,
-} from 'pages/components';
+import * as Components from 'pages/components';
 import { CodeSendForm } from './components';
-import * as Hooks from './hooks';
-import { isValidResponse, signup } from 'api';
+import { checkEmail, isValidResponse, sendCode, signup } from 'api';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils';
+import { useChangeHandlerManager, useValidationManager } from './hooks';
 
 const Signup = () => {
   const { t } = useTranslation();
   const { alert } = useContext(AlertContext);
   const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [isSignupButtonDisabled, setIsSignupButtonDisabled] = useState(true);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [emailSuccess, setEmailSuccess] = useState('');
+  const [codeSuccess, setCodeSuccess] = useState('');
 
-  const emailManager = Hooks.useEmailManager();
-  const passwordManager = Hooks.usePasswordManager();
-  const codeManager = Hooks.useCodeManager(
-    emailManager.isEmailChecked,
-    emailManager.email
-  );
-  const { isValid } = Hooks.useValidationManager({
-    email: emailManager.email,
-    password: passwordManager.password,
-    confirmPassword: passwordManager.confirmPassword,
-    name: name,
-    code: codeManager.code,
-  });
+  const changeHandlerManager = useChangeHandlerManager();
+  const validationManager = useValidationManager();
 
-  const handleEmailChange = (newEmail: { emailId: string; domain: string }) => {
-    emailManager.handleEmailChange(newEmail);
+  const isValid =
+    validationManager.isEmailValid(changeHandlerManager.email) &&
+    validationManager.isPasswordValid(changeHandlerManager.password.password) &&
+    validationManager.isCodeValid(changeHandlerManager.code) &&
+    validationManager.isConfirmPasswordValid(
+      changeHandlerManager.password.password,
+      changeHandlerManager.password.confirmPassword
+    );
+
+  const handleCheckEmail = async () => {
+    try {
+      const emailString = `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`;
+      const response = await checkEmail(emailString);
+
+      if (isValidResponse(response)) {
+        setIsEmailChecked(true);
+        setEmailSuccess(t('signup.checkEmailSuccess'));
+        validationManager.setEmailError('');
+      } else if (Number(response?.exceptionCode) === 1004) {
+        setEmailSuccess('');
+        validationManager.setEmailError(t('signup.emailAlreadyExists'));
+      } else {
+        setEmailSuccess('');
+        validationManager.setEmailError(t('signup.signupErrorMessage'));
+      }
+    } catch (error) {
+      setEmailSuccess('');
+      validationManager.setEmailError(t('signup.signupErrorMessage'));
+    }
   };
 
-  const handlePasswordChange = (newPassword: string) => {
-    passwordManager.handlePasswordChange(newPassword);
-  };
-
-  const handleConfirmPasswordChange = (newConfirmPassword: string) => {
-    passwordManager.handleConfirmPasswordChange(newConfirmPassword);
-  };
-
-  const handleCodeChange = (newCode: string) => {
-    codeManager.handleCodeChange(newCode);
-  };
-
-  useEffect(() => {
-    const essentialApiSent =
-      emailManager.isEmailChecked && codeManager.isCodeSent;
-    setIsSignupButtonDisabled(!isValid || !essentialApiSent);
-  }, [
-    emailManager.email,
-    passwordManager.password,
-    passwordManager.confirmPassword,
-    codeManager.code,
-  ]);
-
-  const handleSignUp = async () => {
-    if (isSignupButtonDisabled) {
+  const handleSendCode = async () => {
+    if (!isEmailChecked) {
+      validationManager.setCodeError(t('signup.noCheckEmail'));
       return;
     }
 
     try {
+      const emailString = `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`;
+      const response = await sendCode(emailString);
+      if (isValidResponse(response)) {
+        setCodeSuccess(t('signup.codeSent'));
+      } else {
+        validationManager.setCodeError(t('signup.codeSendFailed'));
+      }
+    } catch {
+      validationManager.setCodeError(t('signup.codeSendFailed'));
+    }
+  };
+
+  const handleSignUp = async () => {
+    if (!isValid) return;
+
+    try {
       const response = await signup(
-        `${emailManager.email.emailId}@${emailManager.email.domain}`,
-        passwordManager.password,
-        passwordManager.confirmPassword,
-        name,
-        codeManager.code
+        `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`,
+        changeHandlerManager.password.password,
+        changeHandlerManager.password.confirmPassword,
+        changeHandlerManager.name,
+        changeHandlerManager.code
       );
       if (isValidResponse(response)) {
         alert(t('signup.signupSuccess')).then(() => {
-          navigate(-1);
+          navigate('/login');
         });
       } else {
         alert(response.exceptionMessage);
@@ -90,43 +96,63 @@ const Signup = () => {
     <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
       <form className="bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
         <div className="flex flex-col mb-6 gap-3">
-          <EmailButtonForm
-            email={emailManager.email}
+          <Components.EmailButtonForm
+            email={changeHandlerManager.email}
             buttonText={t('signup.checkEmail')}
-            handleEmailChange={handleEmailChange}
-            handleClickButton={emailManager.handleCheckEmail}
-            success={emailManager.success}
-            error={emailManager.error}
+            handleEmailChange={(newEmail) => {
+              setEmailSuccess('');
+              changeHandlerManager.handleEmailChange(newEmail);
+              validationManager.validateEmail(newEmail);
+            }}
+            handleClickButton={handleCheckEmail}
+            success={emailSuccess}
+            error={validationManager.error.email}
           />
-          <HiddenInput
+          <Components.HiddenInput
             label={t('signup.password')}
-            value={passwordManager.password}
-            setValue={handlePasswordChange}
-            errorMessage={passwordManager.passwordError}
+            value={changeHandlerManager.password.password}
+            setValue={(value) => {
+              changeHandlerManager.handlePasswordChange(value);
+              validationManager.validatePassword(value);
+            }}
+            errorMessage={validationManager.error.password}
           />
-          <HiddenInput
+          <Components.HiddenInput
             label={t('signup.confirmPassword')}
-            value={passwordManager.confirmPassword}
-            setValue={handleConfirmPasswordChange}
-            errorMessage={passwordManager.confirmPasswordError}
+            value={changeHandlerManager.password.confirmPassword}
+            setValue={(value) => {
+              changeHandlerManager.handleConfirmPasswordChange(value);
+              validationManager.validateConfirmPassword(
+                changeHandlerManager.password.password,
+                value
+              );
+            }}
+            errorMessage={validationManager.error.confirmPassword}
           />
-          <CustomInput
+          <Components.CustomInput
             label={t('signup.name')}
-            value={name}
-            setValue={setName}
+            value={changeHandlerManager.name}
+            setValue={(value) => {
+              changeHandlerManager.handleNameChange(value);
+              validationManager.validateName(value);
+            }}
+            errorMessage={validationManager.error.name}
           />
           <CodeSendForm
-            code={codeManager.code}
-            handleCodeChange={handleCodeChange}
-            handleSendCode={codeManager.handleSendCode}
-            success={codeManager.success}
-            error={codeManager.error}
+            code={changeHandlerManager.code}
+            handleCodeChange={(newCode) => {
+              changeHandlerManager.handleCodeChange(newCode);
+              validationManager.validateCode(newCode);
+            }}
+            handleSendCode={handleSendCode}
+            success={codeSuccess}
+            error={validationManager.error.code}
           />
         </div>
-        <LoginSignupButton
+        <Components.LoginSignupButton
           label={t('signup.signupButton')}
           onClick={handleSignUp}
-          disabled={isSignupButtonDisabled}
+          disabled={!isValid}
         />
       </form>
     </div>

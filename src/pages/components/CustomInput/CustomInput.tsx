@@ -23,8 +23,8 @@ const CustomInput = ({
   };
 
   return (
-    <div className="relative w-full">
-      <p className="block mb-2 text-sm font-medium text-gray-700">{label}</p>
+    <div className="flex flex-col relative w-full gap-2">
+      <p className="block text-sm font-medium text-gray-700">{label}</p>
       <div
         className="flex items-center w-full bg-white border 
         border-black border-opacity-10 bg-clip-padding rounded-lg py-2 px-2"
@@ -53,9 +53,7 @@ const CustomInput = ({
             />
           ))}
       </div>
-      {errorMessage && (
-        <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
-      )}
+      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
     </div>
   );
 };

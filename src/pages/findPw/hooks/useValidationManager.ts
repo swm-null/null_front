@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const useValidationManager = () => {
+const useValidation = () => {
   const { t } = useTranslation();
   const [error, setError] = useState({
     email: '',
     password: '',
     confirmPassword: '',
-    name: '',
     code: '',
   });
 
@@ -30,11 +29,6 @@ const useValidationManager = () => {
     confirmPassword: string
   ) => {
     return password === confirmPassword;
-  };
-
-  const isNameValid = (name: string) => {
-    const nameRegex = /^(?!\s*$).+/;
-    return nameRegex.test(name);
   };
 
   const isCodeValid = (code: string) => {
@@ -75,14 +69,6 @@ const useValidationManager = () => {
     }
   };
 
-  const validateName = (name: string) => {
-    if (!isNameValid(name)) {
-      setError((prev) => ({ ...prev, name: t('signup.invalidName') }));
-    } else {
-      setError((prev) => ({ ...prev, name: '' }));
-    }
-  };
-
   const validateCode = (code: string) => {
     if (!isCodeValid(code)) {
       setError((prev) => ({ ...prev, code: t('signup.invalidCodeForm') }));
@@ -91,29 +77,17 @@ const useValidationManager = () => {
     }
   };
 
-  const setEmailError = (message: string) => {
-    setError((prev) => ({ ...prev, email: message }));
-  };
-
-  const setCodeError = (message: string) => {
-    setError((prev) => ({ ...prev, code: message }));
-  };
-
   return {
     error,
-    setEmailError,
-    setCodeError,
     validateEmail,
     validatePassword,
     validateConfirmPassword,
-    validateName,
     validateCode,
     isEmailValid,
     isPasswordValid,
     isConfirmPasswordValid,
-    isNameValid,
     isCodeValid,
   };
 };
 
-export default useValidationManager;
+export default useValidation;

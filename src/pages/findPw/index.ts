@@ -1,1 +1,1 @@
-export { default as FindPw } from './findPw';
+export { default as FindPw } from './FindPw';
