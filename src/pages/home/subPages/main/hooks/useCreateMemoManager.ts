@@ -14,7 +14,7 @@ const useCreateMemoManager = ({
   setStatus: (status: Status) => void;
 }) => {
   const queryClient = useQueryClient();
-  const [page, setPage] = useState<number>(0);
+  const [page] = useState<number>(0);
 
   const useMemoStack = () => {
     return useQuery({
