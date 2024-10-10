@@ -63,7 +63,7 @@ const CreatedMemoCard = ({
     >
       <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
-          updatedAt={formatDate(new Date(memo.updated_at))}
+          updatedAt={formatDate(new Date(memo.updated_at + 'Z'))}
           handleDeleteMemo={handleDeleteMemo}
         >
           {tags.length === 0 ? (

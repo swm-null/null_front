@@ -17,7 +17,7 @@ const MemoFooter = ({
   return (
     <div className="flex flex-1 items-center">
       <p className="text-gray2 font-medium text-[10px]">
-        {formatDate(new Date(updatedAt))}
+        {formatDate(new Date(updatedAt + 'Z'))}
       </p>
 
       <button
