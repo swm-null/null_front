@@ -22,7 +22,7 @@ const CodeSendForm = ({
     <div className="flex flex-col gap-2">
       <div className="flex gap-2">
         <CustomInput
-          label={t('auth.code')}
+          label={t('utils.auth.code')}
           value={code}
           setValue={handleCodeChange}
         />
