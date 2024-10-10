@@ -1,6 +1,5 @@
 import { DeleteIcon, PinIcon } from 'assets/icons';
 import { format } from 'date-fns';
-import { toZonedTime } from 'date-fns-tz';
 
 const MemoHeader = ({
   updatedAt,
@@ -12,9 +11,7 @@ const MemoHeader = ({
   handleDeleteMemo: () => void;
 }) => {
   const formatDate = (date: Date): string => {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const zonedDate = toZonedTime(date, timeZone);
-    return format(zonedDate, dateFormat);
+    return format(date, dateFormat);
   };
 
   return (
