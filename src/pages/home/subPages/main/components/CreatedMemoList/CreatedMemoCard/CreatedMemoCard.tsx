@@ -54,7 +54,12 @@ const CreatedMemoCard = ({
     }
   };
 
-  const formatDate = (date: Date): string => format(date, t('memo.dateFormat'));
+  const formatDate = (date: string): string => {
+    if (date.endsWith('Z')) {
+      return format(new Date(date), t('memo.dateFormat'));
+    }
+    return format(`${date}Z`, t('memo.dateFormat'));
+  };
 
   return (
     <div
@@ -63,7 +68,7 @@ const CreatedMemoCard = ({
     >
       <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
-          updatedAt={formatDate(new Date(memo.updated_at + 'Z'))}
+          updatedAt={formatDate(memo.updated_at)}
           handleDeleteMemo={handleDeleteMemo}
         >
           {tags.length === 0 ? (
