@@ -6,18 +6,19 @@ import {
 } from '@mui/material';
 import { DownIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
+import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 
 export default function SortToggle({
   sortOption,
   setSortOption,
 }: {
-  sortOption: 'latest' | 'oldest';
-  setSortOption: (sortOption: 'latest' | 'oldest') => void;
+  sortOption: SortOption;
+  setSortOption: (sortOption: SortOption) => void;
 }) {
   const { t } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setSortOption(event.target.value as 'latest' | 'oldest');
+    setSortOption(event.target.value as SortOption);
   };
 
   return (
@@ -47,10 +48,12 @@ export default function SortToggle({
             top: '12%',
           },
         }}
-        renderValue={(selected) => t(`pages.dashboard.toggle.${selected}`)}
+        renderValue={(selected) =>
+          t(`pages.dashboard.toggle.${selected.toLowerCase()}`)
+        }
       >
-        <MenuItem value="latest">{t('pages.dashboard.toggle.latest')}</MenuItem>
-        <MenuItem value="oldest">{t('pages.dashboard.toggle.oldest')}</MenuItem>
+        <MenuItem value="LATEST">{t('pages.dashboard.toggle.latest')}</MenuItem>
+        <MenuItem value="OLDEST">{t('pages.dashboard.toggle.oldest')}</MenuItem>
       </Select>
     </FormControl>
   );
