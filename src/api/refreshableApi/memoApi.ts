@@ -119,19 +119,32 @@ interface getMemosResponse extends validResponse {
   memos: Memo[];
 }
 
-export const getAllMemos = async (
-  page: number
-): Promise<getMemosResponse | errorResponse> => {
+export interface getPaginationMemosResponse extends validResponse {
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+  memos: Memo[];
+}
+
+export const getRecentMemos = async (
+  page: number,
+  memoLimit: number
+): Promise<getPaginationMemosResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/tag/memos?page=${page}&sortOrder=LATEST`;
+  const endpoint = `/tag/memos?memoPage=${page}&memoLimit=${memoLimit}&sortOrder=LATEST`;
 
   try {
     const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
+      total_count: response.data.total_count,
+      current_count: response.data.current_count,
+      total_page: response.data.total_page,
+      current_page: response.data.current_page,
       memos: response.data.memos,
-    } as getMemosResponse;
+    } as getPaginationMemosResponse;
     return responseInfo;
   } catch (error) {
     return errorHandler(error, method);
@@ -139,10 +152,13 @@ export const getAllMemos = async (
 };
 
 export const getMemosByTag = async (
-  tagId: string
+  tagId: string,
+  memoPage: number,
+  memoLimit: number,
+  sortOrder: 'LATEST' | 'OLDEST'
 ): Promise<getMemosResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/tag/memos?tagId=${tagId}&sortOrder=LATEST`;
+  const endpoint = `/tag/memos?tagId=${tagId}&memoPage=${memoPage}&memoLimit=${memoLimit}&sortOrder=${sortOrder}`;
 
   try {
     const response = await refreshableApi.get(endpoint);
@@ -163,6 +179,12 @@ export const isValidResponse = (
 ): response is validResponse => {
   const validStatus = [200, 201, 202, 203, 204, 205, 206];
   return validStatus.includes(response.status);
+};
+
+export const isPaginationMemosResponse = (
+  response: getPaginationMemosResponse | errorResponse
+): response is getPaginationMemosResponse => {
+  return (response as getPaginationMemosResponse).current_count !== undefined;
 };
 
 export const isSearchMemoResponse = (

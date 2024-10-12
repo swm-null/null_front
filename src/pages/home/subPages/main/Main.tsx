@@ -18,6 +18,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     status,
     setStatus,
   });
+  const { fetchNextPage } = createMemoManager.useMemoStack();
 
   const isCreateMode = () => mode === 'create';
   const isSearchMode = () => mode === 'search';
@@ -72,6 +73,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
       />
       <Component.CreatedMemoList
         memos={createMemoManager.useMemoStack().data || []}
+        fetchNextPage={fetchNextPage}
       />
     </>
   );
