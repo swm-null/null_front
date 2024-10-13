@@ -1,70 +1,68 @@
 import { useEffect, useCallback, useState, useMemo } from 'react';
-import { forkJoin, from, lastValueFrom, map } from 'rxjs';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 import * as Api from 'api';
 
+const TAG_LIMIT = 15;
+const MEMO_LIMIT = 10;
+
 const useSelectedTagMemosManager = (
-  tags: Tag[] | null,
-  selectedTag: Tag | null
+  selectedTag: Tag | null,
+  sortOption: SortOption
 ) => {
   const queryClient = useQueryClient();
   const [memoSectionListByTag, setMemoSectionListByTag] = useState<
-    { tag: Tag; childTags: Tag[] | null; memos: Memo[] }[]
+    { tag: Tag | null; childTags: Tag[] | null; memos: Memo[] }[]
   >([]);
+  const [tags, setTags] = useState<Tag[]>([]);
 
-  const { data: fetchedMemos = [], refetch } = useQuery({
+  const {
+    data: fetchedMemos,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery<Api.paginationDashboardResponse, Error>({
     queryKey: useMemo(
-      () => ['memos', tags?.map((tag) => tag.id) || selectedTag?.id],
-      [tags, selectedTag]
+      () => ['memos', MEMO_LIMIT, sortOption],
+      [selectedTag, MEMO_LIMIT, sortOption]
     ),
-    queryFn: async () => {
-      if (tags?.length) {
-        return lastValueFrom(forkJoin(tags.map(fetchTagData)));
-      } else if (selectedTag) {
-        return lastValueFrom(
-          fetchMemosByTag(selectedTag.id).pipe(
-            map((memos) => [{ tag: selectedTag, childTags: null, memos }])
-          )
-        );
+    queryFn: async ({ pageParam = 1 }: any) => {
+      const response =
+        selectedTag !== null
+          ? await Api.getDashboardDataByTag({
+              parentTagId: selectedTag.id,
+              tagPage: pageParam,
+              tagLimit: TAG_LIMIT,
+              memoLimit: MEMO_LIMIT,
+              sortOrder: sortOption,
+            })
+          : await Api.getDashboardDataByTag({
+              tagPage: pageParam,
+              tagLimit: TAG_LIMIT,
+              memoLimit: MEMO_LIMIT,
+              sortOrder: sortOption,
+            });
+
+      if (!Api.isGetDashboardDataByTag(response)) {
+        throw new Error('대시보드 데이터를 가져오는 중 오류가 발생했습니다.');
       }
-      return [];
+      return response as Api.paginationDashboardResponse;
     },
-    staleTime: 0,
-    refetchOnWindowFocus: true,
+    getNextPageParam: (lastPage) => {
+      return lastPage.total_page > lastPage.current_page
+        ? lastPage.current_page + 1
+        : undefined;
+    },
+    initialPageParam: 1,
   });
 
-  const fetchTagData = (tag: Tag) => {
-    return forkJoin({
-      memos: fetchMemosByTag(tag.id),
-      childTags: fetchChildTags(tag.id),
-    }).pipe(map(({ memos, childTags }) => ({ tag, childTags, memos })));
-  };
-
-  const fetchMemosByTag = (tagId: string) => {
-    return from(Api.getMemosByTag(tagId)).pipe(
-      map((response) =>
-        Api.isGetMemosResponse(response) ? response.memos : []
-      )
-    );
-  };
-
-  const fetchChildTags = (tagId: string) => {
-    return from(Api.getChildTags(tagId)).pipe(
-      map((response) => (Api.isGetTagsResponse(response) ? response.tags : []))
-    );
-  };
-
-  // 변경 내용을 서버에 반영되기 전에 query에 캐쉬
+  // 메모 상태 업데이트
   const updateMemoState = (
     updateFn: (
       prev: { tag: Tag; memos: Memo[] }[]
     ) => { tag: Tag; memos: Memo[] }[]
   ) => {
-    queryClient.setQueryData(
-      ['memos', tags?.map((tag) => tag.id) || 'NO_TAGS'],
-      updateFn
-    );
+    queryClient.setQueryData(['memos'], updateFn);
   };
 
   const updateMemoFromMemoSectionListByTag = useCallback(
@@ -82,7 +80,7 @@ const useSelectedTagMemosManager = (
           };
         })
       ),
-    [tags]
+    []
   );
 
   const deleteMemoFromMemoSectionListByTag = useCallback(
@@ -99,7 +97,7 @@ const useSelectedTagMemosManager = (
           };
         })
       ),
-    [tags]
+    []
   );
 
   const revertMemoFromMemoSectionListByTag = useCallback(
@@ -120,21 +118,58 @@ const useSelectedTagMemosManager = (
           };
         })
       ),
-    [tags]
+    []
   );
 
+  // fetchedMemos와 memoSectionListByTag 비교하여 업데이트
   useEffect(() => {
-    if (JSON.stringify(fetchedMemos) !== JSON.stringify(memoSectionListByTag)) {
-      setMemoSectionListByTag(fetchedMemos);
+    if (!fetchedMemos) return;
+
+    const newChildMemoSectionList = fetchedMemos.pages.flatMap((page) =>
+      page.child_tags_with_memos.map((childTag) => ({
+        tag: childTag.tag,
+        childTags: [],
+        memos: childTag.memos,
+      }))
+    );
+
+    const newTagMemoSection = fetchedMemos.pages.map((page) => ({
+      tag: null,
+      childTags: [],
+      memos: page.tag_with_memos.memos,
+    }));
+
+    const newMemoSectionList = [
+      ...newTagMemoSection,
+      ...newChildMemoSectionList,
+    ];
+
+    console.log(newMemoSectionList);
+
+    const newTags = newMemoSectionList
+      .map((page) => page.tag)
+      .filter((tag) => tag !== null);
+
+    if (
+      JSON.stringify(memoSectionListByTag) !==
+      JSON.stringify(newMemoSectionList)
+    ) {
+      setMemoSectionListByTag(newMemoSectionList);
     }
-  }, [fetchedMemos, memoSectionListByTag]);
+
+    if (JSON.stringify(tags) !== JSON.stringify(newTags)) {
+      setTags(newTags);
+    }
+  }, [fetchedMemos?.pageParams, memoSectionListByTag]);
 
   useEffect(() => {
     refetch();
-  }, [tags, refetch]);
+  }, [refetch, MEMO_LIMIT, sortOption]);
 
   return {
     memoSectionListByTag,
+    tags,
+    fetchNextPage,
     updateMemoFromMemoSectionListByTag,
     deleteMemoFromMemoSectionListByTag,
     revertMemoFromMemoSectionListByTag,

@@ -19,28 +19,23 @@ const useCreateMemoManager = ({
   const queryClient = useQueryClient();
 
   const useMemoStack = () => {
-    const {
-      data,
-      fetchNextPage,
-      hasNextPage,
-      isFetchingNextPage,
-      status: queryStatus,
-    } = useInfiniteQuery<Api.getPaginationMemosResponse, Error>({
-      queryKey: ['memos'],
-      queryFn: async ({ pageParam = 1 }: any) => {
-        const response = await Api.getRecentMemos(pageParam, 10);
-        if (!Api.isPaginationMemosResponse(response)) {
-          throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
-        }
-        return response;
-      },
-      getNextPageParam: (lastPage) => {
-        return lastPage.total_page > lastPage.current_page
-          ? lastPage.current_page + 1
-          : undefined;
-      },
-      initialPageParam: 1,
-    });
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+      useInfiniteQuery<Api.paginationMemosResponse, Error>({
+        queryKey: ['memos'],
+        queryFn: async ({ pageParam = 1 }: any) => {
+          const response = await Api.getRecentMemos(pageParam, 10);
+          if (!Api.isPaginationMemosResponse(response)) {
+            throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
+          }
+          return response;
+        },
+        getNextPageParam: (lastPage) => {
+          return lastPage.total_page > lastPage.current_page
+            ? lastPage.current_page + 1
+            : undefined;
+        },
+        initialPageParam: 1,
+      });
 
     const allMemos = data?.pages.flatMap((page) => page.memos) || [];
 
@@ -49,7 +44,6 @@ const useCreateMemoManager = ({
       fetchNextPage,
       hasNextPage,
       isFetchingNextPage,
-      queryStatus,
     };
   };
 

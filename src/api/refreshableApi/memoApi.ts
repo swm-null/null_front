@@ -1,4 +1,4 @@
-import { Memo, MemoSearchAnswer } from 'pages/home/subPages/interfaces';
+import { Memo, MemoSearchAnswer, Tag } from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, API_BASE_URL, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
@@ -119,18 +119,26 @@ interface getMemosResponse extends validResponse {
   memos: Memo[];
 }
 
-export interface getPaginationMemosResponse extends validResponse {
+interface paginationData {
   total_count: number;
   current_count: number;
   total_page: number;
   current_page: number;
+}
+
+interface paginationMemos extends paginationData {
   memos: Memo[];
 }
+
+export interface paginationMemosResponse
+  extends paginationMemos,
+    paginationData,
+    validResponse {}
 
 export const getRecentMemos = async (
   page: number,
   memoLimit: number
-): Promise<getPaginationMemosResponse | errorResponse> => {
+): Promise<paginationMemosResponse | errorResponse> => {
   const method = getMethodName();
   const endpoint = `/tag/memos?memoPage=${page}&memoLimit=${memoLimit}&sortOrder=LATEST`;
 
@@ -144,29 +152,47 @@ export const getRecentMemos = async (
       total_page: response.data.total_page,
       current_page: response.data.current_page,
       memos: response.data.memos,
-    } as getPaginationMemosResponse;
+    } as paginationMemosResponse;
     return responseInfo;
   } catch (error) {
     return errorHandler(error, method);
   }
 };
 
-export const getMemosByTag = async (
-  tagId: string,
-  memoPage: number,
-  memoLimit: number,
-  sortOrder: 'LATEST' | 'OLDEST'
-): Promise<getMemosResponse | errorResponse> => {
+export interface paginationDashboardResponse
+  extends paginationData,
+    validResponse {
+  tag_with_memos: { tag: Tag } & paginationMemos;
+  child_tags_with_memos: ({ tag: Tag } & paginationMemos)[];
+}
+
+export const getDashboardDataByTag = async ({
+  parentTagId,
+  tagPage,
+  tagLimit,
+  memoLimit,
+  sortOrder,
+}: {
+  parentTagId?: string;
+  tagPage: number;
+  tagLimit: number;
+  memoLimit: number;
+  sortOrder: 'LATEST' | 'OLDEST';
+}): Promise<paginationDashboardResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/tag/memos?tagId=${tagId}&memoPage=${memoPage}&memoLimit=${memoLimit}&sortOrder=${sortOrder}`;
+  const endpoint = `/childTags/memos?${parentTagId ? `parentTagId=${parentTagId}` : ''}&tagPage=${tagPage}&tagLimit=${tagLimit}&memoLimit=${memoLimit}&sortOrder=${sortOrder}`;
 
   try {
     const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
-      message: '특정 태그의 메모 가져오는 것을 성공했습니다.',
-      memos: response.data.memos,
+      child_tags_with_memos: response.data.child_tags_with_memos,
+      tag_with_memos: response.data.tag_with_memos,
+      total_count: response.data.total_count,
+      current_count: response.data.current_count,
+      total_page: response.data.total_page,
+      current_page: response.data.current_page,
     };
     return responseInfo;
   } catch (error) {
@@ -182,9 +208,9 @@ export const isValidResponse = (
 };
 
 export const isPaginationMemosResponse = (
-  response: getPaginationMemosResponse | errorResponse
-): response is getPaginationMemosResponse => {
-  return (response as getPaginationMemosResponse).current_count !== undefined;
+  response: paginationMemosResponse | errorResponse
+): response is paginationMemosResponse => {
+  return (response as paginationMemosResponse).current_count !== undefined;
 };
 
 export const isSearchMemoResponse = (
@@ -215,4 +241,10 @@ export const isGetMemosResponse = (
   response: getMemosResponse | errorResponse
 ): response is getMemosResponse => {
   return isValidResponse(response as getMemosResponse);
+};
+
+export const isGetDashboardDataByTag = (
+  response: paginationDashboardResponse | errorResponse
+): response is paginationDashboardResponse => {
+  return (response as paginationDashboardResponse).current_count !== undefined;
 };

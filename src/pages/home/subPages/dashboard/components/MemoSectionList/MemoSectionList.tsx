@@ -3,16 +3,18 @@ import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 
 interface MemoSectionProps {
+  parentTag: Tag | null;
   memoSectionListData: Array<{
-    tag: Tag;
+    tag: Tag | null;
     childTags: Tag[] | null;
     memos: Memo[];
   }>;
-  addTagToStack: (tag: Tag) => void;
-  handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
+  addTagToStack: (tag: Tag | null) => void;
+  handleMemoClick: (memo: Memo, tag: Tag | null, index: number) => void;
 }
 
 const MemoSectionList = ({
+  parentTag,
   memoSectionListData,
   addTagToStack,
   handleMemoClick,
@@ -29,7 +31,10 @@ const MemoSectionList = ({
     const taggedMemo = memoSectionListData[0];
 
     return (
-      <div className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg">
+      <div
+        key={taggedMemo.tag?.id}
+        className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg"
+      >
         <Components.MemosList>
           {taggedMemo.memos.map((memo, index) => (
             <Components.UneditableMemo
@@ -37,7 +42,13 @@ const MemoSectionList = ({
               memo={memo}
               shadow
               border
-              onClick={() => handleMemoClick(memo, taggedMemo.tag, index)}
+              onClick={() =>
+                handleMemoClick(
+                  memo,
+                  taggedMemo.tag ? taggedMemo?.tag : parentTag,
+                  index
+                )
+              }
             />
           ))}
         </Components.MemosList>
@@ -58,7 +69,7 @@ const MemoSectionList = ({
 
         return (
           <MemoSection
-            key={tag.id}
+            key={tag?.id}
             tag={tag}
             childTags={childTags}
             memos={memos}
