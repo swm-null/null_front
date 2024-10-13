@@ -23,7 +23,7 @@ const useSelectedTagMemosManager = (
     refetch,
   } = useInfiniteQuery<Api.paginationDashboardResponse, Error>({
     queryKey: useMemo(
-      () => ['memos', MEMO_LIMIT, sortOption],
+      () => ['memos', selectedTag?.id, MEMO_LIMIT, sortOption],
       [selectedTag, MEMO_LIMIT, sortOption]
     ),
     queryFn: async ({ pageParam = 1 }: any) => {
@@ -143,8 +143,6 @@ const useSelectedTagMemosManager = (
       ...newTagMemoSection,
       ...newChildMemoSectionList,
     ];
-
-    console.log(newMemoSectionList);
 
     const newTags = newMemoSectionList
       .map((page) => page.tag)
