@@ -1,6 +1,7 @@
 import * as Components from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
+import { v4 as uuid_v4 } from 'uuid';
 
 interface MemoSectionProps {
   parentTag: Tag | null;
@@ -69,7 +70,7 @@ const MemoSectionList = ({
 
         return (
           <MemoSection
-            key={tag?.id || 'null'}
+            key={tag?.id || uuid_v4()}
             tag={tag}
             childTags={childTags}
             memos={memos}

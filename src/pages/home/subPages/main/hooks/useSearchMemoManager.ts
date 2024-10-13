@@ -55,30 +55,40 @@ const useSearchMemoManager = ({
     const optimisticSearchConversation: Interface.MemoSearchConversation = {
       id: uuid_v4(),
       query: query,
-      answer: null,
+      createdAt: '',
+      searchMemosResponse: null,
     };
     setSearchConversation(optimisticSearchConversation);
 
     return {
       conversationId: optimisticSearchConversation.id,
       conversationQuery: optimisticSearchConversation.query,
+      conversationCreatedAt: optimisticSearchConversation.createdAt,
     };
   };
 
   const createErrorAnswer = (
     _: AxiosError<unknown, any>,
     __: string,
-    context: { conversationId: string; conversationQuery: string } | undefined
+    context:
+      | {
+          conversationId: string;
+          conversationQuery: string;
+          conversationCreatedAt: string;
+        }
+      | undefined
   ) => {
     const conversationId = context?.conversationId;
     const conversationQuery = context?.conversationQuery;
+    const conversationCreatedAt = context?.conversationCreatedAt;
 
     if (conversationId) {
       const updatedSearchConversation = {
         id: conversationId,
         query: conversationQuery,
-        answer: {
-          text: t('utils.auth.serverError'),
+        createdAt: conversationCreatedAt,
+        searchMemosResponse: {
+          processedMessage: t('utils.auth.serverError'),
           memos: [],
         },
       } as Interface.MemoSearchConversation;
@@ -100,7 +110,8 @@ const useSearchMemoManager = ({
       const updatedSearchConversation = {
         id: conversationId,
         query: conversationQuery,
-        answer: data,
+        createdAt: '',
+        searchMemosResponse: data,
       } as Interface.MemoSearchConversation;
 
       setSearchConversation(updatedSearchConversation);
@@ -138,7 +149,11 @@ const useSearchMemoManager = ({
     Interface.MemoSearchAnswer,
     AxiosError,
     string,
-    { conversationId: string; conversationQuery: string }
+    {
+      conversationId: string;
+      conversationQuery: string;
+      conversationCreatedAt: string;
+    }
   >({
     mutationFn: searchMemo,
     onMutate: createTemporarySearchConversation,

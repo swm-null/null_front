@@ -43,14 +43,14 @@ const useSelectedTagMemosManager = (
               sortOrder: sortOption,
             });
 
-      if (!Api.isGetDashboardDataByTag(response)) {
+      if (!Api.isGetDashboardData(response)) {
         throw new Error('대시보드 데이터를 가져오는 중 오류가 발생했습니다.');
       }
       return response as Api.paginationDashboardResponse;
     },
     getNextPageParam: (lastPage) => {
-      return lastPage.total_page > lastPage.current_page
-        ? lastPage.current_page + 1
+      return lastPage.totalPage > lastPage.currentPage
+        ? lastPage.currentPage + 1
         : undefined;
     },
     initialPageParam: 1,
@@ -126,7 +126,7 @@ const useSelectedTagMemosManager = (
     if (!fetchedMemos) return;
 
     const newChildMemoSectionList = fetchedMemos.pages.flatMap((page) =>
-      page.child_tags_with_memos.map((childTag) => ({
+      page.childTagsWithMemos.map((childTag) => ({
         tag: childTag.tag,
         childTags: [],
         memos: childTag.memos,
@@ -136,7 +136,7 @@ const useSelectedTagMemosManager = (
     const newTagMemoSection = fetchedMemos.pages.map((page) => ({
       tag: null,
       childTags: [],
-      memos: page.tag_with_memos.memos,
+      memos: page.tagWithMemos.memos,
     }));
 
     const newMemoSectionList = [

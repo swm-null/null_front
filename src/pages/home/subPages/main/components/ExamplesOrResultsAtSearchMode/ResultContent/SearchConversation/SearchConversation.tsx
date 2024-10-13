@@ -19,7 +19,7 @@ const SearchConversation = ({
         <AIInfo name={chatBotName} />
         <UserQuestion contentText={data.query} />
       </div>
-      <AIAnswer content={data.answer} />
+      <AIAnswer content={data.searchMemosResponse} />
     </div>
   );
 };
@@ -52,7 +52,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswer | null }) => {
       {content ? (
         <>
           <div className="inline bg-transparent resize-none whitespace-pre-wrap break-words">
-            {content.text}
+            {content.processedMessage}
           </div>
           <div className="flex flex-col w-full">
             {content.memos && (
