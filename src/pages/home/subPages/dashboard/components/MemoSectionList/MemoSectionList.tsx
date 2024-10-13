@@ -38,7 +38,7 @@ const MemoSectionList = ({
         <Components.MemosList>
           {taggedMemo.memos.map((memo, index) => (
             <Components.UneditableMemo
-              key={index}
+              key={memo.id}
               memo={memo}
               shadow
               border
@@ -69,7 +69,7 @@ const MemoSectionList = ({
 
         return (
           <MemoSection
-            key={tag?.id}
+            key={tag?.id || 'null'}
             tag={tag}
             childTags={childTags}
             memos={memos}
