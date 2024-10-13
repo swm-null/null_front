@@ -19,9 +19,9 @@ const useCreateMemoManager = ({
   const queryClient = useQueryClient();
 
   const useMemoStack = () => {
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
       useInfiniteQuery<Api.paginationMemosResponse, Error>({
-        queryKey: ['memos'],
+        queryKey: ['recentMemo'],
         queryFn: async ({ pageParam = 1 }: any) => {
           const response = await Api.getRecentMemos(pageParam, 10);
           if (!Api.isPaginationMemosResponse(response)) {
@@ -30,14 +30,15 @@ const useCreateMemoManager = ({
           return response;
         },
         getNextPageParam: (lastPage) => {
-          return lastPage.total_page > lastPage.current_page
-            ? lastPage.current_page + 1
+          return lastPage.totalPage > lastPage.currentPage
+            ? lastPage.currentPage + 1
             : undefined;
         },
         initialPageParam: 1,
       });
 
-    const allMemos = data?.pages.flatMap((page) => page.memos) || [];
+    const allMemos =
+      !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
 
     return {
       data: allMemos,

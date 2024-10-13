@@ -72,7 +72,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         onCameraButtonClick={handleCameraButtonClick}
       />
       <Component.CreatedMemoList
-        memos={createMemoManager.useMemoStack().data || []}
+        memos={createMemoManager.useMemoStack().data}
         fetchNextPage={fetchNextPage}
       />
     </>
