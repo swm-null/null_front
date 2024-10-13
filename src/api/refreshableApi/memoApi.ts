@@ -1,4 +1,9 @@
-import { Memo, MemoSearchAnswer, Tag } from 'pages/home/subPages/interfaces';
+import {
+  Memo,
+  MemoSearchAnswer,
+  MemoSearchConversation,
+  Tag,
+} from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, API_BASE_URL, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
@@ -18,7 +23,7 @@ export const searchMemo = async function (
     const responseInfo = {
       method,
       status: response.status,
-      text: response.data.processed_message,
+      processedMessage: response.data.processed_message,
       memos: response.data.memos,
     } as searchMemoResponse;
     return responseInfo;
@@ -120,10 +125,10 @@ interface getMemosResponse extends validResponse {
 }
 
 interface paginationData {
-  total_count: number;
-  current_count: number;
-  total_page: number;
-  current_page: number;
+  totalCount: number;
+  currentCount: number;
+  totalPage: number;
+  currentPage: number;
 }
 
 interface paginationMemos extends paginationData {
@@ -147,10 +152,10 @@ export const getRecentMemos = async (
     const responseInfo = {
       method,
       status: response.status,
-      total_count: response.data.total_count,
-      current_count: response.data.current_count,
-      total_page: response.data.total_page,
-      current_page: response.data.current_page,
+      totalCount: response.data.total_count,
+      currentCount: response.data.current_count,
+      totalPage: response.data.total_page,
+      currentPage: response.data.current_page,
       memos: response.data.memos,
     } as paginationMemosResponse;
     return responseInfo;
@@ -162,8 +167,8 @@ export const getRecentMemos = async (
 export interface paginationDashboardResponse
   extends paginationData,
     validResponse {
-  tag_with_memos: { tag: Tag } & paginationMemos;
-  child_tags_with_memos: ({ tag: Tag } & paginationMemos)[];
+  tagWithMemos: { tag: Tag } & paginationMemos;
+  childTagsWithMemos: ({ tag: Tag } & paginationMemos)[];
 }
 
 export const getDashboardDataByTag = async ({
@@ -180,19 +185,68 @@ export const getDashboardDataByTag = async ({
   sortOrder: 'LATEST' | 'OLDEST';
 }): Promise<paginationDashboardResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/childTags/memos?${parentTagId ? `parentTagId=${parentTagId}` : ''}&tagPage=${tagPage}&tagLimit=${tagLimit}&memoLimit=${memoLimit}&sortOrder=${sortOrder}`;
+
+  const params = new URLSearchParams();
+  if (parentTagId) params.append('parentTagId', parentTagId);
+  if (tagPage) params.append('tagPage', tagPage.toString());
+  if (tagLimit) params.append('tagLimit', tagLimit.toString());
+  if (memoLimit) params.append('memoLimit', memoLimit.toString());
+  if (sortOrder) params.append('sortOrder', sortOrder);
+
+  const endpoint = `/childTags/memos?${params.toString()}`;
 
   try {
     const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
-      child_tags_with_memos: response.data.child_tags_with_memos,
-      tag_with_memos: response.data.tag_with_memos,
-      total_count: response.data.total_count,
-      current_count: response.data.current_count,
-      total_page: response.data.total_page,
+      childTagsWithMemos: response.data.child_tags_with_memos,
+      tagWithMemos: response.data.tag_with_memos,
+      totalCount: response.data.total_count,
+      currentCount: response.data.current_count,
+      totalPage: response.data.total_page,
       current_page: response.data.current_page,
+    };
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
+export interface paginationSearchHistoriesResponse extends paginationData {
+  searchHistories: MemoSearchConversation[];
+}
+
+export const getSearchHistories = async ({
+  query,
+  searchHistoryPage,
+  searchHistoryLimit,
+}: {
+  query?: string;
+  searchHistoryPage?: number;
+  searchHistoryLimit?: number;
+}): Promise<paginationSearchHistoriesResponse | errorResponse> => {
+  const method = getMethodName();
+
+  const params = new URLSearchParams();
+  if (query) params.append('query', query);
+  if (searchHistoryPage)
+    params.append('searchHistoryPage', searchHistoryPage.toString());
+  if (searchHistoryLimit)
+    params.append('searchHistoryLimit', searchHistoryLimit.toString());
+
+  const endpoint = `/memos/search/histories?${params.toString()}`;
+
+  try {
+    const response = await refreshableApi.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      totalCount: response.data.totalCount,
+      currentCount: response.data.currentCount,
+      totalPage: response.data.totalPage,
+      currentPage: response.data.currentPage,
+      searchHistories: response.data.searchHistories,
     };
     return responseInfo;
   } catch (error) {
@@ -210,13 +264,13 @@ export const isValidResponse = (
 export const isPaginationMemosResponse = (
   response: paginationMemosResponse | errorResponse
 ): response is paginationMemosResponse => {
-  return (response as paginationMemosResponse).current_count !== undefined;
+  return (response as paginationMemosResponse).currentCount !== undefined;
 };
 
 export const isSearchMemoResponse = (
   response: searchMemoResponse | errorResponse
 ): response is searchMemoResponse => {
-  return (response as searchMemoResponse).text !== undefined;
+  return (response as searchMemoResponse).processedMessage !== undefined;
 };
 
 export const isCreateMemoResponse = (
@@ -243,8 +297,17 @@ export const isGetMemosResponse = (
   return isValidResponse(response as getMemosResponse);
 };
 
-export const isGetDashboardDataByTag = (
+export const isGetDashboardData = (
   response: paginationDashboardResponse | errorResponse
 ): response is paginationDashboardResponse => {
-  return (response as paginationDashboardResponse).current_count !== undefined;
+  return (response as paginationDashboardResponse).tagWithMemos !== undefined;
+};
+
+export const isGetSearchHistories = (
+  response: paginationSearchHistoriesResponse | errorResponse
+): response is paginationSearchHistoriesResponse => {
+  return (
+    (response as paginationSearchHistoriesResponse).searchHistories !==
+    undefined
+  );
 };
