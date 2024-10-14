@@ -6,8 +6,8 @@ interface EmailButtonFormProps {
   buttonText: string;
   handleEmailChange: (newEmail: { emailId: string; domain: string }) => void;
   handleClickButton: () => void;
-  success: string;
-  error: string;
+  successMessage: string;
+  errorMessage: string;
 }
 
 const EmailButtonForm = ({
@@ -15,8 +15,8 @@ const EmailButtonForm = ({
   buttonText,
   handleEmailChange,
   handleClickButton,
-  success,
-  error,
+  successMessage,
+  errorMessage,
 }: EmailButtonFormProps) => {
   const { t } = useTranslation();
 
@@ -37,8 +37,10 @@ const EmailButtonForm = ({
             {buttonText}
           </button>
         </div>
-        {success && <p className="text-green-500 text-sm">{success}</p>}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {successMessage && (
+          <p className="text-green-500 text-sm">{successMessage}</p>
+        )}
+        {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
       </div>
     </div>
   );

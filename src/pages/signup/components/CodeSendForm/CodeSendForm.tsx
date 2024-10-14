@@ -5,16 +5,16 @@ interface CodeSendFormProps {
   code: string;
   handleCodeChange: (code: string) => void;
   handleSendCode: () => void;
-  success?: string;
-  error?: string;
+  successMessage?: string;
+  errorMessage?: string;
 }
 
 const CodeSendForm = ({
   code,
   handleCodeChange,
   handleSendCode,
-  success,
-  error,
+  successMessage,
+  errorMessage,
 }: CodeSendFormProps) => {
   const { t } = useTranslation();
 
@@ -35,8 +35,10 @@ const CodeSendForm = ({
           {t('signup.sendCode')}
         </button>
       </div>
-      {success && <p className="text-green-500 text-sm">{success}</p>}
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {successMessage && (
+        <p className="text-green-500 text-sm">{successMessage}</p>
+      )}
+      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
     </div>
   );
 };

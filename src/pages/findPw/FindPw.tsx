@@ -11,7 +11,7 @@ const FindPw = () => {
   const { alert } = useContext(AlertContext);
   const navigate = useNavigate();
 
-  const [emailSuccess, setEmailSuccess] = useState('');
+  const [emailSuccessMessage, setEmailSuccessMessage] = useState('');
 
   const changeHandlerManager = useChangeHandlerManager();
   const validationManager = useValidationManager();
@@ -23,7 +23,7 @@ const FindPw = () => {
       const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
       const response = await sendCode(emailString);
       if (isValidResponse(response)) {
-        setEmailSuccess(t('utils.auth.codeSent'));
+        setEmailSuccessMessage(t('utils.auth.codeSent'));
       } else {
         alert(t('utils.auth.codeSendFailed'));
       }
@@ -63,13 +63,13 @@ const FindPw = () => {
             email={changeHandlerManager.form.email}
             buttonText={t('findPw.sendCode')}
             handleEmailChange={(newEmail) => {
-              setEmailSuccess('');
+              setEmailSuccessMessage('');
               changeHandlerManager.handleEmailChange(newEmail);
               validationManager.validateEmail(newEmail);
             }}
             handleClickButton={handleSendCode}
-            success={emailSuccess}
-            error={validationManager.error.email}
+            successMessage={emailSuccessMessage}
+            errorMessage={validationManager.errorMessage.email}
           />
         </>
 
@@ -82,7 +82,7 @@ const FindPw = () => {
                 changeHandlerManager.handleCodeChange(value);
                 validationManager.validateCode(value);
               }}
-              errorMessage={validationManager.error.code}
+              errorMessage={validationManager.errorMessage.code}
             />
             <Components.HiddenInput
               label={t('utils.auth.password')}
@@ -91,7 +91,7 @@ const FindPw = () => {
                 changeHandlerManager.handlePasswordChange(value);
                 validationManager.validatePassword(value);
               }}
-              errorMessage={validationManager.error.password}
+              errorMessage={validationManager.errorMessage.password}
             />
             <Components.HiddenInput
               label={t('utils.auth.confirmPassword')}
@@ -103,7 +103,7 @@ const FindPw = () => {
                   value
                 );
               }}
-              errorMessage={validationManager.error.confirmPassword}
+              errorMessage={validationManager.errorMessage.confirmPassword}
             />
           </div>
           <Components.LoginSignupButton

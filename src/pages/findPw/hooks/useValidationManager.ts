@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 const useValidation = () => {
   const { t } = useTranslation();
-  const [error, setError] = useState({
+  const [errorMessage, setErrorMessage] = useState({
     email: '',
     password: '',
     confirmPassword: '',
@@ -38,17 +38,20 @@ const useValidation = () => {
 
   const validateEmail = (email: { emailId: string; domain: string }) => {
     if (!isEmailValid(email)) {
-      setError((prev) => ({ ...prev, email: t('signup.invalidEmail') }));
+      setErrorMessage((prev) => ({ ...prev, email: t('signup.invalidEmail') }));
     } else {
-      setError((prev) => ({ ...prev, email: '' }));
+      setErrorMessage((prev) => ({ ...prev, email: '' }));
     }
   };
 
   const validatePassword = (password: string) => {
     if (!isPasswordValid(password)) {
-      setError((prev) => ({ ...prev, password: t('signup.invalidPassword') }));
+      setErrorMessage((prev) => ({
+        ...prev,
+        password: t('signup.invalidPassword'),
+      }));
     } else {
-      setError((prev) => ({ ...prev, password: '' }));
+      setErrorMessage((prev) => ({ ...prev, password: '' }));
     }
   };
 
@@ -57,12 +60,12 @@ const useValidation = () => {
     confirmPassword: string
   ) => {
     if (!isConfirmPasswordValid(password, confirmPassword)) {
-      setError((prev) => ({
+      setErrorMessage((prev) => ({
         ...prev,
         confirmPassword: t('signup.passwordsDoNotMatch'),
       }));
     } else {
-      setError((prev) => ({
+      setErrorMessage((prev) => ({
         ...prev,
         confirmPassword: '',
       }));
@@ -71,9 +74,12 @@ const useValidation = () => {
 
   const validateCode = (code: string) => {
     if (!isCodeValid(code)) {
-      setError((prev) => ({ ...prev, code: t('signup.invalidCodeForm') }));
+      setErrorMessage((prev) => ({
+        ...prev,
+        code: t('signup.invalidCodeForm'),
+      }));
     } else {
-      setError((prev) => ({ ...prev, code: '' }));
+      setErrorMessage((prev) => ({ ...prev, code: '' }));
     }
   };
 
@@ -94,7 +100,7 @@ const useValidation = () => {
     isConfirmPasswordValid(password, confirmPassword);
 
   return {
-    error,
+    errorMessage,
     validateEmail,
     validatePassword,
     validateConfirmPassword,

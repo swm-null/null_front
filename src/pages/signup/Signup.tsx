@@ -105,8 +105,8 @@ const Signup = () => {
               validationManager.validateEmail(newEmail);
             }}
             handleClickButton={handleCheckEmail}
-            success={emailSuccess}
-            error={validationManager.error.email}
+            successMessage={emailSuccess}
+            errorMessage={validationManager.error.email}
           />
           <Components.HiddenInput
             label={t('utils.auth.password')}
@@ -145,8 +145,8 @@ const Signup = () => {
               validationManager.validateCode(newCode);
             }}
             handleSendCode={handleSendCode}
-            success={codeSuccess}
-            error={validationManager.error.code}
+            successMessage={codeSuccess}
+            errorMessage={validationManager.error.code}
           />
         </div>
         <Components.LoginSignupButton
