@@ -51,7 +51,6 @@ const SearchHistoryPage = ({}: {}) => {
   const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newMessage = e.target.value;
     setMessage(newMessage);
-    console.log(newMessage);
     input$.next(newMessage);
   };
 
