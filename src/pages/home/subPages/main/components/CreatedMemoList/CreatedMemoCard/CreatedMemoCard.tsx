@@ -1,26 +1,24 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { deleteMemo, isValidResponse } from 'api';
 import { MemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
-import { BookIcon, DeleteIcon } from 'assets/icons';
+import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
+import { Skeleton } from '@mui/material';
 
 const CreatedMemoCardHeader = ({
-  aiName,
   updatedAt,
   handleDeleteMemo,
+  children,
 }: {
-  aiName: string;
   updatedAt: string;
-  handleDeleteMemo: () => {};
+  handleDeleteMemo: () => void;
+  children: ReactNode;
 }) => {
   return (
     <div className="flex">
-      <div className="flex gap-2 items-center mr-auto">
-        <BookIcon />
-        <p className="text-[#6A5344] font-extrabold select-none">{aiName}</p>
-      </div>
+      <div className="flex gap-2 items-center mr-auto">{children}</div>
       <div className="flex gap-2 items-center">
         <p className="text-[#6A5344] select-none">{updatedAt}</p>
         <button className="rounded-full">
@@ -56,23 +54,30 @@ const CreatedMemoCard = ({
     }
   };
 
-  const formatDate = (date: Date): string => format(date, t('memo.dateFormat'));
+  const formatDate = (date: string): string => {
+    if (date.endsWith('Z')) {
+      return format(new Date(date), t('memo.dateFormat'));
+    }
+    return format(`${date}Z`, t('memo.dateFormat'));
+  };
 
   return (
     <div
       className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border border-black border-opacity-10 bg-clip-padding rounded-xl 
       shadow-custom backdrop-blur-lg"
     >
-      <div className="flex flex-col w-full gap-5">
+      <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
-          aiName={t('pages.search.ai.name')}
-          updatedAt={formatDate(new Date(memo.updated_at))}
+          updatedAt={formatDate(memo.updated_at)}
           handleDeleteMemo={handleDeleteMemo}
-        />
-        <div className="flex flex-col gap-9">
-          <TagManager tags={tags} setTags={setTags} editable />
-          <MemoText message={message} setMessage={setMessage} />
-        </div>
+        >
+          {tags.length === 0 ? (
+            <Skeleton animation="wave" width={50} />
+          ) : (
+            <TagManager tags={tags} setTags={setTags} />
+          )}
+        </CreatedMemoCardHeader>
+        <MemoText message={message} setMessage={setMessage} />
       </div>
     </div>
   );

@@ -1,70 +1,157 @@
 import { useEffect, useCallback, useState, useMemo } from 'react';
-import { forkJoin, from, lastValueFrom, map } from 'rxjs';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 import * as Api from 'api';
 
+const TAG_LIMIT = 10;
+const MEMO_LIMIT = 10;
+
 const useSelectedTagMemosManager = (
-  tags: Tag[] | null,
-  selectedTag: Tag | null
+  selectedTag: Tag | null,
+  sortOption: SortOption
 ) => {
   const queryClient = useQueryClient();
   const [memoSectionListByTag, setMemoSectionListByTag] = useState<
-    { tag: Tag; childTags: Tag[] | null; memos: Memo[] }[]
+    { tag: Tag | null; childTags: Tag[] | null; memos: Memo[] }[]
   >([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [childTagPages, setChildTagPages] = useState<
+    Record<string, { currentPage: number; totalPage: number } | undefined>
+  >({});
+  const [rootTag, setRootTag] = useState<Tag>();
 
-  const { data: fetchedMemos = [], refetch } = useQuery({
+  const {
+    data: fetchedMemos,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery<Api.paginationDashboardResponse, Error>({
     queryKey: useMemo(
-      () => ['memos', tags?.map((tag) => tag.id) || selectedTag?.id],
-      [tags, selectedTag]
+      () => ['memos', selectedTag?.id, MEMO_LIMIT, sortOption],
+      [selectedTag, MEMO_LIMIT, sortOption]
     ),
-    queryFn: async () => {
-      if (tags?.length) {
-        return lastValueFrom(forkJoin(tags.map(fetchTagData)));
-      } else if (selectedTag) {
-        return lastValueFrom(
-          fetchMemosByTag(selectedTag.id).pipe(
-            map((memos) => [{ tag: selectedTag, childTags: null, memos }])
-          )
-        );
+    queryFn: async ({ pageParam = 1 }: any) => {
+      const response = await Api.getDashboardDataByTag({
+        tagPage: pageParam,
+        tagLimit: TAG_LIMIT,
+        memoLimit: MEMO_LIMIT,
+        sortOrder: sortOption,
+      });
+
+      if (!Api.isGetDashboardData(response)) {
+        throw new Error('대시보드 데이터를 가져오는 중 오류가 발생했습니다.');
       }
-      return [];
+
+      response.child_tags_with_memos.forEach((childTag) => {
+        setChildTagPages((prev) => ({
+          ...prev,
+          [childTag.tag.id]: {
+            currentPage: childTag.current_page,
+            totalPage: childTag.total_page,
+          },
+        }));
+      });
+
+      if (response.tag_with_memos && response.tag_with_memos.tag.name === '@') {
+        setChildTagPages((prev) => ({
+          ...prev,
+          [response.tag_with_memos.tag.id]: {
+            currentPage: response.tag_with_memos.current_page,
+            totalPage: response.tag_with_memos.total_page,
+          },
+        }));
+        setRootTag(response.tag_with_memos.tag);
+      }
+
+      return response as Api.paginationDashboardResponse;
     },
-    staleTime: 0,
-    refetchOnWindowFocus: true,
+    getNextPageParam: (lastPage) => {
+      const nextPage = lastPage.current_page + 1;
+      return nextPage <= lastPage.total_page ? nextPage : undefined;
+    },
+    initialPageParam: 1,
   });
 
-  const fetchTagData = (tag: Tag) => {
-    return forkJoin({
-      memos: fetchMemosByTag(tag.id),
-      childTags: fetchChildTags(tag.id),
-    }).pipe(map(({ memos, childTags }) => ({ tag, childTags, memos })));
-  };
+  const fetchNextPageForChildTag = async (childTag: Tag | null) => {
+    if (!rootTag) return;
 
-  const fetchMemosByTag = (tagId: string) => {
-    return from(Api.getMemosByTag(tagId)).pipe(
-      map((response) =>
-        Api.isGetMemosResponse(response) ? response.memos : []
-      )
+    const targetTagId = childTag ? childTag.id : rootTag?.id;
+    const childTagPageData = childTagPages[targetTagId];
+
+    if (!childTagPageData) return;
+
+    const { currentPage, totalPage } = childTagPageData;
+
+    if (currentPage >= totalPage) return;
+
+    const nextPage = currentPage + 1;
+
+    const response = await Api.getChildTagSectionData({
+      tagId: targetTagId,
+      memoPage: nextPage,
+      memoLimit: MEMO_LIMIT,
+      sortOrder: sortOption,
+    });
+
+    if (!response || !Api.isGetChildTagSectionData(response)) {
+      throw new Error('자식 태그 메모를 불러오는 중 오류가 발생했습니다.');
+    }
+
+    setChildTagPages((prevPages) => {
+      return {
+        ...prevPages,
+        [targetTagId]: {
+          currentPage: response.current_page,
+          totalPage: totalPage,
+        },
+      };
+    });
+
+    queryClient.setQueryData(
+      ['memos', selectedTag?.id, MEMO_LIMIT, sortOption],
+      (prev: any) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          pages: prev.pages.flatMap((page: any) => {
+            const updatedTagWithMemos =
+              page.tag_with_memos.tag.id === targetTagId
+                ? {
+                    ...page.tag_with_memos,
+                    memos: [...page.tag_with_memos.memos, ...response.memos],
+                  }
+                : { ...page.tag_with_memos };
+
+            const updatedChildTagsWithMemos = page.child_tags_with_memos.map(
+              (tagSection: any) => {
+                if (tagSection.tag.id === targetTagId) {
+                  return {
+                    ...tagSection,
+                    memos: [...tagSection.memos, ...response.memos],
+                  };
+                }
+                return { ...tagSection };
+              }
+            );
+
+            return {
+              ...page,
+              child_tags_with_memos: updatedChildTagsWithMemos,
+              tag_with_memos: updatedTagWithMemos,
+            };
+          }),
+        };
+      }
     );
   };
 
-  const fetchChildTags = (tagId: string) => {
-    return from(Api.getChildTags(tagId)).pipe(
-      map((response) => (Api.isGetTagsResponse(response) ? response.tags : []))
-    );
-  };
-
-  // 변경 내용을 서버에 반영되기 전에 query에 캐쉬
   const updateMemoState = (
     updateFn: (
       prev: { tag: Tag; memos: Memo[] }[]
     ) => { tag: Tag; memos: Memo[] }[]
   ) => {
-    queryClient.setQueryData(
-      ['memos', tags?.map((tag) => tag.id) || 'NO_TAGS'],
-      updateFn
-    );
+    queryClient.setQueryData(['memos'], updateFn);
   };
 
   const updateMemoFromMemoSectionListByTag = useCallback(
@@ -82,7 +169,7 @@ const useSelectedTagMemosManager = (
           };
         })
       ),
-    [tags]
+    []
   );
 
   const deleteMemoFromMemoSectionListByTag = useCallback(
@@ -99,7 +186,7 @@ const useSelectedTagMemosManager = (
           };
         })
       ),
-    [tags]
+    []
   );
 
   const revertMemoFromMemoSectionListByTag = useCallback(
@@ -120,21 +207,60 @@ const useSelectedTagMemosManager = (
           };
         })
       ),
-    [tags]
+    []
   );
 
   useEffect(() => {
-    if (JSON.stringify(fetchedMemos) !== JSON.stringify(memoSectionListByTag)) {
-      setMemoSectionListByTag(fetchedMemos);
+    if (!fetchedMemos) return;
+
+    const newChildMemoSectionList = fetchedMemos.pages.flatMap((page) =>
+      page.child_tags_with_memos.map((childTag) => {
+        return {
+          tag: childTag.tag,
+          childTags: [],
+          memos: childTag.memos,
+        };
+      })
+    );
+
+    const newTagMemoSection = fetchedMemos.pages.map((page) => {
+      return {
+        tag: null,
+        childTags: [],
+        memos: page.tag_with_memos.memos,
+      };
+    });
+
+    const newMemoSectionList = [
+      ...newTagMemoSection,
+      ...newChildMemoSectionList,
+    ];
+
+    const newTags = newMemoSectionList
+      .map((page) => page.tag)
+      .filter((tag) => tag !== null);
+
+    if (
+      JSON.stringify(memoSectionListByTag) !==
+      JSON.stringify(newMemoSectionList)
+    ) {
+      setMemoSectionListByTag(newMemoSectionList);
     }
-  }, [fetchedMemos, memoSectionListByTag]);
+
+    if (JSON.stringify(tags) !== JSON.stringify(newTags)) {
+      setTags(newTags);
+    }
+  }, [fetchedMemos, selectedTag]);
 
   useEffect(() => {
     refetch();
-  }, [tags, refetch]);
+  }, [refetch, MEMO_LIMIT, sortOption]);
 
   return {
     memoSectionListByTag,
+    tags,
+    fetchNextPage,
+    fetchNextPageForChildTag,
     updateMemoFromMemoSectionListByTag,
     deleteMemoFromMemoSectionListByTag,
     revertMemoFromMemoSectionListByTag,

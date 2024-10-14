@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
 import { AccordionSummary } from './AccordionSummary';
 import { AccordionContent } from './AccordionContent';
+import { v4 as uuid_v4 } from 'uuid';
 
 const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +33,7 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
 
   return (
     <div
-      key={data.id}
+      key={data.id || uuid_v4()}
       className="rounded-2xl overflow-hidden border border-shadow0 shadow-custom"
       style={{
         backgroundColor: isOpen ? '#FFF6E3' : '#FFF6E366',

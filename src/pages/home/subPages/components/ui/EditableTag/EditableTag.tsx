@@ -49,7 +49,7 @@ interface EditableTagProps {
 }
 
 const tagStyles = tv({
-  base: 'inline-flex flex-shrink-0 self-start items-center h-[1.25rem] py-[0.0625rem] px-[0.5625rem] gap-[5px]',
+  base: 'inline-flex shrink-0 self-center items-center h-[1.25rem] py-[0.0625rem] px-[0.5625rem] gap-[5px]',
   variants: {
     color: {
       white: 'bg-white',
@@ -123,7 +123,6 @@ const EditableTag = ({
         border: border,
         shadow: shadow,
       })} ${className}`}
-      style={{ position: 'relative', zIndex: 10 }}
       onClick={onClick}
     >
       <span

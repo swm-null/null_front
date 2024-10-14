@@ -15,7 +15,7 @@ const MemoSectionHeader = ({
   handleTagClick,
 }: MemoSectionHeaderProps) => {
   return (
-    <div className="flex w-full px-3 py-4 flex-col bg-[#FFF6E380] gap-4">
+    <div className="flex flex-col w-full px-3 py-4 bg-[#FFF6E380] gap-4">
       <div className="flex w-full items-center gap-3">
         <p className="text-[#3e3e3e]">{tag.name}</p>
         <div className="flex gap-1">
@@ -29,18 +29,20 @@ const MemoSectionHeader = ({
           <RightIcon color="black" />
         </div>
       </div>
-      <div className="flex gap-2 overflow-x-scroll no-scrollbar">
-        {childTags.map((childTag, index) => (
-          <UneditableTag
-            key={index}
-            className="px-2 py-1 h-6"
-            text={`#${childTag.name}`}
-            color="white"
-            fontColor="brown2"
-            border={5}
-            invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-          />
-        ))}
+      <div className="flex overflow-hidden w-[247.83px]">
+        <div className="flex gap-2 min-w-max overflow-x-auto no-scrollbar flex-nowrap">
+          {childTags.map((childTag, index) => (
+            <UneditableTag
+              key={index}
+              className="px-2 py-1 h-6"
+              text={`#${childTag.name}`}
+              color="white"
+              fontColor="brown2"
+              border={5}
+              invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

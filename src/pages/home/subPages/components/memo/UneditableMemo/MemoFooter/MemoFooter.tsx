@@ -10,14 +10,17 @@ const MemoFooter = ({
   dateFormat: string;
   handleDeleteMemo: () => void;
 }) => {
-  const formatDate = (date: Date): string => {
-    return format(date, dateFormat);
+  const formatDate = (date: string): string => {
+    if (date.endsWith('Z')) {
+      return format(new Date(date), dateFormat);
+    }
+    return format(`${date}Z`, dateFormat);
   };
 
   return (
     <div className="flex flex-1 items-center">
       <p className="text-gray2 font-medium text-[10px]">
-        {formatDate(new Date(updatedAt))}
+        {formatDate(updatedAt)}
       </p>
 
       <button

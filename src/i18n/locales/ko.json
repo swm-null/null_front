@@ -28,7 +28,7 @@
     "deleteErrorMessage": "메모 삭제에 실패했습니다. 다시 시도해 주세요.",
     "updateErrorMessage": "메모 업데이트에 실패했습니다. 다시 시도해 주세요.",
     "dateFormat": "yyyy.MM.dd HH:mm",
-    "dateFormatEdit": "수정된 시간: yyyy년 mm월 dd일 HH:mm",
+    "dateFormatEdit": "수정된 시간: yyyy년 MM월 dd일 HH:mm",
     "tagRebuild": "태그 재생성",
     "save": "저장"
   },
@@ -90,12 +90,8 @@
     "create": {
       "header": "메모 추가하기",
       "inputPlaceholder": "메모 작성...",
-      "createMemoMessage": "AI로 생성한 메모를 추가했습니다.",
+      "tagRebuilding": "태그 생성중...",
       "placeholder": "AI로 관련 태그를 자동으로 생성해드립니다.",
-      "memoCreateButton": {
-        "loading": "로딩 중...",
-        "default": "메모 생성하기"
-      },
       "errorMessage": "죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
       "refreshButton": "새로고침(임시버튼)"
     },

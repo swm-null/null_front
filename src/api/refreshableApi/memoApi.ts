@@ -1,7 +1,13 @@
-import { Memo, MemoSearchAnswer } from 'pages/home/subPages/interfaces';
+import {
+  Memo,
+  MemoSearchAnswer,
+  MemoSearchConversation,
+  Tag,
+} from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, API_BASE_URL, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
+import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 
@@ -18,7 +24,7 @@ export const searchMemo = async function (
     const responseInfo = {
       method,
       status: response.status,
-      text: response.data.processed_message,
+      processed_message: response.data.processed_message,
       memos: response.data.memos,
     } as searchMemoResponse;
     return responseInfo;
@@ -115,42 +121,177 @@ export const deleteMemo = async (
   }
 };
 
-interface getMemosResponse extends validResponse {
+interface paginationData {
+  total_count: number;
+  current_count: number;
+  total_page: number;
+  current_page: number;
+}
+
+interface paginationMemos extends paginationData {
   memos: Memo[];
 }
 
-export const getAllMemos = async (): Promise<
-  getMemosResponse | errorResponse
-> => {
+interface paginationMemosWithTag extends paginationData {
+  tag: Tag;
+  memos: Memo[];
+}
+
+export interface paginationRecentMemosResponse
+  extends paginationMemos,
+    validResponse {}
+
+export interface paginationMemosResponse
+  extends paginationMemosWithTag,
+    paginationData,
+    validResponse {}
+
+export const getRecentMemos = async (
+  page: number,
+  memoLimit: number
+): Promise<paginationRecentMemosResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/memos`;
+  const endpoint = `/tag/memos?memoPage=${page}&memoLimit=${memoLimit}&sortOrder=LATEST`;
 
   try {
     const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
-      memos: response.data,
-    } as getMemosResponse;
+      total_count: response.data.total_count,
+      current_count: response.data.current_count,
+      total_page: response.data.total_page,
+      current_page: response.data.current_page,
+      memos: response.data.memos,
+    } as paginationRecentMemosResponse;
     return responseInfo;
   } catch (error) {
     return errorHandler(error, method);
   }
 };
 
-export const getMemosByTag = async (
-  tagId: string
-): Promise<getMemosResponse | errorResponse> => {
+export interface paginationDashboardResponse
+  extends paginationData,
+    validResponse {
+  tag_with_memos: paginationMemosWithTag;
+  child_tags_with_memos: paginationMemosWithTag[];
+}
+
+export const getDashboardDataByTag = async ({
+  parentTagId,
+  tagPage,
+  tagLimit,
+  memoLimit,
+  sortOrder,
+}: {
+  parentTagId?: string;
+  tagPage: number;
+  tagLimit: number;
+  memoLimit: number;
+  sortOrder: SortOption;
+}): Promise<paginationDashboardResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/tag/memos?tagId=${tagId}&sortOrder=LATEST`;
+
+  const params = new URLSearchParams();
+  if (parentTagId) params.append('parentTagId', parentTagId);
+  if (tagPage) params.append('tagPage', tagPage.toString());
+  if (tagLimit) params.append('tagLimit', tagLimit.toString());
+  if (memoLimit) params.append('memoLimit', memoLimit.toString());
+  if (sortOrder) params.append('sortOrder', sortOrder);
+
+  const endpoint = `/childTags/memos?${params.toString()}`;
 
   try {
     const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
-      message: '특정 태그의 메모 가져오는 것을 성공했습니다.',
+      child_tags_with_memos: response.data.child_tags_with_memos,
+      tag_with_memos: response.data.tag_with_memos,
+      total_count: response.data.total_count,
+      current_count: response.data.current_count,
+      total_page: response.data.total_page,
+      current_page: response.data.current_page,
+    };
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
+export const getChildTagSectionData = async ({
+  tagId,
+  memoPage,
+  memoLimit,
+  sortOrder,
+}: {
+  tagId?: string;
+  memoPage: number;
+  memoLimit: number;
+  sortOrder: SortOption;
+}): Promise<paginationMemosWithTag | errorResponse> => {
+  const method = getMethodName();
+
+  const params = new URLSearchParams();
+  if (tagId) params.append('tagId', tagId);
+  if (memoPage) params.append('memoPage', memoPage.toString());
+  if (memoLimit) params.append('memoLimit', memoLimit.toString());
+  if (sortOrder) params.append('sortOrder', sortOrder);
+
+  const endpoint = `/tag/memos?${params.toString()}`;
+
+  try {
+    const response = await refreshableApi.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      tag: response.data.tag,
+      total_count: response.data.total_count,
+      current_count: response.data.current_count,
+      total_page: response.data.total_page,
+      current_page: response.data.current_page,
       memos: response.data.memos,
+    };
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
+export interface paginationSearchHistoriesResponse extends paginationData {
+  search_histories: MemoSearchConversation[];
+}
+
+export const getSearchHistories = async ({
+  query,
+  searchHistoryPage,
+  searchHistoryLimit,
+}: {
+  query?: string;
+  searchHistoryPage?: number;
+  searchHistoryLimit?: number;
+}): Promise<paginationSearchHistoriesResponse | errorResponse> => {
+  const method = getMethodName();
+
+  const params = new URLSearchParams();
+  if (query) params.append('query', query);
+  if (searchHistoryPage)
+    params.append('searchHistoryPage', searchHistoryPage.toString());
+  if (searchHistoryLimit)
+    params.append('searchHistoryLimit', searchHistoryLimit.toString());
+
+  const endpoint = `/memos/search/histories?${params.toString()}`;
+
+  try {
+    const response = await refreshableApi.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      total_count: response.data.total_count,
+      current_count: response.data.current_count,
+      total_page: response.data.total_page,
+      current_page: response.data.current_page,
+      search_histories: response.data.search_histories,
     };
     return responseInfo;
   } catch (error) {
@@ -165,10 +306,18 @@ export const isValidResponse = (
   return validStatus.includes(response.status);
 };
 
+export const isRecentMemosResponse = (
+  response: paginationRecentMemosResponse | errorResponse
+): response is paginationRecentMemosResponse => {
+  return (
+    (response as paginationRecentMemosResponse).current_count !== undefined
+  );
+};
+
 export const isSearchMemoResponse = (
   response: searchMemoResponse | errorResponse
 ): response is searchMemoResponse => {
-  return (response as searchMemoResponse).text !== undefined;
+  return (response as searchMemoResponse).processed_message !== undefined;
 };
 
 export const isCreateMemoResponse = (
@@ -189,8 +338,23 @@ export const isDeleteMemoResponse = (
   return isValidResponse(response);
 };
 
-export const isGetMemosResponse = (
-  response: getMemosResponse | errorResponse
-): response is getMemosResponse => {
-  return isValidResponse(response as getMemosResponse);
+export const isGetDashboardData = (
+  response: paginationDashboardResponse | errorResponse
+): response is paginationDashboardResponse => {
+  return (response as paginationDashboardResponse).tag_with_memos !== undefined;
+};
+
+export const isGetSearchHistories = (
+  response: paginationSearchHistoriesResponse | errorResponse
+): response is paginationSearchHistoriesResponse => {
+  return (
+    (response as paginationSearchHistoriesResponse).search_histories !==
+    undefined
+  );
+};
+
+export const isGetChildTagSectionData = (
+  response: paginationMemosWithTag | errorResponse
+): response is paginationMemosWithTag => {
+  return (response as paginationMemosWithTag).tag !== undefined;
 };

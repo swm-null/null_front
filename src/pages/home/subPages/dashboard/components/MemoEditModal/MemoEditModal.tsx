@@ -6,7 +6,7 @@ interface MemoEditModalProps {
   open: boolean;
   handleClose: () => void;
   selectedMemo?: Memo;
-  selectedMemoTag?: Tag;
+  selectedMemoTag?: Tag | null;
   selectedMemoIndex?: number;
   updateMemo: (tag: Tag, memo: Memo) => void;
   deleteMemo: (tag: Tag, memoId: string) => void;
