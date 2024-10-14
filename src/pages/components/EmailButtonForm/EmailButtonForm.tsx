@@ -1,27 +1,27 @@
 import { useTranslation } from 'react-i18next';
 import { EmailInput } from './EmailInput';
 
-interface EmailCheckFormProps {
+interface EmailButtonFormProps {
   email: { emailId: string; domain: string };
+  buttonText: string;
   handleEmailChange: (newEmail: { emailId: string; domain: string }) => void;
-  handleCheckEmail: () => void;
-  isEmailInputTouched: boolean;
-  success: string;
-  error: string;
+  handleClickButton: () => void;
+  success: { flag: boolean; message: string };
+  error: { flag: boolean; message: string };
 }
 
-const EmailCheckForm = ({
+const EmailButtonForm = ({
   email,
+  buttonText,
   handleEmailChange,
-  handleCheckEmail,
-  isEmailInputTouched,
+  handleClickButton,
   success,
   error,
-}: EmailCheckFormProps) => {
+}: EmailButtonFormProps) => {
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <p className="block text-sm font-medium text-gray-700">
         {t('signup.email')}
       </p>
@@ -32,20 +32,18 @@ const EmailCheckForm = ({
             type="button"
             className="h-[2.626rem] self-end ml-auto px-4 py-2 bg-[#F4CDB1] text-[#6A5344] text-[0.9375rem]
               rounded-lg flex-shrink-0"
-            onClick={handleCheckEmail}
+            onClick={handleClickButton}
           >
-            {t('signup.checkEmail')}
+            {buttonText}
           </button>
         </div>
-        {isEmailInputTouched && success && (
-          <p className="text-green-500 text-sm">{success}</p>
+        {success.flag && (
+          <p className="text-green-500 text-sm">{success.message}</p>
         )}
-        {isEmailInputTouched && error && (
-          <p className="text-red-500 text-sm">{error}</p>
-        )}
+        {error.flag && <p className="text-red-500 text-sm">{error.message}</p>}
       </div>
-    </>
+    </div>
   );
 };
 
-export default EmailCheckForm;
+export default EmailButtonForm;

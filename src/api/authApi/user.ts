@@ -99,6 +99,35 @@ export const sendCode = async (
   }
 };
 
+export const resetPassword = async (
+  email: string,
+  newPassword: string,
+  confirmPassword: string,
+  code: string
+): Promise<validResponse | errorResponse> => {
+  const method = getMethodName();
+  const endpoint = '/user/findPassword';
+  try {
+    const response = await authApi.post(
+      endpoint,
+      JSON.stringify({
+        email,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+        code,
+      })
+    );
+    const responseInfo = {
+      method,
+      status: response.status,
+      message: response.data,
+    } as validResponse;
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
 export const verifyCode = async (
   email: string,
   code: string

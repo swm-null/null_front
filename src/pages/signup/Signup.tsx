@@ -1,96 +1,94 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoginSignupButton, HiddenInput, CustomInput } from 'pages/components';
-import { EmailCheckForm, CodeSendForm } from './components';
-import * as Hooks from './hooks';
-import { isValidResponse, signup } from 'api';
+import * as Components from 'pages/components';
+import { CodeSendForm } from './components';
+import { checkEmail, isValidResponse, sendCode, signup } from 'api';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils';
+import { useChangeHandlerManager } from './hooks';
+import { useValidationManager } from 'pages/hooks';
 
 const Signup = () => {
   const { t } = useTranslation();
   const { alert } = useContext(AlertContext);
   const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [isSignupButtonDisabled, setIsSignupButtonDisabled] = useState(true);
-
-  const emailManager = Hooks.useEmailManager();
-  const passwordManager = Hooks.usePasswordManager();
-  const codeManager = Hooks.useCodeManager(
-    emailManager.isEmailChecked,
-    emailManager.email
-  );
-  const { isValid } = Hooks.useValidationManager({
-    email: emailManager.email,
-    password: passwordManager.password,
-    confirmPassword: passwordManager.confirmPassword,
-    name: name,
-    code: codeManager.code,
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const [emailSuccess, setEmailSuccess] = useState({
+    flag: false,
+    message: '',
+  });
+  const [codeSuccess, setCodeSuccess] = useState({
+    flag: false,
+    message: '',
   });
 
-  const [isEmailInputTouched, setIsEmailInputTouched] = useState(false);
-  const [isPasswordInputTouched, setIsPasswordInputTouched] = useState(false);
-  const [isConfirmPasswordInputTouched, setIsConfirmPasswordInputTouched] =
-    useState(false);
-  const [isCodeInputTouched, setIsCodeInputTouched] = useState(false);
+  const changeHandlerManager = useChangeHandlerManager();
+  const validationManager = useValidationManager();
 
-  const handleEmailChange = (newEmail: { emailId: string; domain: string }) => {
-    emailManager.handleEmailChange(newEmail);
-    setIsEmailInputTouched(true);
-  };
+  const isValid = validationManager.isValid(changeHandlerManager.form);
 
-  const handlePasswordChange = (newPassword: string) => {
-    passwordManager.handlePasswordChange(newPassword);
-    setIsPasswordInputTouched(true);
-  };
+  const handleCheckEmail = async () => {
+    try {
+      const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
+      const response = await checkEmail(emailString);
 
-  const handleConfirmPasswordChange = (newConfirmPassword: string) => {
-    passwordManager.handleConfirmPasswordChange(newConfirmPassword);
-    setIsConfirmPasswordInputTouched(true);
-  };
-
-  const handleCodeChange = (newCode: string) => {
-    codeManager.handleCodeChange(newCode);
-    setIsCodeInputTouched(true);
-  };
-
-  useEffect(() => {
-    if (
-      isEmailInputTouched &&
-      isPasswordInputTouched &&
-      isConfirmPasswordInputTouched &&
-      isCodeInputTouched
-    ) {
-      const essentialApiSent =
-        emailManager.isEmailChecked && codeManager.isCodeSent;
-      setIsSignupButtonDisabled(!isValid || !essentialApiSent);
+      if (isValidResponse(response)) {
+        setIsEmailChecked(true);
+        setEmailSuccess((prev) => ({
+          ...prev,
+          message: t('signup.checkEmailSuccess'),
+        }));
+        validationManager.setEmailError('');
+      } else if (Number(response?.exceptionCode) === 1004) {
+        setEmailSuccess((prev) => ({ ...prev, flag: false }));
+        validationManager.setEmailError(t('signup.emailAlreadyExists'));
+      } else {
+        setEmailSuccess((prev) => ({ ...prev, flag: false }));
+        validationManager.setEmailError(t('signup.signupErrorMessage'));
+      }
+    } catch (error) {
+      setEmailSuccess((prev) => ({ ...prev, flag: false }));
+      validationManager.setEmailError(t('signup.signupErrorMessage'));
     }
-  }, [
-    emailManager.email,
-    passwordManager.password,
-    passwordManager.confirmPassword,
-    codeManager.code,
-    isEmailInputTouched,
-    isPasswordInputTouched,
-    isConfirmPasswordInputTouched,
-    isCodeInputTouched,
-  ]);
+  };
+
+  const handleSendCode = async () => {
+    if (!isEmailChecked) {
+      validationManager.setCodeError(t('signup.noCheckEmail'));
+      return;
+    }
+
+    try {
+      const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
+      const response = await sendCode(emailString);
+      if (isValidResponse(response)) {
+        setCodeSuccess({
+          flag: true,
+          message: t('utils.auth.codeSent'),
+        });
+      } else {
+        validationManager.setCodeError(t('utils.auth.codeSendFailed'));
+      }
+    } catch {
+      validationManager.setCodeError(t('utils.auth.codeSendFailed'));
+    }
+  };
 
   const handleSignUp = async () => {
-    if (isSignupButtonDisabled) return;
+    if (!isValid) return;
 
     try {
       const response = await signup(
-        `${emailManager.email.emailId}@${emailManager.email.domain}`,
-        passwordManager.password,
-        passwordManager.confirmPassword,
-        name,
-        codeManager.code
+        `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`,
+        changeHandlerManager.form.password,
+        changeHandlerManager.form.confirmPassword,
+        changeHandlerManager.form.name,
+        changeHandlerManager.form.code
       );
       if (isValidResponse(response)) {
         alert(t('signup.signupSuccess')).then(() => {
-          navigate(-1);
+          navigate('/login');
         });
       } else {
         alert(response.exceptionMessage);
@@ -104,43 +102,63 @@ const Signup = () => {
     <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
       <form className="bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
         <div className="flex flex-col mb-6 gap-3">
-          <EmailCheckForm
-            email={emailManager.email}
-            handleEmailChange={handleEmailChange}
-            handleCheckEmail={emailManager.handleCheckEmail}
-            isEmailInputTouched={isEmailInputTouched}
-            success={emailManager.success}
-            error={emailManager.error}
+          <Components.EmailButtonForm
+            email={changeHandlerManager.form.email}
+            buttonText={t('signup.checkEmail')}
+            handleEmailChange={(newEmail) => {
+              setEmailSuccess((prev) => ({ ...prev, flag: false }));
+              changeHandlerManager.handleEmailChange(newEmail);
+              validationManager.validateEmail(newEmail);
+            }}
+            handleClickButton={handleCheckEmail}
+            success={emailSuccess}
+            error={validationManager.error.email}
           />
-          <HiddenInput
-            label={t('signup.password')}
-            value={passwordManager.password}
-            setValue={handlePasswordChange}
-            errorMessage={passwordManager.passwordError}
+          <Components.HiddenInput
+            label={t('utils.auth.password')}
+            value={changeHandlerManager.form.password}
+            setValue={(value) => {
+              changeHandlerManager.handlePasswordChange(value);
+              validationManager.validatePassword(value);
+            }}
+            error={validationManager.error.password}
           />
-          <HiddenInput
-            label={t('signup.confirmPassword')}
-            value={passwordManager.confirmPassword}
-            setValue={handleConfirmPasswordChange}
-            errorMessage={passwordManager.confirmPasswordError}
+          <Components.HiddenInput
+            label={t('utils.auth.confirmPassword')}
+            value={changeHandlerManager.form.confirmPassword}
+            setValue={(value) => {
+              changeHandlerManager.handleConfirmPasswordChange(value);
+              validationManager.validateConfirmPassword(
+                changeHandlerManager.form.password,
+                value
+              );
+            }}
+            error={validationManager.error.confirmPassword}
           />
-          <CustomInput
+          <Components.CustomInput
             label={t('signup.name')}
-            value={name}
-            setValue={setName}
+            value={changeHandlerManager.form.name}
+            setValue={(value) => {
+              changeHandlerManager.handleNameChange(value);
+              validationManager.validateName(value);
+            }}
+            error={validationManager.error.name}
           />
           <CodeSendForm
-            code={codeManager.code}
-            handleCodeChange={handleCodeChange}
-            handleSendCode={codeManager.handleSendCode}
-            success={codeManager.success}
-            error={codeManager.error}
+            code={changeHandlerManager.form.code}
+            handleCodeChange={(newCode) => {
+              changeHandlerManager.handleCodeChange(newCode);
+              validationManager.validateCode(newCode);
+            }}
+            handleSendCode={handleSendCode}
+            success={codeSuccess}
+            error={validationManager.error.code}
           />
         </div>
-        <LoginSignupButton
+        <Components.LoginSignupButton
           label={t('signup.signupButton')}
           onClick={handleSignUp}
-          disabled={isSignupButtonDisabled}
+          disabled={!isValid}
         />
       </form>
     </div>

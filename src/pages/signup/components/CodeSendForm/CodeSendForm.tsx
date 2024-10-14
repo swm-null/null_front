@@ -5,8 +5,8 @@ interface CodeSendFormProps {
   code: string;
   handleCodeChange: (code: string) => void;
   handleSendCode: () => void;
-  success: string;
-  error: string;
+  success?: { flag: boolean; message: string };
+  error?: { flag: boolean; message: string };
 }
 
 const CodeSendForm = ({
@@ -22,7 +22,7 @@ const CodeSendForm = ({
     <div className="flex flex-col gap-2">
       <div className="flex gap-2">
         <CustomInput
-          label={t('signup.code')}
+          label={t('utils.auth.code')}
           value={code}
           setValue={handleCodeChange}
         />
@@ -35,8 +35,10 @@ const CodeSendForm = ({
           {t('signup.sendCode')}
         </button>
       </div>
-      {success && <p className="text-green-500 text-sm">{success}</p>}
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {success?.flag && (
+        <p className="text-green-500 text-sm">{success.message}</p>
+      )}
+      {error?.flag && <p className="text-red-500 text-sm">{error.message}</p>}
     </div>
   );
 };

@@ -4,12 +4,12 @@ const HiddenInput = ({
   label,
   value,
   setValue,
-  errorMessage = '',
+  error,
 }: {
   label: string;
   value: string;
   setValue: (value: string) => void;
-  errorMessage?: string;
+  error?: { flag: boolean; message: string };
 }) => {
   return (
     <CustomInput
@@ -18,7 +18,7 @@ const HiddenInput = ({
       setValue={setValue}
       hidden
       useHiddenToggle
-      errorMessage={errorMessage}
+      error={error}
     />
   );
 };

@@ -40,6 +40,17 @@ const Login = () => {
             value={password}
             setValue={setPassword}
           />
+          <div className="flex gap-2 text-gray-700 text-sm">
+            <p>{t('login.findPw')}</p>
+            <p
+              className="cursor-pointer underline ml-auto"
+              onClick={() => {
+                navigate('/findPw');
+              }}
+            >
+              {t('login.findPwButton')}
+            </p>
+          </div>
         </div>
 
         <div className="flex gap-2 flex-col">

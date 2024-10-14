@@ -2,6 +2,7 @@ import { routerType } from 'pages/types/router.types';
 import { Home } from './home';
 import { Login } from './login';
 import { Signup } from './signup';
+import { FindPw } from './findPw';
 
 const pagesData: routerType[] = [
   {
@@ -18,6 +19,11 @@ const pagesData: routerType[] = [
     path: 'signup',
     element: <Signup />,
     title: 'signup',
+  },
+  {
+    path: 'findPw',
+    element: <FindPw />,
+    title: 'findPw',
   },
 ];
 
