@@ -17,7 +17,7 @@ const MemoSearchTextArea = ({
   onSubmit,
 }: MemoSearchTextAreaProps) => {
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleSubmit: onSubmit,
+    handleETCEnterSubmit: onSubmit,
   });
   const [focus, setFocus] = useState(false);
   const getBackgroundColor = () => (focus ? 'bg-[#FFF6E3]' : 'bg-[#FFF6E3CC]');

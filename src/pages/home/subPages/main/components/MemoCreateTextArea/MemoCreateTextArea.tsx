@@ -21,7 +21,7 @@ const MemoCreateTextArea = ({
   onCameraButtonClick,
 }: MemoCreateTextAreaProps) => {
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleSubmit: onSubmit,
+    handleCtrlSubmit: onSubmit,
   });
   const [focus, setFocus] = useState(false);
   const getBackgroundColor = () => {
