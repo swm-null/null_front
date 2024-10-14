@@ -188,7 +188,7 @@ export const getDashboardDataByTag = async ({
   tagPage: number;
   tagLimit: number;
   memoLimit: number;
-  sortOrder: 'LATEST' | 'OLDEST';
+  sortOrder: SortOption;
 }): Promise<paginationDashboardResponse | errorResponse> => {
   const method = getMethodName();
 
