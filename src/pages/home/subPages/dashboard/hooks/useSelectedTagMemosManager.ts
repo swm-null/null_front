@@ -4,8 +4,8 @@ import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 import * as Api from 'api';
 
-const TAG_LIMIT = 5;
-const MEMO_LIMIT = 5;
+const TAG_LIMIT = 10;
+const MEMO_LIMIT = 10;
 
 const useSelectedTagMemosManager = (
   selectedTag: Tag | null,
