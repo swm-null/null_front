@@ -91,6 +91,25 @@ const useValidationManager = () => {
     }
   };
 
+  const isValid = ({
+    email,
+    password,
+    confirmPassword,
+    name,
+    code,
+  }: {
+    email: { emailId: string; domain: string };
+    password: string;
+    confirmPassword: string;
+    name: string;
+    code: string;
+  }) =>
+    isEmailValid(email) &&
+    isPasswordValid(password) &&
+    isCodeValid(code) &&
+    isNameValid(name) &&
+    isConfirmPasswordValid(password, confirmPassword);
+
   const setEmailError = (message: string) => {
     setError((prev) => ({ ...prev, email: message }));
   };
@@ -108,11 +127,7 @@ const useValidationManager = () => {
     validateConfirmPassword,
     validateName,
     validateCode,
-    isEmailValid,
-    isPasswordValid,
-    isConfirmPasswordValid,
-    isNameValid,
-    isCodeValid,
+    isValid,
   };
 };
 

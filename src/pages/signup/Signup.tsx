@@ -19,18 +19,11 @@ const Signup = () => {
   const changeHandlerManager = useChangeHandlerManager();
   const validationManager = useValidationManager();
 
-  const isValid =
-    validationManager.isEmailValid(changeHandlerManager.email) &&
-    validationManager.isPasswordValid(changeHandlerManager.password.password) &&
-    validationManager.isCodeValid(changeHandlerManager.code) &&
-    validationManager.isConfirmPasswordValid(
-      changeHandlerManager.password.password,
-      changeHandlerManager.password.confirmPassword
-    );
+  const isValid = validationManager.isValid(changeHandlerManager.form);
 
   const handleCheckEmail = async () => {
     try {
-      const emailString = `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`;
+      const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
       const response = await checkEmail(emailString);
 
       if (isValidResponse(response)) {
@@ -57,7 +50,7 @@ const Signup = () => {
     }
 
     try {
-      const emailString = `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`;
+      const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
       const response = await sendCode(emailString);
       if (isValidResponse(response)) {
         setCodeSuccess(t('utils.auth.codeSent'));
@@ -74,11 +67,11 @@ const Signup = () => {
 
     try {
       const response = await signup(
-        `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`,
-        changeHandlerManager.password.password,
-        changeHandlerManager.password.confirmPassword,
-        changeHandlerManager.name,
-        changeHandlerManager.code
+        `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`,
+        changeHandlerManager.form.password,
+        changeHandlerManager.form.confirmPassword,
+        changeHandlerManager.form.name,
+        changeHandlerManager.form.code
       );
       if (isValidResponse(response)) {
         alert(t('signup.signupSuccess')).then(() => {
@@ -97,7 +90,7 @@ const Signup = () => {
       <form className="bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
         <div className="flex flex-col mb-6 gap-3">
           <Components.EmailButtonForm
-            email={changeHandlerManager.email}
+            email={changeHandlerManager.form.email}
             buttonText={t('signup.checkEmail')}
             handleEmailChange={(newEmail) => {
               setEmailSuccess('');
@@ -110,7 +103,7 @@ const Signup = () => {
           />
           <Components.HiddenInput
             label={t('utils.auth.password')}
-            value={changeHandlerManager.password.password}
+            value={changeHandlerManager.form.password}
             setValue={(value) => {
               changeHandlerManager.handlePasswordChange(value);
               validationManager.validatePassword(value);
@@ -119,11 +112,11 @@ const Signup = () => {
           />
           <Components.HiddenInput
             label={t('utils.auth.confirmPassword')}
-            value={changeHandlerManager.password.confirmPassword}
+            value={changeHandlerManager.form.confirmPassword}
             setValue={(value) => {
               changeHandlerManager.handleConfirmPasswordChange(value);
               validationManager.validateConfirmPassword(
-                changeHandlerManager.password.password,
+                changeHandlerManager.form.password,
                 value
               );
             }}
@@ -131,7 +124,7 @@ const Signup = () => {
           />
           <Components.CustomInput
             label={t('signup.name')}
-            value={changeHandlerManager.name}
+            value={changeHandlerManager.form.name}
             setValue={(value) => {
               changeHandlerManager.handleNameChange(value);
               validationManager.validateName(value);
@@ -139,7 +132,7 @@ const Signup = () => {
             errorMessage={validationManager.error.name}
           />
           <CodeSendForm
-            code={changeHandlerManager.code}
+            code={changeHandlerManager.form.code}
             handleCodeChange={(newCode) => {
               changeHandlerManager.handleCodeChange(newCode);
               validationManager.validateCode(newCode);
