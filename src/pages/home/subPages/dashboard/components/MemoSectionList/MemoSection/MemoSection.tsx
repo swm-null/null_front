@@ -24,7 +24,14 @@ const MemoSection = ({
   const observerRef = useRef<HTMLDivElement | null>(null);
   const keyFormat = (memoId: string) => (tag ? memoId : `root-${memoId}`);
 
-  useIntersectionObserver(observerRef, fetchNextPage);
+  useIntersectionObserver(observerRef, {
+    callback: (entries) => {
+      if (entries[0].isIntersecting) {
+        fetchNextPage();
+      }
+    },
+    options: { threshold: 0.5 },
+  });
 
   return (
     <div

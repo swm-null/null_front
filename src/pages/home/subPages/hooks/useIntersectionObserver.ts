@@ -1,20 +1,20 @@
 import { useEffect, RefObject } from 'react';
 
+interface UseIntersectionObserverProps {
+  callback: (entries: IntersectionObserverEntry[]) => void;
+  options?: IntersectionObserverInit;
+}
+
 const useIntersectionObserver = (
   ref: RefObject<HTMLDivElement>,
-  fetchNextPage: () => void
+  { callback, options }: UseIntersectionObserverProps
 ) => {
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current) {
+      return;
+    }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.5 }
-    );
+    const observer = new IntersectionObserver(callback, options);
 
     observer.observe(ref.current);
 
@@ -23,7 +23,7 @@ const useIntersectionObserver = (
         observer.unobserve(ref.current);
       }
     };
-  }, [ref, fetchNextPage]);
+  }, [ref, callback, options]);
 };
 
 export default useIntersectionObserver;

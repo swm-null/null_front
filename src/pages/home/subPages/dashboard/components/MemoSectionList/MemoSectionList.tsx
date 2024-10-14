@@ -31,7 +31,14 @@ const MemoSectionList = ({
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  useIntersectionObserver(observerRef, fetchNextPage);
+  useIntersectionObserver(observerRef, {
+    callback: (entries) => {
+      if (entries[0].isIntersecting) {
+        fetchNextPage();
+      }
+    },
+    options: { threshold: 0.5 },
+  });
 
   if (isMemoSectionEmpty()) {
     // 처음 유저가 서비스를 사용해서 메모와 태그가 아예 없는 경우
@@ -90,7 +97,7 @@ const MemoSectionList = ({
           />
         );
       })}
-      <div ref={observerRef} />;
+      <div ref={observerRef} />
     </div>
   );
 };

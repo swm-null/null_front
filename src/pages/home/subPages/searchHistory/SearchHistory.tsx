@@ -54,7 +54,14 @@ const SearchHistoryPage = ({}: {}) => {
     input$.next(newMessage);
   };
 
-  useIntersectionObserver(observerRef, fetchNextPage);
+  useIntersectionObserver(observerRef, {
+    callback: (entries) => {
+      if (entries[0].isIntersecting) {
+        fetchNextPage();
+      }
+    },
+    options: { threshold: 0.5 },
+  });
 
   const handleSubmit = useCallback(() => {
     refetch();

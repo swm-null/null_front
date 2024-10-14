@@ -255,7 +255,6 @@ const useSelectedTagMemosManager = (
 
   useEffect(() => {
     refetch();
-    console.log(selectedTag);
   }, [refetch, MEMO_LIMIT, sortOption, selectedTag]);
 
   return {

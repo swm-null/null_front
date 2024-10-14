@@ -16,7 +16,14 @@ const CreatedMemoList = ({
 }) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  useIntersectionObserver(observerRef, fetchNextPage);
+  useIntersectionObserver(observerRef, {
+    callback: (entries) => {
+      if (entries[0].isIntersecting) {
+        fetchNextPage();
+      }
+    },
+    options: { threshold: 0.5 },
+  });
 
   return (
     <div className="flex flex-col gap-3">
