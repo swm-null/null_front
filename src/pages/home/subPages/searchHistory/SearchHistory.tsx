@@ -8,6 +8,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import * as Api from 'api';
 import { v4 as uuid_v4 } from 'uuid';
 import { debounceTime, Subject, switchMap } from 'rxjs';
+import { useIntersectionObserver } from '../hooks';
 
 const SEARCH_HISTORY_LIMIT = 15;
 
@@ -54,28 +55,7 @@ const SearchHistoryPage = ({}: {}) => {
     input$.next(newMessage);
   };
 
-  useEffect(() => {
-    if (!observerRef.current) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [observerRef.current, fetchNextPage]);
+  useIntersectionObserver(observerRef, fetchNextPage);
 
   const handleSubmit = useCallback(() => {
     refetch();

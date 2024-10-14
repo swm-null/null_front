@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { CreatedMemoCard } from './CreatedMemoCard';
+import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 
 const CreatedMemoList = ({
   memos,
@@ -15,28 +16,7 @@ const CreatedMemoList = ({
 }) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (!observerRef.current) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [observerRef.current, fetchNextPage]);
+  useIntersectionObserver(observerRef, fetchNextPage);
 
   return (
     <div className="flex flex-col gap-3">

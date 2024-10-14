@@ -2,7 +2,8 @@ import * as Components from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 
 interface MemoSectionProps {
   parentTag: Tag | null;
@@ -30,28 +31,7 @@ const MemoSectionList = ({
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (!observerRef.current) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [observerRef.current, fetchNextPageForChildTag]);
+  useIntersectionObserver(observerRef, fetchNextPage);
 
   if (isMemoSectionEmpty()) {
     // 처음 유저가 서비스를 사용해서 메모와 태그가 아예 없는 경우

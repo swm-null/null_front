@@ -1,7 +1,8 @@
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSectionHeader } from './MemoSectionHeader';
 import { UneditableMemo } from 'pages/home/subPages/components';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 
 interface MemoSectionProps {
   tag: Tag | null;
@@ -23,28 +24,7 @@ const MemoSection = ({
   const observerRef = useRef<HTMLDivElement | null>(null);
   const keyFormat = (memoId: string) => (tag ? memoId : `root-${memoId}`);
 
-  useEffect(() => {
-    if (!observerRef.current) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1.0 }
-    );
-
-    observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
-    };
-  }, [observerRef.current, fetchNextPage]);
+  useIntersectionObserver(observerRef, fetchNextPage);
 
   return (
     <div
