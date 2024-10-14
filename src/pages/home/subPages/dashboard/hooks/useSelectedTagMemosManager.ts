@@ -32,6 +32,7 @@ const useSelectedTagMemosManager = (
     ),
     queryFn: async ({ pageParam = 1 }: any) => {
       const response = await Api.getDashboardDataByTag({
+        parentTagId: selectedTag?.id,
         tagPage: pageParam,
         tagLimit: TAG_LIMIT,
         memoLimit: MEMO_LIMIT,
@@ -254,7 +255,8 @@ const useSelectedTagMemosManager = (
 
   useEffect(() => {
     refetch();
-  }, [refetch, MEMO_LIMIT, sortOption]);
+    console.log(selectedTag);
+  }, [refetch, MEMO_LIMIT, sortOption, selectedTag]);
 
   return {
     memoSectionListByTag,

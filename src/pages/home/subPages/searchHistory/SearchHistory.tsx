@@ -41,7 +41,6 @@ const SearchHistoryPage = ({}: {}) => {
         : undefined;
     },
     initialPageParam: 1,
-    enabled: false,
   });
 
   const searchConversations =
