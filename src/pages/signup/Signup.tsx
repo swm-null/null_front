@@ -95,7 +95,6 @@ const Signup = () => {
           navigate(-1);
         });
       } else {
-        console.log(response);
         alert(response.exceptionMessage);
       }
     } catch {

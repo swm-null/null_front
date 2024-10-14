@@ -67,6 +67,8 @@ const DashboardPage = ({}: {}) => {
             memoSectionListData={tagMemosManager.memoSectionListByTag}
             addTagToStack={handleChildTagClick}
             handleMemoClick={handleMemoClickAndOpenModal}
+            fetchNextPage={tagMemosManager.fetchNextPage}
+            fetchNextPageForChildTag={tagMemosManager.fetchNextPageForChildTag}
           />
         </div>
       </div>

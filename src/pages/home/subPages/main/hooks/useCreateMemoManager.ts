@@ -20,18 +20,18 @@ const useCreateMemoManager = ({
 
   const useMemoStack = () => {
     const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
-      useInfiniteQuery<Api.paginationMemosResponse, Error>({
+      useInfiniteQuery<Api.paginationRecentMemosResponse, Error>({
         queryKey: ['recentMemo'],
         queryFn: async ({ pageParam = 1 }: any) => {
           const response = await Api.getRecentMemos(pageParam, 10);
-          if (!Api.isPaginationMemosResponse(response)) {
+          if (!Api.isRecentMemosResponse(response)) {
             throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
           }
           return response;
         },
         getNextPageParam: (lastPage) => {
-          return lastPage.totalPage > lastPage.currentPage
-            ? lastPage.currentPage + 1
+          return lastPage.total_page > lastPage.current_page
+            ? lastPage.current_page + 1
             : undefined;
         },
         initialPageParam: 1,

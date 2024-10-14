@@ -55,15 +55,15 @@ const useSearchMemoManager = ({
     const optimisticSearchConversation: Interface.MemoSearchConversation = {
       id: uuid_v4(),
       query: query,
-      createdAt: '',
-      searchMemosResponse: null,
+      created_at: '',
+      search_memos_response: null,
     };
     setSearchConversation(optimisticSearchConversation);
 
     return {
       conversationId: optimisticSearchConversation.id,
       conversationQuery: optimisticSearchConversation.query,
-      conversationCreatedAt: optimisticSearchConversation.createdAt,
+      conversationCreatedAt: optimisticSearchConversation.created_at,
     };
   };
 
@@ -86,9 +86,9 @@ const useSearchMemoManager = ({
       const updatedSearchConversation = {
         id: conversationId,
         query: conversationQuery,
-        createdAt: conversationCreatedAt,
-        searchMemosResponse: {
-          processedMessage: t('utils.auth.serverError'),
+        created_at: conversationCreatedAt,
+        search_memos_response: {
+          processed_message: t('utils.auth.serverError'),
           memos: [],
         },
       } as Interface.MemoSearchConversation;
@@ -110,8 +110,8 @@ const useSearchMemoManager = ({
       const updatedSearchConversation = {
         id: conversationId,
         query: conversationQuery,
-        createdAt: '',
-        searchMemosResponse: data,
+        created_at: '',
+        search_memos_response: data,
       } as Interface.MemoSearchConversation;
 
       setSearchConversation(updatedSearchConversation);

@@ -41,7 +41,7 @@ const AccordionSummary = ({
       />
       <p className="text-base font-semibold text-brown2">{data.query}</p>
       <p className="ml-auto text-sm font-regular text-brown2">
-        {formatDate(data.createdAt)}
+        {formatDate(data.created_at)}
       </p>
     </div>
   );

@@ -32,8 +32,8 @@ const SearchHistoryPage = ({}: {}) => {
       return response;
     },
     getNextPageParam: (lastPage) => {
-      return lastPage.totalPage > lastPage.currentPage
-        ? lastPage.currentPage + 1
+      return lastPage.total_page > lastPage.current_page
+        ? lastPage.current_page + 1
         : undefined;
     },
     initialPageParam: 1,
@@ -41,7 +41,7 @@ const SearchHistoryPage = ({}: {}) => {
 
   const searchConversations =
     !isLoading && data
-      ? data.pages.flatMap((page) => page.searchHistories ?? [])
+      ? data.pages.flatMap((page) => page.search_histories ?? [])
       : [];
 
   useEffect(() => {
