@@ -131,13 +131,13 @@ const useValidationManager = () => {
     email: { emailId: string; domain: string };
     password: string;
     confirmPassword: string;
-    name: string;
+    name?: string;
     code: string;
   }) =>
     isEmailValid(email) &&
     isPasswordValid(password) &&
     isCodeValid(code) &&
-    isNameValid(name) &&
+    (name ? isNameValid(name) : true) &&
     isConfirmPasswordValid(password, confirmPassword);
 
   const setEmailError = (message: string) => {

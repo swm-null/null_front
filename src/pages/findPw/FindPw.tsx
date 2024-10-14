@@ -4,7 +4,8 @@ import * as Components from 'pages/components';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils';
 import { isValidResponse, resetPassword, sendCode } from 'api';
-import { useValidationManager, useChangeHandlerManager } from './hooks';
+import { useChangeHandlerManager } from './hooks';
+import { useValidationManager } from 'pages/hooks';
 
 const FindPw = () => {
   const { t } = useTranslation();

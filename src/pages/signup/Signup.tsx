@@ -5,7 +5,8 @@ import { CodeSendForm } from './components';
 import { checkEmail, isValidResponse, sendCode, signup } from 'api';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils';
-import { useChangeHandlerManager, useValidationManager } from './hooks';
+import { useChangeHandlerManager } from './hooks';
+import { useValidationManager } from 'pages/hooks';
 
 const Signup = () => {
   const { t } = useTranslation();
