@@ -7,14 +7,14 @@ const CustomInput = ({
   setValue,
   hidden = false,
   useHiddenToggle = false,
-  errorMessage = '',
+  error,
 }: {
   label: string;
   value: string;
   setValue: (value: string) => void;
   hidden?: boolean;
   useHiddenToggle?: boolean;
-  errorMessage?: string;
+  error?: { flag: boolean; message: string };
 }) => {
   const [isHidden, setIsHidden] = useState(hidden);
 
@@ -53,7 +53,7 @@ const CustomInput = ({
             />
           ))}
       </div>
-      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+      {error?.flag && <p className="text-red-500 text-sm">{error.message}</p>}
     </div>
   );
 };

@@ -13,8 +13,14 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const [emailSuccess, setEmailSuccess] = useState('');
-  const [codeSuccess, setCodeSuccess] = useState('');
+  const [emailSuccess, setEmailSuccess] = useState({
+    flag: false,
+    message: '',
+  });
+  const [codeSuccess, setCodeSuccess] = useState({
+    flag: false,
+    message: '',
+  });
 
   const changeHandlerManager = useChangeHandlerManager();
   const validationManager = useValidationManager();
@@ -28,17 +34,20 @@ const Signup = () => {
 
       if (isValidResponse(response)) {
         setIsEmailChecked(true);
-        setEmailSuccess(t('signup.checkEmailSuccess'));
+        setEmailSuccess((prev) => ({
+          ...prev,
+          message: t('signup.checkEmailSuccess'),
+        }));
         validationManager.setEmailError('');
       } else if (Number(response?.exceptionCode) === 1004) {
-        setEmailSuccess('');
+        setEmailSuccess((prev) => ({ ...prev, flag: false }));
         validationManager.setEmailError(t('signup.emailAlreadyExists'));
       } else {
-        setEmailSuccess('');
+        setEmailSuccess((prev) => ({ ...prev, flag: false }));
         validationManager.setEmailError(t('signup.signupErrorMessage'));
       }
     } catch (error) {
-      setEmailSuccess('');
+      setEmailSuccess((prev) => ({ ...prev, flag: false }));
       validationManager.setEmailError(t('signup.signupErrorMessage'));
     }
   };
@@ -53,7 +62,10 @@ const Signup = () => {
       const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
       const response = await sendCode(emailString);
       if (isValidResponse(response)) {
-        setCodeSuccess(t('utils.auth.codeSent'));
+        setCodeSuccess({
+          flag: true,
+          message: t('utils.auth.codeSent'),
+        });
       } else {
         validationManager.setCodeError(t('utils.auth.codeSendFailed'));
       }
@@ -93,13 +105,13 @@ const Signup = () => {
             email={changeHandlerManager.form.email}
             buttonText={t('signup.checkEmail')}
             handleEmailChange={(newEmail) => {
-              setEmailSuccess('');
+              setEmailSuccess((prev) => ({ ...prev, flag: false }));
               changeHandlerManager.handleEmailChange(newEmail);
               validationManager.validateEmail(newEmail);
             }}
             handleClickButton={handleCheckEmail}
-            successMessage={emailSuccess}
-            errorMessage={validationManager.error.email}
+            success={emailSuccess}
+            error={validationManager.error.email}
           />
           <Components.HiddenInput
             label={t('utils.auth.password')}
@@ -108,7 +120,7 @@ const Signup = () => {
               changeHandlerManager.handlePasswordChange(value);
               validationManager.validatePassword(value);
             }}
-            errorMessage={validationManager.error.password}
+            error={validationManager.error.password}
           />
           <Components.HiddenInput
             label={t('utils.auth.confirmPassword')}
@@ -120,7 +132,7 @@ const Signup = () => {
                 value
               );
             }}
-            errorMessage={validationManager.error.confirmPassword}
+            error={validationManager.error.confirmPassword}
           />
           <Components.CustomInput
             label={t('signup.name')}
@@ -129,7 +141,7 @@ const Signup = () => {
               changeHandlerManager.handleNameChange(value);
               validationManager.validateName(value);
             }}
-            errorMessage={validationManager.error.name}
+            error={validationManager.error.name}
           />
           <CodeSendForm
             code={changeHandlerManager.form.code}
@@ -138,8 +150,8 @@ const Signup = () => {
               validationManager.validateCode(newCode);
             }}
             handleSendCode={handleSendCode}
-            successMessage={codeSuccess}
-            errorMessage={validationManager.error.code}
+            success={codeSuccess}
+            error={validationManager.error.code}
           />
         </div>
         <Components.LoginSignupButton
