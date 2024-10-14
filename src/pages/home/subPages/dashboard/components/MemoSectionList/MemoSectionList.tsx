@@ -1,24 +1,37 @@
 import * as Components from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
+import { v4 as uuid_v4 } from 'uuid';
+import { useRef } from 'react';
+import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 
 interface MemoSectionProps {
+  parentTag: Tag | null;
   memoSectionListData: Array<{
-    tag: Tag;
+    tag: Tag | null;
     childTags: Tag[] | null;
     memos: Memo[];
   }>;
-  addTagToStack: (tag: Tag) => void;
-  handleMemoClick: (memo: Memo, tag: Tag, index: number) => void;
+  addTagToStack: (tag: Tag | null) => void;
+  handleMemoClick: (memo: Memo, tag: Tag | null, index: number) => void;
+  fetchNextPage: () => void;
+  fetchNextPageForChildTag: (tag: Tag | null) => void;
 }
 
 const MemoSectionList = ({
+  parentTag,
   memoSectionListData,
   addTagToStack,
   handleMemoClick,
+  fetchNextPage,
+  fetchNextPageForChildTag,
 }: MemoSectionProps) => {
   const isMemoSectionEmpty = () => memoSectionListData.length === 0;
   const hasSingleMemoSection = () => memoSectionListData.length === 1;
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  useIntersectionObserver(observerRef, fetchNextPage);
 
   if (isMemoSectionEmpty()) {
     // 처음 유저가 서비스를 사용해서 메모와 태그가 아예 없는 경우
@@ -29,15 +42,24 @@ const MemoSectionList = ({
     const taggedMemo = memoSectionListData[0];
 
     return (
-      <div className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg">
+      <div
+        key={taggedMemo.tag?.id}
+        className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg"
+      >
         <Components.MemosList>
           {taggedMemo.memos.map((memo, index) => (
             <Components.UneditableMemo
-              key={index}
+              key={memo.id}
               memo={memo}
               shadow
               border
-              onClick={() => handleMemoClick(memo, taggedMemo.tag, index)}
+              onClick={() =>
+                handleMemoClick(
+                  memo,
+                  taggedMemo.tag ? taggedMemo?.tag : parentTag,
+                  index
+                )
+              }
             />
           ))}
         </Components.MemosList>
@@ -58,15 +80,17 @@ const MemoSectionList = ({
 
         return (
           <MemoSection
-            key={tag.id}
+            key={tag?.id || uuid_v4()}
             tag={tag}
             childTags={childTags}
             memos={memos}
             handleTagClick={() => addTagToStack(tag)}
             handleMemoClick={handleMemoClick}
+            fetchNextPage={() => fetchNextPageForChildTag(tag)}
           />
         );
       })}
+      <div ref={observerRef} />;
     </div>
   );
 };

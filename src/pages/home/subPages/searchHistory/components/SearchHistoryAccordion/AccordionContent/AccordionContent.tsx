@@ -19,10 +19,12 @@ const AccordionContent = ({
     }}
   >
     <div className="flex flex-col flex-1 gap-4 px-5 pb-5">
-      <p className="pr-2 pl-9 font-regular text-brown2">{data.answer?.text}</p>
-      {data.answer?.memos?.length !== 0 && (
+      <p className="pr-2 pl-9 font-regular text-brown2">
+        {data.search_memos_response?.processed_message}
+      </p>
+      {data.search_memos_response?.memos?.length !== 0 && (
         <MemosList>
-          {data.answer?.memos?.map((memo) => (
+          {data.search_memos_response?.memos?.map((memo) => (
             <UneditableMemo key={memo.id} memo={memo} />
           ))}
         </MemosList>

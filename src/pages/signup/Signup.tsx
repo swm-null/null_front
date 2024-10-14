@@ -78,9 +78,7 @@ const Signup = () => {
   ]);
 
   const handleSignUp = async () => {
-    if (isSignupButtonDisabled) {
-      return;
-    }
+    if (isSignupButtonDisabled) return;
 
     try {
       const response = await signup(
@@ -95,7 +93,6 @@ const Signup = () => {
           navigate(-1);
         });
       } else {
-        console.log(response);
         alert(response.exceptionMessage);
       }
     } catch {

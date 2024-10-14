@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Breadcrumbs } from '@mui/material';
 import { UneditableTag } from 'pages/home/subPages/components';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
+import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -13,6 +14,8 @@ interface CurrentTagPathProps {
   tags: Tag[];
   handleTagOrAllTagsClick: (tag: Tag | null) => void;
   handleChildTagClick: (tag: Tag) => void;
+  sortOption: SortOption;
+  setSortOption: (sortOption: SortOption) => void;
   invalidCharsPattern: RegExp;
 }
 
@@ -23,10 +26,10 @@ const CurrentTagPath = ({
   tags,
   handleTagOrAllTagsClick,
   handleChildTagClick,
+  sortOption,
+  setSortOption,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
-  const [sortOption, setSortOption] = useState<'latest' | 'oldest'>('latest');
-
   const handleAllTagsClick = () => {
     setTagStack([]);
     handleTagOrAllTagsClick(null);

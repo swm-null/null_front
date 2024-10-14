@@ -1,7 +1,10 @@
-import { useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
 import { Status } from '../interfaces';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
@@ -14,19 +17,35 @@ const useCreateMemoManager = ({
   setStatus: (status: Status) => void;
 }) => {
   const queryClient = useQueryClient();
-  const [page] = useState<number>(0);
 
   const useMemoStack = () => {
-    return useQuery({
-      queryKey: ['memos', page],
-      queryFn: async () => {
-        const response = await Api.getAllMemos(page);
-        if (!Api.isValidResponse(response)) {
-          throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
-        }
-        return response.memos;
-      },
-    });
+    const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+      useInfiniteQuery<Api.paginationRecentMemosResponse, Error>({
+        queryKey: ['recentMemo'],
+        queryFn: async ({ pageParam = 1 }: any) => {
+          const response = await Api.getRecentMemos(pageParam, 10);
+          if (!Api.isRecentMemosResponse(response)) {
+            throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
+          }
+          return response;
+        },
+        getNextPageParam: (lastPage) => {
+          return lastPage.total_page > lastPage.current_page
+            ? lastPage.current_page + 1
+            : undefined;
+        },
+        initialPageParam: 1,
+      });
+
+    const allMemos =
+      !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
+
+    return {
+      data: allMemos,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+    };
   };
 
   const tryCreateMemoAndSetStatus = async (
@@ -55,9 +74,9 @@ const useCreateMemoManager = ({
   };
 
   const createTemporaryMemo = async (content: string) => {
-    await queryClient.cancelQueries({ queryKey: ['memos', page] });
+    await queryClient.cancelQueries({ queryKey: ['recentMemo'] });
     const previousMemos =
-      queryClient.getQueryData<Interface.Memo[]>(['memos', page]) || [];
+      queryClient.getQueryData<Interface.Memo[]>(['recentMemo']) || [];
 
     const optimisticMemo: Interface.Memo = {
       id: uuid_v4(),
@@ -69,7 +88,7 @@ const useCreateMemoManager = ({
     };
 
     queryClient.setQueryData<Interface.Memo[]>(
-      ['memos', page],
+      ['recentMemo'],
       [optimisticMemo, ...previousMemos]
     );
 
@@ -81,12 +100,10 @@ const useCreateMemoManager = ({
     __: string,
     context: { optimisticMemoId: string } | undefined
   ) => {
-    // TODO: 태그 생성하다 오류나면 어떻게 처리하지? 왠지 front에서 메모 재생성하기 기능이 있어야할 것 같은데
-    // 지금은 그냥 안보이게 설정함
     const optimisticMemoId = context?.optimisticMemoId;
     if (optimisticMemoId) {
       queryClient.setQueryData<Interface.Memo[]>(
-        ['memos', page],
+        ['recentMemo'],
         (oldMemos) =>
           oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
       );
@@ -112,14 +129,14 @@ const useCreateMemoManager = ({
       };
 
       queryClient.setQueryData<Interface.Memo[]>(
-        ['memos', page],
+        ['recentMemo'],
         (oldMemos) =>
           oldMemos?.map((memo) =>
             memo.id === optimisticMemoId ? updatedMemo : memo
           ) || []
       );
     } else if (optimisticMemoId) {
-      queryClient.invalidateQueries({ queryKey: ['memos', page] });
+      queryClient.invalidateQueries({ queryKey: ['recentMemo'] });
     }
   };
 

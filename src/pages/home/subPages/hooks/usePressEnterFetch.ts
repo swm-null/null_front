@@ -4,9 +4,7 @@ import { KeyboardEvent } from 'react';
 // form 형식은 textarea 못 써서, keyboard 입력으로 직접 수행
 const usePressEnterFetch = ({ handleSubmit }: { handleSubmit: () => void }) => {
   const handlePressEnterFetch = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.nativeEvent.isComposing) {
-      return;
-    }
+    if (e.nativeEvent.isComposing) return;
 
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
