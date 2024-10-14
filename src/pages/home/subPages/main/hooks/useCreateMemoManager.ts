@@ -75,8 +75,6 @@ const useCreateMemoManager = ({
 
   const createTemporaryMemo = async (content: string) => {
     await queryClient.cancelQueries({ queryKey: ['recentMemo'] });
-    const previousMemos =
-      queryClient.getQueryData<Interface.Memo[]>(['recentMemo']) || [];
 
     const optimisticMemo: Interface.Memo = {
       id: uuid_v4(),
@@ -87,10 +85,15 @@ const useCreateMemoManager = ({
       tags: [],
     };
 
-    queryClient.setQueryData<Interface.Memo[]>(
-      ['recentMemo'],
-      [optimisticMemo, ...previousMemos]
-    );
+    queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+      return {
+        pages: oldData?.pages.map((page: any) => ({
+          ...page,
+          memos: [optimisticMemo, ...page?.memos],
+        })),
+        pageParams: oldData?.pageParams as any,
+      };
+    });
 
     return { optimisticMemoId: optimisticMemo.id };
   };
@@ -128,13 +131,17 @@ const useCreateMemoManager = ({
         tags: data.tags,
       };
 
-      queryClient.setQueryData<Interface.Memo[]>(
-        ['recentMemo'],
-        (oldMemos) =>
-          oldMemos?.map((memo) =>
-            memo.id === optimisticMemoId ? updatedMemo : memo
-          ) || []
-      );
+      queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+        return {
+          pages: oldData?.pages.map((page: any) => ({
+            ...page,
+            memos: page?.memos.map((memo: any) =>
+              memo.id === optimisticMemoId ? updatedMemo : memo
+            ),
+          })),
+          pageParams: oldData?.pageParams as any,
+        };
+      });
     } else if (optimisticMemoId) {
       queryClient.invalidateQueries({ queryKey: ['recentMemo'] });
     }
