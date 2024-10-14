@@ -3,29 +3,32 @@ import { Header } from 'pages/home/subPages/components';
 import { SearchScrollView } from './components';
 import { SearchHistoryAccordion } from './components/SearchHistoryAccordion';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import * as Api from 'api';
 import { v4 as uuid_v4 } from 'uuid';
+import { debounceTime, Subject, switchMap } from 'rxjs';
 
 const SEARCH_HISTORY_LIMIT = 15;
 
+const input$ = new Subject();
 const SearchHistoryPage = ({}: {}) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const { data, fetchNextPage, isLoading } = useInfiniteQuery<
+  const { data, fetchNextPage, isLoading, refetch } = useInfiniteQuery<
     Api.paginationSearchHistoriesResponse,
     Error
   >({
-    queryKey: ['searchHistory', message], // message도 의존성으로 포함
+    queryKey: ['searchHistory', message],
     queryFn: async ({ pageParam = 1 }: any) => {
       const response = await Api.getSearchHistories({
         query: message,
         searchHistoryPage: pageParam,
         searchHistoryLimit: SEARCH_HISTORY_LIMIT,
       });
+
       if (!Api.isGetSearchHistories(response)) {
         throw new Error('메모 검색 기록을 가져오는 중 오류가 발생했습니다.');
       }
@@ -37,12 +40,20 @@ const SearchHistoryPage = ({}: {}) => {
         : undefined;
     },
     initialPageParam: 1,
+    enabled: false,
   });
 
   const searchConversations =
     !isLoading && data
       ? data.pages.flatMap((page) => page.search_histories ?? [])
       : [];
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newMessage = e.target.value;
+    setMessage(newMessage);
+    console.log(newMessage);
+    input$.next(newMessage);
+  };
 
   useEffect(() => {
     if (!observerRef.current) {
@@ -67,13 +78,24 @@ const SearchHistoryPage = ({}: {}) => {
     };
   }, [observerRef.current, fetchNextPage]);
 
-  const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
-  };
+  const handleSubmit = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
-  const handleSubmit = (message: string) => {
-    console.log(message);
-  };
+  useEffect(() => {
+    const subscription = input$
+      .pipe(
+        debounceTime(300),
+        switchMap(() => {
+          return refetch();
+        })
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [refetch]);
 
   return (
     <div className="flex flex-col flex-1 h-screen bg-custom-gradient-basic">
@@ -87,7 +109,7 @@ const SearchHistoryPage = ({}: {}) => {
               value={message}
               onChange={handleMessageChange}
               placeholder={t('pages.searchHistory.inputPlaceholder')}
-              onSubmit={() => handleSubmit(message)}
+              onSubmit={handleSubmit}
             />
           }
         >

@@ -92,7 +92,6 @@ const useSelectedTagMemosManager = (
     const { currentPage, totalPage } = childTagPageData;
 
     if (currentPage >= totalPage) {
-      // 이미 마지막 페이지인 경우 더 이상 요청하지 않음
       return;
     }
 
@@ -119,13 +118,11 @@ const useSelectedTagMemosManager = (
       };
     });
 
-    // 자식 태그에 대한 새 데이터를 기존 memoSectionListByTag에 추가
     queryClient.setQueryData(
       ['memos', selectedTag?.id, MEMO_LIMIT, sortOption],
       (prev: any) => {
-        if (!prev) return prev; // 기존 데이터가 없는 경우
+        if (!prev) return prev;
 
-        // 자식 태그의 메모 업데이트
         return {
           ...prev,
           pages: prev.pages.flatMap((page: any) => {
@@ -160,7 +157,6 @@ const useSelectedTagMemosManager = (
     );
   };
 
-  // 메모 상태 업데이트
   const updateMemoState = (
     updateFn: (
       prev: { tag: Tag; memos: Memo[] }[]

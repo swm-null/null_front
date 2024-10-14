@@ -7,8 +7,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const MAX_SEARCH_QUERIES = 100;
-
 const useSearchMemoManager = ({
   status,
   setStatus,
@@ -115,8 +113,6 @@ const useSearchMemoManager = ({
       } as Interface.MemoSearchConversation;
 
       setSearchConversation(updatedSearchConversation);
-      // FIXME: searchHistory api연동되면 localhost에 저장하는 이 메소드 삭제.
-      saveSearchHistory(updatedSearchConversation);
 
       queryClient.setQueryData<Interface.MemoSearchConversation[]>(
         ['searchHistory'],
@@ -128,21 +124,6 @@ const useSearchMemoManager = ({
     } else if (conversationId) {
       queryClient.invalidateQueries({ queryKey: ['searchHistory'] });
     }
-  };
-
-  const saveSearchHistory = (
-    newSearchAnswer: Interface.MemoSearchConversation
-  ) => {
-    const searchConversations = JSON.parse(
-      localStorage.getItem('search_queries') || '[]'
-    );
-    searchConversations.unshift(newSearchAnswer);
-
-    if (searchConversations.length > MAX_SEARCH_QUERIES) {
-      searchConversations.length = MAX_SEARCH_QUERIES;
-    }
-
-    localStorage.setItem('search_queries', JSON.stringify(searchConversations));
   };
 
   const { mutateAsync } = useMutation<
