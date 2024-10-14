@@ -16,18 +16,11 @@ const FindPw = () => {
   const changeHandlerManager = useChangeHandlerManager();
   const validationManager = useValidationManager();
 
-  const isValid =
-    validationManager.isEmailValid(changeHandlerManager.email) &&
-    validationManager.isPasswordValid(changeHandlerManager.password.password) &&
-    validationManager.isCodeValid(changeHandlerManager.code) &&
-    validationManager.isConfirmPasswordValid(
-      changeHandlerManager.password.password,
-      changeHandlerManager.password.confirmPassword
-    );
+  const isValid = validationManager.isValid(changeHandlerManager.form);
 
   const handleSendCode = async () => {
     try {
-      const emailString = `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`;
+      const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
       const response = await sendCode(emailString);
       if (isValidResponse(response)) {
         setEmailSuccess(t('utils.auth.codeSent'));
@@ -44,10 +37,10 @@ const FindPw = () => {
 
     try {
       const response = await resetPassword(
-        `${changeHandlerManager.email.emailId}@${changeHandlerManager.email.domain}`,
-        changeHandlerManager.password.password,
-        changeHandlerManager.password.confirmPassword,
-        changeHandlerManager.code
+        `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`,
+        changeHandlerManager.form.password,
+        changeHandlerManager.form.confirmPassword,
+        changeHandlerManager.form.code
       );
       if (isValidResponse(response)) {
         alert(t('findPw.findPwSuccess')).then(() => {
@@ -67,7 +60,7 @@ const FindPw = () => {
         <>
           <InfoText />
           <Components.EmailButtonForm
-            email={changeHandlerManager.email}
+            email={changeHandlerManager.form.email}
             buttonText={t('findPw.sendCode')}
             handleEmailChange={(newEmail) => {
               setEmailSuccess('');
@@ -84,7 +77,7 @@ const FindPw = () => {
           <div className="flex flex-col gap-2">
             <Components.CustomInput
               label={t('utils.auth.code')}
-              value={changeHandlerManager.code}
+              value={changeHandlerManager.form.code}
               setValue={(value) => {
                 changeHandlerManager.handleCodeChange(value);
                 validationManager.validateCode(value);
@@ -93,7 +86,7 @@ const FindPw = () => {
             />
             <Components.HiddenInput
               label={t('utils.auth.password')}
-              value={changeHandlerManager.password.password}
+              value={changeHandlerManager.form.password}
               setValue={(value) => {
                 changeHandlerManager.handlePasswordChange(value);
                 validationManager.validatePassword(value);
@@ -102,11 +95,11 @@ const FindPw = () => {
             />
             <Components.HiddenInput
               label={t('utils.auth.confirmPassword')}
-              value={changeHandlerManager.password.confirmPassword}
+              value={changeHandlerManager.form.confirmPassword}
               setValue={(value) => {
                 changeHandlerManager.handleConfirmPasswordChange(value);
                 validationManager.validateConfirmPassword(
-                  changeHandlerManager.password.password,
+                  changeHandlerManager.form.password,
                   value
                 );
               }}

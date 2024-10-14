@@ -77,16 +77,29 @@ const useValidation = () => {
     }
   };
 
+  const isValid = ({
+    email,
+    password,
+    confirmPassword,
+    code,
+  }: {
+    email: { emailId: string; domain: string };
+    password: string;
+    confirmPassword: string;
+    code: string;
+  }) =>
+    isEmailValid(email) &&
+    isPasswordValid(password) &&
+    isCodeValid(code) &&
+    isConfirmPasswordValid(password, confirmPassword);
+
   return {
     error,
     validateEmail,
     validatePassword,
     validateConfirmPassword,
     validateCode,
-    isEmailValid,
-    isPasswordValid,
-    isConfirmPasswordValid,
-    isCodeValid,
+    isValid,
   };
 };
 

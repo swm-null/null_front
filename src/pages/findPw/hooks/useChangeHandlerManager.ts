@@ -34,9 +34,12 @@ const useChangeHandler = () => {
   };
 
   return {
-    email,
-    password,
-    code,
+    form: {
+      email,
+      password: password.password,
+      confirmPassword: password.confirmPassword,
+      code,
+    },
     handleEmailChange,
     handlePasswordChange,
     handleConfirmPasswordChange,
