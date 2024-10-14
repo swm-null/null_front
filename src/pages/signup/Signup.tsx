@@ -78,9 +78,7 @@ const Signup = () => {
   ]);
 
   const handleSignUp = async () => {
-    if (isSignupButtonDisabled) {
-      return;
-    }
+    if (isSignupButtonDisabled) return;
 
     try {
       const response = await signup(

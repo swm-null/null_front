@@ -5,9 +5,7 @@ const useIntersectionObserver = (
   fetchNextPage: () => void
 ) => {
   useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
+    if (!ref.current) return;
 
     const observer = new IntersectionObserver(
       (entries) => {

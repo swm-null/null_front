@@ -31,21 +31,12 @@ const useSelectedTagMemosManager = (
       [selectedTag, MEMO_LIMIT, sortOption]
     ),
     queryFn: async ({ pageParam = 1 }: any) => {
-      const response =
-        selectedTag !== null
-          ? await Api.getDashboardDataByTag({
-              parentTagId: selectedTag.id,
-              tagPage: pageParam,
-              tagLimit: TAG_LIMIT,
-              memoLimit: MEMO_LIMIT,
-              sortOrder: sortOption,
-            })
-          : await Api.getDashboardDataByTag({
-              tagPage: pageParam,
-              tagLimit: TAG_LIMIT,
-              memoLimit: MEMO_LIMIT,
-              sortOrder: sortOption,
-            });
+      const response = await Api.getDashboardDataByTag({
+        tagPage: pageParam,
+        tagLimit: TAG_LIMIT,
+        memoLimit: MEMO_LIMIT,
+        sortOrder: sortOption,
+      });
 
       if (!Api.isGetDashboardData(response)) {
         throw new Error('대시보드 데이터를 가져오는 중 오류가 발생했습니다.');
@@ -91,9 +82,7 @@ const useSelectedTagMemosManager = (
 
     const { currentPage, totalPage } = childTagPageData;
 
-    if (currentPage >= totalPage) {
-      return;
-    }
+    if (currentPage >= totalPage) return;
 
     const nextPage = currentPage + 1;
 
