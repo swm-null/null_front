@@ -92,7 +92,9 @@ const MemoSectionList = ({
             childTags={childTags}
             memos={memos}
             handleTagClick={() => addTagToStack(tag)}
-            handleMemoClick={handleMemoClick}
+            handleMemoClick={(memo: Memo, index: number) =>
+              handleMemoClick(memo, tag ? tag : parentTag, index)
+            }
             fetchNextPage={() => fetchNextPageForChildTag(tag)}
           />
         );

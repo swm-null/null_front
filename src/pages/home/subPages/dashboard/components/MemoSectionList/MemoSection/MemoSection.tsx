@@ -9,7 +9,7 @@ interface MemoSectionProps {
   childTags: Tag[];
   memos: Memo[];
   handleTagClick: () => void;
-  handleMemoClick: (memo: Memo, tag: Tag | null, index: number) => void;
+  handleMemoClick: (memo: Memo, index: number) => void;
   fetchNextPage: () => void;
 }
 
@@ -53,7 +53,7 @@ const MemoSection = ({
                 memo={memo}
                 shadow
                 border
-                onClick={() => handleMemoClick(memo, tag, index)}
+                onClick={() => handleMemoClick(memo, index)}
               />
             </div>
           ))}
