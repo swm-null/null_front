@@ -12,8 +12,14 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
+  const removeAllImage = useCallback(() => {
+    setImages([]);
+  }, []);
+
   return (
-    <ImageListContext.Provider value={{ images, addImage, removeImage }}>
+    <ImageListContext.Provider
+      value={{ images, addImage, removeImage, removeAllImage }}
+    >
       {children}
     </ImageListContext.Provider>
   );

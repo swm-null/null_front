@@ -5,12 +5,21 @@ import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
 import ImageList from './ImageList/ImageList';
 import { ImageListContext } from 'utils';
+import { isFileResponse, uploadFile } from 'api';
+import {
+  catchError,
+  firstValueFrom,
+  forkJoin,
+  from,
+  of,
+  map as rxjsMap,
+} from 'rxjs';
 
 interface MemoCreateTextAreaProps {
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: () => void;
+  onSubmit: (images: string[]) => void;
 }
 
 const MemoCreateTextArea = ({
@@ -19,13 +28,44 @@ const MemoCreateTextArea = ({
   onChange,
   onSubmit,
 }: MemoCreateTextAreaProps) => {
-  const { images, addImage, removeImage } = useContext(ImageListContext);
+  const { images, addImage, removeImage, removeAllImage } =
+    useContext(ImageListContext);
 
   const [focus, setFocus] = useState(false);
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     setFocus(false);
-    onSubmit();
+    const image_urls = await get_image_urls(images);
+    onSubmit(image_urls);
+    removeAllImage();
   };
+
+  const get_image_urls = async (images: File[]): Promise<string[]> => {
+    if (images.length === 0) {
+      return [];
+    }
+
+    const uploadObservables = images.map((image) => {
+      return from(uploadFile(image)).pipe(
+        rxjsMap((response) => {
+          if (isFileResponse(response)) return { success: true, response };
+          return { success: false, response: { url: '' } };
+        }),
+        catchError(() => of({ success: false, response: { url: '' } }))
+      );
+    });
+
+    const results = await firstValueFrom(forkJoin(uploadObservables));
+    const allSuccessful = results.every((result) => result.success);
+
+    if (allSuccessful) {
+      const uploadedUrls = results.map((result) => result.response.url);
+      return uploadedUrls;
+    } else {
+      throw new Error('파일 업로드에 문제가 생겼습니다.');
+    }
+  };
+
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleEnterWithCtrl: handleSubmit,
   });

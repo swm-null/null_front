@@ -38,9 +38,9 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     }
   };
 
-  const handleSubmit = (message: string) => {
+  const handleSubmit = (message: string, images?: string[]) => {
     if (isCreateMode()) {
-      createMemoManager.tryCreateMemoAndSetStatus(message, setMessage);
+      createMemoManager.tryCreateMemoAndSetStatus(message, setMessage, images);
     } else {
       searchMemoManager.trySearchMemoAndSetStatus(message, setMessage);
     }
@@ -63,7 +63,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         value={message}
         onChange={handleMessageChange}
         placeholder={t('pages.create.inputPlaceholder')}
-        onSubmit={() => handleSubmit(message)}
+        onSubmit={(images: string[]) => handleSubmit(message, images)}
       />
       <Component.CreatedMemoList
         memos={createMemoManager.useMemoStack().data}
