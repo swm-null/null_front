@@ -54,7 +54,6 @@ const MemoCreateTextArea = ({
     <div
       className={`flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 
         bg-[#FFF6E3CC] border-[1px] border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg`}
-      onFocus={() => setFocus(true)}
       onBlur={(e) => {
         if (
           containerRef.current &&
@@ -81,6 +80,7 @@ const MemoCreateTextArea = ({
           onChange={onChange}
           placeholder={placeholder}
           onKeyDown={handlePressEnterFetch}
+          onFocus={() => setFocus(true)}
           minRows={1}
           maxRows={20}
         />
