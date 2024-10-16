@@ -1,8 +1,10 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { usePressEnterFetch } from 'pages/home/subPages/hooks';
 import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
+import ImageList from './ImageList/ImageList';
+import { ImageListContext } from 'utils';
 
 interface MemoCreateTextAreaProps {
   value: string;
@@ -21,6 +23,8 @@ const MemoCreateTextArea = ({
   onMicButtonClick,
   onCameraButtonClick,
 }: MemoCreateTextAreaProps) => {
+  const { images, addImage, removeImage } = useContext(ImageListContext);
+
   const [focus, setFocus] = useState(false);
   const handleSubmit = () => {
     setFocus(false);
@@ -30,20 +34,26 @@ const MemoCreateTextArea = ({
     handleEnterWithCtrl: handleSubmit,
   });
 
+  const hiddenTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [isMultiline, setIsMultiline] = useState(false);
   const [hiddenTextareaWidth, setHiddenTextareaWidth] = useState<number | null>(
     null
   );
 
-  const hiddenTextareaRef = useRef<HTMLTextAreaElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const clipboardData = e.clipboardData;
+    const items = clipboardData.items;
 
-  const handleBlur = (e: React.FocusEvent) => {
-    if (
-      containerRef.current &&
-      !containerRef.current.contains(e.relatedTarget)
-    ) {
-      setFocus(false);
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        const blob = item.getAsFile();
+        if (blob) {
+          addImage(blob);
+          break;
+        }
+      }
     }
   };
 
@@ -55,16 +65,25 @@ const MemoCreateTextArea = ({
       const maxLines = Math.floor(
         hiddenTextareaRef.current.clientHeight / lineHeight
       );
-      setIsMultiline(maxLines > 1);
+      setIsMultiline(maxLines > 1 || images.length >= 1);
       setHiddenTextareaWidth(containerRef.current.clientWidth);
     }
-  }, [value]);
+  }, [value, images]);
 
   return (
     <div
       className={`flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 
         bg-[#FFF6E3CC] border-[1px] border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg`}
-      onBlur={handleBlur}
+      onFocus={() => setFocus(true)}
+      onBlur={(e) => {
+        if (
+          containerRef.current &&
+          !containerRef.current.contains(e.relatedTarget)
+        ) {
+          setFocus(false);
+        }
+      }}
+      onPaste={handlePaste}
     >
       <HiddenTextarea
         value={value}
@@ -83,12 +102,12 @@ const MemoCreateTextArea = ({
           onChange={onChange}
           placeholder={placeholder}
           onKeyDown={handlePressEnterFetch}
-          onFocus={() => setFocus(true)}
           minRows={1}
           maxRows={20}
         />
+        <ImageList images={images} removeImage={removeImage} />
         <IconButtons
-          focus={focus}
+          submitAvailable={focus || isMultiline}
           onMicButtonClick={onMicButtonClick}
           onCameraButtonClick={onCameraButtonClick}
           onSubmitButtonClick={handleSubmit}

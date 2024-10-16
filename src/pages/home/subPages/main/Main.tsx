@@ -1,12 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDropzone } from 'react-dropzone';
 import * as Component from './components';
 import { Mode, Status } from './interfaces';
 import { useCreateMemoManager, useSearchMemoManager } from './hooks';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
+import { ImageListContext } from 'utils';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
+  const { addImage } = useContext(ImageListContext);
+
   const [message, setMessage] = useState('');
   const [mode, setMode] = useState<Mode>('create');
   const [status, setStatus] = useState<Status>('default');
@@ -96,17 +100,41 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     </>
   );
 
+  const onDrop = (acceptedFiles: File[]) => {
+    if (isCreateMode() && acceptedFiles.length > 0) {
+      acceptedFiles.map((file) => {
+        addImage(file);
+      });
+    }
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': [],
+    },
+    noClick: true,
+  });
+
   return (
-    <div className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center">
-      <div className="max-w-[740px] flex flex-col flex-1 text-gray3">
-        <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
-        <div className="overflow-scroll no-scrollbar p-4 gap-4 flex flex-col">
-          {isCreateMode()
-            ? createModeContent
-            : isSearchMode() && searchModeContent}
+    <>
+      <input {...getInputProps()} />
+      <div
+        className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center"
+        {...getRootProps()}
+      >
+        <div className="max-w-[740px] flex flex-col flex-1 text-gray3">
+          <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
+          <div
+            className={`overflow-scroll no-scrollbar p-4 gap-4 flex flex-col`}
+          >
+            {isCreateMode()
+              ? createModeContent
+              : isSearchMode() && searchModeContent}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
