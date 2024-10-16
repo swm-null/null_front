@@ -5,7 +5,7 @@ import {
   Tag,
 } from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
-import { errorHandler, API_BASE_URL, getMethodName } from '../utils';
+import { errorHandler, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
 import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 
@@ -40,7 +40,7 @@ export const createMemo = async (
   inputImageUrls?: string[]
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `${API_BASE_URL}/memo`;
+  const endpoint = `/memo`;
   try {
     const response = await refreshableApi.post(
       endpoint,
