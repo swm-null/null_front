@@ -38,6 +38,15 @@ const MemoCreateTextArea = ({
   const hiddenTextareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleBlur = (e: React.FocusEvent) => {
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(e.relatedTarget)
+    ) {
+      setFocus(false);
+    }
+  };
+
   useEffect(() => {
     if (hiddenTextareaRef.current && containerRef.current) {
       const lineHeight = parseFloat(
@@ -55,14 +64,7 @@ const MemoCreateTextArea = ({
     <div
       className={`flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 
         bg-[#FFF6E3CC] border-[1px] border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg`}
-      onBlur={(e) => {
-        if (
-          containerRef.current &&
-          !containerRef.current.contains(e.relatedTarget)
-        ) {
-          setFocus(false);
-        }
-      }}
+      onBlur={handleBlur}
     >
       <HiddenTextarea
         value={value}
