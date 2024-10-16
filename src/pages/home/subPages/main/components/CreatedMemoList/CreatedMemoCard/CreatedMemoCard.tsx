@@ -7,28 +7,6 @@ import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 
-const CreatedMemoCardHeader = ({
-  updatedAt,
-  handleDeleteMemo,
-  children,
-}: {
-  updatedAt: string;
-  handleDeleteMemo: () => void;
-  children: ReactNode;
-}) => {
-  return (
-    <div className="flex">
-      <div className="flex gap-2 items-center mr-auto">{children}</div>
-      <div className="flex gap-2 items-center">
-        <p className="text-[#6A5344] select-none">{updatedAt}</p>
-        <button className="rounded-full">
-          <DeleteIcon onClick={handleDeleteMemo} />
-        </button>
-      </div>
-    </div>
-  );
-};
-
 interface CreatedMemoCardProps {
   memo: Memo;
   softDeleteMemo?: (memoId: string) => void;
@@ -77,7 +55,37 @@ const CreatedMemoCard = ({
             <TagManager tags={tags} setTags={setTags} />
           )}
         </CreatedMemoCardHeader>
-        <MemoText message={message} setMessage={setMessage} />
+        <div className="flex flex-row gap-9">
+          {memo.image_urls && memo.image_urls.length > 0 && (
+            <img
+              src={memo.image_urls[0]}
+              className="w-60 h-60 rounded-2xl object-cover"
+            />
+          )}
+          <MemoText message={message} setMessage={setMessage} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CreatedMemoCardHeader = ({
+  updatedAt,
+  handleDeleteMemo,
+  children,
+}: {
+  updatedAt: string;
+  handleDeleteMemo: () => void;
+  children: ReactNode;
+}) => {
+  return (
+    <div className="flex">
+      <div className="flex gap-2 items-center mr-auto">{children}</div>
+      <div className="flex gap-2 items-center">
+        <p className="text-[#6A5344] select-none">{updatedAt}</p>
+        <button className="rounded-full">
+          <DeleteIcon onClick={handleDeleteMemo} />
+        </button>
       </div>
     </div>
   );
