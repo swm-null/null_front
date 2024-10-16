@@ -11,8 +11,6 @@ interface MemoCreateTextAreaProps {
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
-  onMicButtonClick: () => void;
-  onCameraButtonClick: () => void;
 }
 
 const MemoCreateTextArea = ({
@@ -20,8 +18,6 @@ const MemoCreateTextArea = ({
   placeholder,
   onChange,
   onSubmit,
-  onMicButtonClick,
-  onCameraButtonClick,
 }: MemoCreateTextAreaProps) => {
   const { images, addImage, removeImage } = useContext(ImageListContext);
 
@@ -54,6 +50,28 @@ const MemoCreateTextArea = ({
           break;
         }
       }
+    }
+  };
+
+  const handleMicButtonClick = () => {
+    // TODO: 마이크 버튼 클릭시 하는 메소드 생기면 추가
+  };
+
+  const handleCameraButtonClick = () => {
+    const inputFile = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    if (inputFile) {
+      inputFile.click();
+    }
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const blob = files[0];
+      addImage(blob);
     }
   };
 
@@ -108,8 +126,9 @@ const MemoCreateTextArea = ({
         <ImageList images={images} removeImage={removeImage} />
         <IconButtons
           submitAvailable={focus || isMultiline}
-          onMicButtonClick={onMicButtonClick}
-          onCameraButtonClick={onCameraButtonClick}
+          onMicButtonClick={handleMicButtonClick}
+          onCameraButtonClick={handleCameraButtonClick}
+          onFileChange={handleFileChange}
           onSubmitButtonClick={handleSubmit}
         />
       </div>

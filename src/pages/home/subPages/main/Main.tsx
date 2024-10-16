@@ -46,14 +46,6 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     }
   };
 
-  const handleMicButtonClick = () => {
-    // TODO: 음성 인식 기능이 추가되면 코드 작성하기
-  };
-
-  const handleCameraButtonClick = () => {
-    // TODO: camera OCR 기능이 추가되면 코드 작성하기
-  };
-
   useEffect(() => {
     setStatus('default'); // mode가 변경될 때마다 status를 초기화
   }, [mode]);
@@ -72,8 +64,6 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         onChange={handleMessageChange}
         placeholder={t('pages.create.inputPlaceholder')}
         onSubmit={() => handleSubmit(message)}
-        onMicButtonClick={handleMicButtonClick}
-        onCameraButtonClick={handleCameraButtonClick}
       />
       <Component.CreatedMemoList
         memos={createMemoManager.useMemoStack().data}

@@ -11,9 +11,9 @@ const ImageList = ({ images, removeImage }: ImageListProps) => {
   return (
     <div className="w-full flex gap-5">
       {images.map((image, index) => (
-        <div key={index} className="relative h-24">
+        <div key={index} className="relative h-24 max-w-28">
           <img
-            src={URL.createObjectURL(image)} // 수정된 부분
+            src={URL.createObjectURL(image)}
             alt="Pasted content"
             className="h-full max-w-full object-contain rounded-lg"
           />
