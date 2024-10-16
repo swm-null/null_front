@@ -46,3 +46,11 @@ code {
 .placeholder-custom::placeholder {
   color: #6a5344cc;
 }
+
+.flickity-page-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
