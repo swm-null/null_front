@@ -1,7 +1,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
-import { CameraIcon, MicIcon, RightArrowIcon } from 'assets/icons';
 import { usePressEnterFetch } from 'pages/home/subPages/hooks';
+import { IconButtons } from './IconButtons';
+import { HiddenTextarea } from './HiddenTextarea';
 
 interface MemoCreateTextAreaProps {
   value: string;
@@ -94,65 +95,5 @@ const MemoCreateTextArea = ({
     </div>
   );
 };
-
-const HiddenTextarea = ({
-  value,
-  hiddenTextareaWidth,
-  hiddenTextareaRef,
-}: {
-  value: string;
-  hiddenTextareaWidth: number | null;
-  hiddenTextareaRef: React.RefObject<HTMLTextAreaElement>;
-}) => (
-  <div
-    className="flex flex-1"
-    style={{
-      position: 'absolute',
-      top: '9999px',
-      width: hiddenTextareaWidth ? `${hiddenTextareaWidth}px` : 'auto',
-    }}
-  >
-    <TextareaAutosize
-      className="flex-1 focus:outline-none resize-none min-h-9 content-center 
-        text-[#111111] bg-transparent placeholder-custom"
-      value={value}
-      ref={hiddenTextareaRef}
-    />
-  </div>
-);
-
-const IconButtons = ({
-  focus,
-  onMicButtonClick,
-  onCameraButtonClick,
-  onSubmitButtonClick,
-}: {
-  focus: boolean;
-  onMicButtonClick?: () => void;
-  onCameraButtonClick?: () => void;
-  onSubmitButtonClick?: () => void;
-}) => (
-  <div className="flex justify-end gap-1 items-center">
-    <MicIcon
-      tabIndex={0}
-      className="w-7 h-7 cursor-pointer"
-      onClick={onMicButtonClick}
-    />
-    <CameraIcon
-      tabIndex={0}
-      className="w-7 h-7 cursor-pointer"
-      onClick={onCameraButtonClick}
-    />
-    {focus && (
-      <RightArrowIcon
-        tabIndex={0}
-        className="w-7 h-7 mx-1 p-1 cursor-pointer rounded-full bg-[#F4CDB1]"
-        onClick={() => {
-          onSubmitButtonClick && onSubmitButtonClick();
-        }}
-      />
-    )}
-  </div>
-);
 
 export default MemoCreateTextArea;
