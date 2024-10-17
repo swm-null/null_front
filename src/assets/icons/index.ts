@@ -21,3 +21,4 @@ export { default as EditIcon } from './edit.svg?react';
 export { default as PinIcon } from './pin.svg?react';
 export { default as CheckedIcon } from './checked.svg?react';
 export { default as NotCheckedIcon } from './notChecked.svg?react';
+export { default as RightArrowIcon } from './rightArrow.svg?react';
