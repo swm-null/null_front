@@ -7,7 +7,7 @@ import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 import Flickity from 'react-flickity-component';
-import 'flickity/css/flickity.css'; // Flickity 기본 스타일
+import 'flickity/css/flickity.css';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -43,7 +43,7 @@ const CreatedMemoCard = ({
 
   const flickityOptions = {
     prevNextButtons: false,
-    pageDots: true,
+    pageDots: memo.image_urls && memo.image_urls.length > 1 ? true : undefined,
     wrapAround: true,
   };
 
