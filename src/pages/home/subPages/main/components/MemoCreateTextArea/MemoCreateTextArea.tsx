@@ -146,7 +146,7 @@ const IconButtons = ({
     {focus && (
       <RightArrowIcon
         tabIndex={0}
-        className="w-7 h-7 mx-1 p-1 cursor-pointer -rotate-90 rounded-full bg-[#F4CDB1]"
+        className="w-7 h-7 mx-1 p-1 cursor-pointer rounded-full bg-[#F4CDB1]"
         onClick={() => {
           onSubmitButtonClick && onSubmitButtonClick();
         }}
