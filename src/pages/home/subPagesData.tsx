@@ -1,5 +1,6 @@
 import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
+import { ImageListProvider } from 'utils';
 
 export const getSubPagesData = (
   setCurrentPage: (page: string) => void
@@ -8,7 +9,11 @@ export const getSubPagesData = (
     {
       path: '',
       element: (
-        <Page.Main navigateToHistory={() => setCurrentPage('searchHistory')} />
+        <ImageListProvider>
+          <Page.Main
+            navigateToHistory={() => setCurrentPage('searchHistory')}
+          />
+        </ImageListProvider>
       ),
       title: 'main',
     },
