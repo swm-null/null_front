@@ -1,4 +1,5 @@
 import { TextareaAutosize } from '@mui/material';
+import { IconButtons } from '../IconButtons';
 
 const HiddenTextarea = ({
   value,
@@ -22,6 +23,12 @@ const HiddenTextarea = ({
         text-[#111111] bg-transparent placeholder-custom"
       value={value}
       ref={hiddenTextareaRef}
+    />
+    <IconButtons
+      focus={true}
+      onMicButtonClick={() => {}}
+      onCameraButtonClick={() => {}}
+      onSubmitButtonClick={() => {}}
     />
   </div>
 );
