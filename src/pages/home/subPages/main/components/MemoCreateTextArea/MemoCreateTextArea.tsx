@@ -27,7 +27,7 @@ const MemoCreateTextArea = ({
     onSubmit();
   };
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleCtrlSubmit: handleSubmit,
+    handleEnterWithCtrl: handleSubmit,
   });
 
   const [isMultiline, setIsMultiline] = useState(false);
