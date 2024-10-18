@@ -1,49 +1,64 @@
 import { CameraIcon, MicIcon, RightArrowIcon } from 'assets/icons';
-import { ChangeEvent, MouseEvent } from 'react';
+import { ChangeEvent, useContext } from 'react';
+import { ImageListContext } from 'utils';
 
 const IconButtons = ({
   submitAvailable,
   onMicButtonClick,
-  onCameraButtonClick,
-  onFileChange,
   onSubmitButtonClick,
 }: {
   submitAvailable: boolean;
   onMicButtonClick?: () => void;
-  onCameraButtonClick?: (e: MouseEvent<SVGSVGElement>) => void; // 타입 변경
-  onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onSubmitButtonClick?: () => void;
-}) => (
-  <div className="flex justify-end gap-1 items-center">
-    <MicIcon
-      tabIndex={0}
-      className="w-7 h-7 cursor-pointer"
-      onClick={onMicButtonClick}
-    />
-    <form>
-      <input
-        title="input-file"
-        type="file"
-        accept="image/*"
-        onChange={onFileChange}
-        className="hidden"
-      />
-      <CameraIcon
+}) => {
+  const { addImage } = useContext(ImageListContext);
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      addImage(files[0]);
+    }
+  };
+
+  const handleCameraButtonClick = () => {
+    const inputFile = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    if (inputFile) inputFile.click();
+  };
+
+  return (
+    <div className="flex justify-end gap-1 items-center">
+      <MicIcon
         tabIndex={0}
         className="w-7 h-7 cursor-pointer"
-        onClick={onCameraButtonClick}
+        onClick={onMicButtonClick}
       />
-    </form>
-    {submitAvailable && (
-      <RightArrowIcon
-        tabIndex={0}
-        className="w-7 h-7 mx-1 p-1 cursor-pointer rounded-full bg-[#F4CDB1]"
-        onClick={() => {
-          onSubmitButtonClick && onSubmitButtonClick();
-        }}
-      />
-    )}
-  </div>
-);
+      <form>
+        <input
+          title="input-file"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+        <CameraIcon
+          tabIndex={0}
+          className="w-7 h-7 cursor-pointer"
+          onClick={handleCameraButtonClick}
+        />
+      </form>
+      {submitAvailable && (
+        <RightArrowIcon
+          tabIndex={0}
+          className="w-7 h-7 mx-1 p-1 cursor-pointer rounded-full bg-[#F4CDB1]"
+          onClick={() => {
+            onSubmitButtonClick && onSubmitButtonClick();
+          }}
+        />
+      )}
+    </div>
+  );
+};
 
 export default IconButtons;
