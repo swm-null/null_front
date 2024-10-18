@@ -49,7 +49,7 @@ interface EditableTagProps {
 }
 
 const tagStyles = tv({
-  base: 'inline-flex shrink-0 self-center items-center h-[1.25rem] py-[0.0625rem] px-[0.5625rem] gap-[5px]',
+  base: 'inline-flex shrink-0 self-center items-center h-5 py-[0.0625rem] px-[0.5625rem] gap-[5px]',
   variants: {
     color: {
       white: 'bg-white',
