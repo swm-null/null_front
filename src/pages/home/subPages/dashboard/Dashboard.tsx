@@ -65,7 +65,9 @@ const DashboardPage = () => {
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">
           <Components.CurrentTagPath
             allTagText={t('pages.dashboard.allMemoButton')}
-            tags={tagsManager.tagRelations.tags}
+            tags={tagsManager.tagRelations.flatMap(
+              (tagRelation) => tagRelation.tag
+            )}
             tagStack={tagStack}
             setTagStack={setTagStack}
             sortOption={sortOption}

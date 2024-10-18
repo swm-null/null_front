@@ -1,23 +1,26 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import * as Api from 'api';
-import { SortOption } from '../../../interfaces';
+import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 
 const MEMO_LIMIT = 10;
 
-const useChildTagMemos = (tagId: string | null, sortOption: SortOption) => {
+const useChildTagMemosManager = (
+  tagId: string | null,
+  sortOption: SortOption
+) => {
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['childTagMemos', tagId, sortOption],
     queryFn: async ({ pageParam = 1 }: any) => {
       if (!tagId) return;
 
-      const response = await Api.getChildTagSectionData({
+      const response = await Api.getDashboardSectionData({
         tagId,
         memoPage: pageParam,
         memoLimit: MEMO_LIMIT,
         sortOrder: sortOption,
       });
 
-      if (!Api.isGetChildTagSectionData(response)) {
+      if (!Api.isMemosResponse(response)) {
         throw new Error('자식 태그 메모를 불러오는 중 오류가 발생했습니다.');
       }
 
@@ -40,4 +43,4 @@ const useChildTagMemos = (tagId: string | null, sortOption: SortOption) => {
   };
 };
 
-export default useChildTagMemos;
+export default useChildTagMemosManager;

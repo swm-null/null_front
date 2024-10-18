@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { Tag } from 'pages/home/subPages/interfaces';
+import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 import * as Api from 'api';
 
@@ -9,10 +9,7 @@ const MEMO_LIMIT = 10;
 
 const useTagsManager = (sortOption: SortOption) => {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
-  const [tagRelations, setTagRelations] = useState<{
-    tags: Tag[];
-    childTags: Tag[][];
-  }>({ tags: [], childTags: [] });
+  const [tagRelations, setTagRelations] = useState<TagRelation[]>([]);
 
   const queryClient = useQueryClient();
 
@@ -37,7 +34,7 @@ const useTagsManager = (sortOption: SortOption) => {
   const { data: tagData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['tags', selectedTag?.id],
     queryFn: async ({ pageParam = 1 }: any) => {
-      const response = await Api.getDashboardDataByTag({
+      const response = await Api.getDashboardTagRelation({
         parentTagId: selectedTag?.id,
         tagPage: pageParam,
         tagLimit: TAG_LIMIT,
@@ -45,7 +42,7 @@ const useTagsManager = (sortOption: SortOption) => {
         sortOrder: sortOption,
       });
 
-      if (!Api.isGetDashboardData(response)) {
+      if (!Api.isDashboardTagRelationResponse(response)) {
         throw new Error('대시보드 데이터를 가져오는 중 오류가 발생했습니다.');
       }
 
@@ -62,18 +59,9 @@ const useTagsManager = (sortOption: SortOption) => {
   useEffect(() => {
     if (!tagData) return;
 
-    const newMemoSectionList = {
-      tags: tagData.pages.flatMap((page) =>
-        page.child_tags_with_memos.flatMap(
-          (child_tag_with_memos) => child_tag_with_memos.tag
-        )
-      ),
-      childTags: tagData.pages.flatMap((page) =>
-        page.child_tags_with_memos.map(
-          (child_tag_with_memos) => child_tag_with_memos.child_tags
-        )
-      ),
-    };
+    const newMemoSectionList = tagData.pages.flatMap(
+      (page) => page.tag_relations
+    );
 
     setTagRelations(newMemoSectionList);
   }, [tagData]);

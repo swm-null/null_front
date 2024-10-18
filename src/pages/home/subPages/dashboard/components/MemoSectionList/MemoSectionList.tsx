@@ -1,4 +1,4 @@
-import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { Memo, Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
 import { useRef } from 'react';
@@ -7,7 +7,7 @@ import { SortOption } from '../../interfaces';
 
 interface MemoSectionListProps {
   parentTag: Tag | null;
-  tagRelations: { tags: Tag[]; childTags: Tag[][] };
+  tagRelations: TagRelation[];
   sortOption: SortOption;
   addTagToStack: (tag: Tag | null) => void;
   handleMemoClick: (memo: Memo, tag: Tag | null, index: number) => void;
@@ -35,8 +35,9 @@ const MemoSectionList = ({
 
   return (
     <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2">
-      {tagRelations.tags.map((tag, index) => {
-        const childTags = tagRelations.childTags[index] || [];
+      {tagRelations.map((tagRelation) => {
+        const tag = tagRelation.tag;
+        const childTags = tagRelation.child_tags || [];
 
         return (
           <MemoSection
