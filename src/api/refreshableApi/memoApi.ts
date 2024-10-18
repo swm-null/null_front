@@ -132,8 +132,9 @@ interface paginationMemos extends paginationData {
   memos: Memo[];
 }
 
-interface paginationMemosWithTag extends paginationData {
+export interface paginationMemosWithTag extends paginationData {
   tag: Tag;
+  child_tags: Tag[];
   memos: Memo[];
 }
 

@@ -7,7 +7,7 @@ import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
 import { SortOption } from './interfaces';
 
-const DashboardPage = ({}: {}) => {
+const DashboardPage = () => {
   const { t } = useTranslation();
 
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
@@ -17,16 +17,12 @@ const DashboardPage = ({}: {}) => {
   const [selectedMemoTag, setSelectedMemoTag] = useState<Tag | null>();
   const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
 
-  const tagsManager = Hooks.useTagsManager();
-  const tagMemosManager = Hooks.useSelectedTagMemosManager(
-    tagsManager.selectedTag,
-    sortOption
-  );
+  const tagsManager = Hooks.useTagsManager(sortOption);
 
   const handleChildTagClick = (tag: Tag | null) => {
-    setTagStack((prevStack) =>
-      [...prevStack, tag].filter((tag) => tag !== null)
-    );
+    if (tag) {
+      setTagStack((prevStack) => [...prevStack, tag]);
+    }
     tagsManager.handleTagOrAllTagsClick(tag);
   };
 
@@ -46,6 +42,22 @@ const DashboardPage = ({}: {}) => {
     setSelectedMemoIndex(index);
   };
 
+  const updateMemoFromMemoSectionListByTag = (_tag: Tag, _memo: Memo) => {
+    // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 업데이트 해주는 코드 들어가야함
+  };
+
+  const deleteMemoFromMemoSectionListByTag = (_tag: Tag, _memoId: string) => {
+    // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 삭제 해주는 코드 들어가야함
+  };
+
+  const revertMemoFromMemoSectionListByTag = (
+    _tag: Tag,
+    _index: number,
+    _memo: Memo
+  ) => {
+    // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 잘못 삭제, 업데이트한 것을 복구 해주는 코드 들어가야함
+  };
+
   return (
     <div className="flex flex-col h-full bg-custom-gradient-basic text-gray2 overflow-hidden px-4 pb-4">
       <div className="w-full h-full pt-12 pb-8 flex flex-col max-w-[1102px] self-center gap-4">
@@ -53,7 +65,7 @@ const DashboardPage = ({}: {}) => {
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">
           <Components.CurrentTagPath
             allTagText={t('pages.dashboard.allMemoButton')}
-            tags={tagMemosManager.tags}
+            tags={tagsManager.tagRelations.tags}
             tagStack={tagStack}
             setTagStack={setTagStack}
             sortOption={sortOption}
@@ -64,11 +76,11 @@ const DashboardPage = ({}: {}) => {
           />
           <Components.MemoSectionList
             parentTag={tagsManager.selectedTag}
-            memoSectionListData={tagMemosManager.memoSectionListByTag}
+            tagRelations={tagsManager.tagRelations}
+            sortOption={sortOption}
             addTagToStack={handleChildTagClick}
             handleMemoClick={handleMemoClickAndOpenModal}
-            fetchNextPage={tagMemosManager.fetchNextPage}
-            fetchNextPageForChildTag={tagMemosManager.fetchNextPageForChildTag}
+            fetchNextPage={tagsManager.fetchNextPage}
           />
         </div>
       </div>
@@ -79,9 +91,9 @@ const DashboardPage = ({}: {}) => {
         selectedMemo={selectedMemo}
         selectedMemoTag={selectedMemoTag}
         selectedMemoIndex={selectedMemoIndex}
-        updateMemo={tagMemosManager.updateMemoFromMemoSectionListByTag}
-        deleteMemo={tagMemosManager.deleteMemoFromMemoSectionListByTag}
-        revertMemo={tagMemosManager.revertMemoFromMemoSectionListByTag}
+        updateMemo={updateMemoFromMemoSectionListByTag}
+        deleteMemo={deleteMemoFromMemoSectionListByTag}
+        revertMemo={revertMemoFromMemoSectionListByTag}
       />
     </div>
   );
