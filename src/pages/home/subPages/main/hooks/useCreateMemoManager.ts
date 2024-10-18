@@ -50,14 +50,15 @@ const useCreateMemoManager = ({
 
   const tryCreateMemoAndSetStatus = async (
     message: string,
-    setMessage: (message: string) => void
+    setMessage: (message: string) => void,
+    images?: string[]
   ) => {
-    if (message.trim()) {
+    if (message.trim() || images?.length) {
       setMessage('');
       setStatus('loading');
 
       try {
-        await mutateAsync(message);
+        await mutateAsync({ message, images });
         setStatus('success');
       } catch (error) {
         setStatus('error');
@@ -65,21 +66,33 @@ const useCreateMemoManager = ({
     }
   };
 
-  const createMemo = async (message: string): Promise<Interface.Memo> => {
-    const response = await Api.createMemo(message);
+  const createMemo = async ({
+    message,
+    images,
+  }: {
+    message: string;
+    images?: string[];
+  }): Promise<Interface.Memo> => {
+    const response = await Api.createMemo(message, images);
     if (!Api.isValidResponse(response)) {
       throw new Error('Memo Create Error');
     }
     return response;
   };
 
-  const createTemporaryMemo = async (content: string) => {
+  const createTemporaryMemo = async ({
+    message,
+    images,
+  }: {
+    message: string;
+    images?: string[];
+  }) => {
     await queryClient.cancelQueries({ queryKey: ['recentMemo'] });
 
     const optimisticMemo: Interface.Memo = {
       id: uuid_v4(),
-      content: content,
-      image_urls: null,
+      content: message,
+      image_urls: images || [],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       tags: [],
@@ -100,7 +113,7 @@ const useCreateMemoManager = ({
 
   const deleteTemporaryMemo = (
     _: AxiosError<unknown, any>,
-    __: string,
+    __: { message: string; images?: string[] },
     context: { optimisticMemoId: string } | undefined
   ) => {
     const optimisticMemoId = context?.optimisticMemoId;
@@ -116,7 +129,7 @@ const useCreateMemoManager = ({
   const updateTemporaryMemoData = (
     data: Interface.Memo | undefined,
     _: AxiosError<unknown, any> | null,
-    __: string,
+    __: { message: string; images?: string[] },
     context: { optimisticMemoId: string } | undefined
   ) => {
     const optimisticMemoId = context?.optimisticMemoId;
@@ -150,7 +163,7 @@ const useCreateMemoManager = ({
   const { mutateAsync } = useMutation<
     Interface.Memo,
     AxiosError,
-    string,
+    { message: string; images?: string[] },
     { optimisticMemoId: string }
   >({
     mutationFn: createMemo,
