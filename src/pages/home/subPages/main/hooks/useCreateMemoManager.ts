@@ -53,7 +53,7 @@ const useCreateMemoManager = ({
     setMessage: (message: string) => void,
     images?: string[]
   ) => {
-    if (message.trim() || (images?.length && images?.length > 0)) {
+    if (message.trim() || images?.length) {
       setMessage('');
       setStatus('loading');
 
