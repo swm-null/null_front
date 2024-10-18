@@ -21,7 +21,7 @@ const MemoCreateTextArea = ({
   onChange,
   onSubmit,
 }: MemoCreateTextAreaProps) => {
-  const { images, addImage, removeImage, removeAllImage } =
+  const { images, addImage, removeImage, removeAllImage, isValidFileType } =
     useContext(ImageListContext);
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -66,7 +66,7 @@ const MemoCreateTextArea = ({
     Array.from(items).forEach((item) => {
       if (item.type.startsWith('image/')) {
         const blob = item.getAsFile();
-        if (blob) addImage(blob);
+        if (blob && isValidFileType(blob)) addImage(blob);
       }
     });
   };

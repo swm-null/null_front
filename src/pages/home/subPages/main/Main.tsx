@@ -9,7 +9,7 @@ import { ImageListContext } from 'utils';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
-  const { addImage } = useContext(ImageListContext);
+  const { addImage, isValidFileType } = useContext(ImageListContext);
 
   const [message, setMessage] = useState('');
   const [mode, setMode] = useState<Mode>('create');
@@ -91,8 +91,9 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   );
 
   const onDrop = (acceptedFiles: File[]) => {
-    if (isCreateMode() && acceptedFiles.length > 0) {
-      acceptedFiles.map((file) => {
+    const validFiles = acceptedFiles.filter(isValidFileType);
+    if (validFiles.length > 0) {
+      validFiles.forEach((file) => {
         addImage(file);
       });
     }
@@ -100,9 +101,6 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: {
-      'image/*': [],
-    },
     noClick: true,
   });
 

@@ -5,6 +5,7 @@ interface ImageListContextType {
   addImage: (image: File) => void;
   removeImage: (index: number) => void;
   removeAllImage: () => void;
+  isValidFileType: (file: File) => boolean;
 }
 
 const ImageListContext = createContext<ImageListContextType>({
@@ -12,6 +13,7 @@ const ImageListContext = createContext<ImageListContextType>({
   addImage: (_: File) => {},
   removeImage: (_: number) => {},
   removeAllImage: () => {},
+  isValidFileType: (_: File) => false,
 });
 
 export default ImageListContext;

@@ -16,9 +16,14 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
     setImages([]);
   }, []);
 
+  const isValidFileType = (file: File) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    return allowedTypes.includes(file.type);
+  };
+
   return (
     <ImageListContext.Provider
-      value={{ images, addImage, removeImage, removeAllImage }}
+      value={{ images, addImage, removeImage, removeAllImage, isValidFileType }}
     >
       {children}
     </ImageListContext.Provider>

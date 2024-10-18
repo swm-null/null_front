@@ -11,12 +11,16 @@ const IconButtons = ({
   onMicButtonClick?: () => void;
   onSubmitButtonClick?: () => void;
 }) => {
-  const { addImage } = useContext(ImageListContext);
+  const { addImage, isValidFileType } = useContext(ImageListContext);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      addImage(files[0]);
+      Array.from(files).forEach((file) => {
+        if (isValidFileType(file)) {
+          addImage(file);
+        }
+      });
     }
   };
 
