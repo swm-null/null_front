@@ -25,9 +25,8 @@ const HiddenTextarea = ({
       ref={hiddenTextareaRef}
     />
     <IconButtons
-      focus={true}
+      submitAvailable={true}
       onMicButtonClick={() => {}}
-      onCameraButtonClick={() => {}}
       onSubmitButtonClick={() => {}}
     />
   </div>
