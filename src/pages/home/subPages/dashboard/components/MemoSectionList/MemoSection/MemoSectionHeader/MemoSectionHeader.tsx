@@ -30,18 +30,22 @@ const MemoSectionHeader = ({
         </div>
       </div>
       <div className="flex overflow-hidden w-[247.83px]">
-        <div className="flex gap-2 min-w-max overflow-x-auto no-scrollbar flex-nowrap">
-          {childTags.map((childTag, index) => (
-            <UneditableTag
-              key={index}
-              className="px-2 py-1 h-6"
-              text={`#${childTag.name}`}
-              color="white"
-              fontColor="brown2"
-              border={5}
-              invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-            />
-          ))}
+        <div className="flex gap-1 min-w-max overflow-x-auto no-scrollbar flex-nowrap">
+          {childTags.length > 0 ? (
+            childTags.map((childTag, index) => (
+              <UneditableTag
+                key={index}
+                className="px-2 py-1 h-6"
+                text={`#${childTag.name}`}
+                color="white"
+                fontColor="brown2"
+                border={5}
+                invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+              />
+            ))
+          ) : (
+            <div className="h-6" />
+          )}
         </div>
       </div>
     </div>
