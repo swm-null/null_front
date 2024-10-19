@@ -4,6 +4,7 @@ import { v4 as uuid_v4 } from 'uuid';
 import { useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { SortOption } from '../../interfaces';
+import { LeafMemos } from './LeafMemos';
 
 interface MemoSectionListProps {
   parentTag: Tag | null;
@@ -23,6 +24,7 @@ const MemoSectionList = ({
   fetchNextPage,
 }: MemoSectionListProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const hasNoSection = () => tagRelations.length === 0;
 
   useIntersectionObserver(observerRef, {
     callback: (entries) => {
@@ -33,23 +35,41 @@ const MemoSectionList = ({
     options: { threshold: 0.5 },
   });
 
+  if (hasNoSection()) {
+    return (
+      <LeafMemos
+        parentTag={parentTag}
+        sortOption={sortOption}
+        handleMemoClick={handleMemoClick}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2">
-      {[
-        { tag: parentTag, child_tags: [], isLinked: true },
-        ...tagRelations,
-      ].map((tagRelation) => {
+      {parentTag && (
+        <MemoSection
+          key={`section-${parentTag.id}`}
+          tag={parentTag}
+          childTags={[]}
+          isLinked={true}
+          sortOption={sortOption}
+          handleTagClick={() => addTagToStack(parentTag)}
+          handleMemoClick={(memo: Memo, memoIndex: number) =>
+            handleMemoClick(memo, parentTag, memoIndex)
+          }
+        />
+      )}
+      {tagRelations.map((tagRelation) => {
         const tag = tagRelation.tag;
         const childTags = tagRelation.child_tags || [];
-        const isLinked =
-          'isLinked' in tagRelation ? tagRelation.isLinked : false;
 
         return (
           <MemoSection
-            key={tag?.id || uuid_v4()}
+            key={`section-${tag?.id}` || uuid_v4()}
             tag={tag}
             childTags={childTags}
-            isLinked={isLinked}
+            isLinked={false}
             sortOption={sortOption}
             handleTagClick={() => addTagToStack(tag)}
             handleMemoClick={(memo: Memo, memoIndex: number) =>

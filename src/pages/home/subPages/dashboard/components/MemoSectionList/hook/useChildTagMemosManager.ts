@@ -1,23 +1,31 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import * as Api from 'api';
 import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
+import { Memo } from 'pages/home/subPages/interfaces';
 
 const MEMO_LIMIT = 10;
 
 const useChildTagMemosManager = (
   tagId: string | null,
   isLinked: boolean,
-  sortOption: SortOption
+  sortOption: SortOption,
+  memoLimit?: number
 ) => {
   const { data, fetchNextPage } = useInfiniteQuery({
-    queryKey: ['childTagMemos', tagId, sortOption, isLinked],
+    queryKey: [
+      'childTagMemos',
+      tagId,
+      sortOption,
+      isLinked,
+      memoLimit ? memoLimit : MEMO_LIMIT,
+    ],
     queryFn: async ({ pageParam = 1 }: any) => {
       if (!tagId) return;
 
       const response = await Api.getTagMemos({
         tagId,
         page: pageParam,
-        limit: MEMO_LIMIT,
+        limit: memoLimit ? memoLimit : MEMO_LIMIT,
         isLinked: isLinked,
         sortOrder: sortOption,
       });
@@ -37,7 +45,11 @@ const useChildTagMemosManager = (
     enabled: !!tagId,
   });
 
-  const memos = data?.pages.flatMap((page) => page?.memos) || [];
+  const memos =
+    data?.pages.flatMap(
+      (page) =>
+        page?.memos.filter((memo): memo is Memo => memo !== undefined) || []
+    ) || [];
 
   return {
     memos,

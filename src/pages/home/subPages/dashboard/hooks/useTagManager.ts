@@ -49,7 +49,6 @@ const useTagsManager = () => {
       return nextPage <= lastPage.total_page ? nextPage : undefined;
     },
     initialPageParam: 1,
-    enabled: !!selectedTag?.id,
   });
 
   useEffect(() => {
