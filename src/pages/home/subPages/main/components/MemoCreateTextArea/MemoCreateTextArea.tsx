@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { usePressEnterFetch } from 'pages/home/subPages/hooks';
 import { IconButtons } from './IconButtons';
@@ -25,9 +25,14 @@ const MemoCreateTextArea = ({
     useContext(ImageListContext);
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hiddenTextareaWidth, setHiddenTextareaWidth] = useState<number | null>(
+    null
+  );
 
-  const { hiddenTextareaRef, isMultiline, hiddenTextareaWidth } =
-    useHiddenTextareaManager(value, images);
+  const { hiddenTextareaRef, isMultiline } = useHiddenTextareaManager(
+    value,
+    images
+  );
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleEnterWithCtrl: handleSubmit,
   });
@@ -74,6 +79,12 @@ const MemoCreateTextArea = ({
   const handleMicButtonClick = () => {
     // TODO: 마이크 버튼 클릭시 하는 메소드 생기면 추가
   };
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setHiddenTextareaWidth(containerRef.current?.clientWidth);
+    }
+  }, [containerRef.current]);
 
   return (
     <div
