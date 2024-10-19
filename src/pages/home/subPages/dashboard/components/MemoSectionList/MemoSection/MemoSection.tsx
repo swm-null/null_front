@@ -60,7 +60,7 @@ const MemoSection = ({
   if (!memos.length) return <></>;
 
   return (
-    <div className="flex flex-col w-auto max-w-full rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border border-black border-opacity-10 shadow-custom backdrop-blur-lg">
+    <div className="flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border border-black border-opacity-10 shadow-custom backdrop-blur-lg">
       {!isLinked && (
         <MemoSectionHeader
           tag={tag!}
@@ -71,9 +71,9 @@ const MemoSection = ({
       )}
       <div
         ref={memosDivRef}
-        className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10 w-fit"
+        className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10"
       >
-        <div className="flex flex-col flex-1 gap-[0.4rem] w-fit">
+        <div className="flex flex-col flex-1 gap-[0.4rem]">
           {(memos || []).map(
             (memo, index) =>
               memo && (

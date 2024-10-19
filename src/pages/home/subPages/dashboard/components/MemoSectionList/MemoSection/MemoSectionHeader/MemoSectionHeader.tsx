@@ -18,10 +18,10 @@ const MemoSectionHeader = ({
 }: MemoSectionHeaderProps) => {
   return (
     <div
-      className="flex flex-col w-full min-w-0 px-3 py-4 bg-[#FFF6E380] gap-4"
+      className="flex flex-col w-full px-3 py-4 bg-[#FFF6E380] gap-4"
       style={{ width: width }}
     >
-      <div className="flex w-full min-w-0 items-center gap-3">
+      <div className="flex w-full items-center gap-3">
         <p className="text-[#3e3e3e]">{tag.name}</p>
         <div className="flex gap-1">
           <EditIcon width="1.125rem" height="1.125rem" />
@@ -34,7 +34,7 @@ const MemoSectionHeader = ({
           <RightIcon color="black" />
         </div>
       </div>
-      <div className="flex overflow-hidden w-fit">
+      <div className="flex overflow-hidden">
         <div className="flex gap-1 overflow-x-auto no-scrollbar flex-nowrap">
           {childTags.length > 0 ? (
             childTags.map((childTag, index) => (
