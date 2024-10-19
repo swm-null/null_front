@@ -31,6 +31,8 @@ const MemoSection = ({
     sortOption
   );
 
+  const haveLinkedMemos = isLinked && !memos.length;
+
   useIntersectionObserver(observerRef, {
     callback: (entries) => {
       if (entries[0].isIntersecting) {
@@ -39,6 +41,8 @@ const MemoSection = ({
     },
     options: { threshold: 0.5 },
   });
+
+  if (haveLinkedMemos) return <></>;
 
   return (
     <div className="flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border border-black border-opacity-10 shadow-custom backdrop-blur-lg">
