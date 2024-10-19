@@ -2,6 +2,7 @@ import { Memo, MemoSearchAnswer } from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
+import { isValidResponse } from 'api';
 
 interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
 
@@ -113,13 +114,6 @@ export const deleteMemo = async (
   } catch (error) {
     return errorHandler(error, method);
   }
-};
-
-export const isValidResponse = (
-  response: validResponse | errorResponse
-): response is validResponse => {
-  const validStatus = [200, 201, 202, 203, 204, 205, 206];
-  return validStatus.includes(response.status);
 };
 
 export const isSearchMemoResponse = (
