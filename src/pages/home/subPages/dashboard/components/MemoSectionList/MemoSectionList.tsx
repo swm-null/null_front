@@ -4,7 +4,7 @@ import { v4 as uuid_v4 } from 'uuid';
 import { useEffect, useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { SortOption } from '../../interfaces';
-import { LeafMemos } from './LeafMemos';
+import { LeafMemoList } from './LeafMemoList';
 
 interface MemoSectionListProps {
   parentTag: Tag | null;
@@ -45,7 +45,7 @@ const MemoSectionList = ({
 
   if (hasNoSection()) {
     return (
-      <LeafMemos
+      <LeafMemoList
         parentTag={parentTag}
         sortOption={sortOption}
         handleMemoClick={handleMemoClick}
