@@ -1,16 +1,21 @@
 import * as Icon from 'assets/icons';
+import { LegacyRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface BottomNavBarProps {
+  bottomNavRef: LegacyRef<HTMLDivElement>;
   setCurrentPage: (page: string) => void;
 }
 
-const BottomNavBar = ({ setCurrentPage }: BottomNavBarProps) => {
+const BottomNavBar = ({ bottomNavRef, setCurrentPage }: BottomNavBarProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="fixed w-full bottom-0">
-      <div className="flex rounded-full shadow-custom backdrop-blur-lg mb-6 mx-4 px-4 bg-[#F5ECE0] border border-black border-opacity-10 bg-clip-padding justify-between items-center">
+    <div ref={bottomNavRef} className="fixed w-full bottom-0">
+      <div
+        className="flex rounded-full shadow-custom backdrop-blur-lg mb-6 mx-4 px-4 
+        bg-[#F5ECE0] border border-black border-opacity-10 bg-clip-padding justify-between items-center"
+      >
         <BottomNavButton
           icon={<Icon.HomeIcon />}
           label={t('pages.sidebar.main')}
