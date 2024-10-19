@@ -42,19 +42,15 @@ const DashboardPage = () => {
     setSelectedMemoIndex(index);
   };
 
-  const updateMemoFromMemoSectionListByTag = (_tag: Tag, _memo: Memo) => {
+  const updateMemoFromMemoSectionList = (_memo: Memo) => {
     // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 업데이트 해주는 코드 들어가야함
   };
 
-  const deleteMemoFromMemoSectionListByTag = (_tag: Tag, _memoId: string) => {
+  const deleteMemoFromMemoSectionList = (_memoId: string) => {
     // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 삭제 해주는 코드 들어가야함
   };
 
-  const revertMemoFromMemoSectionListByTag = (
-    _tag: Tag,
-    _index: number,
-    _memo: Memo
-  ) => {
+  const revertMemoFromMemoSectionList = (_memo: Memo) => {
     // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 잘못 삭제, 업데이트한 것을 복구 해주는 코드 들어가야함
   };
 
@@ -93,9 +89,9 @@ const DashboardPage = () => {
         selectedMemo={selectedMemo}
         selectedMemoTag={selectedMemoTag}
         selectedMemoIndex={selectedMemoIndex}
-        updateMemo={updateMemoFromMemoSectionListByTag}
-        deleteMemo={deleteMemoFromMemoSectionListByTag}
-        revertMemo={revertMemoFromMemoSectionListByTag}
+        updateMemo={updateMemoFromMemoSectionList}
+        deleteMemo={deleteMemoFromMemoSectionList}
+        revertMemo={revertMemoFromMemoSectionList}
       />
     </div>
   );

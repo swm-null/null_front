@@ -8,9 +8,9 @@ interface MemoEditModalProps {
   selectedMemo?: Memo;
   selectedMemoTag?: Tag | null;
   selectedMemoIndex?: number;
-  updateMemo: (tag: Tag, memo: Memo) => void;
-  deleteMemo: (tag: Tag, memoId: string) => void;
-  revertMemo: (tag: Tag, index: number, memo: Memo) => void;
+  updateMemo: (memo: Memo) => void;
+  deleteMemo: (memoId: string) => void;
+  revertMemo: (memo: Memo) => void;
 }
 
 const MemoEditModal = ({
@@ -27,8 +27,8 @@ const MemoEditModal = ({
     e.stopPropagation();
   };
 
-  const handleUpdateMemo = (tag: Tag, memo: Memo) => {
-    updateMemo(tag, memo);
+  const handleUpdateMemo = (memo: Memo) => {
+    updateMemo(memo);
   };
 
   return (
@@ -46,11 +46,9 @@ const MemoEditModal = ({
               key={selectedMemoIndex}
               memo={selectedMemo}
               editable
-              softUpdateMemo={(memo) => handleUpdateMemo(selectedMemoTag, memo)}
-              softDeleteMemo={(memoId) => deleteMemo(selectedMemoTag, memoId)}
-              softRevertMemo={(selectedMemo) =>
-                revertMemo(selectedMemoTag, selectedMemoIndex!, selectedMemo)
-              }
+              softUpdateMemo={handleUpdateMemo}
+              softDeleteMemo={deleteMemo}
+              softRevertMemo={revertMemo}
               handleSave={handleClose}
             />
           ) : null}
