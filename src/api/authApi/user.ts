@@ -135,10 +135,7 @@ export const verifyCode = async (
   const method = getMethodName();
   const endpoint = '/user/verifyCode';
   try {
-    const response = await authApi.post(
-      endpoint,
-      JSON.stringify({ email, code })
-    );
+    const response = await authApi.post(endpoint, JSON.stringify({ email, code }));
     const responseInfo = {
       method,
       status: response.status,

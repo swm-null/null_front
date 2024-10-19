@@ -22,9 +22,7 @@ export interface paginationDashboardTagRelationsResponse
   tag_relations: Interface.TagRelation[];
 }
 
-export interface paginationMemosResponse
-  extends paginationMemos,
-    validResponse {}
+export interface paginationMemosResponse extends paginationMemos, validResponse {}
 
 export const getRecentMemos = async (
   page: number,
@@ -173,8 +171,7 @@ export const isDashboardTagRelationsResponse = (
   response: paginationDashboardTagRelationsResponse | errorResponse
 ): response is paginationDashboardTagRelationsResponse => {
   return (
-    (response as paginationDashboardTagRelationsResponse).tag_relations !==
-    undefined
+    (response as paginationDashboardTagRelationsResponse).tag_relations !== undefined
   );
 };
 
@@ -182,7 +179,6 @@ export const isSearchHistoriesResponse = (
   response: paginationSearchHistoriesResponse | errorResponse
 ): response is paginationSearchHistoriesResponse => {
   return (
-    (response as paginationSearchHistoriesResponse).search_histories !==
-    undefined
+    (response as paginationSearchHistoriesResponse).search_histories !== undefined
   );
 };
