@@ -1,16 +1,18 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useRef, useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { usePressEnterFetch } from 'pages/home/subPages/hooks';
 import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
+import { ImageList } from './ImageList';
+import { ImageListContext } from 'utils';
+import { isFilesResponse, uploadFile, uploadFiles } from 'api';
+import { useHiddenTextareaManager } from './hook';
 
 interface MemoCreateTextAreaProps {
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: () => void;
-  onMicButtonClick: () => void;
-  onCameraButtonClick: () => void;
+  onSubmit: (images: string[]) => void;
 }
 
 const MemoCreateTextArea = ({
@@ -18,25 +20,37 @@ const MemoCreateTextArea = ({
   placeholder,
   onChange,
   onSubmit,
-  onMicButtonClick,
-  onCameraButtonClick,
 }: MemoCreateTextAreaProps) => {
+  const { images, addImage, removeImage, removeAllImage, isValidFileType } =
+    useContext(ImageListContext);
   const [focus, setFocus] = useState(false);
-  const handleSubmit = () => {
-    setFocus(false);
-    onSubmit();
-  };
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { hiddenTextareaRef, isMultiline, hiddenTextareaWidth } =
+    useHiddenTextareaManager(value, images);
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleEnterWithCtrl: handleSubmit,
   });
 
-  const [isMultiline, setIsMultiline] = useState(false);
-  const [hiddenTextareaWidth, setHiddenTextareaWidth] = useState<number | null>(
-    null
-  );
+  async function handleSubmit() {
+    setFocus(false);
+    const imageUrls = await getImageUrls(images);
+    onSubmit(imageUrls);
+    removeAllImage();
+  }
 
-  const hiddenTextareaRef = useRef<HTMLTextAreaElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const getImageUrls = async (images: File[]): Promise<string[]> => {
+    if (images.length === 0) return [];
+
+    const response =
+      images.length === 1
+        ? await uploadFile(images[0])
+        : await uploadFiles(images);
+    if (!isFilesResponse(response))
+      throw new Error('파일 업로드에 문제가 생겼습니다.');
+
+    return response.urls;
+  };
 
   const handleBlur = (e: React.FocusEvent) => {
     if (
@@ -47,24 +61,26 @@ const MemoCreateTextArea = ({
     }
   };
 
-  useEffect(() => {
-    if (hiddenTextareaRef.current && containerRef.current) {
-      const lineHeight = parseFloat(
-        getComputedStyle(hiddenTextareaRef.current).lineHeight
-      );
-      const maxLines = Math.floor(
-        hiddenTextareaRef.current.clientHeight / lineHeight
-      );
-      setIsMultiline(maxLines > 1);
-      setHiddenTextareaWidth(containerRef.current.clientWidth);
-    }
-  }, [value]);
+  const handlePaste = (e: React.ClipboardEvent) => {
+    const items = e.clipboardData.items;
+    Array.from(items).forEach((item) => {
+      if (item.type.startsWith('image/')) {
+        const blob = item.getAsFile();
+        if (blob && isValidFileType(blob)) addImage(blob);
+      }
+    });
+  };
+
+  const handleMicButtonClick = () => {
+    // TODO: 마이크 버튼 클릭시 하는 메소드 생기면 추가
+  };
 
   return (
     <div
-      className={`flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 
-        bg-[#FFF6E3CC] border-[1px] border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg`}
+      className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
+      onFocus={() => setFocus(true)}
       onBlur={handleBlur}
+      onPaste={handlePaste}
     >
       <HiddenTextarea
         value={value}
@@ -77,20 +93,19 @@ const MemoCreateTextArea = ({
         className={`flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row'}`}
       >
         <TextareaAutosize
-          className="flex-auto focus:outline-none resize-none min-h-9 content-center 
+          className="flex-auto focus:outline-none resize-none min-h-9 content-center
             text-[#111111] bg-transparent placeholder-custom"
           value={value}
           onChange={onChange}
           placeholder={placeholder}
           onKeyDown={handlePressEnterFetch}
-          onFocus={() => setFocus(true)}
           minRows={1}
           maxRows={20}
         />
+        <ImageList images={images} removeImage={removeImage} />
         <IconButtons
-          focus={focus}
-          onMicButtonClick={onMicButtonClick}
-          onCameraButtonClick={onCameraButtonClick}
+          submitAvailable={focus || isMultiline}
+          onMicButtonClick={handleMicButtonClick}
           onSubmitButtonClick={handleSubmit}
         />
       </div>

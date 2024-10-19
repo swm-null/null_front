@@ -1,12 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDropzone } from 'react-dropzone';
 import * as Component from './components';
 import { Mode, Status } from './interfaces';
 import { useCreateMemoManager, useSearchMemoManager } from './hooks';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
+import { ImageListContext } from 'utils';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
+  const { addImage, isValidFileType } = useContext(ImageListContext);
+
   const [message, setMessage] = useState('');
   const [mode, setMode] = useState<Mode>('create');
   const [status, setStatus] = useState<Status>('default');
@@ -34,20 +38,12 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     }
   };
 
-  const handleSubmit = (message: string) => {
+  const handleSubmit = (message: string, images?: string[]) => {
     if (isCreateMode()) {
-      createMemoManager.tryCreateMemoAndSetStatus(message, setMessage);
+      createMemoManager.tryCreateMemoAndSetStatus(message, setMessage, images);
     } else {
       searchMemoManager.trySearchMemoAndSetStatus(message, setMessage);
     }
-  };
-
-  const handleMicButtonClick = () => {
-    // TODO: 음성 인식 기능이 추가되면 코드 작성하기
-  };
-
-  const handleCameraButtonClick = () => {
-    // TODO: camera OCR 기능이 추가되면 코드 작성하기
   };
 
   useEffect(() => {
@@ -67,9 +63,7 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         value={message}
         onChange={handleMessageChange}
         placeholder={t('pages.create.inputPlaceholder')}
-        onSubmit={() => handleSubmit(message)}
-        onMicButtonClick={handleMicButtonClick}
-        onCameraButtonClick={handleCameraButtonClick}
+        onSubmit={(images: string[]) => handleSubmit(message, images)}
       />
       <Component.CreatedMemoList
         memos={createMemoManager.useMemoStack().data}
@@ -96,17 +90,39 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     </>
   );
 
+  const onDrop = (acceptedFiles: File[]) => {
+    const validFiles = acceptedFiles.filter(isValidFileType);
+    if (validFiles.length > 0) {
+      validFiles.forEach((file) => {
+        addImage(file);
+      });
+    }
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    noClick: true,
+  });
+
   return (
-    <div className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center">
-      <div className="max-w-[740px] flex flex-col flex-1 text-gray3">
-        <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
-        <div className="overflow-scroll no-scrollbar p-4 gap-4 flex flex-col">
-          {isCreateMode()
-            ? createModeContent
-            : isSearchMode() && searchModeContent}
+    <>
+      <input {...getInputProps()} />
+      <div
+        className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center"
+        {...getRootProps()}
+      >
+        <div className="max-w-[740px] flex flex-col flex-1 text-gray3">
+          <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
+          <div
+            className={`overflow-scroll no-scrollbar p-4 gap-4 flex flex-col`}
+          >
+            {isCreateMode()
+              ? createModeContent
+              : isSearchMode() && searchModeContent}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
