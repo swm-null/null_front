@@ -1,7 +1,7 @@
 import { Memo, Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { SortOption } from '../../interfaces';
 import { LeafMemos } from './LeafMemos';
@@ -24,6 +24,8 @@ const MemoSectionList = ({
   fetchNextPage,
 }: MemoSectionListProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
   const hasNoSection = () => tagRelations.length === 0;
 
   useIntersectionObserver(observerRef, {
@@ -34,6 +36,12 @@ const MemoSectionList = ({
     },
     options: { threshold: 0.5 },
   });
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = 0;
+    }
+  }, [parentTag, scrollRef?.current]);
 
   if (hasNoSection()) {
     return (
@@ -46,7 +54,10 @@ const MemoSectionList = ({
   }
 
   return (
-    <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2">
+    <div
+      ref={scrollRef}
+      className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2"
+    >
       {parentTag && (
         <MemoSection
           key={`section-${parentTag.id}`}
