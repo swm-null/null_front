@@ -16,11 +16,7 @@ const NavigationBar: FC<NavigationBarProps> = ({
   return isSmallScreen ? (
     <BottomNavBar bottomNavRef={bottomNavRef} setCurrentPage={setCurrentPage} />
   ) : (
-    <div className="flex w-full h-full">
-      <div className="flex overflow-x-hidden z-20 items-center justify-center self-center">
-        <LeftNavBar setCurrentPage={setCurrentPage} />
-      </div>
-    </div>
+    <LeftNavBar setCurrentPage={setCurrentPage} />
   );
 };
 
