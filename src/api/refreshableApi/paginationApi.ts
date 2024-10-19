@@ -130,21 +130,19 @@ export interface paginationSearchHistoriesResponse
 
 export const getSearchHistories = async ({
   query,
-  searchHistoryPage,
-  searchHistoryLimit,
+  page,
+  limit,
 }: {
   query?: string;
-  searchHistoryPage?: number;
-  searchHistoryLimit?: number;
+  page?: number;
+  limit?: number;
 }): Promise<paginationSearchHistoriesResponse | errorResponse> => {
   const method = getMethodName();
 
   const params = new URLSearchParams();
   if (query) params.append('query', query);
-  if (searchHistoryPage)
-    params.append('searchHistoryPage', searchHistoryPage.toString());
-  if (searchHistoryLimit)
-    params.append('searchHistoryLimit', searchHistoryLimit.toString());
+  if (page) params.append('page', page.toString());
+  if (limit) params.append('limit', limit.toString());
 
   const endpoint = `/memos/search/histories?${params.toString()}`;
 

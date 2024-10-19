@@ -26,8 +26,8 @@ const SearchHistoryPage = ({}: {}) => {
     queryFn: async ({ pageParam = 1 }: any) => {
       const response = await Api.getSearchHistories({
         query: message,
-        searchHistoryPage: pageParam,
-        searchHistoryLimit: SEARCH_HISTORY_LIMIT,
+        page: pageParam,
+        limit: SEARCH_HISTORY_LIMIT,
       });
 
       if (!Api.isSearchHistoriesResponse(response)) {
