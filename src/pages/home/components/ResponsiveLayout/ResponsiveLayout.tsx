@@ -1,8 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { BottomNavBar } from './BottomNavBar';
 import { ProfileButton } from './ProfileButton';
-import { LeftNavBar } from './LeftNavBar';
+import { NavigationBar } from './NavigationBar';
 
 const MOBILE_DEVICE_WIDTH = 770;
 
@@ -15,46 +14,32 @@ const ResponsiveLayout = ({
 }) => {
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
   const [bottomNavHeight, setBottomNavHeight] = useState(0);
-
   const isSmallScreen = useMediaQuery({
     query: `(max-width:${MOBILE_DEVICE_WIDTH}px)`,
   });
 
   useEffect(() => {
-    if (!bottomNavRef.current) return;
-    setBottomNavHeight(bottomNavRef.current?.offsetHeight);
+    if (bottomNavRef.current) {
+      setBottomNavHeight(bottomNavRef.current.offsetHeight);
+    }
   }, [bottomNavRef]);
 
   return (
     <div className="flex flex-col w-full h-full bg-custom-gradient-basic">
-      {!isSmallScreen && (
-        <div className="flex w-full h-full">
-          <div className="flex overflow-x-hidden z-20 items-center justify-center self-center">
-            <LeftNavBar setCurrentPage={handleNavigation} />
-          </div>
-        </div>
-      )}
+      <ProfileButton />
       <div
-        className="flex-grow overflow-y-auto"
+        className={`flex-grow overflow-y-auto absolute right-0 top-0 left-0`}
         style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
           bottom: isSmallScreen ? bottomNavHeight : 0,
-          left: 0,
         }}
       >
-        <div className="absolute top-0 right-0 m-4 z-30">
-          <ProfileButton />
-        </div>
         {children}
       </div>
-      {isSmallScreen && (
-        <BottomNavBar
-          bottomNavRef={bottomNavRef}
-          setCurrentPage={handleNavigation}
-        />
-      )}
+      <NavigationBar
+        isSmallScreen={isSmallScreen}
+        bottomNavRef={bottomNavRef}
+        setCurrentPage={handleNavigation}
+      />
     </div>
   );
 };
