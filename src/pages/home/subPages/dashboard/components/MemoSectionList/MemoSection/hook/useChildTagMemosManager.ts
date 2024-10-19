@@ -6,17 +6,19 @@ const MEMO_LIMIT = 10;
 
 const useChildTagMemosManager = (
   tagId: string | null,
+  isLinked: boolean,
   sortOption: SortOption
 ) => {
   const { data, fetchNextPage } = useInfiniteQuery({
-    queryKey: ['childTagMemos', tagId, sortOption],
+    queryKey: ['childTagMemos', tagId, sortOption, isLinked],
     queryFn: async ({ pageParam = 1 }: any) => {
       if (!tagId) return;
 
-      const response = await Api.getDashboardSectionData({
+      const response = await Api.getTagMemos({
         tagId,
-        memoPage: pageParam,
-        memoLimit: MEMO_LIMIT,
+        page: pageParam,
+        limit: MEMO_LIMIT,
+        isLinked: isLinked,
         sortOrder: sortOption,
       });
 

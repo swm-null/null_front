@@ -1,9 +1,4 @@
-import {
-  Memo,
-  MemoSearchConversation,
-  Tag,
-  TagRelation,
-} from 'pages/home/subPages/interfaces';
+import * as Interface from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
@@ -17,13 +12,14 @@ interface paginationData {
 }
 
 interface paginationMemos extends paginationData {
-  memos: Memo[];
+  memos: Interface.Memo[];
 }
 
-export interface paginationTagRelationResponse
+export interface paginationDashboardTagRelationsResponse
   extends paginationData,
     validResponse {
-  tag_relations: TagRelation[];
+  tag: Interface.Tag;
+  tag_relations: Interface.TagRelation[];
 }
 
 export interface paginationMemosResponse
@@ -32,107 +28,44 @@ export interface paginationMemosResponse
 
 export const getRecentMemos = async (
   page: number,
-  memoLimit: number
+  limit: number
 ): Promise<paginationMemosResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/tag/memos?memoPage=${page}&memoLimit=${memoLimit}&sortOrder=LATEST`;
 
   try {
-    const response = await refreshableApi.get(endpoint);
-    const responseInfo = {
-      method,
-      status: response.status,
-      total_count: response.data.total_count,
-      current_count: response.data.current_count,
-      total_page: response.data.total_page,
-      current_page: response.data.current_page,
-      memos: response.data.memos,
-    } as paginationMemosResponse;
-    return responseInfo;
+    const response = (await getTagMemos({
+      page: page,
+      limit: limit,
+      sortOrder: 'LATEST',
+    })) as paginationMemosResponse;
+    response.method = method;
+    return response;
   } catch (error) {
     return errorHandler(error, method);
   }
 };
 
-// FIXME: be 코드 바뀌면 없애기
-export interface paginationDashboardResponse
-  extends paginationData,
-    validResponse {
-  tag_with_memos: { tag: Tag; child_tags: Tag[] } & paginationMemos;
-  child_tags_with_memos: ({ tag: Tag; child_tags: Tag[] } & paginationMemos)[];
-}
-
-export const getDashboardTagRelation = async ({
-  parentTagId,
-  tagPage,
-  tagLimit,
-  memoLimit,
-  sortOrder,
-}: {
-  parentTagId?: string;
-  tagPage: number;
-  tagLimit: number;
-  memoLimit: number;
-  sortOrder: SortOption;
-}): Promise<paginationTagRelationResponse | errorResponse> => {
-  const method = getMethodName();
-
-  const params = new URLSearchParams();
-  if (parentTagId) params.append('parentTagId', parentTagId);
-  if (tagPage) params.append('tagPage', tagPage.toString());
-  if (tagLimit) params.append('tagLimit', tagLimit.toString());
-  if (memoLimit) params.append('memoLimit', memoLimit.toString());
-  if (sortOrder) params.append('sortOrder', sortOrder);
-
-  const endpoint = `/childTags/memos?${params.toString()}`;
-
-  try {
-    const response = await refreshableApi.get(endpoint);
-    // FIXME: be 코드 바뀌면 없애기
-    const tempResponseInfo = {
-      method,
-      status: response.status,
-      child_tags_with_memos: response.data.child_tags_with_memos,
-      tag_with_memos: response.data.tag_with_memos,
-      total_count: response.data.total_count,
-      current_count: response.data.current_count,
-      total_page: response.data.total_page,
-      current_page: response.data.current_page,
-    } as paginationDashboardResponse;
-
-    const responseInfo = {
-      ...tempResponseInfo,
-      tag_relations: tempResponseInfo.child_tags_with_memos.map(
-        (child_tag_with_memos) => ({
-          tag: child_tag_with_memos.tag,
-          child_tags: child_tag_with_memos.child_tags,
-        })
-      ),
-    };
-    return responseInfo as paginationTagRelationResponse;
-  } catch (error) {
-    return errorHandler(error, method);
-  }
-};
-
-export const getDashboardSectionData = async ({
+export const getTagMemos = async ({
   tagId,
-  memoPage,
-  memoLimit,
+  page,
+  limit,
   sortOrder,
+  isLinked,
 }: {
   tagId?: string;
-  memoPage: number;
-  memoLimit: number;
+  page: number;
+  limit: number;
   sortOrder: SortOption;
+  isLinked?: boolean;
 }): Promise<paginationMemosResponse | errorResponse> => {
   const method = getMethodName();
 
   const params = new URLSearchParams();
   if (tagId) params.append('tagId', tagId);
-  if (memoPage) params.append('memoPage', memoPage.toString());
-  if (memoLimit) params.append('memoLimit', memoLimit.toString());
+  if (page) params.append('page', page.toString());
+  if (limit) params.append('limit', limit.toString());
   if (sortOrder) params.append('sortOrder', sortOrder);
+  if (isLinked) params.append('isLinked', isLinked.toString());
 
   const endpoint = `/tag/memos?${params.toString()}`;
 
@@ -153,10 +86,46 @@ export const getDashboardSectionData = async ({
   }
 };
 
+export const getDashboardTagRelations = async ({
+  tagId,
+  page,
+  limit,
+}: {
+  tagId?: string;
+  page: number;
+  limit: number;
+}): Promise<paginationDashboardTagRelationsResponse | errorResponse> => {
+  const method = getMethodName();
+
+  const params = new URLSearchParams();
+  if (tagId) params.append('tagId', tagId);
+  if (page) params.append('page', page.toString());
+  if (limit) params.append('limit', limit.toString());
+
+  const endpoint = `/childTags?${params.toString()}`;
+
+  try {
+    const response = await refreshableApi.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      total_count: response.data.total_count,
+      current_count: response.data.current_count,
+      total_page: response.data.total_page,
+      current_page: response.data.current_page,
+      tag: response.data.tag,
+      tag_relations: response.data.child_tags,
+    };
+    return responseInfo as paginationDashboardTagRelationsResponse;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
 export interface paginationSearchHistoriesResponse
   extends paginationData,
     validResponse {
-  search_histories: MemoSearchConversation[];
+  search_histories: Interface.MemoSearchConversation[];
 }
 
 export const getSearchHistories = async ({
@@ -202,11 +171,12 @@ export const isMemosResponse = (
   return (response as paginationMemosResponse).current_count !== undefined;
 };
 
-export const isDashboardTagRelationResponse = (
-  response: paginationTagRelationResponse | errorResponse
-): response is paginationTagRelationResponse => {
+export const isDashboardTagRelationsResponse = (
+  response: paginationDashboardTagRelationsResponse | errorResponse
+): response is paginationDashboardTagRelationsResponse => {
   return (
-    (response as paginationTagRelationResponse).tag_relations !== undefined
+    (response as paginationDashboardTagRelationsResponse).tag_relations !==
+    undefined
   );
 };
 

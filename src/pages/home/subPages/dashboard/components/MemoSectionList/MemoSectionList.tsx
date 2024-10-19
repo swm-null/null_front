@@ -35,15 +35,21 @@ const MemoSectionList = ({
 
   return (
     <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2">
-      {tagRelations.map((tagRelation) => {
+      {[
+        { tag: parentTag, child_tags: [], isLinked: true },
+        ...tagRelations,
+      ].map((tagRelation) => {
         const tag = tagRelation.tag;
         const childTags = tagRelation.child_tags || [];
+        const isLinked =
+          'isLinked' in tagRelation ? tagRelation.isLinked : false;
 
         return (
           <MemoSection
-            key={tag.id || uuid_v4()}
+            key={tag?.id || uuid_v4()}
             tag={tag}
             childTags={childTags}
+            isLinked={isLinked}
             sortOption={sortOption}
             handleTagClick={() => addTagToStack(tag)}
             handleMemoClick={(memo: Memo, memoIndex: number) =>

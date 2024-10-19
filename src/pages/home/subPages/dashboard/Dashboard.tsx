@@ -17,7 +17,7 @@ const DashboardPage = () => {
   const [selectedMemoTag, setSelectedMemoTag] = useState<Tag | null>();
   const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
 
-  const tagsManager = Hooks.useTagsManager(sortOption);
+  const tagsManager = Hooks.useTagsManager();
 
   const handleChildTagClick = (tag: Tag | null) => {
     if (tag) {

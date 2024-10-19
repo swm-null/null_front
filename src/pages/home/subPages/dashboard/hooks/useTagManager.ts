@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
-import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 import * as Api from 'api';
 
 const TAG_LIMIT = 10;
-const MEMO_LIMIT = 10;
 
-const useTagsManager = (sortOption: SortOption) => {
+const useTagsManager = () => {
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
   const [tagRelations, setTagRelations] = useState<TagRelation[]>([]);
 
@@ -34,15 +32,13 @@ const useTagsManager = (sortOption: SortOption) => {
   const { data: tagData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['tags', selectedTag?.id],
     queryFn: async ({ pageParam = 1 }: any) => {
-      const response = await Api.getDashboardTagRelation({
-        parentTagId: selectedTag?.id,
-        tagPage: pageParam,
-        tagLimit: TAG_LIMIT,
-        memoLimit: MEMO_LIMIT,
-        sortOrder: sortOption,
+      const response = await Api.getDashboardTagRelations({
+        tagId: selectedTag?.id,
+        page: pageParam,
+        limit: TAG_LIMIT,
       });
 
-      if (!Api.isDashboardTagRelationResponse(response)) {
+      if (!Api.isDashboardTagRelationsResponse(response)) {
         throw new Error('대시보드 데이터를 가져오는 중 오류가 발생했습니다.');
       }
 

@@ -61,7 +61,7 @@ const UneditableMemo = ({
 
   return (
     <div
-      className={`relative flex p-4 min-h-[115px] flex-col bg-white gap-[0.88rem]
+      className={`relative flex p-4 min-h-[115px] w-60 flex-col bg-white gap-[0.88rem] 
         ${border ? 'border border-black border-opacity-10 bg-clip-padding' : ''} rounded-2xl ${shadow ? 'shadow-custom backdrop-blur-lg' : ''}`}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
