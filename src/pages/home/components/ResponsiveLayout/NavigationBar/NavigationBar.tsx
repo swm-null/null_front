@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { BottomNavBar } from './BottomNavBar';
 import { LeftNavBar } from './LeftNavBar';
 
@@ -8,15 +7,21 @@ interface NavigationBarProps {
   setCurrentPage: (page: string) => void;
 }
 
-const NavigationBar: FC<NavigationBarProps> = ({
+const NavigationBar = ({
   isSmallScreen,
   bottomNavRef,
   setCurrentPage,
-}) => {
+}: NavigationBarProps) => {
+  const currentPage = window.location.pathname.split('/').pop() || '';
+
   return isSmallScreen ? (
-    <BottomNavBar bottomNavRef={bottomNavRef} setCurrentPage={setCurrentPage} />
+    <BottomNavBar
+      currentPage={currentPage}
+      bottomNavRef={bottomNavRef}
+      setCurrentPage={setCurrentPage}
+    />
   ) : (
-    <LeftNavBar setCurrentPage={setCurrentPage} />
+    <LeftNavBar currentPage={currentPage} setCurrentPage={setCurrentPage} />
   );
 };
 

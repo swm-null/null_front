@@ -17,6 +17,8 @@ export default {
         peach1: '#FCE1CF',
         'peach1-transparent': '#FCF3E6',
         peach2: '#F7DBC2',
+        'peach2-transparent': '#F7DBC2CC',
+        yellow0: '#FFF3C7',
       },
       backgroundImage: {
         'custom-gradient-basic':
