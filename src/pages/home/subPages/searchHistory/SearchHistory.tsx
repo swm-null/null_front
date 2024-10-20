@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Header } from 'pages/home/subPages/components';
 import { SearchScrollView } from './components';
 import { SearchHistoryAccordion } from './components/SearchHistoryAccordion';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
@@ -85,9 +84,6 @@ const SearchHistoryPage = ({}: {}) => {
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">
       <div className="max-w-[740px] w-full flex flex-col flex-1 overflow-hidden self-center">
-        <div className="px-4">
-          <Header headerText={t('pages.searchHistory.header')} />
-        </div>
         <SearchScrollView
           searchTextArea={
             <MemoSearchTextArea

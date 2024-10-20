@@ -6,7 +6,6 @@ import { Mode, Status } from './interfaces';
 import { useCreateMemoManager, useSearchMemoManager } from './hooks';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
 import { ImageListContext } from 'utils';
-import { Header } from '../components';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
@@ -113,13 +112,9 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         {...getRootProps()}
       >
         <div className="max-w-[740px] h-full flex flex-col flex-1 text-gray3">
-          <div className="px-4">
-            <Header headerText={t('utils.service.name')} />
-          </div>
+          <div className="px-4"></div>
           <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
-          <div
-            className={`overflow-scroll no-scrollbar p-4 gap-4 flex flex-col`}
-          >
+          <div className={`overflow-scroll no-scrollbar p-4 gap-4 flex flex-col`}>
             {isCreateMode()
               ? createModeContent
               : isSearchMode() && searchModeContent}
