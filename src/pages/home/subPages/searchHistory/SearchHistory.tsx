@@ -26,11 +26,11 @@ const SearchHistoryPage = ({}: {}) => {
     queryFn: async ({ pageParam = 1 }: any) => {
       const response = await Api.getSearchHistories({
         query: message,
-        searchHistoryPage: pageParam,
-        searchHistoryLimit: SEARCH_HISTORY_LIMIT,
+        page: pageParam,
+        limit: SEARCH_HISTORY_LIMIT,
       });
 
-      if (!Api.isGetSearchHistories(response)) {
+      if (!Api.isSearchHistoriesResponse(response)) {
         throw new Error('메모 검색 기록을 가져오는 중 오류가 발생했습니다.');
       }
       return response;

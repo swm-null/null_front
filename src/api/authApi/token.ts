@@ -14,10 +14,7 @@ export const refresh = async (
   const method = getMethodName();
   const endpoint = '/user/refresh';
   try {
-    const response = await authApi.post(
-      endpoint,
-      JSON.stringify({ refresh_token })
-    );
+    const response = await authApi.post(endpoint, JSON.stringify({ refresh_token }));
     const responseInfo = {
       method,
       status: response.status,

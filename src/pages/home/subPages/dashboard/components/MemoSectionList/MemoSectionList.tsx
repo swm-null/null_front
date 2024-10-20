@@ -1,35 +1,32 @@
-import * as Components from 'pages/home/subPages/components';
-import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { Memo, Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
+import { SortOption } from '../../interfaces';
+import { LeafMemoSection } from './LeafMemoSection';
 
-interface MemoSectionProps {
+interface MemoSectionListProps {
   parentTag: Tag | null;
-  memoSectionListData: Array<{
-    tag: Tag | null;
-    childTags: Tag[] | null;
-    memos: Memo[];
-  }>;
+  tagRelations: TagRelation[];
+  sortOption: SortOption;
   addTagToStack: (tag: Tag | null) => void;
   handleMemoClick: (memo: Memo, tag: Tag | null, index: number) => void;
   fetchNextPage: () => void;
-  fetchNextPageForChildTag: (tag: Tag | null) => void;
 }
 
 const MemoSectionList = ({
   parentTag,
-  memoSectionListData,
+  tagRelations,
+  sortOption,
   addTagToStack,
   handleMemoClick,
   fetchNextPage,
-  fetchNextPageForChildTag,
-}: MemoSectionProps) => {
-  const isMemoSectionEmpty = () => memoSectionListData.length === 0;
-  const hasSingleMemoSection = () => memoSectionListData.length === 1;
-
+}: MemoSectionListProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const hasNoSection = () => tagRelations.length === 0;
 
   useIntersectionObserver(observerRef, {
     callback: (entries) => {
@@ -40,62 +37,55 @@ const MemoSectionList = ({
     options: { threshold: 0.5 },
   });
 
-  if (isMemoSectionEmpty()) {
-    // 처음 유저가 서비스를 사용해서 메모와 태그가 아예 없는 경우
-    return null;
-  }
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = 0;
+    }
+  }, [parentTag, scrollRef?.current]);
 
-  if (hasSingleMemoSection()) {
-    const taggedMemo = memoSectionListData[0];
-
+  if (hasNoSection()) {
     return (
-      <div
-        key={taggedMemo.tag?.id}
-        className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg"
-      >
-        <Components.MemosList>
-          {taggedMemo.memos.map((memo, index) => (
-            <Components.UneditableMemo
-              key={memo.id}
-              memo={memo}
-              shadow
-              border
-              onClick={() =>
-                handleMemoClick(
-                  memo,
-                  taggedMemo.tag ? taggedMemo?.tag : parentTag,
-                  index
-                )
-              }
-            />
-          ))}
-        </Components.MemosList>
-      </div>
+      <LeafMemoSection
+        parentTag={parentTag}
+        sortOption={sortOption}
+        handleMemoClick={handleMemoClick}
+      />
     );
   }
 
   return (
-    <div className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2">
-      {memoSectionListData.map(({ tag, childTags, memos }) => {
-        if (memos.length === 0) {
-          return null;
-        }
-
-        if (!childTags) {
-          throw new Error(`Child tags are missing for tag: ${tag}`);
-        }
+    <div
+      ref={scrollRef}
+      className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2"
+    >
+      {parentTag && (
+        <MemoSection
+          key={`section-${parentTag.id}`}
+          tag={parentTag}
+          childTags={[]}
+          isLinked={true}
+          sortOption={sortOption}
+          handleTagClick={() => addTagToStack(parentTag)}
+          handleMemoClick={(memo: Memo, memoIndex: number) =>
+            handleMemoClick(memo, parentTag, memoIndex)
+          }
+        />
+      )}
+      {tagRelations.map((tagRelation) => {
+        const tag = tagRelation.tag;
+        const childTags = tagRelation.child_tags || [];
 
         return (
           <MemoSection
-            key={tag?.id || uuid_v4()}
+            key={`section-${tag?.id}` || uuid_v4()}
             tag={tag}
             childTags={childTags}
-            memos={memos}
+            isLinked={false}
+            sortOption={sortOption}
             handleTagClick={() => addTagToStack(tag)}
-            handleMemoClick={(memo: Memo, index: number) =>
-              handleMemoClick(memo, tag ? tag : parentTag, index)
+            handleMemoClick={(memo: Memo, memoIndex: number) =>
+              handleMemoClick(memo, tag || parentTag, memoIndex)
             }
-            fetchNextPage={() => fetchNextPageForChildTag(tag)}
           />
         );
       })}
