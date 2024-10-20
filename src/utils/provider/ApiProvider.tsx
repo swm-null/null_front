@@ -1,4 +1,4 @@
-import { useEffect, useContext, ReactNode, useState } from 'react';
+import { useContext, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -8,7 +8,8 @@ import { jwtDecode } from 'jwt-decode';
 
 const ApiProvider = ({ children }: { children: ReactNode }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [redirectLogin, setRedirectLogin] = useState(false);
+  const [alerted, setAlerted] = useState(false);
+
   const { alert } = useContext(AlertContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -44,15 +45,21 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const alertLoginRequiredThenRedirect = () => {
-    alert(t('utils.auth.loginRequired')).then(() => {
-      setRedirectLogin(true);
-    });
+    if (!alerted) {
+      setAlerted(true);
+      alert(t('utils.auth.loginRequired')).then(() => {
+        navigate('/login');
+      });
+    }
   };
 
   const alertSessionExpiredThenRedirect = () => {
-    alert(t('utils.auth.sessionExpired')).then(() => {
-      setRedirectLogin(true);
-    });
+    if (!alerted) {
+      setAlerted(true);
+      alert(t('utils.auth.sessionExpired')).then(() => {
+        navigate('/login');
+      });
+    }
   };
 
   const checkTokenFromCookie = async () => {
@@ -109,14 +116,9 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(() => {
-    if (redirectLogin) {
-      setRedirectLogin(false);
-      navigate('/login');
-    }
-  }, [redirectLogin]);
-
   refreshableApi.interceptors.request.use(async (config) => {
+    if (alerted) return Promise.reject('Refresh Token Expired');
+
     const accessToken = await getAccessToken();
     config.headers['Authorization'] = `Bearer ${accessToken}`;
     return config;
