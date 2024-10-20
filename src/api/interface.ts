@@ -7,6 +7,6 @@ export interface validResponse extends response {
 }
 
 export interface errorResponse extends response {
-  exceptionCode?: number;
-  exceptionMessage?: string;
+  exceptionCode: string;
+  exceptionMessage: string;
 }

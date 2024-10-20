@@ -22,7 +22,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
 
   const onAccessTokenFetched = (accessToken: string) => {
     refreshSubscribers.forEach((callback) => callback(accessToken));
-    refreshSubscribers = [];
+    refreshSubscribers.length = 0;
   };
 
   const addRefreshSubscriber = (callback: (token: string) => void) => {
@@ -87,24 +87,23 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     setIsRefreshing(true);
     try {
       const response = await refresh(refreshToken);
+
       if (isTokenResponse(response)) {
         const newAccessToken = response.access_token;
         onAccessTokenFetched(newAccessToken);
         Cookies.set('access_token', newAccessToken);
         return newAccessToken;
       } else {
-        throw new Error('Invalid token response');
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        const errorResponse = (error as any).response;
-        const errorStatus = errorResponse?.status;
-        const errorCode = errorResponse?.data?.code;
+        const errorStatus = response.status;
+        const errorCode = response.exceptionCode;
 
         if (isRefreshTokenExpired(errorStatus, errorCode)) {
           alertSessionExpiredThenRedirect();
         }
+        throw new Error('Invalid token response');
       }
+    } catch (error) {
+      alertLoginRequiredThenRedirect();
     } finally {
       setIsRefreshing(false);
     }
@@ -137,15 +136,13 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
       alertSessionExpiredThenRedirect();
     } else {
-      await alert(t('utils.auth.serverError'));
+      alertLoginRequiredThenRedirect();
       return Promise.reject(error);
     }
   });
 
   return (
-    <ApiContext.Provider
-      value={{ authApi, refreshableApi, checkTokenFromCookie }}
-    >
+    <ApiContext.Provider value={{ authApi, refreshableApi, checkTokenFromCookie }}>
       {children}
       <AlertDialog />
     </ApiContext.Provider>
