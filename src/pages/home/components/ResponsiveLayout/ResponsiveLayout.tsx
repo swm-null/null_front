@@ -29,13 +29,17 @@ const ResponsiveLayout = ({
   return (
     <div className="flex flex-col w-full h-full bg-custom-gradient-basic">
       <div
-        className={`absolute top-0 left-0 right-0 bottom-0 overflow-auto flex flex-col ${isSmallScreen ? '' : 'gap-4'}`}
+        className={`absolute top-0 left-0 right-0 bottom-0 overflow-auto h-full flex flex-col ${isSmallScreen ? '' : 'gap-4'}`}
       >
         <div className={`flex w-full py-5 pl-4 pr-6 items-center`}>
           <LogoIcon className="h-14 w-auto mr-auto" />
           <ProfileButton />
         </div>
-        {isSmallScreen ? children : <div className="px-20">{children}</div>}
+        {isSmallScreen ? (
+          <div className="h-full">{children}</div>
+        ) : (
+          <div className="px-20 h-full">{children}</div>
+        )}
       </div>
       <NavigationBar
         isSmallScreen={isSmallScreen}

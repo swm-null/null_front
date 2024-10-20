@@ -63,15 +63,15 @@ const BottomNavButton = ({
 }) => {
   return (
     <div
-      className="py-2 flex gap-2 flex-1 flex-col items-center justify-center cursor-pointer"
+      className="py-3 flex gap-2 flex-1 flex-col items-center justify-center cursor-pointer"
       onClick={onClick}
     >
-      <div
-        className={`px-3 h-7 content-center rounded-xl ${selected ? 'bg-peach2-transparent' : ''} `}
+      <div className={`${selected ? 'text-brown1' : 'text-gray3'} `}>{icon}</div>
+      <span
+        className={`text-xs ${selected ? 'text-[#5D4037]' : 'text-gray3'}  text-center`}
       >
-        {icon}
-      </div>
-      <span className="text-xs text-[#5D4037] text-center">{label}</span>
+        {label}
+      </span>
     </div>
   );
 };
