@@ -13,6 +13,7 @@ const ResponsiveLayout = ({
   handleNavigation: (page: string) => void;
 }) => {
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
+  // bottomNavHeight 왠지 페이지에 전달해서 안에서 직접 padding 조절해야할 것 같아서 킵
   const [bottomNavHeight, setBottomNavHeight] = useState(0);
   const isSmallScreen = useMediaQuery({
     query: `(max-width:${MOBILE_DEVICE_WIDTH}px)`,
@@ -28,10 +29,7 @@ const ResponsiveLayout = ({
     <div className="flex flex-col w-full h-full bg-custom-gradient-basic">
       <ProfileButton />
       <div
-        className={`flex-grow overflow-y-auto absolute right-0 top-0 left-0`}
-        style={{
-          bottom: isSmallScreen ? bottomNavHeight : 0,
-        }}
+        className={`absolute top-0 left-0 right-0 bottom-0 overflow-auto ${isSmallScreen ? 'pt-[1.19rem]' : 'pt-[4rem]'}`}
       >
         {children}
       </div>

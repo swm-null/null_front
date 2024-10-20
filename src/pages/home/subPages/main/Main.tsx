@@ -6,6 +6,7 @@ import { Mode, Status } from './interfaces';
 import { useCreateMemoManager, useSearchMemoManager } from './hooks';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
 import { ImageListContext } from 'utils';
+import { Header } from '../components';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
@@ -108,10 +109,13 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     <>
       <input {...getInputProps()} />
       <div
-        className="bg-custom-gradient-basic pt-[calc(50vh-120px-140px)] pb-14 px-4 flex h-full justify-center"
+        className="flex justify-center overflow-hidden h-full"
         {...getRootProps()}
       >
-        <div className="max-w-[740px] flex flex-col flex-1 text-gray3">
+        <div className="max-w-[740px] h-full flex flex-col flex-1 text-gray3">
+          <div className="px-4">
+            <Header headerText={t('utils.service.name')} />
+          </div>
           <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
           <div
             className={`overflow-scroll no-scrollbar p-4 gap-4 flex flex-col`}
