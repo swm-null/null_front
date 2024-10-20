@@ -35,7 +35,7 @@ const ResponsiveLayout = ({
           <LogoIcon className="h-14 w-auto mr-auto" />
           <ProfileButton />
         </div>
-        {children}
+        {isSmallScreen ? children : <div className="px-20">{children}</div>}
       </div>
       <NavigationBar
         isSmallScreen={isSmallScreen}
