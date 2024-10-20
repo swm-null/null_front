@@ -58,7 +58,7 @@ const ProfileButton = () => {
   };
 
   return (
-    <>
+    <div className="absolute top-0 right-0 m-4 z-30">
       <IconButton onClick={handleClick}>
         <Avatar
           className="w-10 h-10 border-2 border-white shadow-custom"
@@ -73,7 +73,7 @@ const ProfileButton = () => {
           {t('profile.deleteAccountButton')}
         </MenuItem>
       </Menu>
-    </>
+    </div>
   );
 };
 
