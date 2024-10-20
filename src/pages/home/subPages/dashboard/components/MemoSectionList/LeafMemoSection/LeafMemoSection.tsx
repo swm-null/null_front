@@ -7,7 +7,7 @@ import { MemosList, UneditableMemo } from 'pages/home/subPages/components';
 
 const SINGLE_MEMO_LIMIT = 20;
 
-const LeafMemoList = ({
+const LeafMemoSection = ({
   parentTag,
   sortOption,
   handleMemoClick,
@@ -59,4 +59,4 @@ const LeafMemoList = ({
   );
 };
 
-export default LeafMemoList;
+export default LeafMemoSection;
