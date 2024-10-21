@@ -59,7 +59,7 @@ const SidebarTooltipButton = ({
 
   return (
     <div
-      className={`min-w-12 h-12 px-[14px] ${selected ? 'bg-yellow0' : 'bg-peach1'} text-[#5D4037] gap-4
+      className={`min-w-12 h-12 px-[14px] bg-peach1 ${selected ? '' : 'bg-opacity-50'} text-[#5D4037] gap-4
         inline-flex items-center shadow-custom backdrop-blur-lg rounded-full cursor-pointer`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
