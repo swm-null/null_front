@@ -6,8 +6,9 @@ import { HomeRouter } from './router';
 import { useContext, useEffect } from 'react';
 import { ApiContext } from 'utils';
 
+const queryClient = new QueryClient();
+
 const Home = () => {
-  const queryClient = new QueryClient();
   const { checkTokenFromCookie } = useContext(ApiContext);
   const navigate = useNavigate();
 
