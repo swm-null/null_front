@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useEffect, useRef } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { ProfileButton } from './ProfileButton';
 import { NavigationBar } from './NavigationBar';
@@ -14,8 +14,7 @@ const ResponsiveLayout = ({
   children: ReactNode;
   handleNavigation: (page: string) => void;
 }) => {
-  const bottomNavRef = useRef<HTMLDivElement | null>(null);
-  const { setBottomNavHeight, setIsSmallScreen } = useContext(BottomNavContext);
+  const { setIsSmallScreen } = useContext(BottomNavContext);
 
   const isSmallScreen = useMediaQuery({
     query: `(max-width:${MOBILE_DEVICE_WIDTH}px)`,
@@ -24,12 +23,6 @@ const ResponsiveLayout = ({
   useEffect(() => {
     setIsSmallScreen(isSmallScreen);
   }, [isSmallScreen]);
-
-  useEffect(() => {
-    if (bottomNavRef.current) {
-      setBottomNavHeight(bottomNavRef.current.offsetHeight);
-    }
-  }, [bottomNavRef]);
 
   return (
     <div className="flex flex-col w-full h-full bg-custom-gradient-basic">
@@ -46,7 +39,7 @@ const ResponsiveLayout = ({
           {children}
         </div>
       </div>
-      <NavigationBar bottomNavRef={bottomNavRef} setCurrentPage={handleNavigation} />
+      <NavigationBar setCurrentPage={handleNavigation} />
     </div>
   );
 };
