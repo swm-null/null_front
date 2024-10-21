@@ -3,13 +3,13 @@ import { TextareaAutosize } from '@mui/material';
 
 const MemoText = ({
   message,
-  textColor,
+  textColor = '#111111',
   setMessage,
   handleBlur,
   editable = false,
 }: {
   message: string;
-  textColor: string;
+  textColor?: string;
   setMessage: (newMessage: string) => void;
   handleBlur?: () => void;
   editable?: boolean;
