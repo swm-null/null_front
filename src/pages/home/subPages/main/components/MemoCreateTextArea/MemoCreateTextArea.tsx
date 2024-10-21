@@ -29,10 +29,7 @@ const MemoCreateTextArea = ({
     null
   );
 
-  const { hiddenTextareaRef, isMultiline } = useHiddenTextareaManager(
-    value,
-    images
-  );
+  const { hiddenTextareaRef, isMultiline } = useHiddenTextareaManager(value, images);
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleEnterWithCtrl: handleSubmit,
   });
@@ -48,9 +45,7 @@ const MemoCreateTextArea = ({
     if (images.length === 0) return [];
 
     const response =
-      images.length === 1
-        ? await uploadFile(images[0])
-        : await uploadFiles(images);
+      images.length === 1 ? await uploadFile(images[0]) : await uploadFiles(images);
     if (!isFilesResponse(response))
       throw new Error('파일 업로드에 문제가 생겼습니다.');
 
@@ -58,10 +53,7 @@ const MemoCreateTextArea = ({
   };
 
   const handleBlur = (e: React.FocusEvent) => {
-    if (
-      containerRef.current &&
-      !containerRef.current.contains(e.relatedTarget)
-    ) {
+    if (containerRef.current && !containerRef.current.contains(e.relatedTarget)) {
       setFocus(false);
     }
   };
@@ -89,7 +81,6 @@ const MemoCreateTextArea = ({
   return (
     <div
       className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
-      onFocus={() => setFocus(true)}
       onBlur={handleBlur}
       onPaste={handlePaste}
     >
@@ -110,6 +101,7 @@ const MemoCreateTextArea = ({
           onChange={onChange}
           placeholder={placeholder}
           onKeyDown={handlePressEnterFetch}
+          onFocus={() => setFocus(true)}
           minRows={1}
           maxRows={20}
         />
