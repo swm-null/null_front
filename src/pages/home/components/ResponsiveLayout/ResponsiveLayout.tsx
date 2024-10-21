@@ -15,7 +15,7 @@ const ResponsiveLayout = ({
 }) => {
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
   // bottomNavHeight 왠지 페이지에 전달해서 안에서 직접 padding 조절해야할 것 같아서 킵
-  const [bottomNavHeight, setBottomNavHeight] = useState(0);
+  const [_, setBottomNavHeight] = useState(0);
   const isSmallScreen = useMediaQuery({
     query: `(max-width:${MOBILE_DEVICE_WIDTH}px)`,
   });
