@@ -65,10 +65,12 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         placeholder={t('pages.create.inputPlaceholder')}
         onSubmit={(images: string[]) => handleSubmit(message, images)}
       />
-      <Component.CreatedMemoList
-        memos={createMemoManager.useMemoStack().data}
-        fetchNextPage={fetchNextPage}
-      />
+      <div className={`overflow-scroll no-scrollbar`}>
+        <Component.CreatedMemoList
+          memos={createMemoManager.useMemoStack().data}
+          fetchNextPage={fetchNextPage}
+        />
+      </div>
     </>
   );
 
@@ -112,13 +114,8 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
         {...getRootProps()}
       >
         <div className="max-w-[740px] h-full flex flex-col flex-1 text-gray3">
-          <div className="px-4"></div>
           <Component.ModeToggle mode={mode} onModeChange={handleModeChange} />
-          <div className={`overflow-scroll no-scrollbar p-4 gap-4 flex flex-col`}>
-            {isCreateMode()
-              ? createModeContent
-              : isSearchMode() && searchModeContent}
-          </div>
+          {isCreateMode() ? createModeContent : isSearchMode() && searchModeContent}
         </div>
       </div>
     </>

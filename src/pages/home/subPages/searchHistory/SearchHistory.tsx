@@ -12,6 +12,7 @@ import { useIntersectionObserver } from '../hooks';
 const SEARCH_HISTORY_LIMIT = 15;
 
 const input$ = new Subject();
+
 const SearchHistoryPage = ({}: {}) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
@@ -83,17 +84,14 @@ const SearchHistoryPage = ({}: {}) => {
 
   return (
     <div className="flex flex-col flex-1 overflow-hidden h-full">
-      <div className="max-w-[740px] w-full flex flex-col flex-1 overflow-hidden self-center">
-        <SearchScrollView
-          searchTextArea={
-            <MemoSearchTextArea
-              value={message}
-              onChange={handleMessageChange}
-              placeholder={t('pages.searchHistory.inputPlaceholder')}
-              onSubmit={handleSubmit}
-            />
-          }
-        >
+      <div className="max-w-[740px] w-full h-full flex flex-col flex-1 overflow-hidden self-center">
+        <MemoSearchTextArea
+          value={message}
+          onChange={handleMessageChange}
+          placeholder={t('pages.searchHistory.inputPlaceholder')}
+          onSubmit={handleSubmit}
+        />
+        <SearchScrollView>
           {searchConversations.map((searchConversation) => (
             <SearchHistoryAccordion
               // FIXME: searchHistory에 key 생기면 삭제
