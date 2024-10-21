@@ -92,12 +92,15 @@ const MemoCreateTextArea = ({
         />
         <div
           ref={containerRef}
-          className={`flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row'}`}
+          className={`flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row items-center'}`}
         >
           <TextareaAutosize
             className="flex-auto focus:outline-none resize-none min-h-9 content-center
             text-[#111111] bg-transparent placeholder-custom"
             value={value}
+            onFocus={() => {
+              setFocus(true);
+            }}
             onChange={onChange}
             placeholder={placeholder}
             onKeyDown={handlePressEnterFetch}
