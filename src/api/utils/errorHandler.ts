@@ -9,9 +9,7 @@ export const errorHandler = (error: unknown, method: string): errorResponse => {
     if (error.response) {
       const httpErrorCode = error.response.status;
       const errorCode = error.response?.data ? error.response.data.code : '';
-      const errorDetails = error.response?.data
-        ? error.response.data.message
-        : '';
+      const errorDetails = error.response?.data ? error.response.data.message : '';
 
       errorInfo = {
         method,
@@ -28,6 +26,8 @@ export const errorHandler = (error: unknown, method: string): errorResponse => {
         method,
         status: 0,
         message: '서버로부터 응답이 없습니다.',
+        exceptionCode: '',
+        exceptionMessage: '',
       } as errorResponse;
     }
 
@@ -37,6 +37,8 @@ export const errorHandler = (error: unknown, method: string): errorResponse => {
         method,
         status: -1,
         message: '요청을 설정하는 동안 문제가 발생했습니다.',
+        exceptionCode: '',
+        exceptionMessage: '',
       } as errorResponse;
     }
   } else if (error instanceof Error) {
@@ -44,12 +46,16 @@ export const errorHandler = (error: unknown, method: string): errorResponse => {
       method,
       status: -2,
       message: `${method}에서 예상치 못한 에러 발생: ${error.message}`,
+      exceptionCode: '',
+      exceptionMessage: '',
     } as errorResponse;
   } else {
     errorInfo = {
       method,
       status: -3,
       message: `${method}에서 처리할 수 없는 예상치 못한 에러 발생`,
+      exceptionCode: '',
+      exceptionMessage: '',
     } as errorResponse;
   }
 

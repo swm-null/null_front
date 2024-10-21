@@ -81,9 +81,7 @@ const MemoCreateTextArea = ({
   return (
     <div className="p-4">
       <div
-        className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] 
-        border border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
-        onFocus={() => setFocus(true)}
+        className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
         onBlur={handleBlur}
         onPaste={handlePaste}
       >
@@ -92,7 +90,6 @@ const MemoCreateTextArea = ({
           hiddenTextareaWidth={hiddenTextareaWidth}
           hiddenTextareaRef={hiddenTextareaRef}
         />
-
         <div
           ref={containerRef}
           className={`flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row'}`}

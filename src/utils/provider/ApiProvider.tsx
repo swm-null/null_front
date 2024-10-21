@@ -1,4 +1,4 @@
-import { useEffect, useContext, ReactNode, useState } from 'react';
+import { useContext, ReactNode, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -7,12 +7,14 @@ import { isTokenResponse, refresh, authApi, refreshableApi } from 'api';
 import { jwtDecode } from 'jwt-decode';
 
 const ApiProvider = ({ children }: { children: ReactNode }) => {
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [redirectLogin, setRedirectLogin] = useState(false);
   const { alert } = useContext(AlertContext);
   const { t } = useTranslation();
+
   const navigate = useNavigate();
-  let refreshSubscribers: Array<(token: string) => void> = [];
+
+  const isRefreshingRef = useRef(false);
+  const alertedRef = useRef(false);
+  const refreshSubscribersRef = useRef<Array<(token: string) => void>>([]);
 
   const isTokenExpired = (status: number) => status === 401;
   const isAccessTokenExpired = (status: number, code: string) =>
@@ -21,12 +23,12 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     isTokenExpired(status) && code === '0004';
 
   const onAccessTokenFetched = (accessToken: string) => {
-    refreshSubscribers.forEach((callback) => callback(accessToken));
-    refreshSubscribers = [];
+    refreshSubscribersRef.current.forEach((callback) => callback(accessToken));
+    refreshSubscribersRef.current.length = 0;
   };
 
   const addRefreshSubscriber = (callback: (token: string) => void) => {
-    refreshSubscribers.push(callback);
+    refreshSubscribersRef.current.push(callback);
   };
 
   const isTokenValid = (token: string) => {
@@ -44,15 +46,13 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const alertLoginRequiredThenRedirect = () => {
-    alert(t('utils.auth.loginRequired')).then(() => {
-      setRedirectLogin(true);
-    });
-  };
-
-  const alertSessionExpiredThenRedirect = () => {
-    alert(t('utils.auth.sessionExpired')).then(() => {
-      setRedirectLogin(true);
-    });
+    if (!alertedRef.current) {
+      alertedRef.current = true;
+      alert(t('utils.auth.loginRequired')).then(() => {
+        navigate('/login');
+        alertedRef.current = false;
+      });
+    }
   };
 
   const checkTokenFromCookie = async () => {
@@ -78,52 +78,50 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getAccessTokenByRefresh = async (refreshToken: string) => {
-    if (isRefreshing) {
+    if (isRefreshingRef.current) {
       return new Promise((resolve) => {
         addRefreshSubscriber((newToken) => resolve(newToken));
       });
     }
 
-    setIsRefreshing(true);
+    isRefreshingRef.current = true;
     try {
       const response = await refresh(refreshToken);
+
       if (isTokenResponse(response)) {
         const newAccessToken = response.access_token;
         onAccessTokenFetched(newAccessToken);
         Cookies.set('access_token', newAccessToken);
         return newAccessToken;
       } else {
+        const errorStatus = response.status;
+        const errorCode = response.exceptionCode;
+
+        if (isRefreshTokenExpired(errorStatus, errorCode)) {
+          alertLoginRequiredThenRedirect();
+        }
         throw new Error('Invalid token response');
       }
     } catch (error) {
-      if (error instanceof Error) {
-        const errorResponse = (error as any).response;
-        const errorStatus = errorResponse?.status;
-        const errorCode = errorResponse?.data?.code;
-
-        if (isRefreshTokenExpired(errorStatus, errorCode)) {
-          alertSessionExpiredThenRedirect();
-        }
-      }
+      alertLoginRequiredThenRedirect();
     } finally {
-      setIsRefreshing(false);
+      isRefreshingRef.current = false;
     }
   };
 
-  useEffect(() => {
-    if (redirectLogin) {
-      setRedirectLogin(false);
-      navigate('/login');
-    }
-  }, [redirectLogin]);
-
   refreshableApi.interceptors.request.use(async (config) => {
+    if (alertedRef.current) return Promise.reject('Refresh Token Expired');
+
     const accessToken = await getAccessToken();
+    if (!accessToken) return Promise.reject('Refresh Token Expired');
+
     config.headers['Authorization'] = `Bearer ${accessToken}`;
     return config;
   });
 
   refreshableApi.interceptors.response.use(undefined, async (error) => {
+    if (alertedRef.current) return null;
+
     const errorStatus = error.response.status;
     const errorCode = error.response.data.code;
     const originalRequest = error.config;
@@ -135,17 +133,15 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
         return refreshableApi(originalRequest);
       }
     } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
-      alertSessionExpiredThenRedirect();
+      alertLoginRequiredThenRedirect();
     } else {
-      await alert(t('utils.auth.serverError'));
+      alertLoginRequiredThenRedirect();
       return Promise.reject(error);
     }
   });
 
   return (
-    <ApiContext.Provider
-      value={{ authApi, refreshableApi, checkTokenFromCookie }}
-    >
+    <ApiContext.Provider value={{ authApi, refreshableApi, checkTokenFromCookie }}>
       {children}
       <AlertDialog />
     </ApiContext.Provider>
