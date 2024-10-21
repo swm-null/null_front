@@ -102,7 +102,7 @@ const EditableMemo = ({
           dateFormat={t('memo.dateFormatEdit')}
           handleDeleteMemo={handleDeleteMemo}
         />
-        <div className="flex mb-auto flex-row w-full flex-1">
+        <div className="flex mb-auto flex-row w-full flex-1 gap-9">
           {memo.image_urls?.length ? (
             <Flickity
               className="carousel w-60 h-60 min-w-60 rounded-2xl overflow-hidden"
