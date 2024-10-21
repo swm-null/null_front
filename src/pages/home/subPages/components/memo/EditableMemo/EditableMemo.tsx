@@ -5,9 +5,9 @@ import { debounceTime } from 'rxjs/operators';
 import { MemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import * as Api from 'api';
-import { MemoHeader } from './MemoHeader.tsx';
+import { MemoHeader } from './MemoHeader.tsx/index.ts';
 import { TagRebuildCheckbox } from './TagRebuildCheckbox/index.ts';
-import Flickity from 'react-flickity-component';
+import { ImageSlider } from './ImageSlider';
 
 const EditableMemo = ({
   memo,
@@ -85,12 +85,6 @@ const EditableMemo = ({
     };
   }, [updateMemoSubject]);
 
-  const flickityOptions = {
-    prevNextButtons: false,
-    pageDots: memo.image_urls && memo.image_urls.length > 1 ? true : undefined,
-    wrapAround: true,
-  };
-
   return (
     <div
       className={`p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-md gap-8 
@@ -103,25 +97,7 @@ const EditableMemo = ({
           handleDeleteMemo={handleDeleteMemo}
         />
         <div className="flex mb-auto flex-row w-full flex-1 gap-9">
-          {memo.image_urls?.length ? (
-            <Flickity
-              className="carousel w-60 h-60 min-w-60 rounded-2xl overflow-hidden"
-              elementType="div"
-              options={flickityOptions}
-              static
-            >
-              {memo.image_urls.map((url, index) => (
-                <img
-                  src={url}
-                  key={index}
-                  alt={`Memo Image ${index + 1}`}
-                  className="carousel-cell object-cover w-full h-full"
-                />
-              ))}
-            </Flickity>
-          ) : (
-            <></>
-          )}
+          <ImageSlider image_urls={memo.image_urls} />
           <MemoText message={message} setMessage={setMessage} editable={editable} />
         </div>
       </div>
