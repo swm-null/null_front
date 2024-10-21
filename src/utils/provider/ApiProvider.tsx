@@ -55,16 +55,6 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const alertSessionExpiredThenRedirect = () => {
-    if (!alertedRef.current) {
-      alertedRef.current = true;
-      alert(t('utils.auth.sessionExpired')).then(() => {
-        navigate('/login');
-        alertedRef.current = false;
-      });
-    }
-  };
-
   const checkTokenFromCookie = async () => {
     await getAccessToken();
   };
@@ -108,7 +98,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
         const errorCode = response.exceptionCode;
 
         if (isRefreshTokenExpired(errorStatus, errorCode)) {
-          alertSessionExpiredThenRedirect();
+          alertLoginRequiredThenRedirect();
         }
         throw new Error('Invalid token response');
       }
@@ -143,7 +133,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
         return refreshableApi(originalRequest);
       }
     } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
-      alertSessionExpiredThenRedirect();
+      alertLoginRequiredThenRedirect();
     } else {
       alertLoginRequiredThenRedirect();
       return Promise.reject(error);
