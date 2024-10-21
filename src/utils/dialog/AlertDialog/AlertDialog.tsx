@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Dialog } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { AlertContext } from 'utils/context';
@@ -53,6 +53,20 @@ const AlarmContent = ({
   onClose,
   onConfirm,
 }: AlarmContentProps) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        onConfirm();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onConfirm]);
+
   return (
     <div className="relative w-full p-5 shadow-custom flex flex-col gap-5 sm:w-400px">
       <p className="text-lg font-bold">{title}</p>
