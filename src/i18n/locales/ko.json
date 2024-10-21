@@ -1,7 +1,7 @@
 {
   "utils": {
     "service": {
-      "name": "오트노트"
+      "name": "OatNote"
     },
     "alert": { "ok": "확인", "cancel": "취소" },
     "auth": {

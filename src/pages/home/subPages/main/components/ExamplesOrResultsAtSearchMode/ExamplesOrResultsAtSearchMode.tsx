@@ -19,7 +19,7 @@ const ExamplesOrResultsAtSearchMode = ({
   handleButtonClick,
 }: ExamplesOrResultsAtSearchModeProps) => {
   return (
-    <div className="text-[#111111] overflow-visible">
+    <div className="flex flex-col flex-grow-0 text-[#111111] overflow-hidden p-4 pt-0">
       {status === 'default' ? (
         <ExampleContents
           buttonData={buttonData}

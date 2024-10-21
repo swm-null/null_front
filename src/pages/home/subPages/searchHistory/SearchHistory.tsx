@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Header } from 'pages/home/subPages/components';
 import { SearchScrollView } from './components';
 import { SearchHistoryAccordion } from './components/SearchHistoryAccordion';
 import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
@@ -13,6 +12,7 @@ import { useIntersectionObserver } from '../hooks';
 const SEARCH_HISTORY_LIMIT = 15;
 
 const input$ = new Subject();
+
 const SearchHistoryPage = ({}: {}) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
@@ -83,21 +83,15 @@ const SearchHistoryPage = ({}: {}) => {
   }, [refetch]);
 
   return (
-    <div className="flex flex-col flex-1 h-screen bg-custom-gradient-basic">
-      <div className="max-w-[740px] pt-24 pb-16 w-full flex flex-col flex-1 overflow-hidden self-center">
-        <div className="px-4">
-          <Header headerText={t('pages.searchHistory.header')} />
-        </div>
-        <SearchScrollView
-          searchTextArea={
-            <MemoSearchTextArea
-              value={message}
-              onChange={handleMessageChange}
-              placeholder={t('pages.searchHistory.inputPlaceholder')}
-              onSubmit={handleSubmit}
-            />
-          }
-        >
+    <div className="flex flex-col flex-1 overflow-hidden h-full">
+      <div className="max-w-[740px] w-full h-full flex flex-col flex-1 overflow-hidden self-center">
+        <MemoSearchTextArea
+          value={message}
+          onChange={handleMessageChange}
+          placeholder={t('pages.searchHistory.inputPlaceholder')}
+          onSubmit={handleSubmit}
+        />
+        <SearchScrollView>
           {searchConversations.map((searchConversation) => (
             <SearchHistoryAccordion
               // FIXME: searchHistory에 key 생기면 삭제

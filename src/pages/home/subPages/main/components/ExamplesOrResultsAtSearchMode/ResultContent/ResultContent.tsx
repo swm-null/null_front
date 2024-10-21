@@ -16,9 +16,9 @@ const ResultContent = ({
   if (!searchConversation) return;
 
   return (
-    <>
+    <div className="flex flex-col h-full overflow-hidden">
       <div
-        className="px-2 py-6 w-full rounded-xl border-[1px] 
+        className="px-2 py-6 w-full flex-1 rounded-xl border-[1px] overflow-scroll
           border-black border-opacity-10 bg-clip-padding bg-[#FFF6E3CC] font-regular"
       >
         <SearchConversation
@@ -31,17 +31,11 @@ const ResultContent = ({
         onClick={navigateToHistory}
         text={t('pages.main.searchHistory')}
       />
-    </>
+    </div>
   );
 };
 
-const HistoryButton = ({
-  onClick,
-  text,
-}: {
-  onClick: () => void;
-  text: string;
-}) => (
+const HistoryButton = ({ onClick, text }: { onClick: () => void; text: string }) => (
   <div
     className="flex gap-2 mt-2 items-center justify-end cursor-pointer"
     onClick={onClick}

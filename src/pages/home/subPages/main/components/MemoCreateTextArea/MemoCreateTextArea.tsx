@@ -79,38 +79,38 @@ const MemoCreateTextArea = ({
   }, [containerRef.current]);
 
   return (
-    <div
-      className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
-      onBlur={handleBlur}
-      onPaste={handlePaste}
-    >
-      <HiddenTextarea
-        value={value}
-        hiddenTextareaWidth={hiddenTextareaWidth}
-        hiddenTextareaRef={hiddenTextareaRef}
-      />
-
+    <div className="p-4">
       <div
-        ref={containerRef}
-        className={`flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row'}`}
+        className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
+        onBlur={handleBlur}
+        onPaste={handlePaste}
       >
-        <TextareaAutosize
-          className="flex-auto focus:outline-none resize-none min-h-9 content-center
-            text-[#111111] bg-transparent placeholder-custom"
+        <HiddenTextarea
           value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          onKeyDown={handlePressEnterFetch}
-          onFocus={() => setFocus(true)}
-          minRows={1}
-          maxRows={20}
+          hiddenTextareaWidth={hiddenTextareaWidth}
+          hiddenTextareaRef={hiddenTextareaRef}
         />
-        <ImageList images={images} removeImage={removeImage} />
-        <IconButtons
-          submitAvailable={focus || isMultiline}
-          onMicButtonClick={handleMicButtonClick}
-          onSubmitButtonClick={handleSubmit}
-        />
+        <div
+          ref={containerRef}
+          className={`flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row'}`}
+        >
+          <TextareaAutosize
+            className="flex-auto focus:outline-none resize-none min-h-9 content-center
+            text-[#111111] bg-transparent placeholder-custom"
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            onKeyDown={handlePressEnterFetch}
+            minRows={1}
+            maxRows={20}
+          />
+          <ImageList images={images} removeImage={removeImage} />
+          <IconButtons
+            submitAvailable={focus || isMultiline}
+            onMicButtonClick={handleMicButtonClick}
+            onSubmitButtonClick={handleSubmit}
+          />
+        </div>
       </div>
     </div>
   );

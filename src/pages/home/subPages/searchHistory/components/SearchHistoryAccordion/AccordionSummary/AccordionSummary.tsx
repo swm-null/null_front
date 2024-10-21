@@ -1,49 +1,43 @@
 import { DownIcon } from 'assets/icons';
-import { format } from 'date-fns';
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
-import { useTranslation } from 'react-i18next';
+import { LegacyRef } from 'react';
 
 const AccordionSummary = ({
   isOpen,
   data,
-  handleMouseDown,
-  handleMouseMove,
-  handleMouseUp,
+  contentRef,
+  formatDate,
 }: {
   isOpen: boolean;
   data: MemoSearchConversation;
-  handleMouseDown: () => void;
-  handleMouseMove: () => void;
-  handleMouseUp: () => void;
+  contentRef: LegacyRef<HTMLParagraphElement>;
+  formatDate: (date: string) => string;
 }) => {
-  const { t } = useTranslation();
-
-  const formatDate = (date: string): string => {
-    if (date.endsWith('Z')) {
-      return format(new Date(date), t('memo.dateFormat'));
-    }
-    return format(`${date}Z`, t('memo.dateFormat'));
-  };
-
   return (
-    <div
-      className="px-5 py-4 gap-[0.87rem] flex justify-between items-center cursor-pointer"
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-    >
+    <div className="px-5 py-4 flex justify-start cursor-pointer gap-[0.87rem]">
       <DownIcon
-        className="text-brown1"
+        className="text-brown1 flex-shrink-0 transition-transform duration-300"
         style={{
           transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.3s ease',
         }}
       />
-      <p className="text-base font-semibold text-brown2">{data.query}</p>
-      <p className="ml-auto text-sm font-regular text-brown2">
-        {formatDate(data.created_at)}
+      <p
+        ref={isOpen ? undefined : contentRef}
+        className={`text-base font-semibold text-brown2 ${
+          isOpen
+            ? 'whitespace-pre-wrap'
+            : 'overflow-hidden whitespace-nowrap text-ellipsis'
+        }`}
+      >
+        {data.query}
       </p>
+      {!isOpen && (
+        <p className="ml-auto text-sm font-regular text-brown2 flex-shrink-0">
+          {formatDate(data.created_at)}
+        </p>
+      )}
     </div>
   );
 };
+
 export default AccordionSummary;

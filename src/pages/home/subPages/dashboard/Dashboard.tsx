@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
-import { Header } from 'pages/home/subPages/components';
 import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
@@ -55,15 +54,12 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-custom-gradient-basic text-gray2 overflow-hidden px-4 pb-4">
-      <div className="w-full h-full pt-12 pb-8 flex flex-col max-w-[1102px] self-center gap-4">
-        <Header headerText={t('pages.dashboard.header')} />
+    <div className="flex flex-col h-full text-gray2 overflow-hidden">
+      <div className="w-full h-full flex flex-col max-w-[1102px] self-center gap-4">
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">
           <Components.CurrentTagPath
             allTagText={t('pages.dashboard.allMemoButton')}
-            tags={tagsManager.tagRelations.flatMap(
-              (tagRelation) => tagRelation.tag
-            )}
+            tags={tagsManager.tagRelations.flatMap((tagRelation) => tagRelation.tag)}
             tagStack={tagStack}
             setTagStack={setTagStack}
             sortOption={sortOption}

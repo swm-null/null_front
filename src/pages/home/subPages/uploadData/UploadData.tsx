@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { Header } from 'pages/home/subPages/components';
 import { KakaoDropzone } from './components/KakaoDropzone';
 import { CopyTextField } from './components';
 
@@ -11,7 +10,6 @@ const UploadData = ({}: {}) => {
 
   return (
     <div className="flex flex-col flex-1 h-screen text-gray3">
-      <Header headerText={t('pages.uploadData.header')} />
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden gap-2">
         <p>{t('pages.uploadData.emailInstruction.header')}</p>
         <p>{t('pages.uploadData.emailInstruction.text1')}</p>
