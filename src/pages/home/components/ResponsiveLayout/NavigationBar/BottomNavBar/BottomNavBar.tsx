@@ -1,19 +1,24 @@
 import * as Icon from 'assets/icons';
-import { LegacyRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BottomNavContext } from 'utils';
 
 interface BottomNavBarProps {
-  bottomNavRef: LegacyRef<HTMLDivElement>;
   currentPage: string;
   setCurrentPage: (page: string) => void;
 }
 
-const BottomNavBar = ({
-  bottomNavRef,
-  currentPage,
-  setCurrentPage,
-}: BottomNavBarProps) => {
+const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
   const { t } = useTranslation();
+  const { setBottomNavHeight } = useContext(BottomNavContext);
+
+  const bottomNavRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (bottomNavRef.current) {
+      setBottomNavHeight(bottomNavRef.current.offsetHeight);
+    }
+  }, [bottomNavRef]);
 
   return (
     <div ref={bottomNavRef} className="fixed w-full bottom-0">

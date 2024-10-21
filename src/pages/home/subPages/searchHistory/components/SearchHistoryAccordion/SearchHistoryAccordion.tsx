@@ -41,7 +41,7 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
   return (
     <div
       key={data.id || uuid_v4()}
-      className="rounded-2xl overflow-hidden border border-shadow0 shadow-custom"
+      className="flex flex-shrink-0 flex-col w-full rounded-2xl border border-shadow0 shadow-custom"
       style={{
         backgroundColor: isOpen ? '#FFF6E3' : '#FFF6E366',
         transition: 'background-color 0.3s ease',
