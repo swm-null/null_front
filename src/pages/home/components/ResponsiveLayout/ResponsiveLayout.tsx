@@ -35,11 +35,9 @@ const ResponsiveLayout = ({
           <LogoIcon className="h-14 w-auto mr-auto" />
           <ProfileButton />
         </div>
-        {isSmallScreen ? (
-          <div className="h-full">{children}</div>
-        ) : (
-          <div className="px-20 h-full">{children}</div>
-        )}
+        <div className={`flex-grow overflow-auto ${isSmallScreen ? '' : 'px-20'}`}>
+          {children}
+        </div>
       </div>
       <NavigationBar
         isSmallScreen={isSmallScreen}
