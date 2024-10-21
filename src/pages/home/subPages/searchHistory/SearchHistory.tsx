@@ -41,6 +41,7 @@ const SearchHistoryPage = ({}: {}) => {
         : undefined;
     },
     initialPageParam: 1,
+    staleTime: 60 * 1000,
   });
 
   const searchConversations =

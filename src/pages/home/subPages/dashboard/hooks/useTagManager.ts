@@ -49,14 +49,13 @@ const useTagsManager = () => {
       return nextPage <= lastPage.total_page ? nextPage : undefined;
     },
     initialPageParam: 1,
+    staleTime: 60 * 1000,
   });
 
   useEffect(() => {
     if (!tagData) return;
 
-    const newMemoSectionList = tagData.pages.flatMap(
-      (page) => page.tag_relations
-    );
+    const newMemoSectionList = tagData.pages.flatMap((page) => page.tag_relations);
 
     setTagRelations(newMemoSectionList);
   }, [tagData]);

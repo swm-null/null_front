@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, memo, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
 import * as Component from './components';
@@ -22,7 +22,6 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
     status,
     setStatus,
   });
-  const { fetchNextPage } = createMemoManager.useMemoStack();
 
   const isCreateMode = () => mode === 'create';
   const isSearchMode = () => mode === 'search';
@@ -67,8 +66,8 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
       />
       <div className={`overflow-scroll no-scrollbar`}>
         <Component.CreatedMemoList
-          memos={createMemoManager.useMemoStack().data}
-          fetchNextPage={fetchNextPage}
+          memos={createMemoManager.data}
+          fetchNextPage={createMemoManager.fetchNextPage}
         />
       </div>
     </>
@@ -122,4 +121,4 @@ const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   );
 };
 
-export default MainPage;
+export default memo(MainPage);

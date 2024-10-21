@@ -18,35 +18,27 @@ const useCreateMemoManager = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const useMemoStack = () => {
-    const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
-      useInfiniteQuery<Api.paginationMemosResponse, Error>({
-        queryKey: ['recentMemo'],
-        queryFn: async ({ pageParam = 1 }: any) => {
-          const response = await Api.getRecentMemos(pageParam, 10);
-          if (!Api.isMemosResponse(response)) {
-            throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
-          }
-          return response;
-        },
-        getNextPageParam: (lastPage) => {
-          return lastPage.total_page > lastPage.current_page
-            ? lastPage.current_page + 1
-            : undefined;
-        },
-        initialPageParam: 1,
-      });
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+    useInfiniteQuery<Api.paginationMemosResponse, Error>({
+      queryKey: ['recentMemo'],
+      queryFn: async ({ pageParam = 1 }: any) => {
+        const response = await Api.getRecentMemos(pageParam, 10);
+        if (!Api.isMemosResponse(response)) {
+          throw new Error('메모를 가져오는 중 오류가 발생했습니다.');
+        }
+        return response;
+      },
+      getNextPageParam: (lastPage) => {
+        return lastPage.total_page > lastPage.current_page
+          ? lastPage.current_page + 1
+          : undefined;
+      },
+      initialPageParam: 1,
+      staleTime: 60 * 1000,
+    });
 
-    const allMemos =
-      !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
-
-    return {
-      data: allMemos,
-      fetchNextPage,
-      hasNextPage,
-      isFetchingNextPage,
-    };
-  };
+  const allMemos =
+    !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
 
   const tryCreateMemoAndSetStatus = async (
     message: string,
@@ -120,8 +112,7 @@ const useCreateMemoManager = ({
     if (optimisticMemoId) {
       queryClient.setQueryData<Interface.Memo[]>(
         ['recentMemo'],
-        (oldMemos) =>
-          oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
+        (oldMemos) => oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
       );
     }
   };
@@ -173,8 +164,11 @@ const useCreateMemoManager = ({
   });
 
   return {
+    data: allMemos,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     status,
-    useMemoStack,
     tryCreateMemoAndSetStatus,
   };
 };
