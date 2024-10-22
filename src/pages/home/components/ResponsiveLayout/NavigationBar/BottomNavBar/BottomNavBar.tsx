@@ -2,7 +2,6 @@ import * as Icon from 'assets/icons';
 import { useContext, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BottomNavContext } from 'utils';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 
 interface BottomNavBarProps {
   currentPage: string;
@@ -29,7 +28,7 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
       >
         <BottomNavButton
           selected={currentPage === ''}
-          icon={<AddBoxOutlinedIcon />}
+          icon={<Icon.AddIcon />}
           label={t('pages.sidebar.create')}
           onClick={() => setCurrentPage('')}
         />

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import * as Icon from 'assets/icons';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import { useTranslation } from 'react-i18next';
 
 interface LeftNavBarProps {
@@ -17,7 +16,7 @@ const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
         <div className="p-4 flex flex-col items-start justify-center gap-[14px]">
           <SidebarTooltipButton
             selected={currentPage === ''}
-            icon={<AddBoxOutlinedIcon />}
+            icon={<Icon.AddIcon />}
             label={t('pages.sidebar.create')}
             onClick={() => setCurrentPage('')}
           />
