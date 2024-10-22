@@ -20,7 +20,7 @@ const MemoText = ({
 
   return (
     <TextareaAutosize
-      className={`w-full bg-transparent focus:outline-none resize-none font-regular text-[15px]`}
+      className={`w-full flex-1 bg-transparent focus:outline-none resize-none font-regular text-[15px]`}
       style={{ color: textColor }}
       value={message}
       onChange={handleChange}
