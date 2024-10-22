@@ -53,10 +53,11 @@ const UneditableMemo = ({
     }
   };
 
-  const handleMouseUp = () => {
+  const handleClick = () => {
     mouseDownTime.current = null;
     if (!isDragging && onClick) {
       onClick();
+      setIsDragging(false);
     }
   };
 
@@ -75,7 +76,7 @@ const UneditableMemo = ({
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
+      onClick={handleClick}
     >
       {memo.image_urls && memo.image_urls.length > 0 && <ImageBlur />}
 

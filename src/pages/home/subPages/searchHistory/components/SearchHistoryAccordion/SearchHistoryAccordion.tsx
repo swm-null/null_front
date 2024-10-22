@@ -25,7 +25,7 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
     }
   };
 
-  const handleMouseUp = () => {
+  const handleClick = () => {
     mouseDownTime.current = null;
     if (!isDragging) {
       setIsOpen((prev) => !prev);
@@ -48,7 +48,7 @@ const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
+      onClick={handleClick}
     >
       <AccordionSummary
         isOpen={isOpen}
