@@ -2,7 +2,6 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import * as Api from 'api';
 import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 import { Memo } from 'pages/home/subPages/interfaces';
-import { useEffect } from 'react';
 
 const MEMO_LIMIT = 10;
 
