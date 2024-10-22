@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { deleteMemo, isValidResponse } from 'api';
 import { MemoText } from 'pages/home/subPages/components';
@@ -27,9 +27,9 @@ const UneditableMemo = ({
   const [message, setMessage] = useState(memo.content);
   const [tags] = useState(memo.tags);
   const [isDragging, setIsDragging] = useState(false);
-  const mouseDownTime = useRef<number | null>(null);
 
   const haveImageUrl = memo.image_urls && memo.image_urls.length > 0;
+
   const getStyleByImagePresence = (
     defaultStyle: string,
     styleByImagePresence: string
@@ -50,18 +50,14 @@ const UneditableMemo = ({
   };
 
   const handleMouseDown = () => {
-    mouseDownTime.current = Date.now();
     setIsDragging(false);
   };
 
   const handleMouseMove = () => {
-    if (mouseDownTime.current !== null && Date.now() - mouseDownTime.current > 100) {
-      setIsDragging(true);
-    }
+    setIsDragging(true);
   };
 
   const handleClick = () => {
-    mouseDownTime.current = null;
     if (!isDragging && onClick) {
       onClick();
       setIsDragging(false);
