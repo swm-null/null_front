@@ -25,10 +25,10 @@ const FindPw = () => {
   const handleSendCode = async () => {
     try {
       const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
+      setEmailSuccess({ flag: true, message: t('utils.auth.codeSent') });
+
       const response = await sendCode(emailString);
-      if (isValidResponse(response)) {
-        setEmailSuccess({ flag: true, message: t('utils.auth.codeSent') });
-      } else {
+      if (!isValidResponse(response)) {
         alert(t('utils.auth.codeSendFailed'));
       }
     } catch {

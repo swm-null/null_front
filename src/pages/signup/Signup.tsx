@@ -35,10 +35,10 @@ const Signup = () => {
 
       if (isValidResponse(response)) {
         setIsEmailChecked(true);
-        setEmailSuccess((prev) => ({
-          ...prev,
+        setEmailSuccess({
+          flag: true,
           message: t('signup.checkEmailSuccess'),
-        }));
+        });
         validationManager.setEmailError('');
       } else if (Number(response?.exceptionCode) === 1004) {
         setEmailSuccess((prev) => ({ ...prev, flag: false }));
@@ -61,13 +61,12 @@ const Signup = () => {
 
     try {
       const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
+      setCodeSuccess({
+        flag: true,
+        message: t('utils.auth.codeSent'),
+      });
       const response = await sendCode(emailString);
-      if (isValidResponse(response)) {
-        setCodeSuccess({
-          flag: true,
-          message: t('utils.auth.codeSent'),
-        });
-      } else {
+      if (!isValidResponse(response)) {
         validationManager.setCodeError(t('utils.auth.codeSendFailed'));
       }
     } catch {
