@@ -19,14 +19,16 @@ const MemoText = ({
   };
 
   return (
-    <TextareaAutosize
-      className={`w-full flex-1 bg-transparent focus:outline-none resize-none font-regular text-[15px]`}
-      style={{ color: textColor }}
-      value={message}
-      onChange={handleChange}
-      onBlur={handleBlur}
-      readOnly={!editable}
-    />
+    <div className="flex flex-1">
+      <TextareaAutosize
+        className={`w-full bg-transparent focus:outline-none resize-none font-regular text-[15px]`}
+        style={{ color: textColor }}
+        value={message}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        readOnly={!editable}
+      />
+    </div>
   );
 };
 
