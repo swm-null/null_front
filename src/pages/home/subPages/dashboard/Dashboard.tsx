@@ -58,7 +58,7 @@ const DashboardPage = () => {
   return (
     <div
       className="flex flex-col h-full text-gray2 overflow-hidden"
-      style={{ paddingBottom: isSmallScreen ? bottomNavHeight : 0 }}
+      style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 8 : 0 }}
     >
       <div className="w-full h-full flex flex-col max-w-[1102px] self-center gap-4">
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">

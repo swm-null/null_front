@@ -30,7 +30,7 @@ const CreatedMemoList = ({
   return (
     <div
       className="flex flex-col gap-3 p-4 pt-0"
-      style={{ paddingBottom: isSmallScreen ? bottomNavHeight : 0 }}
+      style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 24 : 0 }}
     >
       {memos.map((memo) => (
         <CreatedMemoCard

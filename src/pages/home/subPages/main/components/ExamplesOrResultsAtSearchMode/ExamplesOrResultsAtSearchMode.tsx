@@ -25,7 +25,7 @@ const ExamplesOrResultsAtSearchMode = ({
   return (
     <div
       className="flex flex-col flex-grow-0 text-[#111111] overflow-hidden p-4 pt-0"
-      style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 10 : 0 }}
+      style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 24 : 0 }}
     >
       {status === 'default' ? (
         <ExampleContents
