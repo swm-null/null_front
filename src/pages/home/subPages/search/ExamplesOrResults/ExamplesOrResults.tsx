@@ -1,25 +1,24 @@
 import * as Interface from 'pages/home/subPages/interfaces';
 import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
-import { Status } from 'pages/home/subPages/main/interfaces';
 import { useContext } from 'react';
 import { BottomNavContext } from 'utils';
 
-interface ExamplesOrResultsAtSearchModeProps {
-  status: Status;
+interface ExamplesOrResultsProps {
+  status: Interface.Status;
   searchConversation?: Interface.MemoSearchConversation;
   navigateToHistory: () => void;
   buttonData: [string, string, string, string];
   handleButtonClick: (message: string) => void;
 }
 
-const ExamplesOrResultsAtSearchMode = ({
+const ExamplesOrResults = ({
   status,
   searchConversation,
   navigateToHistory,
   buttonData,
   handleButtonClick,
-}: ExamplesOrResultsAtSearchModeProps) => {
+}: ExamplesOrResultsProps) => {
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
 
   return (
@@ -42,4 +41,4 @@ const ExamplesOrResultsAtSearchMode = ({
   );
 };
 
-export default ExamplesOrResultsAtSearchMode;
+export default ExamplesOrResults;

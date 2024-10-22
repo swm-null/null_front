@@ -1,23 +1,18 @@
 import { useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
-import { Status } from '../interfaces';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const useSearchMemoManager = ({
-  status,
-  setStatus,
-}: {
-  status: Status;
-  setStatus: (status: Status) => void;
-}) => {
+const useSearchMemoManager = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+
   const [searchConversation, setSearchConversation] =
     useState<Interface.MemoSearchConversation>();
+  const [status, setStatus] = useState<Interface.Status>('default');
 
   const trySearchMemoAndSetStatus = async (
     message: string,
@@ -35,9 +30,7 @@ const useSearchMemoManager = ({
     }
   };
 
-  const searchMemo = async (
-    query: string
-  ): Promise<Interface.MemoSearchAnswer> => {
+  const searchMemo = async (query: string): Promise<Interface.MemoSearchAnswer> => {
     const response = await Api.searchMemo(query);
     if (!Api.isSearchMemoResponse(response)) {
       throw new Error('Memo Create Error');
