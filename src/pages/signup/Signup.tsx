@@ -114,6 +114,25 @@ const Signup = () => {
             success={emailSuccess}
             error={validationManager.error.email}
           />
+          <CodeSendForm
+            code={changeHandlerManager.form.code}
+            handleCodeChange={(newCode) => {
+              changeHandlerManager.handleCodeChange(newCode);
+              validationManager.validateCode(newCode);
+            }}
+            handleSendCode={handleSendCode}
+            success={codeSuccess}
+            error={validationManager.error.code}
+          />
+          <Components.CustomInput
+            label={t('signup.name')}
+            value={changeHandlerManager.form.name}
+            setValue={(value) => {
+              changeHandlerManager.handleNameChange(value);
+              validationManager.validateName(value);
+            }}
+            error={validationManager.error.name}
+          />
           <Components.HiddenInput
             label={t('utils.auth.password')}
             value={changeHandlerManager.form.password}
@@ -134,25 +153,6 @@ const Signup = () => {
               );
             }}
             error={validationManager.error.confirmPassword}
-          />
-          <Components.CustomInput
-            label={t('signup.name')}
-            value={changeHandlerManager.form.name}
-            setValue={(value) => {
-              changeHandlerManager.handleNameChange(value);
-              validationManager.validateName(value);
-            }}
-            error={validationManager.error.name}
-          />
-          <CodeSendForm
-            code={changeHandlerManager.form.code}
-            handleCodeChange={(newCode) => {
-              changeHandlerManager.handleCodeChange(newCode);
-              validationManager.validateCode(newCode);
-            }}
-            handleSendCode={handleSendCode}
-            success={codeSuccess}
-            error={validationManager.error.code}
           />
         </div>
         <Components.LoginSignupButton

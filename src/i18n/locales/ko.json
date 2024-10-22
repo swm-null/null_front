@@ -52,7 +52,7 @@
     "email": "Email",
     "signupButton": "회원가입",
     "checkEmail": "중복확인",
-    "name": "이름",
+    "name": "닉네임",
     "sendCode": "코드전송",
     "noCheckEmail": "이메일 중복확인을 해주세요.",
     "checkEmailSuccess": "사용 가능한 이메일입니다.",
