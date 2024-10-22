@@ -20,7 +20,7 @@ const MemoFooter = ({
   };
 
   return (
-    <div className="flex flex-1 items-center" style={{ color: textColor }}>
+    <div className="flex items-center" style={{ color: textColor }}>
       <p className="font-medium text-[10px]">{formatDate(updatedAt)}</p>
 
       <button
