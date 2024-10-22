@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as Icon from 'assets/icons';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import { useTranslation } from 'react-i18next';
 
 interface LeftNavBarProps {
@@ -16,9 +17,15 @@ const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
         <div className="p-4 flex flex-col items-start justify-center gap-[14px]">
           <SidebarTooltipButton
             selected={currentPage === ''}
-            icon={<Icon.HomeIcon />}
-            label={t('pages.sidebar.main')}
+            icon={<AddBoxOutlinedIcon />}
+            label={t('pages.sidebar.create')}
             onClick={() => setCurrentPage('')}
+          />
+          <SidebarTooltipButton
+            selected={currentPage === 'search'}
+            icon={<Icon.SearchIcon />}
+            label={t('pages.sidebar.search')}
+            onClick={() => setCurrentPage('search')}
           />
           <SidebarTooltipButton
             selected={currentPage === 'dashboard'}
@@ -31,12 +38,6 @@ const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
             icon={<Icon.HistoryIcon />}
             label={t('pages.sidebar.searchHistory')}
             onClick={() => setCurrentPage('searchHistory')}
-          />
-          <SidebarTooltipButton
-            selected={currentPage === 'uploadData'}
-            icon={<Icon.ExportIcon />}
-            label={t('pages.sidebar.uploadData')}
-            onClick={() => setCurrentPage('uploadData')}
           />
         </div>
       </div>
@@ -59,13 +60,13 @@ const SidebarTooltipButton = ({
 
   return (
     <div
-      className={`min-w-12 h-12 px-[14px] ${selected ? 'bg-peach0 bg-opacity-80' : 'bg-peach1 bg-opacity-50'} text-[#5D4037] gap-4
+      className={`min-w-12 h-12 px-[14px] ${selected ? 'bg-peach0 bg-opacity-80' : 'bg-peach1 text-opacity-80 bg-opacity-50'} text-[#5D4037] gap-4
         inline-flex items-center shadow-custom backdrop-blur-lg rounded-full cursor-pointer`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={onClick}
     >
-      <div className="flex items-center justify-center">{icon}</div>
+      <div className="flex w-5 items-center justify-center">{icon}</div>
       {hovered && <span className="whitespace-nowrap">{label}</span>}
     </div>
   );
