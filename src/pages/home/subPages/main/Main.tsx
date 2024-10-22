@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import * as Component from './components';
 import { Mode, Status } from './interfaces';
 import { useCreateMemoManager, useSearchMemoManager } from './hooks';
-import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
+import { MemoSearchTextArea } from '../components';
 import { ImageListContext } from 'utils';
 
 const MainPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {

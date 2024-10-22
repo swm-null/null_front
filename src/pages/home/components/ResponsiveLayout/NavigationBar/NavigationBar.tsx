@@ -1,25 +1,18 @@
+import { useContext } from 'react';
 import { BottomNavBar } from './BottomNavBar';
 import { LeftNavBar } from './LeftNavBar';
+import { BottomNavContext } from 'utils';
 
 interface NavigationBarProps {
-  isSmallScreen: boolean;
-  bottomNavRef: React.RefObject<HTMLDivElement>;
   setCurrentPage: (page: string) => void;
 }
 
-const NavigationBar = ({
-  isSmallScreen,
-  bottomNavRef,
-  setCurrentPage,
-}: NavigationBarProps) => {
+const NavigationBar = ({ setCurrentPage }: NavigationBarProps) => {
   const currentPage = window.location.pathname.split('/').pop() || '';
+  const { isSmallScreen } = useContext(BottomNavContext);
 
   return isSmallScreen ? (
-    <BottomNavBar
-      currentPage={currentPage}
-      bottomNavRef={bottomNavRef}
-      setCurrentPage={setCurrentPage}
-    />
+    <BottomNavBar currentPage={currentPage} setCurrentPage={setCurrentPage} />
   ) : (
     <LeftNavBar currentPage={currentPage} setCurrentPage={setCurrentPage} />
   );

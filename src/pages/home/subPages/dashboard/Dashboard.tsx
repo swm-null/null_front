@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
 import { SortOption } from './interfaces';
+import { BottomNavContext } from 'utils';
 
 const DashboardPage = () => {
   const { t } = useTranslation();
+  const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
 
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
   const [tagStack, setTagStack] = useState<Tag[]>([]);
@@ -54,7 +56,10 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full text-gray2 overflow-hidden">
+    <div
+      className="flex flex-col h-full text-gray2 overflow-hidden"
+      style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 8 : 0 }}
+    >
       <div className="w-full h-full flex flex-col max-w-[1102px] self-center gap-4">
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">
           <Components.CurrentTagPath

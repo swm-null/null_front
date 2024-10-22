@@ -2,6 +2,8 @@ import * as Interface from 'pages/home/subPages/interfaces';
 import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
 import { Status } from 'pages/home/subPages/main/interfaces';
+import { useContext } from 'react';
+import { BottomNavContext } from 'utils';
 
 interface ExamplesOrResultsAtSearchModeProps {
   status: Status;
@@ -18,8 +20,13 @@ const ExamplesOrResultsAtSearchMode = ({
   buttonData,
   handleButtonClick,
 }: ExamplesOrResultsAtSearchModeProps) => {
+  const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
+
   return (
-    <div className="flex flex-col flex-grow-0 text-[#111111] overflow-hidden p-4 pt-0">
+    <div
+      className="flex flex-col flex-grow-0 text-[#111111] overflow-hidden p-4 pt-0"
+      style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 24 : 0 }}
+    >
       {status === 'default' ? (
         <ExampleContents
           buttonData={buttonData}

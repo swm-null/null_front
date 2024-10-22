@@ -1,13 +1,11 @@
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SearchScrollView } from './components';
-import { SearchHistoryAccordion } from './components/SearchHistoryAccordion';
-import { MemoSearchTextArea } from '../components/memo/MemoSearchTextArea';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { SearchScrollView, SearchHistoryAccordion } from './components';
+import { MemoSearchTextArea } from '../components';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import * as Api from 'api';
 import { v4 as uuid_v4 } from 'uuid';
 import { debounceTime, Subject, switchMap } from 'rxjs';
-import { useIntersectionObserver } from '../hooks';
 
 const SEARCH_HISTORY_LIMIT = 15;
 
@@ -16,7 +14,6 @@ const input$ = new Subject();
 const SearchHistoryPage = ({}: {}) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState('');
-  const observerRef = useRef<HTMLDivElement | null>(null);
 
   const { data, fetchNextPage, isLoading, refetch } = useInfiniteQuery<
     Api.paginationSearchHistoriesResponse,
@@ -55,15 +52,6 @@ const SearchHistoryPage = ({}: {}) => {
     input$.next(newMessage);
   };
 
-  useIntersectionObserver(observerRef, {
-    callback: (entries) => {
-      if (entries[0].isIntersecting) {
-        fetchNextPage();
-      }
-    },
-    options: { threshold: 0.5 },
-  });
-
   const handleSubmit = useCallback(() => {
     refetch();
   }, [refetch]);
@@ -92,7 +80,7 @@ const SearchHistoryPage = ({}: {}) => {
           placeholder={t('pages.searchHistory.inputPlaceholder')}
           onSubmit={handleSubmit}
         />
-        <SearchScrollView>
+        <SearchScrollView fetchNextPage={fetchNextPage}>
           {searchConversations.map((searchConversation) => (
             <SearchHistoryAccordion
               // FIXME: searchHistory에 key 생기면 삭제
@@ -100,7 +88,6 @@ const SearchHistoryPage = ({}: {}) => {
               data={searchConversation}
             />
           ))}
-          <div ref={observerRef} />
         </SearchScrollView>
       </div>
     </div>

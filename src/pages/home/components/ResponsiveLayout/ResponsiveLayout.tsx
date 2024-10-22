@@ -1,8 +1,9 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useContext, useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { ProfileButton } from './ProfileButton';
 import { NavigationBar } from './NavigationBar';
 import { LogoIcon } from 'assets/icons';
+import { BottomNavContext } from 'utils';
 
 const MOBILE_DEVICE_WIDTH = 770;
 
@@ -13,18 +14,15 @@ const ResponsiveLayout = ({
   children: ReactNode;
   handleNavigation: (page: string) => void;
 }) => {
-  const bottomNavRef = useRef<HTMLDivElement | null>(null);
-  // TODO: bottomNavHeight 왠지 페이지에 전달해서 안에서 직접 padding 조절해야할 것 같아서 킵
-  const [_, setBottomNavHeight] = useState(0);
+  const { setIsSmallScreen } = useContext(BottomNavContext);
+
   const isSmallScreen = useMediaQuery({
     query: `(max-width:${MOBILE_DEVICE_WIDTH}px)`,
   });
 
   useEffect(() => {
-    if (bottomNavRef.current) {
-      setBottomNavHeight(bottomNavRef.current.offsetHeight);
-    }
-  }, [bottomNavRef]);
+    setIsSmallScreen(isSmallScreen);
+  }, [isSmallScreen]);
 
   return (
     <div className="flex flex-col w-full h-full bg-custom-gradient-basic">
@@ -39,15 +37,13 @@ const ResponsiveLayout = ({
           />
           <ProfileButton />
         </div>
-        <div className={`flex-grow overflow-auto ${isSmallScreen ? '' : 'px-20'}`}>
+        <div
+          className={`flex-grow overflow-auto ${isSmallScreen ? '' : 'px-20 pb-10'}`}
+        >
           {children}
         </div>
       </div>
-      <NavigationBar
-        isSmallScreen={isSmallScreen}
-        bottomNavRef={bottomNavRef}
-        setCurrentPage={handleNavigation}
-      />
+      <NavigationBar setCurrentPage={handleNavigation} />
     </div>
   );
 };

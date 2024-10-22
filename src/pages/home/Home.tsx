@@ -4,7 +4,7 @@ import { ResponsiveLayout } from './components';
 import { useNavigate } from 'react-router-dom';
 import { HomeRouter } from './router';
 import { useContext, useEffect } from 'react';
-import { ApiContext } from 'utils';
+import { ApiContext, BottomNavProvider } from 'utils';
 
 const queryClient = new QueryClient();
 
@@ -22,9 +22,11 @@ const Home = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ResponsiveLayout handleNavigation={handleNavigation}>
-        <HomeRouter setCurrentPage={handleNavigation} />
-      </ResponsiveLayout>
+      <BottomNavProvider>
+        <ResponsiveLayout handleNavigation={handleNavigation}>
+          <HomeRouter setCurrentPage={handleNavigation} />
+        </ResponsiveLayout>
+      </BottomNavProvider>
       <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>
   );
