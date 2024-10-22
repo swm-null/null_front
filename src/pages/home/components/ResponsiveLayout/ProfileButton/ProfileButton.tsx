@@ -57,9 +57,9 @@ const ProfileButton = () => {
 
   return (
     <>
-      <IconButton onClick={handleClick}>
+      <IconButton className="w-10 h-10" onClick={handleClick}>
         <Avatar
-          className="w-10 h-10 border-2 border-white shadow-custom"
+          className=" border-2 border-white shadow-custom"
           alt="Profile"
           src={oatmealUrl}
         />

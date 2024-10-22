@@ -31,8 +31,12 @@ const ResponsiveLayout = ({
       <div
         className={`absolute top-0 left-0 right-0 bottom-0 overflow-auto h-full flex flex-col ${isSmallScreen ? '' : 'gap-4'}`}
       >
-        <div className={`flex w-full py-5 pl-4 pr-6 items-center`}>
-          <LogoIcon className="h-14 w-auto mr-auto" />
+        <div
+          className={`flex w-full ${isSmallScreen ? 'py-4' : 'py-5'} pl-4 pr-6 items-center`}
+        >
+          <LogoIcon
+            className={`${isSmallScreen ? 'h-10' : 'h-14'} w-auto mr-auto`}
+          />
           <ProfileButton />
         </div>
         <div className={`flex-grow overflow-auto ${isSmallScreen ? '' : 'px-20'}`}>
