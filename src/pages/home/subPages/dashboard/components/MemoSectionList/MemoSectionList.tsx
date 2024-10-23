@@ -1,7 +1,7 @@
 import { Memo, Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { SortOption } from '../../interfaces';
 import { LeafMemoSection } from './LeafMemoSection';
@@ -26,6 +26,9 @@ const MemoSectionList = ({
   const observerRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
+  const [isDrag, setIsDrag] = useState(false);
+  const [startX, setStartX] = useState(0);
+
   const hasNoSection = () => tagRelations.length === 0;
 
   useIntersectionObserver(observerRef, {
@@ -36,6 +39,26 @@ const MemoSectionList = ({
     },
     options: { threshold: 0.5 },
   });
+
+  const onDragStart = (e: any) => {
+    if (!scrollRef.current) return;
+
+    e.preventDefault();
+    setIsDrag(true);
+    setStartX(e.pageX + scrollRef.current.scrollLeft);
+  };
+
+  const onDragEnd = () => {
+    setIsDrag(false);
+  };
+
+  const onDragMove = (e: any) => {
+    if (!scrollRef.current) return;
+
+    if (isDrag && scrollRef.current) {
+      scrollRef.current.scrollLeft = startX - e.pageX;
+    }
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -57,6 +80,10 @@ const MemoSectionList = ({
     <div
       ref={scrollRef}
       className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2"
+      onMouseDown={onDragStart}
+      onMouseMove={onDragMove}
+      onMouseUp={onDragEnd}
+      onMouseLeave={onDragEnd}
     >
       {parentTag && (
         <MemoSection
