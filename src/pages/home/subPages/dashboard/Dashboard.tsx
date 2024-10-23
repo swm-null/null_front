@@ -13,10 +13,6 @@ const DashboardPage = () => {
 
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
   const [tagStack, setTagStack] = useState<Tag[]>([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedMemo, setSelectedMemo] = useState<Memo>();
-  const [selectedMemoTag, setSelectedMemoTag] = useState<Tag | null>();
-  const [selectedMemoIndex, setSelectedMemoIndex] = useState(0);
 
   const tagsManager = Hooks.useTagsManager();
 
@@ -27,20 +23,12 @@ const DashboardPage = () => {
     tagsManager.handleTagOrAllTagsClick(tag);
   };
 
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setSelectedMemo(undefined);
+  const updateTagFromMemoSectionList = (_tag: Tag) => {
+    // TODO: 여기서 모든 섹션마다 해당 태그를 찾아서 업데이트 해주는 코드 들어가야함
   };
 
-  const handleMemoClickAndOpenModal = (
-    memo: Memo,
-    tag: Tag | null,
-    index: number
-  ) => {
-    setModalOpen(true);
-    setSelectedMemo(memo);
-    setSelectedMemoTag(tag);
-    setSelectedMemoIndex(index);
+  const revertTagFromMemoSectionList = (_tag: Tag) => {
+    // TODO: 여기서 모든 섹션마다 해당 태그를 찾아서 잘못 삭제, 업데이트한 것을 복구 해주는 코드 들어가야함
   };
 
   const updateMemoFromMemoSectionList = (_memo: Memo) => {
@@ -78,18 +66,16 @@ const DashboardPage = () => {
             tagRelations={tagsManager.tagRelations}
             sortOption={sortOption}
             addTagToStack={handleChildTagClick}
-            handleMemoClick={handleMemoClickAndOpenModal}
             fetchNextPage={tagsManager.fetchNextPage}
           />
         </div>
       </div>
 
+      <Components.TagEditModal
+        updateTag={updateTagFromMemoSectionList}
+        revertTag={revertTagFromMemoSectionList}
+      />
       <Components.MemoEditModal
-        open={modalOpen}
-        handleClose={handleModalClose}
-        selectedMemo={selectedMemo}
-        selectedMemoTag={selectedMemoTag}
-        selectedMemoIndex={selectedMemoIndex}
         updateMemo={updateMemoFromMemoSectionList}
         deleteMemo={deleteMemoFromMemoSectionList}
         revertMemo={revertMemoFromMemoSectionList}

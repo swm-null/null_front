@@ -1,4 +1,4 @@
-import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { Tag } from 'pages/home/subPages/interfaces';
 import { MemoSectionHeader } from './MemoSectionHeader';
 import { useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
@@ -12,7 +12,6 @@ interface MemoSectionProps {
   isLinked: boolean;
   sortOption: SortOption;
   handleTagClick: () => void;
-  handleMemoClick: (memo: Memo, index: number) => void;
 }
 
 const MemoSection = ({
@@ -21,7 +20,6 @@ const MemoSection = ({
   isLinked,
   sortOption,
   handleTagClick,
-  handleMemoClick,
 }: MemoSectionProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -56,14 +54,13 @@ const MemoSection = ({
       <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10">
         <div className="flex flex-col flex-1 gap-[0.4rem] w-60 ">
           {memos.map(
-            (memo, index) =>
+            (memo) =>
               memo && (
                 <UneditableMemoWithoutDrag
                   key={memo?.id}
                   memo={memo}
                   shadow
                   border
-                  onClick={() => handleMemoClick(memo, index)}
                 />
               )
           )}
