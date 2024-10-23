@@ -1,9 +1,4 @@
-import {
-  Select,
-  MenuItem,
-  FormControl,
-  SelectChangeEvent,
-} from '@mui/material';
+import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 import { DownIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
 import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
@@ -11,9 +6,13 @@ import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 export default function SortToggle({
   sortOption,
   setSortOption,
+  height,
+  fontSize,
 }: {
   sortOption: SortOption;
   setSortOption: (sortOption: SortOption) => void;
+  height: number | string;
+  fontSize: number | string;
 }) {
   const { t } = useTranslation();
 
@@ -27,10 +26,13 @@ export default function SortToggle({
         value={sortOption}
         onChange={handleChange}
         IconComponent={DownIcon}
-        className="flex items-center h-8 w-[110px] shadow-custom bg-clip-padding"
+        className="flex items-center h-8 w-[97px] shadow-custom bg-clip-padding"
         sx={{
           borderRadius: '16px',
           backgroundColor: '#FFF6E3',
+          width: '6rem',
+          height: height,
+          fontSize: fontSize,
           border: '1px solid rgba(0, 0, 0, 0.1)',
           '&:hover, &:focus': {
             border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -46,6 +48,8 @@ export default function SortToggle({
           },
           '& .MuiSelect-icon': {
             top: '12%',
+            width: 18,
+            height: 17,
           },
         }}
         renderValue={(selected) =>
