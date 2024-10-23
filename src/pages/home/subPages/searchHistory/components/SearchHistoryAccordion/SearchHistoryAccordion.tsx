@@ -1,37 +1,21 @@
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
 import { AccordionSummary } from './AccordionSummary';
 import { AccordionContent } from './AccordionContent';
 import { v4 as uuid_v4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
+import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
 
 const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
   const { t } = useTranslation();
 
-  const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
   const contentRef = useRef<HTMLParagraphElement>(null);
-  const mouseDownTime = useRef<number | null>(null);
 
-  const handleMouseDown = () => {
-    mouseDownTime.current = Date.now();
-  };
-
-  const handleMouseMove = () => {
-    if (mouseDownTime.current !== null && Date.now() - mouseDownTime.current > 100) {
-      setIsDragging(true);
-    }
-  };
-
-  const handleClick = () => {
-    mouseDownTime.current = null;
-    if (!isDragging) {
-      setIsOpen((prev) => !prev);
-    }
-    setIsDragging(false);
-  };
+  const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>
+    setIsOpen((prev) => !prev)
+  );
 
   const formatDate = (date: string): string => {
     const formattedDate = date.endsWith('Z') ? date : `${date}Z`;
