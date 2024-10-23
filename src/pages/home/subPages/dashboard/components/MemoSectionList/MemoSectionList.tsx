@@ -3,7 +3,7 @@ import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
 import { useEffect, useRef, useState } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
-import { SortOption } from '../../interfaces';
+import { SortOption } from 'pages/home/subPages/types';
 import { LeafMemoSection } from './LeafMemoSection';
 
 interface MemoSectionListProps {

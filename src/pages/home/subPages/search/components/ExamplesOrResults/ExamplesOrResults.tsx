@@ -3,9 +3,10 @@ import { ResultContent } from './ResultContent';
 import { ExampleContents } from './ExampleContents';
 import { useContext } from 'react';
 import { BottomNavContext } from 'utils';
+import { Status } from 'pages/home/subPages/types';
 
 interface ExamplesOrResultsProps {
-  status: Interface.Status;
+  status: Status;
   searchConversation?: Interface.MemoSearchConversation;
   navigateToHistory: () => void;
   buttonData: [string, string, string, string];

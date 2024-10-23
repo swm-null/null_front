@@ -5,7 +5,7 @@ import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
-import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
+import { SortOption } from 'pages/home/subPages/types';
 
 interface CurrentTagPathProps {
   allTagText: string;

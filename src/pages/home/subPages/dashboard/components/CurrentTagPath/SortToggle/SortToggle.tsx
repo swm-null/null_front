@@ -1,12 +1,7 @@
-import {
-  Select,
-  MenuItem,
-  FormControl,
-  SelectChangeEvent,
-} from '@mui/material';
+import { Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 import { DownIcon } from 'assets/icons';
+import { SortOption } from 'pages/home/subPages/types';
 import { useTranslation } from 'react-i18next';
-import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 
 export default function SortToggle({
   sortOption,
