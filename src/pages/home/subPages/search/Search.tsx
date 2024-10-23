@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchTextArea } from '../components';
 import { useSearchMemoManager } from './hook';
-import { ExamplesOrResults } from './ExamplesOrResults';
+import { ExamplesOrResults } from './components';
 
 const SearchPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
   const { t } = useTranslation();
