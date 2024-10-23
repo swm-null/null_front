@@ -1,5 +1,4 @@
 import { v4 as uuid_v4 } from 'uuid';
-import { Status } from '../interfaces';
 import {
   useInfiniteQuery,
   useMutation,
@@ -8,15 +7,12 @@ import {
 import { AxiosError } from 'axios';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
+import { useState } from 'react';
 
-const useCreateMemoManager = ({
-  status,
-  setStatus,
-}: {
-  status: Status;
-  setStatus: (status: Status) => void;
-}) => {
+const useCreateMemoManager = () => {
   const queryClient = useQueryClient();
+
+  const [status, setStatus] = useState<Interface.Status>('default');
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
     useInfiniteQuery<Api.paginationMemosResponse, Error>({

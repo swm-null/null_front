@@ -75,7 +75,8 @@
   },
   "pages": {
     "sidebar": {
-      "main": "메인",
+      "create": "메모추가",
+      "search": "메모검색",
       "dashboard": "대시보드",
       "searchHistory": "기록",
       "uploadData": "불러오기"

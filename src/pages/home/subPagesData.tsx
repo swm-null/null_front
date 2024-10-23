@@ -10,12 +10,17 @@ export const getSubPagesData = (
       path: '',
       element: (
         <ImageListProvider>
-          <Page.Main
-            navigateToHistory={() => setCurrentPage('searchHistory')}
-          />
+          <Page.Create />
         </ImageListProvider>
       ),
-      title: 'main',
+      title: 'create',
+    },
+    {
+      path: 'search',
+      element: (
+        <Page.Search navigateToHistory={() => setCurrentPage('searchHistory')} />
+      ),
+      title: 'search',
     },
     {
       path: 'searchHistory',

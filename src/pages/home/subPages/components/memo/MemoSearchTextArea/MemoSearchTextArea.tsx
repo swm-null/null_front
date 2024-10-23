@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { TextareaAutosize } from '@mui/material';
-import { SearchIcon } from 'assets/icons';
+import { LightSearchIcon } from 'assets/icons';
 import { usePressEnterFetch } from 'pages/home/subPages/hooks';
+import { BottomNavContext } from 'utils';
 
 interface MemoSearchTextAreaProps {
   value: string;
@@ -16,6 +17,8 @@ const MemoSearchTextArea = ({
   onChange,
   onSubmit,
 }: MemoSearchTextAreaProps) => {
+  const { isSmallScreen } = useContext(BottomNavContext);
+
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleEnter: onSubmit,
   });
@@ -29,7 +32,9 @@ const MemoSearchTextArea = ({
           ${getBackgroundColor()} border-[1px] border-[#E3BFA4] font-regular shadow-custom`}
       >
         <div className="flex flex-1 gap-2">
-          <SearchIcon />
+          <LightSearchIcon
+            className={`self-center text-brown1 ${isSmallScreen ? 'w-[1.125rem] h-[1.125rem]' : 'w-[1.375rem] h-[1.375rem]'}`}
+          />
           <TextareaAutosize
             className="flex-1 flex-shrink-0 focus:outline-none resize-none min-h-9 content-center 
             text-[#111111] bg-transparent placeholder-custom"

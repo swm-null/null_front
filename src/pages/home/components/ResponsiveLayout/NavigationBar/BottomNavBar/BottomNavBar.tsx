@@ -28,9 +28,15 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
       >
         <BottomNavButton
           selected={currentPage === ''}
-          icon={<Icon.HomeIcon />}
-          label={t('pages.sidebar.main')}
+          icon={<Icon.AddIcon />}
+          label={t('pages.sidebar.create')}
           onClick={() => setCurrentPage('')}
+        />
+        <BottomNavButton
+          selected={currentPage === 'search'}
+          icon={<Icon.SearchIcon />}
+          label={t('pages.sidebar.search')}
+          onClick={() => setCurrentPage('search')}
         />
         <BottomNavButton
           selected={currentPage === 'dashboard'}
@@ -43,12 +49,6 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
           icon={<Icon.HistoryIcon />}
           label={t('pages.sidebar.searchHistory')}
           onClick={() => setCurrentPage('searchHistory')}
-        />
-        <BottomNavButton
-          selected={currentPage === 'uploadData'}
-          icon={<Icon.ExportIcon />}
-          label={t('pages.sidebar.uploadData')}
-          onClick={() => setCurrentPage('uploadData')}
         />
       </div>
     </div>
@@ -68,10 +68,14 @@ const BottomNavButton = ({
 }) => {
   return (
     <div
-      className="py-3 flex gap-2 flex-1 flex-col items-center justify-center cursor-pointer"
+      className="py-3 h-[4.25rem] flex gap-1 flex-1 flex-col items-center justify-center cursor-pointer"
       onClick={onClick}
     >
-      <div className={`${selected ? 'text-brown1' : 'text-gray3'} `}>{icon}</div>
+      <div
+        className={`h-7 flex flex-shrink-0 items-center ${selected ? 'text-brown1' : 'text-gray3'} `}
+      >
+        {icon}
+      </div>
       <span
         className={`text-xs ${selected ? 'text-[#5D4037]' : 'text-gray3'}  text-center`}
       >
