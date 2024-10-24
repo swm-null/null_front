@@ -9,7 +9,9 @@ const TagWithOptions = ({ tag }: { tag: Tag }) => {
   const { openTagEditModal } = useContext(DashboardModalContext);
   const { alert, confirmAlert } = useContext(AlertContext);
 
-  const handleDeleteTag = async () => {
+  const handleDeleteTag = async (e: MouseEvent<SVGSVGElement>) => {
+    e.stopPropagation();
+
     const confirmed = confirmAlert('정말 삭제하시겠습니까?');
 
     if (!confirmed) return;
