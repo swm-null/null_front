@@ -8,11 +8,12 @@ import { AxiosError } from 'axios';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
 import { useState } from 'react';
+import { Status } from 'pages/home/subPages/types';
 
 const useCreateMemoManager = () => {
   const queryClient = useQueryClient();
 
-  const [status, setStatus] = useState<Interface.Status>('default');
+  const [status, setStatus] = useState<Status>('default');
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
     useInfiniteQuery<Api.paginationMemosResponse, Error>({

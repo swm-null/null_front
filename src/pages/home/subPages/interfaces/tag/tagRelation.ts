@@ -1,4 +1,7 @@
-import { Tag } from '../MemoInterface';
+export interface Tag {
+  id: string;
+  name: string;
+}
 
 export interface TagRelation {
   tag: Tag;

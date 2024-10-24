@@ -3,7 +3,7 @@ import { MemoSectionHeader } from './MemoSectionHeader';
 import { useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
-import { SortOption } from '../../../interfaces';
+import { SortOption } from 'pages/home/subPages/types';
 import { UneditableMemoWithoutDrag } from '../UneditableMemoWithoutDrag';
 
 interface MemoSectionProps {

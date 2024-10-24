@@ -1,8 +1,8 @@
-import { Memo, Tag } from 'pages/home/subPages/interfaces';
-import { SortOption } from '../../../interfaces';
 import { useRef } from 'react';
 import { useChildTagMemosManager } from '../hook';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
+import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { SortOption } from 'pages/home/subPages/types';
 import { MemosList } from 'pages/home/subPages/components';
 import { UneditableMemoWithoutDrag } from '../UneditableMemoWithoutDrag';
 

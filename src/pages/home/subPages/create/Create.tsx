@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDropzone } from 'react-dropzone';
 import { useCreateMemoManager } from './hook';
 import { ImageListContext } from 'utils';
-import { MemoCreateTextArea } from './MemoCreateTextArea';
-import { CreatedMemoList } from './CreatedMemoList';
+import { MemoCreateTextArea, CreatedMemoList } from './components';
 
 const CreatePage = () => {
   const { t } = useTranslation();

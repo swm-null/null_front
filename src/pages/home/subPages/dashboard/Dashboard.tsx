@@ -4,7 +4,7 @@ import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
-import { SortOption } from './interfaces';
+import { SortOption } from 'pages/home/subPages/types';
 import { BottomNavContext } from 'utils';
 
 const DashboardPage = () => {

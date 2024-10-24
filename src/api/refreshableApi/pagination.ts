@@ -1,8 +1,8 @@
 import * as Interface from 'pages/home/subPages/interfaces';
+import { SortOption } from 'pages/home/subPages/types';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
-import { SortOption } from 'pages/home/subPages/dashboard/interfaces';
 
 interface paginationData {
   total_count: number;
@@ -34,7 +34,7 @@ export const getRecentMemos = async (
     const response = (await getTagMemos({
       page: page,
       limit: limit,
-      sortOrder: 'LATEST',
+      sortOrder: 'LATEST' as SortOption,
     })) as paginationMemosResponse;
     response.method = method;
     return response;
