@@ -85,7 +85,12 @@ const CurrentTagPath = ({
           ))}
         </div>
         <div className="p-4 pb-2 ml-auto">
-          <SortToggle sortOption={sortOption} setSortOption={setSortOption} />
+          <SortToggle
+            height="1.6875rem"
+            fontSize="0.75rem"
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+          />
         </div>
       </div>
     </div>
