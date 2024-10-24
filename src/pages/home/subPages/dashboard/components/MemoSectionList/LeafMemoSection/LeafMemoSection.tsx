@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useChildTagMemosManager } from '../hook';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
-import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { Tag } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/types';
 import { MemosList } from 'pages/home/subPages/components';
 import { UneditableMemoWithoutDrag } from '../UneditableMemoWithoutDrag';
@@ -11,11 +11,9 @@ const SINGLE_MEMO_LIMIT = 20;
 const LeafMemoSection = ({
   parentTag,
   sortOption,
-  handleMemoClick,
 }: {
   parentTag: Tag | null;
   sortOption: SortOption;
-  handleMemoClick: (memo: Memo, tag: Tag | null, index: number) => void;
 }) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
   const { memos, fetchNextPage } = useChildTagMemosManager(
@@ -43,16 +41,8 @@ const LeafMemoSection = ({
       className="flex flex-1 bg-[#FFF6E366] m-4 mt-2 rounded-2xl shadow-custom backdrop-blur-lg"
     >
       <MemosList>
-        {memos.map((memo, index) => (
-          <UneditableMemoWithoutDrag
-            key={memo.id}
-            memo={memo}
-            shadow
-            border
-            onClick={() =>
-              handleMemoClick(memo, parentTag ? parentTag : null, index)
-            }
-          />
+        {memos.map((memo) => (
+          <UneditableMemoWithoutDrag key={memo.id} memo={memo} shadow border />
         ))}
         <div ref={observerRef} />
       </MemosList>
