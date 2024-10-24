@@ -1,13 +1,11 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { deleteMemo, isValidResponse } from 'api';
-import { MemoText, TagManager } from 'pages/home/subPages/components';
+import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
-import Flickity from 'react-flickity-component';
-import 'flickity/css/flickity.css';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -41,16 +39,10 @@ const CreatedMemoCard = ({
     return format(`${date}Z`, t('memo.dateFormat'));
   };
 
-  const flickityOptions = {
-    prevNextButtons: false,
-    pageDots: memo.image_urls && memo.image_urls.length > 1 ? true : undefined,
-    wrapAround: true,
-  };
-
   return (
     <div
-      className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border border-black border-opacity-10 bg-clip-padding rounded-xl 
-      shadow-custom backdrop-blur-lg"
+      className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border border-black border-opacity-10 
+        bg-clip-padding rounded-xl shadow-custom backdrop-blur-lg"
     >
       <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
@@ -63,26 +55,11 @@ const CreatedMemoCard = ({
             <TagManager tags={tags} setTags={setTags} />
           )}
         </CreatedMemoCardHeader>
-        <div className="flex flex-row gap-9">
-          {memo.image_urls && memo.image_urls.length > 0 && (
-            <Flickity
-              className="carousel w-60 h-60 min-w-60 rounded-2xl overflow-hidden"
-              elementType="div"
-              options={flickityOptions}
-              static
-            >
-              {memo.image_urls.map((url, index) => (
-                <img
-                  src={url}
-                  key={index}
-                  alt={`Memo Image ${index + 1}`}
-                  className="carousel-cell object-cover w-full h-full"
-                />
-              ))}
-            </Flickity>
-          )}
-          <MemoText message={message} setMessage={setMessage} />
-        </div>
+        <ImageMemoText
+          imageUrls={memo.image_urls}
+          message={message}
+          setMessage={setMessage}
+        />
       </div>
     </div>
   );

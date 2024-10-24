@@ -2,12 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { MemoText, TagManager } from 'pages/home/subPages/components';
+import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import * as Api from 'api';
 import { MemoHeader } from './MemoHeader.tsx/index.ts';
 import { TagRebuildCheckbox } from './TagRebuildCheckbox/index.ts';
-import { ImageSlider } from './ImageSlider';
 
 const EditableMemo = ({
   memo,
@@ -96,10 +95,12 @@ const EditableMemo = ({
           dateFormat={t('memo.dateFormatEdit')}
           handleDeleteMemo={handleDeleteMemo}
         />
-        <div className="flex mb-auto flex-row w-full flex-1 gap-9">
-          <ImageSlider image_urls={memo.image_urls} />
-          <MemoText message={message} setMessage={setMessage} editable={editable} />
-        </div>
+        <ImageMemoText
+          imageUrls={memo.image_urls}
+          message={message}
+          setMessage={setMessage}
+          editable={editable}
+        />
       </div>
 
       {editable && (

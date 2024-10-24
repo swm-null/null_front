@@ -1,11 +1,11 @@
 import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { deleteMemo, isValidResponse } from 'api';
-import { MemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { MemoHeader } from './MemoHeader';
 import { ImageBlur } from './ImageBlur';
+import { MemoText } from '../ImageMemoText/MemoText';
 
 interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;

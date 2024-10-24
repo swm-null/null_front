@@ -4,6 +4,11 @@ export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        xxs: '22.5rem',
+        xs: '30rem',
+        xsm: '35rem',
+      },
       colors: {
         gray0: '#F9F9F9',
         gray1: '#DCDDDC',
@@ -28,6 +33,12 @@ export default {
       },
       boxShadow: {
         custom: '0px 4px 20px rgba(44, 27, 11, 0.08)',
+      },
+    },
+    container: {
+      screens: {
+        xxs: '22.5rem',
+        xs: '30rem',
       },
     },
   },

@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import { TextareaAutosize } from '@mui/material';
 
 const MemoText = ({
@@ -14,13 +14,22 @@ const MemoText = ({
   handleBlur?: () => void;
   editable?: boolean;
 }) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null); // ref 생성
+
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
+  useEffect(() => {
+    if (textareaRef.current && editable) {
+      textareaRef.current.focus();
+    }
+  }, [textareaRef.current]);
+
   return (
-    <div className="flex flex-1">
+    <div className="flex flex-1 w-full">
       <TextareaAutosize
+        ref={textareaRef}
         className={`w-full bg-transparent focus:outline-none resize-none font-regular text-[15px]`}
         style={{ color: textColor }}
         value={message}
