@@ -5,6 +5,7 @@ import * as Interface from 'pages/home/subPages/interfaces';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useTranslation } from 'react-i18next';
+import { Status } from 'pages/home/subPages/types';
 
 const useSearchMemoManager = () => {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ const useSearchMemoManager = () => {
 
   const [searchConversation, setSearchConversation] =
     useState<Interface.MemoSearchConversation>();
-  const [status, setStatus] = useState<Interface.Status>('default');
+  const [status, setStatus] = useState<Status>('default');
 
   const trySearchMemoAndSetStatus = async (
     message: string,

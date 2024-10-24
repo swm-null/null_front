@@ -4,7 +4,7 @@ import { UneditableMemo } from 'pages/home/subPages/components';
 import { useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
-import { SortOption } from '../../../interfaces';
+import { SortOption } from 'pages/home/subPages/types';
 
 interface MemoSectionProps {
   tag: Tag | null;

@@ -1,7 +1,4 @@
-export interface Tag {
-  id: string;
-  name: string;
-}
+import { Tag } from '../tag';
 
 export interface Memo {
   id: string;
