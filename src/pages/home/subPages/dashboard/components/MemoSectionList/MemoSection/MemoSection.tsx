@@ -1,10 +1,10 @@
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSectionHeader } from './MemoSectionHeader';
-import { UneditableMemo } from 'pages/home/subPages/components';
 import { useRef } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
 import { SortOption } from 'pages/home/subPages/types';
+import { UneditableMemoWithoutDrag } from '../UneditableMemoWithoutDrag';
 
 interface MemoSectionProps {
   tag: Tag | null;
@@ -58,7 +58,7 @@ const MemoSection = ({
           {memos.map(
             (memo, index) =>
               memo && (
-                <UneditableMemo
+                <UneditableMemoWithoutDrag
                   key={memo?.id}
                   memo={memo}
                   shadow

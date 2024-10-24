@@ -2,7 +2,7 @@ import { UneditableTag } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { DeleteIcon, EditIcon, RightIcon } from 'assets/icons';
-import { useState } from 'react';
+import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
 
 interface MemoSectionHeaderProps {
   tag: Tag;
@@ -15,22 +15,8 @@ const MemoSectionHeader = ({
   childTags,
   handleTagClick,
 }: MemoSectionHeaderProps) => {
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleMouseDown = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = () => {
-    setIsDragging(true);
-  };
-
-  const handleClick = () => {
-    if (!isDragging && handleTagClick) {
-      handleTagClick();
-      setIsDragging(false);
-    }
-  };
+  const { handleMouseDown, handleMouseMove, handleClick } =
+    useClickWithoutDrag(handleTagClick);
 
   return (
     // FIXME: 일단 width 때러박고 나중에, css 만질때 수정하기

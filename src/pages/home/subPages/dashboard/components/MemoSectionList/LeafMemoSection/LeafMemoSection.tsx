@@ -3,7 +3,8 @@ import { useChildTagMemosManager } from '../hook';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/types';
-import { MemosList, UneditableMemo } from 'pages/home/subPages/components';
+import { MemosList } from 'pages/home/subPages/components';
+import { UneditableMemoWithoutDrag } from '../UneditableMemoWithoutDrag';
 
 const SINGLE_MEMO_LIMIT = 20;
 
@@ -43,7 +44,7 @@ const LeafMemoSection = ({
     >
       <MemosList>
         {memos.map((memo, index) => (
-          <UneditableMemo
+          <UneditableMemoWithoutDrag
             key={memo.id}
             memo={memo}
             shadow

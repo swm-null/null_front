@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { deleteMemo, isValidResponse } from 'api';
 import { MemoText } from 'pages/home/subPages/components';
@@ -7,26 +7,26 @@ import { MemoFooter } from './MemoFooter';
 import { MemoHeader } from './MemoHeader';
 import { ImageBlur } from './ImageBlur';
 
+interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
+  memo: Memo;
+  border?: boolean;
+  shadow?: boolean;
+  softDeleteMemo?: (memoId: string) => void;
+  softRevertMemo?: (memo: Memo) => void;
+}
+
 const UneditableMemo = ({
   memo,
   border,
   shadow,
-  onClick,
   softDeleteMemo,
   softRevertMemo,
-}: {
-  memo: Memo;
-  border?: boolean;
-  shadow?: boolean;
-  onClick?: () => void;
-  softDeleteMemo?: (memoId: string) => void;
-  softRevertMemo?: (memo: Memo) => void;
-}) => {
+  ...divProps
+}: UneditableMemoProps) => {
   const { t } = useTranslation();
 
   const [message, setMessage] = useState(memo.content);
   const [tags] = useState(memo.tags);
-  const [isDragging, setIsDragging] = useState(false);
 
   const haveImageUrl = memo.image_urls && memo.image_urls.length > 0;
 
@@ -49,23 +49,9 @@ const UneditableMemo = ({
     }
   };
 
-  const handleMouseDown = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = () => {
-    setIsDragging(true);
-  };
-
-  const handleClick = () => {
-    if (!isDragging && onClick) {
-      onClick();
-      setIsDragging(false);
-    }
-  };
-
   return (
     <div
+      {...divProps}
       className={`relative flex p-4 min-h-[115px] h-auto flex-col gap-[0.88rem] rounded-2xl overflow-hidden
         ${border ? 'border border-black border-opacity-10 bg-clip-padding' : ''} 
         ${shadow ? 'shadow-custom' : ''} ${getStyleByImagePresence('bg-white', 'bg-cover bg-center')}
@@ -77,9 +63,6 @@ const UneditableMemo = ({
           'none'
         ),
       }}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onClick={handleClick}
     >
       {haveImageUrl && <ImageBlur />}
 
