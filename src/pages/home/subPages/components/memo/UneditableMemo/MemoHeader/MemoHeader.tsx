@@ -1,6 +1,6 @@
 import { Tag } from 'pages/home/subPages/interfaces';
-import { UneditableTag } from '../../../ui';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
+import { UneditableTag } from 'pages/home/subPages/components';
 
 const MemoHeader = ({ tags }: { tags: Tag[] }) => {
   return (
