@@ -6,13 +6,9 @@ import { BottomNavContext } from 'utils';
 
 const CreatedMemoList = ({
   memos,
-  softDeleteMemo,
-  softRevertMemo,
   fetchNextPage,
 }: {
   memos: Memo[];
-  softDeleteMemo?: (memoId: string) => void;
-  softRevertMemo?: (memo: Memo) => void;
   fetchNextPage: () => void;
 }) => {
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
@@ -33,12 +29,7 @@ const CreatedMemoList = ({
       style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 24 : 0 }}
     >
       {memos.map((memo) => (
-        <CreatedMemoCard
-          key={memo.id}
-          memo={memo}
-          softDeleteMemo={softDeleteMemo}
-          softRevertMemo={softRevertMemo}
-        />
+        <CreatedMemoCard key={memo.id} memo={memo} />
       ))}
       <div ref={observerRef} />
     </div>
