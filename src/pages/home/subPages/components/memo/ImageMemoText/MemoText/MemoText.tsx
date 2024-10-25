@@ -14,7 +14,7 @@ const MemoText = ({
   handleBlur?: () => void;
   editable?: boolean;
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null); // ref 생성
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
