@@ -102,6 +102,10 @@
       "toggle": {
         "latest": "최신순",
         "oldest": "오래된순"
+      },
+      "tagEdit": {
+        "title": "메모 이름 수정하기",
+        "placeholder": "새로운 이름"
       }
     },
     "search": {

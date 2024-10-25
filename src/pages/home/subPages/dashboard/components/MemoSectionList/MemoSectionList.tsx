@@ -1,4 +1,4 @@
-import { Memo, Tag, TagRelation } from 'pages/home/subPages/interfaces';
+import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
 import { useEffect, useRef, useState } from 'react';
@@ -11,7 +11,6 @@ interface MemoSectionListProps {
   tagRelations: TagRelation[];
   sortOption: SortOption;
   addTagToStack: (tag: Tag | null) => void;
-  handleMemoClick: (memo: Memo, tag: Tag | null, index: number) => void;
   fetchNextPage: () => void;
 }
 
@@ -20,7 +19,6 @@ const MemoSectionList = ({
   tagRelations,
   sortOption,
   addTagToStack,
-  handleMemoClick,
   fetchNextPage,
 }: MemoSectionListProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
@@ -67,13 +65,7 @@ const MemoSectionList = ({
   }, [parentTag, scrollRef?.current]);
 
   if (hasNoSection()) {
-    return (
-      <LeafMemoSection
-        parentTag={parentTag}
-        sortOption={sortOption}
-        handleMemoClick={handleMemoClick}
-      />
-    );
+    return <LeafMemoSection parentTag={parentTag} sortOption={sortOption} />;
   }
 
   return (
@@ -93,9 +85,6 @@ const MemoSectionList = ({
           isLinked={true}
           sortOption={sortOption}
           handleTagClick={() => addTagToStack(parentTag)}
-          handleMemoClick={(memo: Memo, memoIndex: number) =>
-            handleMemoClick(memo, parentTag, memoIndex)
-          }
         />
       )}
       {tagRelations.map((tagRelation) => {
@@ -110,9 +99,6 @@ const MemoSectionList = ({
             isLinked={false}
             sortOption={sortOption}
             handleTagClick={() => addTagToStack(tag)}
-            handleMemoClick={(memo: Memo, memoIndex: number) =>
-              handleMemoClick(memo, tag || parentTag, memoIndex)
-            }
           />
         );
       })}
