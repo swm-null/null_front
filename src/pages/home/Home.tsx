@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { HomeRouter } from './router';
 import { useContext, useEffect } from 'react';
 import { ApiContext, BottomNavProvider } from 'utils';
+import 'flickity/css/flickity.css';
 
 const queryClient = new QueryClient();
 
