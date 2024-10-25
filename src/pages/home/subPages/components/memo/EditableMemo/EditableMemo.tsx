@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import * as Api from 'api';
@@ -28,7 +26,6 @@ const EditableMemo = ({
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
   const [tagRebuild, setTagRebuild] = useState(false);
-  const updateMemoSubject = useRef(new Subject<Memo>()).current;
   const { t } = useTranslation();
 
   const handleDeleteMemo = async () => {
@@ -41,7 +38,7 @@ const EditableMemo = ({
     }
   };
 
-  const tryUpdateMemo = () => {
+  const tryUpdateMemo = async () => {
     const newMemo = {
       id: memo.id,
       content: message,
@@ -52,7 +49,19 @@ const EditableMemo = ({
     };
 
     if (memo.content !== newMemo.content) {
-      updateMemoSubject.next(newMemo);
+      softUpdateMemo && softUpdateMemo(newMemo);
+
+      const response = await Api.updateMemo(
+        newMemo.id,
+        newMemo.content,
+        newMemo.image_urls
+        // tagRebuild // TODO: 태그 재생성 기능 추가되면 구현
+      );
+
+      console.log(response);
+      if (!Api.isUpdateMemoResponse(response)) {
+        alert(t('pages.memo.updateErrorMessage'));
+      }
     }
     handleSave();
   };
@@ -62,27 +71,6 @@ const EditableMemo = ({
     setMessage(memo.content);
     setTags(memo.tags);
   }, [memo]);
-
-  useEffect(() => {
-    const subscription = updateMemoSubject
-      .pipe(debounceTime(500))
-      .subscribe(async (newMemo: Memo) => {
-        softUpdateMemo && softUpdateMemo(newMemo);
-
-        const response = await Api.updateMemo(
-          newMemo.id,
-          newMemo.content
-          // tagRebuild // TODO: 태그 재생성 기능 추가되면 구현
-        );
-        if (!Api.isUpdateMemoResponse(response)) {
-          alert(t('pages.memo.updateErrorMessage'));
-        }
-      });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [updateMemoSubject]);
 
   return (
     <div
