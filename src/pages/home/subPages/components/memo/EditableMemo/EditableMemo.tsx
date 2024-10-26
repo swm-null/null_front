@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
-import { MemoHeader } from './MemoHeader.tsx/index.ts';
-import { TagRebuildCheckbox } from './TagRebuildCheckbox/index.ts';
+import { MemoHeader } from './MemoHeader';
+import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 import { useMemoManager } from '../hook';
 
 const EditableMemo = ({
