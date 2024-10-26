@@ -21,16 +21,15 @@ const MemoSectionHeader = ({
 
   return (
     // FIXME: 일단 width 때러박고 나중에, css 만질때 수정하기
-
     <div
-      className="flex flex-col px-3 py-4 bg-[#FFF6E380] gap-4 w-[268px]"
+      className="flex flex-col px-3 py-4 bg-[#FFF6E380] gap-4 w-[268px] cursor-pointer"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onClick={handleClick}
     >
       <div className="flex w-full items-center gap-3">
         <TagWithOptions tag={tag} />
-        <div className="ml-auto flex items-center cursor-pointer">
+        <div className="ml-auto flex items-center">
           <RightIcon color="black" />
         </div>
       </div>
