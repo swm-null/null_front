@@ -15,12 +15,14 @@ interface paginationMemos extends paginationData {
   memos: Interface.Memo[];
 }
 
-export interface paginationDashboardTagRelationsResponse
-  extends paginationData,
-    validResponse {
+export interface paginationDashboardTagRelations extends paginationData {
   tag: Interface.Tag;
   tag_relations: Interface.TagRelation[];
 }
+
+export interface paginationDashboardTagRelationsResponse
+  extends paginationDashboardTagRelations,
+    validResponse {}
 
 export interface paginationMemosResponse extends paginationMemos, validResponse {}
 
