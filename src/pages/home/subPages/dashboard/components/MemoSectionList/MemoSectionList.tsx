@@ -71,38 +71,40 @@ const MemoSectionList = ({
   return (
     <div
       ref={scrollRef}
-      className="flex flex-1 gap-4 overflow-x-scroll no-scrollbar p-4 pt-2"
+      className="flex flex-1 overflow-x-scroll no-scrollbar p-4 pt-2"
       onMouseDown={onDragStart}
       onMouseMove={onDragMove}
       onMouseUp={onDragEnd}
       onMouseLeave={onDragEnd}
     >
-      {parentTag && (
-        <MemoSection
-          key={`section-${parentTag.id}`}
-          tag={parentTag}
-          childTags={[]}
-          isLinked={true}
-          sortOption={sortOption}
-          handleTagClick={() => addTagToStack(parentTag)}
-        />
-      )}
-      {tagRelations.map((tagRelation) => {
-        const tag = tagRelation.tag;
-        const childTags = tagRelation.child_tags || [];
-
-        return (
+      <div className="flex gap-4">
+        {parentTag && (
           <MemoSection
-            key={`section-${tag?.id}` || uuid_v4()}
-            tag={tag}
-            childTags={childTags}
-            isLinked={false}
+            key={`section-${parentTag.id}`}
+            tag={parentTag}
+            childTags={[]}
+            isLinked={true}
             sortOption={sortOption}
-            handleTagClick={() => addTagToStack(tag)}
+            handleTagClick={() => addTagToStack(parentTag)}
           />
-        );
-      })}
-      <div ref={observerRef} />
+        )}
+        {tagRelations.map((tagRelation) => {
+          const tag = tagRelation.tag;
+          const childTags = tagRelation.child_tags || [];
+
+          return (
+            <MemoSection
+              key={`section-${tag?.id}` || uuid_v4()}
+              tag={tag}
+              childTags={childTags}
+              isLinked={false}
+              sortOption={sortOption}
+              handleTagClick={() => addTagToStack(tag)}
+            />
+          );
+        })}
+      </div>
+      <div ref={observerRef} className="min-w-[1px] bg-transparent" />
     </div>
   );
 };

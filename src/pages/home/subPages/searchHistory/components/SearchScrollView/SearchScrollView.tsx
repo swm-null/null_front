@@ -28,7 +28,7 @@ const SearchScrollView = ({
         style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 24 : 0 }}
       >
         <div className="flex flex-col gap-[0.62rem]">{children}</div>
-        <div ref={observerRef} />
+        <div ref={observerRef} className="min-h-[1px] bg-transparent" />
       </div>
     </div>
   );

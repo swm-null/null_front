@@ -43,7 +43,10 @@ const MemoSection = ({
   if (haveLinkedMemos) return <></>;
 
   return (
-    <div className="flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border border-black border-opacity-10 shadow-custom backdrop-blur-lg">
+    <div
+      className="flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border 
+      border-black border-opacity-10 shadow-custom backdrop-blur-lg"
+    >
       {!isLinked && (
         <MemoSectionHeader
           tag={tag!}
@@ -64,8 +67,8 @@ const MemoSection = ({
                 />
               )
           )}
-          <div ref={observerRef} />
         </div>
+        <div ref={observerRef} className="min-h-[1px] bg-transparent" />
       </div>
     </div>
   );

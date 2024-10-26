@@ -29,18 +29,20 @@ const CreatedMemoList = ({
 
   return (
     <div
-      className="flex flex-col gap-3 p-4 pt-0"
+      className="flex flex-col p-4 pt-0"
       style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 24 : 0 }}
     >
-      {memos.map((memo) => (
-        <CreatedMemoCard
-          key={memo.id}
-          memo={memo}
-          softDeleteMemo={softDeleteMemo}
-          softRevertMemo={softRevertMemo}
-        />
-      ))}
-      <div ref={observerRef} />
+      <div className="flex flex-col gap-3">
+        {memos.map((memo) => (
+          <CreatedMemoCard
+            key={memo.id}
+            memo={memo}
+            softDeleteMemo={softDeleteMemo}
+            softRevertMemo={softRevertMemo}
+          />
+        ))}
+      </div>
+      <div ref={observerRef} className="min-h-[1px] bg-transparent" />
     </div>
   );
 };
