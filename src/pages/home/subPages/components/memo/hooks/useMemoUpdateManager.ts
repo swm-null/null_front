@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { isUpdateMemoResponse, updateMemo } from 'api';
 
-const useMemoDeleteManager = () => {
+const useMemoUpdateManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
@@ -81,4 +81,4 @@ const useMemoDeleteManager = () => {
   return { handleUpdateMemo };
 };
 
-export default useMemoDeleteManager;
+export default useMemoUpdateManager;
