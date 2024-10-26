@@ -1,11 +1,10 @@
 import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MemoText, useMemoManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { MemoHeader } from './MemoHeader';
 import { ImageBlur } from './ImageBlur';
-import { MemoText } from '../ImageMemoText/MemoText';
-import { useMemoDeleteManager } from '../hooks';
 
 interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -21,7 +20,7 @@ const UneditableMemo = ({
 }: UneditableMemoProps) => {
   const { t } = useTranslation();
 
-  const { handleDeleteMemo } = useMemoDeleteManager();
+  const { handleDeleteMemo } = useMemoManager();
 
   const [message, setMessage] = useState(memo.content);
   const [tags] = useState(memo.tags);

@@ -4,7 +4,7 @@ import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader.tsx/index.ts';
 import { TagRebuildCheckbox } from './TagRebuildCheckbox/index.ts';
-import { useMemoDeleteManager, useMemoUpdateManager } from '../hooks';
+import { useMemoManager } from '../hook';
 
 const EditableMemo = ({
   memo,
@@ -22,8 +22,7 @@ const EditableMemo = ({
   const [tagRebuild, setTagRebuild] = useState(false);
   const { t } = useTranslation();
 
-  const { handleDeleteMemo } = useMemoDeleteManager();
-  const { handleUpdateMemo } = useMemoUpdateManager();
+  const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
 
   useEffect(() => {
     setMessage(memo.content);

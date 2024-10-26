@@ -11,7 +11,7 @@ interface paginationData {
   current_page: number;
 }
 
-interface paginationMemos extends paginationData {
+export interface paginationMemos extends paginationData {
   memos: Interface.Memo[];
 }
 

@@ -5,7 +5,7 @@ import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
-import { useMemoDeleteManager } from 'pages/home/subPages/components/memo/hooks';
+import { useMemoManager } from 'pages/home/subPages/components';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -16,7 +16,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
 
-  const { handleDeleteMemo } = useMemoDeleteManager();
+  const { handleDeleteMemo } = useMemoManager();
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {

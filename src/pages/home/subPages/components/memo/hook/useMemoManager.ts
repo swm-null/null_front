@@ -1,14 +1,24 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { InfiniteQueryData, MemoData } from './interfaces';
+import {
+  deleteMemo,
+  isUpdateMemoResponse,
+  isValidResponse,
+  paginationMemos,
+  updateMemo,
+} from 'api';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
-import { isUpdateMemoResponse, updateMemo } from 'api';
 
-const useMemoUpdateManager = () => {
+interface InfiniteQueryData {
+  pages: paginationMemos[];
+  pageParams: number[];
+}
+
+const useMemoManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const allQueriesData = queryClient.getQueriesData<MemoData>({
+  const allQueriesData = queryClient.getQueriesData<paginationMemos>({
     queryKey: ['childTagMemos'],
     exact: false,
   });
@@ -48,7 +58,7 @@ const useMemoUpdateManager = () => {
           oldDataMap.set(queryKey, queryMemos);
 
           queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
-            const updatedPages = oldData.pages.map((page: MemoData) => {
+            const updatedPages = oldData.pages.map((page: paginationMemos) => {
               const memoIndex = page.memos.findIndex((m) => m.id === newMemo.id);
               if (memoIndex !== -1) {
                 const updatedMemos = [...page.memos];
@@ -78,7 +88,46 @@ const useMemoUpdateManager = () => {
     }
   };
 
-  return { handleUpdateMemo };
+  const handleDeleteMemo = async ({
+    memo,
+    handlePreProcess,
+  }: {
+    memo: Memo;
+    handlePreProcess?: () => void;
+  }) => {
+    handlePreProcess && handlePreProcess();
+
+    const oldDataMap = new Map();
+
+    allQueriesData.forEach((query) => {
+      const queryKey = query[0];
+      const queryMemos = query[1];
+
+      if (queryMemos) {
+        oldDataMap.set(queryKey, queryMemos);
+
+        queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
+          const updatedPages = oldData.pages.map((page: paginationMemos) => {
+            const newMemos = page.memos.filter((m) => m.id !== memo.id);
+            return { ...page, memos: newMemos };
+          });
+
+          return { ...oldData, pages: updatedPages };
+        });
+      }
+    });
+
+    const response = await deleteMemo(memo.id);
+    if (!isValidResponse(response)) {
+      alert(t('pages.memo.deleteErrorMessage'));
+
+      oldDataMap.forEach((oldData, queryKey) => {
+        queryClient.setQueryData(queryKey, oldData);
+      });
+    }
+  };
+
+  return { handleUpdateMemo, handleDeleteMemo };
 };
 
-export default useMemoUpdateManager;
+export default useMemoManager;
