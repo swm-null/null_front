@@ -1,19 +1,14 @@
 import { Modal } from '@mui/material';
-import { editTag, isGetTagResponse } from 'api';
-import { Tag } from 'pages/home/subPages/interfaces';
 import { useContext, useEffect, useState } from 'react';
 import { DashboardModalContext } from 'utils';
 import { ModalContent } from './ModalContent';
+import { useTagManager } from 'pages/home/subPages/components';
 
-const TagEditModal = ({
-  updateTag,
-  revertTag,
-}: {
-  updateTag: (tag: Tag) => void;
-  revertTag: (tag: Tag) => void;
-}) => {
+const TagEditModal = () => {
   const { tagEditModal, closeTagEditModal } = useContext(DashboardModalContext);
   const [newTagName, setTagName] = useState(tagEditModal?.tag.name || '');
+
+  const { handleUpdateTag } = useTagManager();
 
   useEffect(() => {
     if (tagEditModal?.tag) {
@@ -25,22 +20,6 @@ const TagEditModal = ({
 
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-  };
-
-  const handleEditTag = async () => {
-    try {
-      const prevTag = tagEditModal.tag;
-      updateTag({ id: tagEditModal.tag.id, name: newTagName });
-
-      const response = await editTag(tagEditModal.tag.id, newTagName);
-      if (!isGetTagResponse(response)) {
-        alert(response.exceptionMessage);
-      } else {
-        setTagName(newTagName);
-        closeTagEditModal();
-        revertTag(prevTag);
-      }
-    } catch {}
   };
 
   return (
@@ -57,7 +36,13 @@ const TagEditModal = ({
             newTagName={newTagName}
             setNewTagName={setTagName}
             handleClose={closeTagEditModal}
-            handleEdit={handleEditTag}
+            handleEdit={() => {
+              closeTagEditModal();
+              handleUpdateTag({
+                id: tagEditModal.tag.id,
+                name: newTagName,
+              });
+            }}
           />
         </div>
       </div>
