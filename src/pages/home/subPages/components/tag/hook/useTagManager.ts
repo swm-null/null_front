@@ -7,6 +7,7 @@ import {
 } from 'api';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AlertContext } from 'utils';
 
 interface InfiniteQueryData {
@@ -16,6 +17,7 @@ interface InfiniteQueryData {
 
 const useTagManager = () => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
 
   const allQueriesData = queryClient.getQueriesData<paginationDashboardTagRelations>(
@@ -76,7 +78,7 @@ const useTagManager = () => {
     });
 
     try {
-      const response = await editTag(updatedTag.id, updatedTag.name); // API 호출
+      const response = await editTag(updatedTag.id, updatedTag.name);
       if (!isValidResponse(response)) {
         alert(response.exceptionMessage);
 
@@ -90,7 +92,7 @@ const useTagManager = () => {
   };
 
   const handleDeleteTag = async (tag: Tag) => {
-    const confirmed = await confirmAlert('정말 삭제하시겠습니까?');
+    const confirmed = await confirmAlert(t('pages.dashboard.tag.delete.alert'));
 
     if (!confirmed) return;
 
