@@ -1,30 +1,15 @@
 import { Modal } from '@mui/material';
-import { Memo } from 'pages/home/subPages/interfaces';
 import { EditableMemo } from 'pages/home/subPages/components';
 import { useContext } from 'react';
 import { DashboardModalContext } from 'utils';
 
-interface MemoEditModalProps {
-  updateMemo: (memo: Memo) => void;
-  deleteMemo: (memoId: string) => void;
-  revertMemo: (memo: Memo) => void;
-}
-
-const MemoEditModal = ({
-  updateMemo,
-  deleteMemo,
-  revertMemo,
-}: MemoEditModalProps) => {
+const MemoEditModal = () => {
   const { memoEditModal, closeMemoEditModal } = useContext(DashboardModalContext);
 
   if (!memoEditModal) return <></>;
 
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-  };
-
-  const handleUpdateMemo = (memo: Memo) => {
-    updateMemo(memo);
   };
 
   return (
@@ -41,10 +26,7 @@ const MemoEditModal = ({
             key={memoEditModal.memo.id}
             memo={memoEditModal.memo}
             editable
-            softUpdateMemo={handleUpdateMemo}
-            softDeleteMemo={deleteMemo}
-            softRevertMemo={revertMemo}
-            handleSave={closeMemoEditModal}
+            handlePreProcess={closeMemoEditModal}
           />
         </div>
       </div>

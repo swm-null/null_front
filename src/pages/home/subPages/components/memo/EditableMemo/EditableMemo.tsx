@@ -1,88 +1,33 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
-import * as Api from 'api';
-import { MemoHeader } from './MemoHeader.tsx/index.ts';
-import { TagRebuildCheckbox } from './TagRebuildCheckbox/index.ts';
+import { MemoHeader } from './MemoHeader';
+import { TagRebuildCheckbox } from './TagRebuildCheckbox';
+import { useMemoManager } from '../hook';
 
 const EditableMemo = ({
   memo,
   editable = false,
   border,
-  softUpdateMemo,
-  softDeleteMemo,
-  softRevertMemo,
-  handleSave,
+  handlePreProcess,
 }: {
   memo: Memo;
   editable?: boolean;
   border?: boolean;
-  softUpdateMemo?: (newMemo: Memo) => void;
-  softDeleteMemo?: (memoId: string) => void;
-  softRevertMemo?: (memo: Memo) => void;
-  handleSave: () => void;
+  handlePreProcess: () => void;
 }) => {
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
   const [tagRebuild, setTagRebuild] = useState(false);
-  const updateMemoSubject = useRef(new Subject<Memo>()).current;
   const { t } = useTranslation();
 
-  const handleDeleteMemo = async () => {
-    softDeleteMemo && softDeleteMemo(memo.id);
+  const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
 
-    const response = await Api.deleteMemo(memo.id);
-    if (!Api.isValidResponse(response)) {
-      alert(t('pages.memo.deleteErrorMessage'));
-      softRevertMemo && softRevertMemo(memo);
-    }
-  };
-
-  const tryUpdateMemo = () => {
-    const newMemo = {
-      id: memo.id,
-      content: message,
-      tags,
-      image_urls: memo.image_urls,
-      created_at: memo.created_at,
-      updated_at: memo.updated_at,
-    };
-
-    if (memo.content !== newMemo.content) {
-      updateMemoSubject.next(newMemo);
-    }
-    handleSave();
-  };
-
-  // 서버에서 메모가 바뀌면, 해당 내용으로 바로 업데이트
   useEffect(() => {
     setMessage(memo.content);
     setTags(memo.tags);
   }, [memo]);
-
-  useEffect(() => {
-    const subscription = updateMemoSubject
-      .pipe(debounceTime(500))
-      .subscribe(async (newMemo: Memo) => {
-        softUpdateMemo && softUpdateMemo(newMemo);
-
-        const response = await Api.updateMemo(
-          newMemo.id,
-          newMemo.content
-          // tagRebuild // TODO: 태그 재생성 기능 추가되면 구현
-        );
-        if (!Api.isUpdateMemoResponse(response)) {
-          alert(t('pages.memo.updateErrorMessage'));
-        }
-      });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [updateMemoSubject]);
 
   return (
     <div
@@ -93,7 +38,7 @@ const EditableMemo = ({
         <MemoHeader
           updatedAt={memo.updated_at}
           dateFormat={t('memo.dateFormatEdit')}
-          handleDeleteMemo={handleDeleteMemo}
+          handleDeleteMemo={() => handleDeleteMemo({ memo, handlePreProcess })}
         />
         <ImageMemoText
           imageUrls={memo.image_urls}
@@ -114,7 +59,15 @@ const EditableMemo = ({
             />
             <button
               className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] rounded-[30px] border border-[#917360]"
-              onClick={tryUpdateMemo}
+              onClick={() =>
+                handleUpdateMemo({
+                  memo,
+                  newMessage: message,
+                  newTags: tags,
+                  newImageUrls: memo.image_urls,
+                  handlePreProcess,
+                })
+              }
             >
               {t('memo.save')}
             </button>

@@ -1,6 +1,6 @@
 import { Tag } from 'pages/home/subPages/interfaces';
 import { MemoSectionHeader } from './MemoSectionHeader';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
 import { SortOption } from 'pages/home/subPages/types';
@@ -22,6 +22,7 @@ const MemoSection = ({
   handleTagClick,
 }: MemoSectionProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const [updateKey, setUpdateKey] = useState(0);
 
   const { memos, fetchNextPage } = useChildTagMemosManager(
     tag?.id || null,
@@ -40,6 +41,10 @@ const MemoSection = ({
     options: { threshold: 0.5 },
   });
 
+  useEffect(() => {
+    setUpdateKey((prev) => prev + 1);
+  }, [memos]);
+
   if (haveLinkedMemos) return <></>;
 
   return (
@@ -55,7 +60,7 @@ const MemoSection = ({
         />
       )}
       <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10">
-        <div className="flex flex-col flex-1 gap-[0.4rem] w-60 ">
+        <div key={updateKey} className="flex flex-col flex-1 gap-[0.4rem] w-60 ">
           {memos.map(
             (memo) =>
               memo && (

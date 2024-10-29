@@ -1,36 +1,22 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { deleteMemo, isValidResponse } from 'api';
 import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
+import { useMemoManager } from 'pages/home/subPages/components';
 
 interface CreatedMemoCardProps {
   memo: Memo;
-  softDeleteMemo?: (memoId: string) => void;
-  softRevertMemo?: (memo: Memo) => void;
 }
 
-const CreatedMemoCard = ({
-  memo,
-  softDeleteMemo,
-  softRevertMemo,
-}: CreatedMemoCardProps) => {
+const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
 
-  const handleDeleteMemo = async () => {
-    softDeleteMemo?.(memo.id);
-
-    const response = await deleteMemo(memo.id);
-    if (!isValidResponse(response)) {
-      alert(t('pages.memo.deleteErrorMessage'));
-      softRevertMemo?.(memo);
-    }
-  };
+  const { handleDeleteMemo } = useMemoManager();
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
@@ -47,7 +33,7 @@ const CreatedMemoCard = ({
       <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
           updatedAt={formatDate(memo.updated_at)}
-          handleDeleteMemo={handleDeleteMemo}
+          handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
           {tags.length === 0 ? (
             <Skeleton animation="wave" width={50} />

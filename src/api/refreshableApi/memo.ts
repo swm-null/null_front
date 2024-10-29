@@ -64,12 +64,14 @@ export const createMemo = async (
 
 export const updateMemo = async (
   id: string,
-  content: string
+  content: string,
+  imageUrls?: string[] | null
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/memos/${id}`;
+  const endpoint = `/memo/${id}`;
   const data = JSON.stringify({
     content: content,
+    image_urls: imageUrls ? imageUrls : [],
   });
   try {
     const response = await refreshableApi.put(endpoint, data);
@@ -95,20 +97,12 @@ export const deleteMemo = async (
   id: string
 ): Promise<validResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/memos/${id}`;
+  const endpoint = `/memo/${id}`;
   try {
     const response = await refreshableApi.delete(endpoint);
-    const { id, content, tags, image_urls, created_at, updated_at } =
-      response.data.memo;
     const responseInfo = {
       method,
       status: response.status,
-      id,
-      content,
-      tags,
-      image_urls,
-      created_at,
-      updated_at,
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {

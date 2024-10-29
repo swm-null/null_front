@@ -6,13 +6,9 @@ import { BottomNavContext } from 'utils';
 
 const CreatedMemoList = ({
   memos,
-  softDeleteMemo,
-  softRevertMemo,
   fetchNextPage,
 }: {
   memos: Memo[];
-  softDeleteMemo?: (memoId: string) => void;
-  softRevertMemo?: (memo: Memo) => void;
   fetchNextPage: () => void;
 }) => {
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
@@ -34,12 +30,7 @@ const CreatedMemoList = ({
     >
       <div className="flex flex-col gap-3">
         {memos.map((memo) => (
-          <CreatedMemoCard
-            key={memo.id}
-            memo={memo}
-            softDeleteMemo={softDeleteMemo}
-            softRevertMemo={softRevertMemo}
-          />
+          <CreatedMemoCard key={memo.id} memo={memo} />
         ))}
       </div>
       <div ref={observerRef} className="min-h-[1px] bg-transparent" />

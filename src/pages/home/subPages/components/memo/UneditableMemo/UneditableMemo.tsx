@@ -1,29 +1,26 @@
 import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { deleteMemo, isValidResponse } from 'api';
+import { MemoText, useMemoManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { MemoHeader } from './MemoHeader';
 import { ImageBlur } from './ImageBlur';
-import { MemoText } from '../ImageMemoText/MemoText';
 
 interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
   border?: boolean;
   shadow?: boolean;
-  softDeleteMemo?: (memoId: string) => void;
-  softRevertMemo?: (memo: Memo) => void;
 }
 
 const UneditableMemo = ({
   memo,
   border,
   shadow,
-  softDeleteMemo,
-  softRevertMemo,
   ...divProps
 }: UneditableMemoProps) => {
   const { t } = useTranslation();
+
+  const { handleDeleteMemo } = useMemoManager();
 
   const [message, setMessage] = useState(memo.content);
   const [tags] = useState(memo.tags);
@@ -38,16 +35,6 @@ const UneditableMemo = ({
     imageUrl: string | undefined,
     defaultBackground: string
   ) => (haveImageUrl ? `url(${imageUrl})` : defaultBackground);
-
-  const handleDeleteMemo = async () => {
-    softDeleteMemo && softDeleteMemo(memo.id);
-
-    const response = await deleteMemo(memo.id);
-    if (!isValidResponse(response)) {
-      alert(t('pages.memo.deleteErrorMessage'));
-      softRevertMemo && softRevertMemo(memo);
-    }
-  };
 
   return (
     <div
@@ -77,7 +64,7 @@ const UneditableMemo = ({
           textColor={getStyleByImagePresence('gray2', 'white')}
           updatedAt={memo.updated_at}
           dateFormat={t('memo.dateFormat')}
-          handleDeleteMemo={handleDeleteMemo}
+          handleDeleteMemo={() => handleDeleteMemo({ memo })}
         />
       </div>
     </div>

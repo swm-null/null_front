@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { Tag } from 'pages/home/subPages/interfaces';
 import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
@@ -29,18 +29,6 @@ const DashboardPage = () => {
 
   const revertTagFromMemoSectionList = (_tag: Tag) => {
     // TODO: 여기서 모든 섹션마다 해당 태그를 찾아서 잘못 삭제, 업데이트한 것을 복구 해주는 코드 들어가야함
-  };
-
-  const updateMemoFromMemoSectionList = (_memo: Memo) => {
-    // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 업데이트 해주는 코드 들어가야함
-  };
-
-  const deleteMemoFromMemoSectionList = (_memoId: string) => {
-    // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 삭제 해주는 코드 들어가야함
-  };
-
-  const revertMemoFromMemoSectionList = (_memo: Memo) => {
-    // TODO: 여기서 모든 섹션마다 해당 메모를 찾아서 잘못 삭제, 업데이트한 것을 복구 해주는 코드 들어가야함
   };
 
   return (
@@ -75,11 +63,7 @@ const DashboardPage = () => {
         updateTag={updateTagFromMemoSectionList}
         revertTag={revertTagFromMemoSectionList}
       />
-      <Components.MemoEditModal
-        updateMemo={updateMemoFromMemoSectionList}
-        deleteMemo={deleteMemoFromMemoSectionList}
-        revertMemo={revertMemoFromMemoSectionList}
-      />
+      <Components.MemoEditModal />
     </div>
   );
 };
