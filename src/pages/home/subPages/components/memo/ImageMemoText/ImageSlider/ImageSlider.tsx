@@ -58,6 +58,7 @@ const ImageSlider = ({
       >
         {imageUrls?.map((url, index) => (
           <ImageItem
+            key={`origin-${index}`}
             image={url}
             index={index}
             onRemove={removeImageUrl}
@@ -67,6 +68,7 @@ const ImageSlider = ({
 
         {images?.map((image, index) => (
           <ImageItem
+            key={`new-${index}`}
             image={image}
             index={index}
             onRemove={removeImage}

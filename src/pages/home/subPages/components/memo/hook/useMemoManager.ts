@@ -29,7 +29,7 @@ const useMemoManager = () => {
     return backupData;
   };
 
-  const restoreMemoData = (backupData: Map<any, any>) => {
+  const restoreMemoData = (backupData: Map<string[], InfiniteQueryData>) => {
     backupData.forEach((data, queryKey) => {
       queryClient.setQueryData(queryKey, data);
     });
@@ -81,7 +81,10 @@ const useMemoManager = () => {
   const updateMemoDataInQueries = (newMemo: Memo) => {
     allMemosQueriesData.forEach((query) => {
       const queryKey = query[0];
+
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
+        if (!oldData) return oldData;
+
         const updatedPages = oldData.pages.map((page) => {
           const memoIndex = page.memos.findIndex((m) => m.id === newMemo.id);
           if (memoIndex !== -1) {
