@@ -14,7 +14,7 @@ const DashboardPage = () => {
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
   const [tagStack, setTagStack] = useState<Tag[]>([]);
 
-  const tagsManager = Hooks.useTagsManager();
+  const tagsManager = Hooks.useDashboardTagManager();
 
   const handleChildTagClick = (tag: Tag | null) => {
     if (tag) {
@@ -40,7 +40,7 @@ const DashboardPage = () => {
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">
           <Components.CurrentTagPath
             allTagText={t('pages.dashboard.allMemoButton')}
-            tags={tagsManager.tagRelations.flatMap((tagRelation) => tagRelation.tag)}
+            tags={tagsManager.childTags}
             tagStack={tagStack}
             setTagStack={setTagStack}
             sortOption={sortOption}
