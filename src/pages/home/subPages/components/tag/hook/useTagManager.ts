@@ -1,17 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  deleteTag,
-  editTag,
-  isValidResponse,
-  paginationDashboardTagRelations,
-} from 'api';
+import * as Api from 'api';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertContext } from 'utils';
 
 interface InfiniteQueryData {
-  pages: paginationDashboardTagRelations[];
+  pages: Api.paginationDashboardTagRelations[];
   pageParams: number[];
 }
 
@@ -20,17 +15,15 @@ const useTagManager = () => {
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
 
-  const allQueriesData = queryClient.getQueriesData<paginationDashboardTagRelations>(
-    {
+  const allQueriesData =
+    queryClient.getQueriesData<Api.paginationDashboardTagRelations>({
       queryKey: ['tags'],
       exact: false,
-    }
-  );
+    });
 
-  const handleUpdateTag = async (updatedTag: Tag) => {
+  const handleUpdateTag = async (updateTarget: Tag) => {
     const oldDataMap = new Map();
 
-    // 현재 데이터를 oldDataMap에 저장
     allQueriesData.forEach((query) => {
       const queryKey = query[0] as string[];
       const queryMemos = query[1];
@@ -39,11 +32,11 @@ const useTagManager = () => {
 
       oldDataMap.set(queryKey, queryMemos);
 
-      if (queryKey.includes(updatedTag.id)) {
+      if (queryKey.includes(updateTarget.id)) {
         queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
-          return oldData.pages.map((page: paginationDashboardTagRelations) => ({
+          return oldData.pages.map((page: Api.paginationDashboardTagRelations) => ({
             ...page,
-            tag: updatedTag,
+            tag: updateTarget,
           }));
         });
         return;
@@ -51,19 +44,19 @@ const useTagManager = () => {
 
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
         const updatedPages = oldData.pages.map(
-          (page: paginationDashboardTagRelations) => {
+          (page: Api.paginationDashboardTagRelations) => {
             const updatedTagRelations = page.tag_relations.map((relation) => {
               const updatedChildTags = relation.child_tags.map((childTag) =>
-                childTag.id === updatedTag.id
-                  ? { ...childTag, name: updatedTag.name }
+                childTag.id === updateTarget.id
+                  ? { ...childTag, name: updateTarget.name }
                   : childTag
               );
 
               return {
                 ...relation,
                 tag:
-                  relation.tag.id === updatedTag.id
-                    ? { ...relation.tag, name: updatedTag.name }
+                  relation.tag.id === updateTarget.id
+                    ? { ...relation.tag, name: updateTarget.name }
                     : relation.tag,
                 child_tags: updatedChildTags,
               };
@@ -78,8 +71,8 @@ const useTagManager = () => {
     });
 
     try {
-      const response = await editTag(updatedTag.id, updatedTag.name);
-      if (!isValidResponse(response)) {
+      const response = await Api.editTag(updateTarget.id, updateTarget.name);
+      if (!Api.isValidResponse(response)) {
         alert(response.exceptionMessage);
 
         oldDataMap.forEach((oldData, queryKey) => {
@@ -91,7 +84,7 @@ const useTagManager = () => {
     }
   };
 
-  const handleDeleteTag = async (tag: Tag) => {
+  const handleDeleteTag = async (deleteTarget: Tag) => {
     const confirmed = await confirmAlert(t('pages.dashboard.tag.delete.alert'));
 
     if (!confirmed) return;
@@ -106,23 +99,23 @@ const useTagManager = () => {
 
       oldDataMap.set(queryKey, queryMemos);
 
-      if (queryKey.includes(tag.id)) {
+      if (queryKey.includes(deleteTarget.id)) {
         queryClient.removeQueries({ queryKey });
         return;
       }
 
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
         const updatedPages = oldData.pages.map(
-          (page: paginationDashboardTagRelations) => {
+          (page: Api.paginationDashboardTagRelations) => {
             const filteredTagRelations = page.tag_relations
               .map((relation) => {
                 const filteredChildTags = relation.child_tags.filter(
-                  (childTag) => childTag.id !== tag.id
+                  (childTag) => childTag.id !== deleteTarget.id
                 );
 
                 return { ...relation, child_tags: filteredChildTags };
               })
-              .filter((relation) => relation.tag.id !== tag.id);
+              .filter((relation) => relation.tag.id !== deleteTarget.id);
 
             return { ...page, tag_relations: filteredTagRelations };
           }
@@ -133,8 +126,8 @@ const useTagManager = () => {
     });
 
     try {
-      const response = await deleteTag(tag.id);
-      if (!isValidResponse(response)) {
+      const response = await Api.deleteTag(deleteTarget.id);
+      if (!Api.isValidResponse(response)) {
         alert(response.exceptionMessage);
 
         oldDataMap.forEach((oldData, queryKey) => {
