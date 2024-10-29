@@ -1,16 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  deleteMemo,
-  isUpdateMemoResponse,
-  isValidResponse,
-  paginationMemos,
-  updateMemo,
-} from 'api';
+import * as Api from 'api';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 
 interface InfiniteQueryData {
-  pages: paginationMemos[];
+  pages: Api.paginationMemos[];
   pageParams: number[];
 }
 
@@ -18,10 +12,28 @@ const useMemoManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
-  const allQueriesData = queryClient.getQueriesData<paginationMemos>({
+  const allMemosQueriesData = queryClient.getQueriesData<Api.paginationMemos>({
     queryKey: ['childTagMemos'],
     exact: false,
   });
+
+  const backupMemoData = () => {
+    const backupData = new Map();
+    allMemosQueriesData.forEach((query) => {
+      const queryKey = query[0];
+      const queryData = query[1];
+      if (queryData) {
+        backupData.set(queryKey, queryData);
+      }
+    });
+    return backupData;
+  };
+
+  const restoreMemoData = (backupData: Map<any, any>) => {
+    backupData.forEach((data, queryKey) => {
+      queryClient.setQueryData(queryKey, data);
+    });
+  };
 
   const handleUpdateMemo = async ({
     memo,
@@ -39,53 +51,49 @@ const useMemoManager = () => {
     handlePreProcess();
 
     const newMemo = {
-      id: memo.id,
+      ...memo,
       content: newMessage,
       tags: newTags,
       image_urls: newImageUrls,
-      created_at: memo.created_at,
-      updated_at: memo.updated_at,
     };
 
-    if (memo.content !== newMemo.content) {
-      const oldDataMap = new Map();
+    const isContentChanged = memo.content !== newMemo.content;
+    const isTagsChanged = JSON.stringify(memo.tags) !== JSON.stringify(newMemo.tags);
+    const isImagesChanged =
+      JSON.stringify(memo.image_urls) !== JSON.stringify(newMemo.image_urls);
 
-      allQueriesData.forEach((query) => {
-        const queryKey = query[0];
-        const queryMemos = query[1];
+    if (isContentChanged || isTagsChanged || isImagesChanged) {
+      const backupData = backupMemoData();
+      updateMemoDataInQueries(newMemo);
 
-        if (queryMemos) {
-          oldDataMap.set(queryKey, queryMemos);
-
-          queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
-            const updatedPages = oldData.pages.map((page: paginationMemos) => {
-              const memoIndex = page.memos.findIndex((m) => m.id === newMemo.id);
-              if (memoIndex !== -1) {
-                const updatedMemos = [...page.memos];
-                updatedMemos[memoIndex] = newMemo;
-                return { ...page, memos: updatedMemos };
-              }
-              return page;
-            });
-            return { ...oldData, pages: updatedPages };
-          });
-        }
-      });
-
-      const response = await updateMemo(
+      const response = await Api.updateMemo(
         newMemo.id,
         newMemo.content,
         newMemo.image_urls
       );
-
-      if (!isUpdateMemoResponse(response)) {
+      if (!Api.isUpdateMemoResponse(response)) {
         alert(t('pages.memo.updateErrorMessage'));
-
-        oldDataMap.forEach((oldData, queryKey) => {
-          queryClient.setQueryData(queryKey, oldData);
-        });
+        restoreMemoData(backupData);
       }
     }
+  };
+
+  const updateMemoDataInQueries = (newMemo: Memo) => {
+    allMemosQueriesData.forEach((query) => {
+      const queryKey = query[0];
+      queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
+        const updatedPages = oldData.pages.map((page) => {
+          const memoIndex = page.memos.findIndex((m) => m.id === newMemo.id);
+          if (memoIndex !== -1) {
+            const updatedMemos = [...page.memos];
+            updatedMemos[memoIndex] = newMemo;
+            return { ...page, memos: updatedMemos };
+          }
+          return page;
+        });
+        return { ...oldData, pages: updatedPages };
+      });
+    });
   };
 
   const handleDeleteMemo = async ({
@@ -97,34 +105,27 @@ const useMemoManager = () => {
   }) => {
     handlePreProcess && handlePreProcess();
 
-    const oldDataMap = new Map();
+    const backupData = backupMemoData();
+    deleteMemoDataInQueries(memo.id);
 
-    allQueriesData.forEach((query) => {
-      const queryKey = query[0];
-      const queryMemos = query[1];
-
-      if (queryMemos) {
-        oldDataMap.set(queryKey, queryMemos);
-
-        queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
-          const updatedPages = oldData.pages.map((page: paginationMemos) => {
-            const newMemos = page.memos.filter((m) => m.id !== memo.id);
-            return { ...page, memos: newMemos };
-          });
-
-          return { ...oldData, pages: updatedPages };
-        });
-      }
-    });
-
-    const response = await deleteMemo(memo.id);
-    if (!isValidResponse(response)) {
+    const response = await Api.deleteMemo(memo.id);
+    if (!Api.isValidResponse(response)) {
       alert(t('pages.memo.deleteErrorMessage'));
-
-      oldDataMap.forEach((oldData, queryKey) => {
-        queryClient.setQueryData(queryKey, oldData);
-      });
+      restoreMemoData(backupData);
     }
+  };
+
+  const deleteMemoDataInQueries = (memoId: string) => {
+    allMemosQueriesData.forEach((query) => {
+      const queryKey = query[0];
+      queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
+        const updatedPages = oldData.pages.map((page) => {
+          const newMemos = page.memos.filter((m) => m.id !== memoId);
+          return { ...page, memos: newMemos };
+        });
+        return { ...oldData, pages: updatedPages };
+      });
+    });
   };
 
   return { handleUpdateMemo, handleDeleteMemo };
