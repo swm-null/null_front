@@ -21,122 +21,101 @@ const useTagManager = () => {
       exact: false,
     });
 
-  const handleUpdateTag = async (updateTarget: Tag) => {
+  const backupData = () => {
     const oldDataMap = new Map();
-
-    allQueriesData.forEach((query) => {
-      const queryKey = query[0] as string[];
-      const queryMemos = query[1];
-
-      if (!queryMemos) return;
-
-      oldDataMap.set(queryKey, queryMemos);
-
-      if (queryKey.includes(updateTarget.id)) {
-        queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
-          return oldData.pages.map((page: Api.paginationDashboardTagRelations) => ({
-            ...page,
-            tag: updateTarget,
-          }));
-        });
-        return;
+    allQueriesData.forEach(([queryKey, data]) => {
+      if (data) {
+        oldDataMap.set(queryKey, data);
       }
-
-      queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
-        const updatedPages = oldData.pages.map(
-          (page: Api.paginationDashboardTagRelations) => {
-            const updatedTagRelations = page.tag_relations.map((relation) => {
-              const updatedChildTags = relation.child_tags.map((childTag) =>
-                childTag.id === updateTarget.id
-                  ? { ...childTag, name: updateTarget.name }
-                  : childTag
-              );
-
-              return {
-                ...relation,
-                tag:
-                  relation.tag.id === updateTarget.id
-                    ? { ...relation.tag, name: updateTarget.name }
-                    : relation.tag,
-                child_tags: updatedChildTags,
-              };
-            });
-
-            return { ...page, tag_relations: updatedTagRelations };
-          }
-        );
-
-        return { ...oldData, pages: updatedPages };
-      });
     });
+    return oldDataMap;
+  };
+
+  const restoreData = (oldDataMap: Map<string[], InfiniteQueryData>) => {
+    oldDataMap.forEach((oldData, queryKey) => {
+      queryClient.setQueryData(queryKey, oldData);
+    });
+  };
+
+  const handleUpdateTag = async (updateTarget: Tag) => {
+    const oldDataMap = backupData();
+    updateTagDataInQueries(updateTarget);
 
     try {
       const response = await Api.editTag(updateTarget.id, updateTarget.name);
       if (!Api.isValidResponse(response)) {
         alert(response.exceptionMessage);
-
-        oldDataMap.forEach((oldData, queryKey) => {
-          queryClient.setQueryData(queryKey, oldData);
-        });
+        restoreData(oldDataMap);
       }
-    } catch (error) {
+    } catch {
       alert('다시 시도해주세요');
+      restoreData(oldDataMap);
     }
+  };
+
+  const updateTagDataInQueries = (updateTarget: Tag) => {
+    allQueriesData.forEach(([queryKey, queryData]) => {
+      if (!queryData) return;
+
+      queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
+        const updatedPages = oldData.pages.map((page) => {
+          const updatedTagRelations = page.tag_relations.map((relation) => ({
+            ...relation,
+            tag:
+              relation.tag.id === updateTarget.id
+                ? { ...relation.tag, name: updateTarget.name }
+                : relation.tag,
+            child_tags: relation.child_tags.map((childTag) =>
+              childTag.id === updateTarget.id
+                ? { ...childTag, name: updateTarget.name }
+                : childTag
+            ),
+          }));
+          return { ...page, tag_relations: updatedTagRelations };
+        });
+        return { ...oldData, pages: updatedPages };
+      });
+    });
   };
 
   const handleDeleteTag = async (deleteTarget: Tag) => {
     const confirmed = await confirmAlert(t('pages.dashboard.tag.delete.alert'));
-
     if (!confirmed) return;
 
-    const oldDataMap = new Map();
-
-    allQueriesData.forEach((query) => {
-      const queryKey = query[0] as string[];
-      const queryMemos = query[1];
-
-      if (!queryMemos) return;
-
-      oldDataMap.set(queryKey, queryMemos);
-
-      if (queryKey.includes(deleteTarget.id)) {
-        queryClient.removeQueries({ queryKey });
-        return;
-      }
-
-      queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
-        const updatedPages = oldData.pages.map(
-          (page: Api.paginationDashboardTagRelations) => {
-            const filteredTagRelations = page.tag_relations
-              .map((relation) => {
-                const filteredChildTags = relation.child_tags.filter(
-                  (childTag) => childTag.id !== deleteTarget.id
-                );
-
-                return { ...relation, child_tags: filteredChildTags };
-              })
-              .filter((relation) => relation.tag.id !== deleteTarget.id);
-
-            return { ...page, tag_relations: filteredTagRelations };
-          }
-        );
-
-        return { ...oldData, pages: updatedPages };
-      });
-    });
+    const oldDataMap = backupData();
+    deleteTagDataInQueries(deleteTarget);
 
     try {
       const response = await Api.deleteTag(deleteTarget.id);
       if (!Api.isValidResponse(response)) {
         alert(response.exceptionMessage);
-
-        oldDataMap.forEach((oldData, queryKey) => {
-          queryClient.setQueryData(queryKey, oldData);
-        });
+        restoreData(oldDataMap);
       }
-    } catch (error) {
+    } catch {
       alert('다시 시도해주세요');
+      restoreData(oldDataMap);
     }
+  };
+
+  const deleteTagDataInQueries = (deleteTarget: Tag) => {
+    allQueriesData.forEach(([queryKey, queryData]) => {
+      if (!queryData) return;
+
+      queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
+        const updatedPages = oldData.pages.map((page) => {
+          const filteredTagRelations = page.tag_relations
+            .filter((relation) => relation.tag.id !== deleteTarget.id)
+            .map((relation) => ({
+              ...relation,
+              child_tags: relation.child_tags.filter(
+                (childTag) => childTag.id !== deleteTarget.id
+              ),
+            }));
+          return { ...page, tag_relations: filteredTagRelations };
+        });
+        return { ...oldData, pages: updatedPages };
+      });
+    });
   };
 
   return { handleUpdateTag, handleDeleteTag };
