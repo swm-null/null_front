@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -19,10 +19,15 @@ const EditableMemo = ({
 }) => {
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
+  const [imageUrls, setImageUrls] = useState(memo.image_urls);
   const [tagRebuild, setTagRebuild] = useState(false);
   const { t } = useTranslation();
 
   const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
+
+  const removeImageUrl = useCallback((index: number) => {
+    setImageUrls((prev) => prev.filter((_, i) => i !== index));
+  }, []);
 
   useEffect(() => {
     setMessage(memo.content);
@@ -41,7 +46,8 @@ const EditableMemo = ({
           handleDeleteMemo={() => handleDeleteMemo({ memo, handlePreProcess })}
         />
         <ImageMemoText
-          imageUrls={memo.image_urls}
+          imageUrls={imageUrls}
+          removeImageUrl={removeImageUrl}
           message={message}
           setMessage={setMessage}
           editable={editable}

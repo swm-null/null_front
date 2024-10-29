@@ -45,7 +45,7 @@ const useMemoManager = () => {
     memo: Memo;
     newMessage: string;
     newTags: Tag[];
-    newImageUrls: string[] | null;
+    newImageUrls: string[];
     handlePreProcess: () => void;
   }) => {
     handlePreProcess();
