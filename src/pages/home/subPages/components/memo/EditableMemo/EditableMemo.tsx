@@ -10,22 +10,21 @@ import { ImageListContext } from 'utils/index.ts';
 
 const EditableMemo = ({
   memo,
-  editable = false,
   border,
   handlePreProcess,
 }: {
   memo: Memo;
-  editable?: boolean;
   border?: boolean;
   handlePreProcess: () => void;
 }) => {
+  const { t } = useTranslation();
+
   const { images } = useContext(ImageListContext);
 
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
   const [imageUrls, setImageUrls] = useState(memo.image_urls);
   const [tagRebuild, setTagRebuild] = useState(false);
-  const { t } = useTranslation();
 
   const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
 
@@ -82,28 +81,28 @@ const EditableMemo = ({
           removeImageUrl={removeImageUrl}
           message={message}
           setMessage={setMessage}
-          editable={editable}
+          editable
         />
       </div>
 
-      {editable && (
-        <div className="flex gap-2">
-          <TagManager tags={tags} setTags={setTags} editable={editable} />
-          <div className="flex ml-auto gap-6 items-center">
-            <TagRebuildCheckbox
-              checked={tagRebuild}
-              setChecked={setTagRebuild}
-              label={t('memo.tagRebuild')}
-            />
-            <button
-              className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] rounded-[30px] border border-[#917360]"
-              onClick={handleUpdateMemoWithUploadImage}
-            >
-              {t('memo.save')}
-            </button>
-          </div>
+      <div className="flex gap-2">
+        <TagManager tags={tags} setTags={setTags} editable />
+        <div className="flex ml-auto gap-6 items-center">
+          <TagRebuildCheckbox
+            checked={tagRebuild}
+            setChecked={setTagRebuild}
+            label={t('memo.tagRebuild')}
+          />
+          <button
+            type="button"
+            className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
+                rounded-[30px] border border-[#917360]"
+            onClick={handleUpdateMemoWithUploadImage}
+          >
+            {t('memo.save')}
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 };

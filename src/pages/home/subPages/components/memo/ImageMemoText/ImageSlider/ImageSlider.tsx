@@ -1,7 +1,8 @@
-import { AddIcon, CloseIcon } from 'assets/icons';
 import { useContext, useEffect, useState } from 'react';
 import Flickity from 'react-flickity-component';
 import { ImageListContext } from 'utils';
+import { FileInput } from 'pages/home/subPages/components/utils';
+import { AddIcon, CloseIcon } from 'assets/icons';
 
 const ImageSlider = ({
   imageUrls,
@@ -12,9 +13,9 @@ const ImageSlider = ({
   removeImageUrl?: (index: number) => void;
   editable?: boolean;
 }) => {
+  const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
   const { images, removeImage, handleAddImageButtonClick, handleImageFileChange } =
     useContext(ImageListContext);
-  const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
 
   const isLastImageIndex = (cellIndex: number) =>
     cellIndex === imageUrls?.length + images.length;
@@ -33,7 +34,7 @@ const ImageSlider = ({
         flickityInstance.off('staticClick', handleStaticClick);
       };
     }
-  }, [flickityInstance, imageUrls, editable]); // flickityInstance를 의존성에 추가
+  }, [flickityInstance, imageUrls, editable]);
 
   const flickityOptions = {
     prevNextButtons: false,
@@ -51,57 +52,52 @@ const ImageSlider = ({
           options={flickityOptions}
         >
           {imageUrls?.map((url, index) => (
-            <div className="carousel-cell w-full h-full xsm:w-60" key={index}>
-              <img
-                src={url}
-                alt={`Memo Image ${index + 1}`}
-                className="object-cover w-full h-full xsm:w-60"
-              />
-              <div
-                className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                onClick={() => {
-                  removeImageUrl && removeImageUrl(index);
-                }}
-              >
-                <CloseIcon className="w-4 h-4" />
-              </div>
-            </div>
+            <ImageItem image={url} index={index} onRemove={removeImageUrl} />
           ))}
 
           {images?.map((image, index) => (
-            <div className="carousel-cell w-full h-full xsm:w-60" key={index}>
-              <img
-                src={URL.createObjectURL(image)}
-                alt={`Memo Image ${imageUrls.length + index + 1}`}
-                className="object-cover w-full h-full xsm:w-60"
-              />
-              <div
-                className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                onClick={() => {
-                  removeImage(index);
-                }}
-              >
-                <CloseIcon className="w-4 h-4" />
-              </div>
-            </div>
+            <ImageItem image={image} index={index} onRemove={removeImage} />
           ))}
 
-          <form className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
-            <input
-              title="input-file"
-              type="file"
-              accept="image/*"
-              onChange={handleImageFileChange}
-              className="hidden"
-            />
-            <AddIcon className="w-10 h-10" />
-          </form>
+          <div className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
+            <FileInput handleImageFileChange={handleImageFileChange}>
+              <AddIcon className="w-10 h-10" onClick={handleAddImageButtonClick} />
+            </FileInput>
+          </div>
         </Flickity>
       </div>
     );
   } else {
     return <></>;
   }
+};
+
+const ImageItem = ({
+  image,
+  index,
+  onRemove,
+}: {
+  image: File | string;
+  index: number;
+  onRemove?: (index: number) => void;
+}) => {
+  const imageUrl = image instanceof File ? URL.createObjectURL(image) : image;
+
+  return (
+    <div className="carousel-cell w-full h-full xsm:w-60" key={index}>
+      <img
+        src={imageUrl}
+        alt={`Memo Image ${index + 1}`}
+        className="object-cover w-full h-full xsm:w-60"
+      />
+      <div
+        className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
+        onClick={() => onRemove && onRemove(index)}
+      >
+        <CloseIcon className="w-4 h-4" />
+      </div>
+    </div>
+  );
 };
 
 export default ImageSlider;
