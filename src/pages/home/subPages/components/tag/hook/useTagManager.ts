@@ -15,15 +15,20 @@ const useTagManager = () => {
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
 
-  const allQueriesData =
+  const allTagRelationsQueriesData =
     queryClient.getQueriesData<Api.paginationDashboardTagRelations>({
       queryKey: ['tags'],
       exact: false,
     });
 
-  const backupData = () => {
+  const allTagsQueriesData = queryClient.getQueriesData<Tag[]>({
+    queryKey: ['childTags'],
+    exact: false,
+  });
+
+  const backupTagRelations = () => {
     const oldDataMap = new Map();
-    allQueriesData.forEach(([queryKey, data]) => {
+    allTagRelationsQueriesData.forEach(([queryKey, data]) => {
       if (data) {
         oldDataMap.set(queryKey, data);
       }
@@ -31,30 +36,48 @@ const useTagManager = () => {
     return oldDataMap;
   };
 
-  const restoreData = (oldDataMap: Map<string[], InfiniteQueryData>) => {
-    oldDataMap.forEach((oldData, queryKey) => {
+  const backupTags = () => {
+    const oldDataMap = new Map();
+    allTagsQueriesData.forEach(([queryKey, data]) => {
+      if (data) {
+        oldDataMap.set(queryKey, data);
+      }
+    });
+    return oldDataMap;
+  };
+
+  const restoreData = (
+    oldTagRelationsMap: Map<string[], InfiniteQueryData>,
+    oldTags: Map<string[], Tag[]>
+  ) => {
+    oldTagRelationsMap.forEach((oldData, queryKey) => {
+      queryClient.setQueryData(queryKey, oldData);
+    });
+
+    oldTags.forEach((oldData, queryKey) => {
       queryClient.setQueryData(queryKey, oldData);
     });
   };
 
   const handleUpdateTag = async (updateTarget: Tag) => {
-    const oldDataMap = backupData();
+    const oldTagRelationsMap = backupTagRelations();
+    const oldTagsMap = backupTags();
     updateTagDataInQueries(updateTarget);
 
     try {
       const response = await Api.editTag(updateTarget.id, updateTarget.name);
       if (!Api.isValidResponse(response)) {
         alert(response.exceptionMessage);
-        restoreData(oldDataMap);
+        restoreData(oldTagRelationsMap, oldTagsMap);
       }
     } catch {
       alert('다시 시도해주세요');
-      restoreData(oldDataMap);
+      restoreData(oldTagRelationsMap, oldTagsMap);
     }
   };
 
   const updateTagDataInQueries = (updateTarget: Tag) => {
-    allQueriesData.forEach(([queryKey, queryData]) => {
+    allTagRelationsQueriesData.forEach(([queryKey, queryData]) => {
       if (!queryData) return;
 
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
@@ -76,29 +99,40 @@ const useTagManager = () => {
         return { ...oldData, pages: updatedPages };
       });
     });
+
+    allTagsQueriesData.forEach(([queryKey, queryData]) => {
+      if (!queryData) return;
+
+      queryClient.setQueryData(queryKey, (oldData: Tag[]) => {
+        return oldData.map((tag) =>
+          tag.id === updateTarget.id ? { ...tag, name: updateTarget.name } : tag
+        );
+      });
+    });
   };
 
   const handleDeleteTag = async (deleteTarget: Tag) => {
     const confirmed = await confirmAlert(t('pages.dashboard.tag.delete.alert'));
     if (!confirmed) return;
 
-    const oldDataMap = backupData();
+    const oldTagRelationsMap = backupTagRelations();
+    const oldTagsMap = backupTags();
     deleteTagDataInQueries(deleteTarget);
 
     try {
       const response = await Api.deleteTag(deleteTarget.id);
       if (!Api.isValidResponse(response)) {
         alert(response.exceptionMessage);
-        restoreData(oldDataMap);
+        restoreData(oldTagRelationsMap, oldTagsMap);
       }
     } catch {
       alert('다시 시도해주세요');
-      restoreData(oldDataMap);
+      restoreData(oldTagRelationsMap, oldTagsMap);
     }
   };
 
   const deleteTagDataInQueries = (deleteTarget: Tag) => {
-    allQueriesData.forEach(([queryKey, queryData]) => {
+    allTagRelationsQueriesData.forEach(([queryKey, queryData]) => {
       if (!queryData) return;
 
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
@@ -114,6 +148,14 @@ const useTagManager = () => {
           return { ...page, tag_relations: filteredTagRelations };
         });
         return { ...oldData, pages: updatedPages };
+      });
+    });
+
+    allTagsQueriesData.forEach(([queryKey, queryData]) => {
+      if (!queryData) return;
+
+      queryClient.setQueryData(queryKey, (oldData: Tag[]) => {
+        return oldData.filter((tag) => tag.id !== deleteTarget.id);
       });
     });
   };
