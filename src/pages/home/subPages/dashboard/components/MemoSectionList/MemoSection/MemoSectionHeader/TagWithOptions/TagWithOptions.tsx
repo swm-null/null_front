@@ -1,29 +1,19 @@
-import { deleteTag, isValidResponse } from 'api';
+import { paginationDashboardTagRelations } from 'api';
 import { DeleteIcon, EditIcon } from 'assets/icons';
+import { useTagManager } from 'pages/home/subPages/components';
 import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { FunctionComponent, SVGProps, useContext } from 'react';
-import { AlertContext } from 'utils';
 import { DashboardModalContext } from 'utils';
+
+export interface InfiniteQueryData {
+  pages: paginationDashboardTagRelations[];
+  pageParams: number[];
+}
 
 const TagWithOptions = ({ tag }: { tag: Tag }) => {
   const { openTagEditModal } = useContext(DashboardModalContext);
-  const { alert, confirmAlert } = useContext(AlertContext);
-
-  const handleDeleteTag = async () => {
-    const confirmed = confirmAlert('정말 삭제하시겠습니까?');
-
-    if (!confirmed) return;
-
-    try {
-      const response = await deleteTag(tag.id);
-      if (!isValidResponse(response)) {
-        alert(response.exceptionMessage);
-      }
-    } catch (error) {
-      alert('다시 시도해주세요');
-    }
-  };
+  const { handleDeleteTag } = useTagManager();
 
   return (
     <>
@@ -35,7 +25,7 @@ const TagWithOptions = ({ tag }: { tag: Tag }) => {
         />
         <IconWrapper
           IconComponent={DeleteIcon}
-          handleStaticClick={handleDeleteTag}
+          handleStaticClick={() => handleDeleteTag(tag)}
         />
       </div>
     </>
