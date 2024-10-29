@@ -1,4 +1,5 @@
 import { CameraIcon, MicIcon, RightArrowIcon } from 'assets/icons';
+import { FileInput } from 'pages/home/subPages/components';
 import { useContext } from 'react';
 import { ImageListContext } from 'utils';
 
@@ -21,20 +22,13 @@ const IconButtons = ({
         className="w-7 h-7 cursor-pointer"
         onClick={onMicButtonClick}
       />
-      <form>
-        <input
-          title="input-file"
-          type="file"
-          accept="image/*"
-          onChange={handleImageFileChange}
-          className="hidden"
-        />
+      <FileInput handleImageFileChange={handleImageFileChange}>
         <CameraIcon
           tabIndex={0}
           className="w-7 h-7 cursor-pointer"
           onClick={handleAddImageButtonClick}
         />
-      </form>
+      </FileInput>
       {submitAvailable && (
         <RightArrowIcon
           tabIndex={0}

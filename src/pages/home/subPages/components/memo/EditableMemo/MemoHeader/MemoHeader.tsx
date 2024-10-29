@@ -2,6 +2,7 @@ import { CameraIcon, DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { useContext } from 'react';
 import { ImageListContext } from 'utils';
+import { FileInput } from '../../../utils';
 
 const MemoHeader = ({
   updatedAt,
@@ -24,20 +25,13 @@ const MemoHeader = ({
 
   return (
     <div className="flex gap-[1.44rem] items-center">
-      <form className="mr-auto">
-        <input
-          title="input-file"
-          type="file"
-          accept="image/*"
-          onChange={handleImageFileChange}
-          className="hidden"
-        />
+      <FileInput handleImageFileChange={handleImageFileChange}>
         <CameraIcon
           className="text-brown2 w-6 h-6"
           onClick={handleAddImageButtonClick}
         />
-      </form>
-      <p className="text-center font-medium text-sm text-brown2">
+      </FileInput>
+      <p className="ml-auto text-center font-medium text-sm text-brown2">
         {formatDate(updatedAt)}
       </p>
       <DeleteIcon className="text-brown2 w-5 h-5" onClick={handleDeleteMemo} />
