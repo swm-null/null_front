@@ -1,10 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
 import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 import { useMemoManager } from '../hook';
+import { isFilesResponse, uploadFile, uploadFiles } from 'api/index.ts';
+import { ImageListContext } from 'utils/index.ts';
 
 const EditableMemo = ({
   memo,
@@ -17,6 +19,8 @@ const EditableMemo = ({
   border?: boolean;
   handlePreProcess: () => void;
 }) => {
+  const { images } = useContext(ImageListContext);
+
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
   const [imageUrls, setImageUrls] = useState(memo.image_urls);
@@ -24,6 +28,34 @@ const EditableMemo = ({
   const { t } = useTranslation();
 
   const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
+
+  const getImageUrls = async (images: File[]): Promise<string[]> => {
+    if (images.length === 0) return [];
+
+    const response =
+      images.length === 1 ? await uploadFile(images[0]) : await uploadFiles(images);
+    if (!isFilesResponse(response))
+      throw new Error('파일 업로드에 문제가 생겼습니다.');
+
+    return response.urls;
+  };
+
+  const handleUpdateMemoWithUploadImage = async () => {
+    try {
+      const newImageUrls = await getImageUrls(images);
+
+      handleUpdateMemo({
+        memo,
+        newMessage: message,
+        newTags: tags,
+        newImageUrls: [...imageUrls, ...newImageUrls],
+        handlePreProcess,
+      });
+    } catch {
+      // FIXME: 에러 처리 어캐 하지...
+      alert('메모 수정 실패');
+    }
+  };
 
   const removeImageUrl = useCallback((index: number) => {
     setImageUrls((prev) => prev.filter((_, i) => i !== index));
@@ -65,15 +97,7 @@ const EditableMemo = ({
             />
             <button
               className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] rounded-[30px] border border-[#917360]"
-              onClick={() =>
-                handleUpdateMemo({
-                  memo,
-                  newMessage: message,
-                  newTags: tags,
-                  newImageUrls: memo.image_urls,
-                  handlePreProcess,
-                })
-              }
+              onClick={handleUpdateMemoWithUploadImage}
             >
               {t('memo.save')}
             </button>
