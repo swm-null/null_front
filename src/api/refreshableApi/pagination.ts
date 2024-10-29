@@ -100,7 +100,7 @@ export const getDashboardTagRelations = async ({
   if (page) params.append('page', page.toString());
   if (limit) params.append('limit', limit.toString());
 
-  const endpoint = `/childTags?${params.toString()}`;
+  const endpoint = `/tags?${params.toString()}`;
 
   try {
     const response = await refreshableApi.get(endpoint);

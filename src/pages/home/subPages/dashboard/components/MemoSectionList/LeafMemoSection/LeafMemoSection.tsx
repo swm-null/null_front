@@ -44,7 +44,7 @@ const LeafMemoSection = ({
         {memos.map((memo) => (
           <UneditableMemoWithoutDrag key={memo.id} memo={memo} shadow border />
         ))}
-        <div ref={observerRef} />
+        <div ref={observerRef} className="min-h-[1px] bg-transparent" />
       </MemosList>
     </div>
   );
