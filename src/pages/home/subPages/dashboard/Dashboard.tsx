@@ -23,14 +23,6 @@ const DashboardPage = () => {
     tagsManager.handleTagOrAllTagsClick(tag);
   };
 
-  const updateTagFromMemoSectionList = (_tag: Tag) => {
-    // TODO: 여기서 모든 섹션마다 해당 태그를 찾아서 업데이트 해주는 코드 들어가야함
-  };
-
-  const revertTagFromMemoSectionList = (_tag: Tag) => {
-    // TODO: 여기서 모든 섹션마다 해당 태그를 찾아서 잘못 삭제, 업데이트한 것을 복구 해주는 코드 들어가야함
-  };
-
   return (
     <div
       className="flex flex-col h-full text-gray2 overflow-hidden"
@@ -59,10 +51,7 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <Components.TagEditModal
-        updateTag={updateTagFromMemoSectionList}
-        revertTag={revertTagFromMemoSectionList}
-      />
+      <Components.TagEditModal />
       <Components.MemoEditModal />
     </div>
   );
