@@ -7,16 +7,18 @@ import { AddIcon, CloseIcon } from 'assets/icons';
 const ImageSlider = ({
   imageUrls,
   removeImageUrl,
-  editable = true,
+  editable = false,
 }: {
   imageUrls: string[];
   removeImageUrl?: (index: number) => void;
   editable?: boolean;
 }) => {
-  const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
   const { images, removeImage, handleAddImageButtonClick, handleImageFileChange } =
     useContext(ImageListContext);
 
+  const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
+
+  const isNoImages = () => imageUrls?.length + images.length === 0;
   const isLastImageIndex = (cellIndex: number) =>
     cellIndex === imageUrls?.length + images.length;
 
@@ -42,43 +44,57 @@ const ImageSlider = ({
     setGallerySize: false,
   };
 
-  if ((imageUrls?.length || images.length) && editable) {
-    return (
-      <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
-        <Flickity
-          flickityRef={(instance) => setFlickityInstance(instance)}
-          elementType="div"
-          className="carousel w-full h-full aspect-square"
-          options={flickityOptions}
-        >
-          {imageUrls?.map((url, index) => (
-            <ImageItem image={url} index={index} onRemove={removeImageUrl} />
-          ))}
+  if (isNoImages()) {
+    return <></>;
+  }
 
-          {images?.map((image, index) => (
-            <ImageItem image={image} index={index} onRemove={removeImage} />
-          ))}
+  return (
+    <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
+      <Flickity
+        flickityRef={(instance) => setFlickityInstance(instance)}
+        elementType="div"
+        className="carousel w-full h-full aspect-square"
+        options={flickityOptions}
+      >
+        {imageUrls?.map((url, index) => (
+          <ImageItem
+            image={url}
+            index={index}
+            onRemove={removeImageUrl}
+            editable={editable}
+          />
+        ))}
 
+        {images?.map((image, index) => (
+          <ImageItem
+            image={image}
+            index={index}
+            onRemove={removeImage}
+            editable={editable}
+          />
+        ))}
+
+        {editable && (
           <div className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
             <FileInput handleImageFileChange={handleImageFileChange}>
               <AddIcon className="w-10 h-10" onClick={handleAddImageButtonClick} />
             </FileInput>
           </div>
-        </Flickity>
-      </div>
-    );
-  } else {
-    return <></>;
-  }
+        )}
+      </Flickity>
+    </div>
+  );
 };
 
 const ImageItem = ({
   image,
   index,
+  editable,
   onRemove,
 }: {
   image: File | string;
   index: number;
+  editable: boolean;
   onRemove?: (index: number) => void;
 }) => {
   const imageUrl = image instanceof File ? URL.createObjectURL(image) : image;
@@ -90,12 +106,14 @@ const ImageItem = ({
         alt={`Memo Image ${index + 1}`}
         className="object-cover w-full h-full xsm:w-60"
       />
-      <div
-        className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
-        onClick={() => onRemove && onRemove(index)}
-      >
-        <CloseIcon className="w-4 h-4" />
-      </div>
+      {editable && (
+        <div
+          className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
+          onClick={() => onRemove && onRemove(index)}
+        >
+          <CloseIcon className="w-4 h-4" />
+        </div>
+      )}
     </div>
   );
 };
