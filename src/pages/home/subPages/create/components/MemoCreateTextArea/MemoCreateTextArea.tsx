@@ -21,7 +21,7 @@ const MemoCreateTextArea = ({
   onChange,
   onSubmit,
 }: MemoCreateTextAreaProps) => {
-  const { images, addImage, removeImage, removeAllImage, isValidFileType } =
+  const { images, removeImage, removeAllImage, handlePaste } =
     useContext(ImageListContext);
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,16 +56,6 @@ const MemoCreateTextArea = ({
     if (containerRef.current && !containerRef.current.contains(e.relatedTarget)) {
       setFocus(false);
     }
-  };
-
-  const handlePaste = (e: React.ClipboardEvent) => {
-    const items = e.clipboardData.items;
-    Array.from(items).forEach((item) => {
-      if (item.type.startsWith('image/')) {
-        const blob = item.getAsFile();
-        if (blob && isValidFileType(blob)) addImage(blob);
-      }
-    });
   };
 
   const handleMicButtonClick = () => {

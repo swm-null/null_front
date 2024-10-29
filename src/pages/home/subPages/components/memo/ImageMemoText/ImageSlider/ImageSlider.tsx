@@ -1,5 +1,5 @@
 import { AddIcon, CloseIcon } from 'assets/icons';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Flickity from 'react-flickity-component';
 import { ImageListContext } from 'utils';
 
@@ -12,30 +12,12 @@ const ImageSlider = ({
   removeImageUrl?: (index: number) => void;
   editable?: boolean;
 }) => {
-  const { images, removeImage, addImage, isValidFileType } =
+  const { images, removeImage, handleAddImageButtonClick, handleImageFileChange } =
     useContext(ImageListContext);
   const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
 
   const isLastImageIndex = (cellIndex: number) =>
     cellIndex === imageUrls?.length + images.length;
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      Array.from(files).forEach((file) => {
-        if (isValidFileType(file)) {
-          addImage(file);
-        }
-      });
-    }
-  };
-
-  const handleAddImageButtonClick = () => {
-    const inputFile = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    if (inputFile) inputFile.click();
-  };
 
   useEffect(() => {
     if (flickityInstance) {
@@ -109,7 +91,7 @@ const ImageSlider = ({
               title="input-file"
               type="file"
               accept="image/*"
-              onChange={handleFileChange}
+              onChange={handleImageFileChange}
               className="hidden"
             />
             <AddIcon className="w-10 h-10" />
