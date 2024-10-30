@@ -14,19 +14,17 @@ const MemoText = forwardRef<
 
       setMaxLines(calculatedMaxLines);
     }
-  }, [ref && 'current' in ref && ref.current, message]);
+  }, [ref, ref && 'current' in ref && ref.current?.offsetHeight, message]);
 
   return (
     <p
       ref={ref}
-      className={`flex flex-1 bg-transparent focus:outline-none font-regular text-[15px] 
+      className={`flex-col h-full bg-transparent focus:outline-none font-regular text-[15px] 
             overflow-hidden whitespace-break-spaces text-ellipsis`}
       style={{
         color: textColor,
         display: '-webkit-box',
         WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
         WebkitLineClamp: maxLines,
       }}
     >

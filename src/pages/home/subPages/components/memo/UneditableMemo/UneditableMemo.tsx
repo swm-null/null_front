@@ -73,9 +73,12 @@ const UneditableMemo = ({
       {haveImageUrl && <ImageBlur />}
 
       <div
-        className={`flex flex-col h-full gap-2 relative z-10 overflow-hidden`}
         ref={memoRef}
-        style={{ height: isEllipsis ? maxHeight : undefined }}
+        className={`flex flex-col flex-1 h-full gap-2 relative z-10 overflow-hidden`}
+        style={{
+          maxHeight: maxHeight,
+          minHeight: isEllipsis ? maxHeight : undefined,
+        }}
       >
         <MemoHeader tags={tags} />
         <MemoText
