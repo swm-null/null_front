@@ -2,6 +2,33 @@ import { errorResponse, validResponse } from 'api/interface';
 import { errorHandler, getMethodName } from 'api/utils';
 import { refreshableApi } from './_api';
 
+export interface profile {
+  email: string;
+  name: string;
+  profileImageUrl: string;
+}
+
+interface profileResponse extends profile, validResponse {}
+
+export const getUserProfile = async (): Promise<profileResponse | errorResponse> => {
+  const method = getMethodName();
+  const endpoint = `/user/me`;
+
+  try {
+    const response = await refreshableApi.post(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      email: response.data.email,
+      name: response.data.name,
+      profileImageUrl: response.data.profile_image_url,
+    };
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
 export const deleteUserAccount = async (): Promise<
   validResponse | errorResponse
 > => {
@@ -18,4 +45,10 @@ export const deleteUserAccount = async (): Promise<
   } catch (error) {
     return errorHandler(error, method);
   }
+};
+
+export const isProfileResponse = (
+  response: profileResponse | errorResponse
+): response is profileResponse => {
+  return (response as profileResponse).email !== undefined;
 };
