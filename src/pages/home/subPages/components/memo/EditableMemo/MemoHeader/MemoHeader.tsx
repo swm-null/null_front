@@ -2,7 +2,7 @@ import { CameraIcon, DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { useContext } from 'react';
 import { ImageListContext } from 'utils';
-import { FileInput } from '../../../utils';
+import { FileInput } from 'pages/home/subPages/components';
 
 const MemoHeader = ({
   updatedAt,
