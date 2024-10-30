@@ -1,7 +1,6 @@
 import { useState, useContext } from 'react';
 import { Menu, MenuItem, Avatar, IconButton } from '@mui/material';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils/context';
 import { isValidResponse, deleteUserAccount } from 'api';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +10,6 @@ const ProfileButton = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { alert, confirmAlert } = useContext(AlertContext);
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,7 +23,7 @@ const ProfileButton = () => {
     Cookies.remove('refresh_token');
     Cookies.remove('access_token');
     handleClose();
-    navigate('/login');
+    window.location.href = '/login';
   };
 
   const handleDeleteAccount = async () => {
@@ -44,7 +42,7 @@ const ProfileButton = () => {
         Cookies.remove('refresh_token');
         Cookies.remove('access_token');
         handleClose();
-        navigate('/login');
+        window.location.href = '/login';
       } else {
         await alert(t('profile.accountDeleteFailed'));
         handleClose();

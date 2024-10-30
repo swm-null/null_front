@@ -122,6 +122,8 @@ const useMemoManager = () => {
     allMemosQueriesData.forEach((query) => {
       const queryKey = query[0];
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
+        if (!oldData) return oldData;
+
         const updatedPages = oldData.pages.map((page) => {
           const newMemos = page.memos.filter((m) => m.id !== memoId);
           return { ...page, memos: newMemos };

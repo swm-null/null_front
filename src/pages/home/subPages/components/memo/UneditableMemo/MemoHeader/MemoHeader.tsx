@@ -18,8 +18,6 @@ const MemoHeader = ({ tags }: { tags: Tag[] }) => {
           />
         ))}
       </div>
-      {/* TODO: pin 기능 나오면 추가 */}
-      {/* <PinIcon className="ml-auto" /> */}
     </div>
   );
 };
