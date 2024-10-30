@@ -1,19 +1,25 @@
-import { createContext } from 'react';
+import { ChangeEvent, createContext } from 'react';
 
 interface ImageListContextType {
   images: File[];
-  addImage: (image: File) => void;
   removeImage: (index: number) => void;
   removeAllImage: () => void;
-  isValidFileType: (file: File) => boolean;
+  getRootProps: () => any;
+  getInputProps: () => any;
+  handlePaste: (e: React.ClipboardEvent) => void;
+  handleImageFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleAddImageButtonClick: () => void;
 }
 
 const ImageListContext = createContext<ImageListContextType>({
   images: [],
-  addImage: (_: File) => {},
   removeImage: (_: number) => {},
   removeAllImage: () => {},
-  isValidFileType: (_: File) => false,
+  getRootProps: () => ({}),
+  getInputProps: () => ({}),
+  handlePaste: (_: React.ClipboardEvent) => {},
+  handleImageFileChange: (_: ChangeEvent<HTMLInputElement>) => {},
+  handleAddImageButtonClick: () => {},
 });
 
 export default ImageListContext;

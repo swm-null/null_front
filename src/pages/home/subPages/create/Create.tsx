@@ -1,13 +1,12 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDropzone } from 'react-dropzone';
 import { useCreateMemoManager } from './hook';
 import { ImageListContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 
 const CreatePage = () => {
   const { t } = useTranslation();
-  const { addImage, isValidFileType } = useContext(ImageListContext);
+  const { getInputProps, getRootProps } = useContext(ImageListContext);
 
   const [message, setMessage] = useState('');
   const createMemoManager = useCreateMemoManager();
@@ -19,20 +18,6 @@ const CreatePage = () => {
   const handleSubmit = (message: string, images?: string[]) => {
     createMemoManager.tryCreateMemoAndSetStatus(message, setMessage, images);
   };
-
-  const onDrop = (acceptedFiles: File[]) => {
-    const validFiles = acceptedFiles.filter(isValidFileType);
-    if (validFiles.length > 0) {
-      validFiles.forEach((file) => {
-        addImage(file);
-      });
-    }
-  };
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    noClick: true,
-  });
 
   return (
     <>

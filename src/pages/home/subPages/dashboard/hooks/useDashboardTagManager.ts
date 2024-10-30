@@ -18,7 +18,6 @@ const useDashboardTagManager = () => {
     queryKey: ['tags', selectedTag ? selectedTag.id : 'root'],
     networkMode: 'always',
     queryFn: async ({ pageParam = 1 }: any) => {
-      console.log('response');
       const response = await getDashboardTagRelations({
         tagId: selectedTag?.id,
         page: pageParam,

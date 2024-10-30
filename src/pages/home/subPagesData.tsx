@@ -32,7 +32,9 @@ export const getSubPagesData = (
       path: 'dashboard',
       element: (
         <DashboardModalProvider>
-          <Page.Dashboard />
+          <ImageListProvider>
+            <Page.Dashboard />
+          </ImageListProvider>
         </DashboardModalProvider>
       ),
       title: 'dashboard',

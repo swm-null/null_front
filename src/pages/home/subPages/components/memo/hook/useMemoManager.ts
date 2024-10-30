@@ -29,7 +29,7 @@ const useMemoManager = () => {
     return backupData;
   };
 
-  const restoreMemoData = (backupData: Map<any, any>) => {
+  const restoreMemoData = (backupData: Map<string[], InfiniteQueryData>) => {
     backupData.forEach((data, queryKey) => {
       queryClient.setQueryData(queryKey, data);
     });
@@ -45,7 +45,7 @@ const useMemoManager = () => {
     memo: Memo;
     newMessage: string;
     newTags: Tag[];
-    newImageUrls: string[] | null;
+    newImageUrls: string[];
     handlePreProcess: () => void;
   }) => {
     handlePreProcess();
@@ -81,6 +81,7 @@ const useMemoManager = () => {
   const updateMemoDataInQueries = (newMemo: Memo) => {
     allMemosQueriesData.forEach((query) => {
       const queryKey = query[0];
+
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
         if (!oldData) return oldData;
 

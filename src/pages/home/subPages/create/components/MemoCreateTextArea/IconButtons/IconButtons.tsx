@@ -1,5 +1,6 @@
 import { CameraIcon, MicIcon, RightArrowIcon } from 'assets/icons';
-import { ChangeEvent, useContext } from 'react';
+import { FileInput } from 'pages/home/subPages/components';
+import { useContext } from 'react';
 import { ImageListContext } from 'utils';
 
 const IconButtons = ({
@@ -11,25 +12,8 @@ const IconButtons = ({
   onMicButtonClick?: () => void;
   onSubmitButtonClick?: () => void;
 }) => {
-  const { addImage, isValidFileType } = useContext(ImageListContext);
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      Array.from(files).forEach((file) => {
-        if (isValidFileType(file)) {
-          addImage(file);
-        }
-      });
-    }
-  };
-
-  const handleCameraButtonClick = () => {
-    const inputFile = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
-    if (inputFile) inputFile.click();
-  };
+  const { handleAddImageButtonClick, handleImageFileChange } =
+    useContext(ImageListContext);
 
   return (
     <div className="flex justify-end gap-1 items-center">
@@ -38,20 +22,13 @@ const IconButtons = ({
         className="w-7 h-7 cursor-pointer"
         onClick={onMicButtonClick}
       />
-      <form>
-        <input
-          title="input-file"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="hidden"
-        />
+      <FileInput handleImageFileChange={handleImageFileChange}>
         <CameraIcon
           tabIndex={0}
           className="w-7 h-7 cursor-pointer"
-          onClick={handleCameraButtonClick}
+          onClick={handleAddImageButtonClick}
         />
-      </form>
+      </FileInput>
       {submitAvailable && (
         <RightArrowIcon
           tabIndex={0}
