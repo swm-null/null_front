@@ -1,10 +1,11 @@
-import { HTMLProps, useState } from 'react';
+import { HTMLProps, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MemoText, useMemoManager } from 'pages/home/subPages/components';
+import { useMemoManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { MemoHeader } from './MemoHeader';
 import { ImageBlur } from './ImageBlur';
+import { MemoText } from './MemoText';
 
 interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -22,8 +23,26 @@ const UneditableMemo = ({
 
   const { handleDeleteMemo } = useMemoManager();
 
-  const [message, setMessage] = useState(memo.content);
+  const memoRef = useRef<HTMLDivElement>(null);
+  const memoTextRef = useRef<HTMLParagraphElement>(null);
   const [tags] = useState(memo.tags);
+  const [maxHeight, setMaxHeight] = useState<number | undefined>();
+  const [isEllipsis, setIsEllipsis] = useState(false);
+
+  useEffect(() => {
+    if (memoRef.current) {
+      setMaxHeight(memoRef.current.clientWidth);
+    }
+  }, [memoRef.current?.offsetWidth]);
+
+  useEffect(() => {
+    if (memoTextRef.current) {
+      const newIsTextEllipsis =
+        memoTextRef.current.scrollHeight > memoTextRef.current.offsetHeight;
+
+      setIsEllipsis(newIsTextEllipsis);
+    }
+  }, [memoTextRef.current]);
 
   const haveImageUrl = memo.image_urls && memo.image_urls.length > 0;
 
@@ -39,10 +58,10 @@ const UneditableMemo = ({
   return (
     <div
       {...divProps}
-      className={`relative flex p-4 min-h-[115px] h-auto flex-col gap-[0.88rem] rounded-2xl overflow-hidden
+      className={`relative flex p-4 min-h-[115px] h-auto flex-col rounded-2xl overflow-hidden
         ${border ? 'border border-black border-opacity-10 bg-clip-padding' : ''} 
         ${shadow ? 'shadow-custom' : ''} ${getStyleByImagePresence('bg-white', 'bg-cover bg-center')}
-        ${getStyleByImagePresence('', 'aspect-[1/1]')}
+        ${getStyleByImagePresence('', 'aspect-square')} 
       `}
       style={{
         backgroundImage: getBackgroundImageStyleByImagePresence(
@@ -53,12 +72,16 @@ const UneditableMemo = ({
     >
       {haveImageUrl && <ImageBlur />}
 
-      <div className={`flex flex-col h-full gap-2 relative z-10`}>
+      <div
+        className={`flex flex-col h-full gap-2 relative z-10 overflow-hidden`}
+        ref={memoRef}
+        style={{ height: isEllipsis ? maxHeight : undefined }}
+      >
         <MemoHeader tags={tags} />
         <MemoText
+          ref={memoTextRef}
           textColor={getStyleByImagePresence('#111111', 'white')}
-          message={message}
-          setMessage={setMessage}
+          message={memo.content}
         />
         <MemoFooter
           textColor={getStyleByImagePresence('gray2', 'white')}
