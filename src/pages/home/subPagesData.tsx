@@ -1,6 +1,5 @@
 import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
-import { ImageListProvider } from 'utils';
 import { DashboardModalProvider } from 'utils';
 
 export const getSubPagesData = (
@@ -9,11 +8,7 @@ export const getSubPagesData = (
   return [
     {
       path: '',
-      element: (
-        <ImageListProvider>
-          <Page.Create />
-        </ImageListProvider>
-      ),
+      element: <Page.Create />,
       title: 'create',
     },
     {
@@ -32,9 +27,7 @@ export const getSubPagesData = (
       path: 'dashboard',
       element: (
         <DashboardModalProvider>
-          <ImageListProvider>
-            <Page.Dashboard />
-          </ImageListProvider>
+          <Page.Dashboard />
         </DashboardModalProvider>
       ),
       title: 'dashboard',
