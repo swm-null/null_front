@@ -1,4 +1,4 @@
-import { DeleteIcon, PinIcon } from 'assets/icons';
+import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 
 const MemoHeader = ({
@@ -19,7 +19,6 @@ const MemoHeader = ({
 
   return (
     <div className="flex gap-[1.44rem] items-center">
-      <PinIcon className="mr-auto" width={'1.5rem'} height={'1.5rem'} />
       <p className="text-center font-medium text-sm text-brown2">
         {formatDate(updatedAt)}
       </p>
