@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useProfileEditModalManager = () => {
+const useProfileMenuManager = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -31,4 +31,4 @@ const useProfileEditModalManager = () => {
   };
 };
 
-export default useProfileEditModalManager;
+export default useProfileMenuManager;

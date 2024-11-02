@@ -1,2 +1,2 @@
 export { default as useProfileManager } from './useProfileManager';
-export { default as useProfileEditModalManager } from './useProfileEditModalManager';
+export { default as useProfileMenuManager } from './useProfileMenuManager';
