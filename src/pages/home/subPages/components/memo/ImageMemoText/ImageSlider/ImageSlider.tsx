@@ -13,8 +13,13 @@ const ImageSlider = ({
   removeImageUrl?: (index: number) => void;
   editable?: boolean;
 }) => {
-  const { images, removeImage, handleAddImageButtonClick, handleImageFileChange } =
-    useContext(ImageListContext);
+  const {
+    images,
+    ALLOWED_IMAGE_FILE_TYPES,
+    removeImage,
+    handleAddImageButtonClick,
+    handleImageFilesChange,
+  } = useContext(ImageListContext);
 
   const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
 
@@ -78,7 +83,10 @@ const ImageSlider = ({
 
         {editable && (
           <div className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
-            <FileInput handleImageFileChange={handleImageFileChange}>
+            <FileInput
+              ALLOWED_FILE_TYPES={ALLOWED_IMAGE_FILE_TYPES}
+              handleImageFileChange={handleImageFilesChange}
+            >
               <AddIcon className="w-10 h-10" onClick={handleAddImageButtonClick} />
             </FileInput>
           </div>

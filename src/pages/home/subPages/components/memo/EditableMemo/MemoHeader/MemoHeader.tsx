@@ -13,8 +13,11 @@ const MemoHeader = ({
   dateFormat: string;
   handleDeleteMemo: () => void;
 }) => {
-  const { handleImageFileChange, handleAddImageButtonClick } =
-    useContext(ImageListContext);
+  const {
+    ALLOWED_IMAGE_FILE_TYPES,
+    handleImageFilesChange,
+    handleAddImageButtonClick,
+  } = useContext(ImageListContext);
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
@@ -25,7 +28,10 @@ const MemoHeader = ({
 
   return (
     <div className="flex gap-[1.44rem] items-center">
-      <FileInput handleImageFileChange={handleImageFileChange}>
+      <FileInput
+        ALLOWED_FILE_TYPES={ALLOWED_IMAGE_FILE_TYPES}
+        handleImageFileChange={handleImageFilesChange}
+      >
         <CameraIcon
           className="text-brown2 w-6 h-6"
           onClick={handleAddImageButtonClick}

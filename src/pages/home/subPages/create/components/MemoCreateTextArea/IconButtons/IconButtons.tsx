@@ -12,8 +12,11 @@ const IconButtons = ({
   onMicButtonClick?: () => void;
   onSubmitButtonClick?: () => void;
 }) => {
-  const { handleAddImageButtonClick, handleImageFileChange } =
-    useContext(ImageListContext);
+  const {
+    ALLOWED_IMAGE_FILE_TYPES,
+    handleAddImageButtonClick,
+    handleImageFilesChange,
+  } = useContext(ImageListContext);
 
   return (
     <div className="flex justify-end gap-1 items-center">
@@ -22,7 +25,10 @@ const IconButtons = ({
         className="w-7 h-7 cursor-pointer"
         onClick={onMicButtonClick}
       />
-      <FileInput handleImageFileChange={handleImageFileChange}>
+      <FileInput
+        ALLOWED_FILE_TYPES={ALLOWED_IMAGE_FILE_TYPES}
+        handleImageFileChange={handleImageFilesChange}
+      >
         <CameraIcon
           tabIndex={0}
           className="w-7 h-7 cursor-pointer"
