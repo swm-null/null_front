@@ -14,15 +14,20 @@
       "confirmPassword": "Password 확인",
       "codeSent": "인증코드를 이메일로 전송했습니다.",
       "codeSendFailed": "유효한 이메일을 입력해주세요."
+    },
+    "file": {
+      "invalidImageType": "이미지에는 jpeg, png, webp 파일만 들어갈 수 있습니다."
     }
   },
   "profile": {
     "header": "설정",
     "logoutButton": "로그아웃",
+    "editProfile": "프로필 수정",
     "deleteAccountButton": "회원탈퇴",
     "accountDeletionConfirmation": "회원탈퇴 하시겠습니까?",
     "accountDeleted": "회원탈퇴가 성공적으로 완료되었습니다.",
-    "accountDeleteFailed": "회원탈퇴를 실패하였습니다. 다시 시도해주세요."
+    "accountDeleteFailed": "회원탈퇴를 실패하였습니다. 다시 시도해주세요.",
+    "profileEditFailed": "프로필 수정을 실패하였습니다. 다시 시도해주세요."
   },
   "memo": {
     "deleteErrorMessage": "메모 삭제에 실패했습니다. 다시 시도해 주세요.",

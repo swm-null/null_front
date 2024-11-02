@@ -1,16 +1,19 @@
 import { useState, useContext, useEffect } from 'react';
 import { Menu, MenuItem, Avatar, IconButton, Divider } from '@mui/material';
 import Cookies from 'js-cookie';
-import { AlertContext } from 'utils/context';
+import { AlertContext, ImageListContext } from 'utils/context';
 import * as Api from 'api';
 import { useTranslation } from 'react-i18next';
 import { oatmealUrl } from 'assets/images';
+import { ProfileEditModal } from './ProfileEditModal';
 
 const ProfileButton = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { alert, confirmAlert } = useContext(AlertContext);
   const [userProfile, setUserProfile] = useState<Api.profile | null>(null);
   const { t } = useTranslation();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const { images } = useContext(ImageListContext);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -35,6 +38,56 @@ const ProfileButton = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    setEditModalOpen(false);
+  };
+
+  const getImageUrl = async (images: File[]): Promise<string | null> => {
+    if (images.length === 0) return null;
+
+    const response = await Api.uploadFile(images[0]);
+    if (!Api.isFilesResponse(response))
+      throw new Error('파일 업로드에 문제가 생겼습니다.');
+
+    return response.urls[0];
+  };
+
+  const handleSave = async (newName: string, newImage: string) => {
+    handleClose();
+    setUserProfile((prev) => {
+      if (!prev) return null;
+      else {
+        return {
+          name: newName,
+          profileImageUrl: newImage,
+          email: prev.email,
+        };
+      }
+    });
+
+    try {
+      if (!userProfile) return null;
+
+      const imageUrl = await getImageUrl(images);
+
+      const response = await Api.editUserProfile(
+        userProfile.email,
+        newName,
+        imageUrl ? imageUrl : userProfile.profileImageUrl
+      );
+
+      if (Api.isProfileResponse(response)) {
+        setUserProfile({
+          name: response.name,
+          profileImageUrl: response.profileImageUrl,
+          email: response.email,
+        });
+        handleClose();
+      } else {
+        throw new Error('profile update failed');
+      }
+    } catch (error) {
+      await alert(t('profile.profileEditFailed'));
+    }
   };
 
   const handleLogout = () => {
@@ -75,7 +128,7 @@ const ProfileButton = () => {
     <>
       <IconButton className="w-10 h-10" onClick={handleClick}>
         <Avatar
-          className=" border-2 border-white shadow-custom"
+          className="border-2 border-white shadow-custom"
           alt="Profile"
           src={userProfile?.profileImageUrl || oatmealUrl}
         />
@@ -87,17 +140,19 @@ const ProfileButton = () => {
         onClose={handleClose}
         sx={{ '& .MuiList-root': { marginBottom: 0, paddingBottom: 0 } }}
       >
-        {userProfile && (
-          <>
-            <MenuItem sx={{ pointerEvents: 'none' }}>
-              <div className="flex flex-col gap-2">
-                <p className="w-full">{userProfile.name}</p>
-                <p className="w-full">{userProfile.email}</p>
-              </div>
-            </MenuItem>
-            <Divider />
-          </>
-        )}
+        {userProfile && [
+          <MenuItem key="profile-info" sx={{ pointerEvents: 'none' }}>
+            <div className="flex flex-col gap-2">
+              <p className="w-full">{userProfile.name}</p>
+              <p className="w-full">{userProfile.email}</p>
+            </div>
+          </MenuItem>,
+          <Divider key="divider" />,
+        ]}
+        <MenuItem onClick={() => setEditModalOpen(true)}>
+          {t('profile.editProfile')}
+        </MenuItem>
+        <Divider />
         <MenuItem onClick={handleDeleteAccount} sx={{ marginBottom: 1 }}>
           {t('profile.deleteAccountButton')}
         </MenuItem>
@@ -115,6 +170,15 @@ const ProfileButton = () => {
           <p className="w-full text-center">{t('profile.logoutButton')}</p>
         </MenuItem>
       </Menu>
+
+      {userProfile && (
+        <ProfileEditModal
+          isOpen={editModalOpen}
+          handleClose={handleClose}
+          userProfile={userProfile}
+          onSave={handleSave}
+        />
+      )}
     </>
   );
 };
