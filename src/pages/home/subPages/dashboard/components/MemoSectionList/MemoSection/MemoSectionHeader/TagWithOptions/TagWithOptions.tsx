@@ -1,7 +1,7 @@
 import { paginationDashboardTagRelations } from 'api';
 import { DeleteIcon, EditIcon } from 'assets/icons';
 import { useTagManager } from 'pages/home/subPages/components';
-import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
+import { useClickWithoutDrag } from 'pages/hooks';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { FunctionComponent, SVGProps, useContext } from 'react';
 import { DashboardModalContext } from 'utils';

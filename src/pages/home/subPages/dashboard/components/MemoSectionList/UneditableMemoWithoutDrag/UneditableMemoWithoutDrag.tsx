@@ -1,7 +1,7 @@
 import { UneditableMemo } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { HTMLProps, useContext } from 'react';
-import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
+import { useClickWithoutDrag } from 'pages/hooks';
 import { DashboardModalContext } from 'utils';
 
 interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {

@@ -3,6 +3,7 @@ import { Modal } from '@mui/material';
 import { profile } from 'api';
 import { ImageListContext } from 'utils';
 import { ModalContent } from './ModalContent';
+import { useClickWithoutDrag } from 'pages/hooks';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -20,6 +21,9 @@ const ProfileEditModal = ({
   const [profileName, setProfileName] = useState(userProfile.name);
   const [profileImage, setProfileImage] = useState(userProfile.profileImageUrl);
 
+  const { handleMouseDown, handleMouseMove, handleClick } =
+    useClickWithoutDrag(handleClose);
+
   const { removeAllImage } = useContext(ImageListContext);
 
   useEffect(() => {
@@ -34,7 +38,9 @@ const ProfileEditModal = ({
     <Modal open={isOpen} onClose={handleClose}>
       <div
         className="fixed inset-0 flex items-center justify-center p-4"
-        onClick={handleClose}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onClick={handleClick}
       >
         <div
           className="flex flex-col bg-[#FFF6E3] border rounded-md w-full max-w-[400px] min-h-[300px] p-4 shadow-custom"
