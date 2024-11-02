@@ -1,11 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { Modal } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import { profile } from 'api';
-import { oatmealUrl } from 'assets/images';
-import { CustomInput } from 'pages/components';
 import { ImageListContext } from 'utils';
-import { FileInput } from 'pages/home/subPages/components';
+import { ModalContent } from './ModalContent';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -20,20 +17,10 @@ const ProfileEditModal = ({
   userProfile,
   onSave,
 }: ProfileEditModalProps) => {
-  const { t } = useTranslation();
-  const [profileName, setProfileName] = useState<string>(userProfile.name);
-  const [profileImage, setProfileImage] = useState<string>(
-    userProfile.profileImageUrl
-  );
-  const {
-    images,
-    ALLOWED_IMAGE_FILE_TYPES,
-    removeAllImage,
-    handleAddImageButtonClick,
-    handleImageFileChange,
-  } = useContext(ImageListContext);
+  const [profileName, setProfileName] = useState(userProfile.name);
+  const [profileImage, setProfileImage] = useState(userProfile.profileImageUrl);
 
-  const imageUrl = images.length !== 0 ? URL.createObjectURL(images[0]) : null;
+  const { removeAllImage } = useContext(ImageListContext);
 
   useEffect(() => {
     if (isOpen) {
@@ -53,49 +40,14 @@ const ProfileEditModal = ({
           className="flex flex-col bg-[#FFF6E3] border rounded-md w-full max-w-[400px] min-h-[300px] p-4 shadow-custom"
           onClick={(e) => e.stopPropagation()}
         >
-          <p className="mb-2 text-base">{t('profile.editProfile')}</p>
-          <div className="flex flex-col items-center gap-4">
-            <FileInput
-              ALLOWED_FILE_TYPES={ALLOWED_IMAGE_FILE_TYPES}
-              handleImageFileChange={handleImageFileChange}
-            >
-              <img
-                src={imageUrl || profileImage || oatmealUrl}
-                alt="Profile"
-                className="w-24 h-24 rounded-full border object-cover"
-                onClick={handleAddImageButtonClick}
-              />
-            </FileInput>
-            <CustomInput
-              label={t('signup.name')}
-              value={profileName}
-              setValue={setProfileName}
-            />
-            <CustomInput
-              label={t('signup.email')}
-              value={userProfile.email}
-              setValue={(_) => {}}
-              editable={false}
-            />
-          </div>
-          <div className="flex justify-end mt-4 gap-2">
-            <button
-              type="button"
-              className="px-3 py-1 text-sm bg-[#F4CDB1] border-[#F4CDB1] border rounded"
-              onClick={() => {
-                onSave(profileName, profileImage);
-              }}
-            >
-              {t('utils.alert.ok')}
-            </button>
-            <button
-              type="button"
-              className="px-3 py-1 text-sm border bg-white border-black border-opacity-10 bg-clip-padding rounded"
-              onClick={handleClose}
-            >
-              {t('utils.alert.cancel')}
-            </button>
-          </div>
+          <ModalContent
+            profileName={profileName}
+            profileImage={profileImage}
+            onSave={onSave}
+            handleClose={handleClose}
+            setProfileName={setProfileName}
+            userProfile={userProfile}
+          />
         </div>
       </div>
     </Modal>
