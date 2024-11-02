@@ -4,11 +4,13 @@ import Cookies from 'js-cookie';
 import * as Api from 'api';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useValidationManager } from 'pages/hooks';
 
 const useProfileManager = () => {
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
   const { images } = useContext(ImageListContext);
+  const { validateName } = useValidationManager();
 
   const queryClient = useQueryClient();
 
@@ -34,6 +36,12 @@ const useProfileManager = () => {
   ) => {
     if (newName === userProfile?.name && !newImage) {
       handleModalClose();
+      return;
+    }
+
+    const errorMessage = validateName(newName);
+    if (errorMessage) {
+      await alert(errorMessage);
       return;
     }
 

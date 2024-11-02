@@ -14,9 +14,7 @@ const useValidationManager = () => {
   const isEmailValid = (email: { emailId: string; domain: string }) => {
     const emailIdRegex = /^[a-zA-Z0-9._%+-]+$/;
     const emailDomainRegex = /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return (
-      emailIdRegex.test(email.emailId) && emailDomainRegex.test(email.domain)
-    );
+    return emailIdRegex.test(email.emailId) && emailDomainRegex.test(email.domain);
   };
 
   const isPasswordValid = (password: string) => {
@@ -25,10 +23,7 @@ const useValidationManager = () => {
     return passwordRegex.test(password);
   };
 
-  const isConfirmPasswordValid = (
-    password: string,
-    confirmPassword: string
-  ) => {
+  const isConfirmPasswordValid = (password: string, confirmPassword: string) => {
     return password === confirmPassword;
   };
 
@@ -73,10 +68,7 @@ const useValidationManager = () => {
     }
   };
 
-  const validateConfirmPassword = (
-    password: string,
-    confirmPassword: string
-  ) => {
+  const validateConfirmPassword = (password: string, confirmPassword: string) => {
     if (!isConfirmPasswordValid(password, confirmPassword)) {
       setError((prev) => ({
         ...prev,
@@ -102,6 +94,7 @@ const useValidationManager = () => {
           message: t('signup.invalidName'),
         },
       }));
+      return t('signup.invalidName');
     } else {
       setError((prev) => ({ ...prev, name: { ...prev.name, flag: false } }));
     }
