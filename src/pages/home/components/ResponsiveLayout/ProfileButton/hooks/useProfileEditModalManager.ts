@@ -14,6 +14,7 @@ const useProfileEditModalManager = () => {
 
   const handleProfileEditModalOpen = () => {
     setEditModalOpen(true);
+    handleMenuClose();
   };
 
   const handleProfileEditModalClose = () => {

@@ -39,7 +39,7 @@ const ProfileButton = () => {
             profileManager.handleSave(
               newName,
               newImage,
-              profileEditModalManager.handleMenuClose
+              profileEditModalManager.handleProfileEditModalClose
             )
           }
         />
