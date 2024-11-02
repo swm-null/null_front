@@ -29,9 +29,14 @@ const useProfileManager = () => {
 
   const handleSave = async (
     newName: string,
-    newImage: string,
-    onSave: () => void
+    newImage: string | null,
+    handleModalClose: () => void
   ) => {
+    if (newName === userProfile?.name && !newImage) {
+      handleModalClose();
+      return;
+    }
+
     queryClient.setQueryData(['userProfile'], {
       ...userProfile,
       name: newName,
@@ -50,7 +55,7 @@ const useProfileManager = () => {
 
       if (Api.isProfileResponse(response)) {
         refetchProfile();
-        onSave();
+        handleModalClose();
       } else {
         throw new Error('profile update failed');
       }

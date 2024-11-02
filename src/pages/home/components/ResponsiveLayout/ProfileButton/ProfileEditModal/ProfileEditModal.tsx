@@ -9,7 +9,7 @@ interface ProfileEditModalProps {
   isOpen: boolean;
   handleClose: () => void;
   userProfile: profile;
-  onSave: (newName: string, newImage: string) => void;
+  onSave: (newName: string, newImage: string | null) => void;
 }
 
 const ProfileEditModal = ({

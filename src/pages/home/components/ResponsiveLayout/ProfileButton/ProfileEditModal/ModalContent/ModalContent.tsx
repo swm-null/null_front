@@ -18,7 +18,7 @@ const ModalContent = ({
   setProfileName: (name: string) => void;
   profileImage: string;
   userProfile: profile;
-  onSave: (name: string, image: string) => void;
+  onSave: (name: string, image: string | null) => void;
   handleClose: () => void;
 }) => {
   const { t } = useTranslation();
@@ -64,7 +64,7 @@ const ModalContent = ({
       <div className="flex justify-end mt-4 gap-2">
         <button
           className="btn-primary px-3 py-1 text-sm bg-[#F4CDB1] rounded"
-          onClick={() => onSave(profileName, profileImage)}
+          onClick={() => onSave(profileName, imageUrl)}
         >
           {t('utils.alert.ok')}
         </button>
