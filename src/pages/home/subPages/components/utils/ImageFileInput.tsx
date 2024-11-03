@@ -1,26 +1,27 @@
-import { ChangeEvent, ReactNode } from 'react';
+import { ChangeEvent, ReactNode, useContext } from 'react';
+import ImageListContext from 'utils/context/ImageListContext';
 
-interface FileInputProps {
-  ALLOWED_FILE_TYPES: string[];
+interface ImageFileInputProps {
   handleClick?: () => void;
   handleImageFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   children: ReactNode;
   className?: string;
 }
 
-const FileInput = ({
-  ALLOWED_FILE_TYPES,
+const ImageFileInput = ({
   handleClick,
   handleImageFileChange,
   children,
   className,
-}: FileInputProps) => {
+}: ImageFileInputProps) => {
+  const { ALLOWED_IMAGE_FILE_TYPES } = useContext(ImageListContext);
+
   return (
     <form className={className} onClick={handleClick}>
       <input
         title="input-file"
         type="file"
-        accept={ALLOWED_FILE_TYPES.join(', ')}
+        accept={ALLOWED_IMAGE_FILE_TYPES.join(', ')}
         onChange={handleImageFileChange}
         className="hidden"
       />
@@ -29,4 +30,4 @@ const FileInput = ({
   );
 };
 
-export default FileInput;
+export default ImageFileInput;

@@ -5,7 +5,7 @@ import { AccordionContent } from './AccordionContent';
 import { v4 as uuid_v4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
-import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
+import { useClickWithoutDrag } from 'pages/hooks';
 
 const SearchHistoryAccordion = ({ data }: { data: MemoSearchConversation }) => {
   const { t } = useTranslation();

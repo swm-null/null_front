@@ -2,7 +2,7 @@ import { UneditableTag } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { RightIcon } from 'assets/icons';
-import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
+import { useClickWithoutDrag } from 'pages/hooks';
 import { TagWithOptions } from './TagWithOptions';
 
 interface MemoSectionHeaderProps {

@@ -7,6 +7,7 @@ const CustomInput = ({
   setValue,
   hidden = false,
   useHiddenToggle = false,
+  editable = true,
   error,
 }: {
   label: string;
@@ -14,6 +15,7 @@ const CustomInput = ({
   setValue: (value: string) => void;
   hidden?: boolean;
   useHiddenToggle?: boolean;
+  editable?: boolean;
   error?: { flag: boolean; message: string };
 }) => {
   const [isHidden, setIsHidden] = useState(hidden);
@@ -27,14 +29,15 @@ const CustomInput = ({
       <p className="block text-sm font-medium text-gray-700">{label}</p>
       <div
         className="flex items-center w-full bg-white border 
-        border-black border-opacity-10 bg-clip-padding rounded-lg py-2 px-2"
+          border-black border-opacity-10 bg-clip-padding rounded-lg py-2 px-2"
       >
         <input
           type={isHidden ? 'password' : 'text'}
           id={label}
           value={value}
+          readOnly={!editable}
           onChange={(e) => setValue(e.target.value)}
-          className="flex-1 w-full focus:outline-none focus:ring focus:border-blue-300"
+          className="flex-1 w-full focus:outline-none"
         />
         {useHiddenToggle &&
           (isHidden ? (

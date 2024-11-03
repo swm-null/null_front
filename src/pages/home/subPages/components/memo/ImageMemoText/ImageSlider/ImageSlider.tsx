@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import Flickity from 'react-flickity-component';
 import { ImageListContext } from 'utils';
-import { FileInput } from 'pages/home/subPages/components/utils';
+import { ImageFileInput } from 'pages/home/subPages/components/utils';
 import { AddIcon, CloseIcon } from 'assets/icons';
 
 const ImageSlider = ({
@@ -13,7 +13,7 @@ const ImageSlider = ({
   removeImageUrl?: (index: number) => void;
   editable?: boolean;
 }) => {
-  const { images, removeImage, handleAddImageButtonClick, handleImageFileChange } =
+  const { images, removeImage, handleAddImageButtonClick, handleImageFilesChange } =
     useContext(ImageListContext);
 
   const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
@@ -78,9 +78,9 @@ const ImageSlider = ({
 
         {editable && (
           <div className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
-            <FileInput handleImageFileChange={handleImageFileChange}>
+            <ImageFileInput handleImageFileChange={handleImageFilesChange}>
               <AddIcon className="w-10 h-10" onClick={handleAddImageButtonClick} />
-            </FileInput>
+            </ImageFileInput>
           </div>
         )}
       </Flickity>
