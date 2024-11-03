@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { MemoSearchTextArea } from '../components';
 import { useSearchMemoManager } from './hook';
 import { SearchConversationList } from './components/SearchConversationList';
+import { SearchConversation } from './components';
 
 const SearchPage = () => {
   const { t } = useTranslation();
@@ -29,10 +30,11 @@ const SearchPage = () => {
           onSubmit={() => handleSubmit(message)}
         />
         <div className={`overflow-scroll no-scrollbar`}>
-          <SearchConversationList
-            searchConversations={searchMemoManager.data}
-            fetchNextPage={searchMemoManager.fetchNextPage}
-          />
+          <SearchConversationList fetchNextPage={searchMemoManager.fetchNextPage}>
+            {searchMemoManager.data.map((conversation) => (
+              <SearchConversation data={conversation} />
+            ))}
+          </SearchConversationList>
         </div>
       </div>
     </div>
