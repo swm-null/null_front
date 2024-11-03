@@ -2,9 +2,7 @@ import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
 import { DashboardModalProvider } from 'utils';
 
-export const getSubPagesData = (
-  setCurrentPage: (page: string) => void
-): routerType[] => {
+export const getSubPagesData = (): routerType[] => {
   return [
     {
       path: '',
@@ -13,9 +11,7 @@ export const getSubPagesData = (
     },
     {
       path: 'search',
-      element: (
-        <Page.Search navigateToHistory={() => setCurrentPage('searchHistory')} />
-      ),
+      element: <Page.Search />,
       title: 'search',
     },
     {

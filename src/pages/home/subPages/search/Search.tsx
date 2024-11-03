@@ -2,9 +2,9 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchTextArea } from '../components';
 import { useSearchMemoManager } from './hook';
-import { ExamplesOrResults } from './components';
+import { SearchConversationList } from './components/SearchConversationList';
 
-const SearchPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
+const SearchPage = () => {
   const { t } = useTranslation();
 
   const [message, setMessage] = useState('');
@@ -16,15 +16,8 @@ const SearchPage = ({ navigateToHistory }: { navigateToHistory: () => void }) =>
   };
 
   const handleSubmit = (message: string) => {
-    searchMemoManager.trySearchMemoAndSetStatus(message, setMessage);
+    searchMemoManager.handleSearchMemo(message);
   };
-
-  const buttonData: [string, string, string, string] = [
-    '라면 레시피 메모 보여줘',
-    '민지 전화번호 알려줘',
-    '맛집 내가 저번에 적은 거 뭐더라',
-    '나 신발 사야하는데 사이즈 알려줘',
-  ];
 
   return (
     <div className="flex justify-center overflow-hidden h-full">
@@ -35,13 +28,12 @@ const SearchPage = ({ navigateToHistory }: { navigateToHistory: () => void }) =>
           placeholder={t('pages.search.inputPlaceholder')}
           onSubmit={() => handleSubmit(message)}
         />
-        <ExamplesOrResults
-          status={searchMemoManager.status}
-          searchConversation={searchMemoManager.searchConversation}
-          navigateToHistory={navigateToHistory}
-          buttonData={buttonData}
-          handleButtonClick={handleSubmit}
-        />
+        <div className={`overflow-scroll no-scrollbar`}>
+          <SearchConversationList
+            searchConversations={searchMemoManager.data}
+            fetchNextPage={searchMemoManager.fetchNextPage}
+          />
+        </div>
       </div>
     </div>
   );
