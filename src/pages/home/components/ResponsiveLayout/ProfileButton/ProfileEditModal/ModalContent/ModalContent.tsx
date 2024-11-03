@@ -1,4 +1,5 @@
 import { profile } from 'api';
+import { CameraIcon } from 'assets/icons';
 import { oatmealUrl } from 'assets/images';
 import { CustomInput } from 'pages/components';
 import { FileInput } from 'pages/home/subPages/components';
@@ -37,15 +38,24 @@ const ModalContent = ({
 
       <div className="flex flex-col items-center gap-4">
         <FileInput
+          className="relative"
           ALLOWED_FILE_TYPES={ALLOWED_IMAGE_FILE_TYPES}
           handleImageFileChange={handleImageFileChange}
+          handleClick={handleAddImageButtonClick}
         >
           <img
             src={imageUrl || profileImage || oatmealUrl}
             alt="Profile"
             className="w-24 h-24 rounded-full border object-cover cursor-pointer"
-            onClick={handleAddImageButtonClick}
           />
+          <button
+            type="button"
+            color="primary"
+            aria-label="upload picture"
+            className="absolute p-1 -bottom-1 -right-1 bg-[#FFF6E3] rounded-full"
+          >
+            <CameraIcon className="border rounded-full shadow-md p-1 w-7 h-7 bg-white" />
+          </button>
         </FileInput>
 
         <CustomInput

@@ -2,17 +2,21 @@ import { ChangeEvent, ReactNode } from 'react';
 
 interface FileInputProps {
   ALLOWED_FILE_TYPES: string[];
+  handleClick?: () => void;
   handleImageFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   children: ReactNode;
+  className?: string;
 }
 
 const FileInput = ({
   ALLOWED_FILE_TYPES,
+  handleClick,
   handleImageFileChange,
   children,
+  className,
 }: FileInputProps) => {
   return (
-    <form>
+    <form className={className} onClick={handleClick}>
       <input
         title="input-file"
         type="file"
