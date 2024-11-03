@@ -19,11 +19,6 @@ export const getSubPagesData = (
       title: 'search',
     },
     {
-      path: 'searchHistory',
-      element: <Page.SearchHistory />,
-      title: 'searchHistory',
-    },
-    {
       path: 'dashboard',
       element: (
         <DashboardModalProvider>
