@@ -4,12 +4,13 @@ import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
 import { useTranslation } from 'react-i18next';
 
+const SEARCH_HISTORY_LIMIT = 10;
+const SEARCH_QUERY_KEY = ['search'] as const;
+
 interface SearchQueryData {
   pages: Api.paginationSearchHistories[];
   pageParams: number[];
 }
-
-const SEARCH_HISTORY_LIMIT = 10;
 
 const useSearchMemoManager = () => {
   const queryClient = useQueryClient();
@@ -19,7 +20,7 @@ const useSearchMemoManager = () => {
     Api.paginationSearchHistories,
     Error
   >({
-    queryKey: ['search'],
+    queryKey: SEARCH_QUERY_KEY,
     queryFn: async ({ pageParam = 1 }: any) => {
       const response = await Api.getSearchHistories({
         page: pageParam,
@@ -43,17 +44,11 @@ const useSearchMemoManager = () => {
   const allSearchHistories =
     !isLoading && data ? data.pages.flatMap((page) => page.search_histories) : [];
 
-  const allSearchQueriesData =
-    queryClient.getQueriesData<Api.paginationSearchHistories>({
-      queryKey: ['search'],
-      exact: false,
-    });
-
   const handleSearchMemo = async (query: string) => {
     const backupData = backupSearchData();
     const tempConversation = createSearchConversationInQueries(query);
 
-    updateSearchDataInQueries(tempConversation);
+    addSearchHistoryInQueries(tempConversation);
 
     try {
       const searchResult = await searchMemo(query);
@@ -78,15 +73,8 @@ const useSearchMemoManager = () => {
   };
 
   const backupSearchData = () => {
-    const backupData = new Map();
-    allSearchQueriesData.forEach((query) => {
-      const queryKey = query[0];
-      const queryData = query[1];
-      if (queryData) {
-        backupData.set(queryKey, queryData);
-      }
-    });
-    return backupData;
+    const data = queryClient.getQueryData<SearchQueryData>(SEARCH_QUERY_KEY);
+    return data ? { queryKey: SEARCH_QUERY_KEY, data } : null;
   };
 
   const createSearchConversationInQueries = (
@@ -100,28 +88,40 @@ const useSearchMemoManager = () => {
     };
   };
 
+  const addSearchHistoryInQueries = (
+    conversation: Interface.MemoSearchConversation
+  ) => {
+    queryClient.setQueryData(SEARCH_QUERY_KEY, (oldData: SearchQueryData) => {
+      if (!oldData) return oldData;
+
+      const updatedPages = [...oldData.pages];
+      if (updatedPages[0]) {
+        updatedPages[0] = {
+          ...updatedPages[0],
+          search_histories: [conversation, ...updatedPages[0].search_histories],
+        };
+      }
+
+      return { ...oldData, pages: updatedPages };
+    });
+  };
+
   const updateSearchDataInQueries = (
     newConversation: Interface.MemoSearchConversation
   ) => {
-    allSearchQueriesData.forEach((query) => {
-      const queryKey = query[0];
-
-      queryClient.setQueryData(queryKey, (oldData: SearchQueryData) => {
-        if (!oldData) return oldData;
-
-        const updatedPages = oldData.pages.map((page) => {
-          const conversationIndex = page.search_histories.findIndex(
-            (conversation) => conversation.id === newConversation.id
-          );
-          if (conversationIndex !== -1) {
-            const updatedHistories = [...page.search_histories];
-            updatedHistories[conversationIndex] = newConversation;
-            return { ...page, search_histories: updatedHistories };
-          }
-          return page;
-        });
-        return { ...oldData, pages: updatedPages };
+    queryClient.setQueryData(SEARCH_QUERY_KEY, (oldData: SearchQueryData) => {
+      const updatedPages = oldData.pages.map((page) => {
+        const conversationIndex = page.search_histories.findIndex(
+          (conversation) => conversation.id === newConversation.id
+        );
+        if (conversationIndex !== -1) {
+          const updatedHistories = [...page.search_histories];
+          updatedHistories[conversationIndex] = newConversation;
+          return { ...page, search_histories: updatedHistories };
+        }
+        return page;
       });
+      return { ...oldData, pages: updatedPages };
     });
   };
 
@@ -133,10 +133,13 @@ const useSearchMemoManager = () => {
     return response;
   };
 
-  const restoreSearchData = (backupData: Map<string[], SearchQueryData>) => {
-    backupData.forEach((data, queryKey) => {
-      queryClient.setQueryData(queryKey, data);
-    });
+  const restoreSearchData = (
+    backupData: { queryKey: readonly string[]; data: SearchQueryData } | null
+  ) => {
+    if (!backupData) return;
+
+    const { queryKey, data } = backupData;
+    queryClient.setQueryData(queryKey, data);
   };
 
   return {

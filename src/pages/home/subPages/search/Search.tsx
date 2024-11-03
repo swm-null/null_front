@@ -16,8 +16,13 @@ const SearchPage = () => {
     setMessage(e.target.value);
   };
 
-  const handleSubmit = (message: string) => {
+  const handleSubmit = () => {
+    if (message.trim().length === 0) {
+      return;
+    }
+
     searchMemoManager.handleSearchMemo(message);
+    setMessage('');
   };
 
   return (
@@ -27,12 +32,15 @@ const SearchPage = () => {
           value={message}
           onChange={handleMessageChange}
           placeholder={t('pages.search.inputPlaceholder')}
-          onSubmit={() => handleSubmit(message)}
+          onSubmit={handleSubmit}
         />
         <div className={`overflow-scroll no-scrollbar`}>
           <SearchConversationList fetchNextPage={searchMemoManager.fetchNextPage}>
-            {searchMemoManager.data.map((conversation) => (
-              <SearchConversation data={conversation} />
+            {searchMemoManager.data.map((conversation, index) => (
+              <SearchConversation
+                key={conversation.id || index}
+                data={conversation}
+              />
             ))}
           </SearchConversationList>
         </div>

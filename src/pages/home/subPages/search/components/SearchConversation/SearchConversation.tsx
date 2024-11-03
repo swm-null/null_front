@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { useClickWithoutDrag } from 'pages/home/subPages/hooks';
+import { useClickWithoutDrag } from 'pages/hooks';
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import { ConversationContent } from './ConversationContent';
 
 const SearchConversation = ({ data }: { data: MemoSearchConversation }) => {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(data.search_memos_response ? false : true);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>
