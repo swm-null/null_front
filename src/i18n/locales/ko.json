@@ -16,7 +16,7 @@
       "codeSendFailed": "유효한 이메일을 입력해주세요."
     },
     "file": {
-      "invalidImageType": "이미지에는 jpeg, png, webp 파일만 들어갈 수 있습니다."
+      "invalidImageType": "이미지에는 jpeg, jpg, png, webp 파일만 들어갈 수 있습니다."
     }
   },
   "profile": {
