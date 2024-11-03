@@ -2,7 +2,7 @@ import { profile } from 'api';
 import { CameraIcon } from 'assets/icons';
 import { oatmealUrl } from 'assets/images';
 import { CustomInput } from 'pages/components';
-import { FileInput } from 'pages/home/subPages/components';
+import { ImageFileInput } from 'pages/home/subPages/components';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageListContext } from 'utils';
@@ -23,12 +23,8 @@ const ModalContent = ({
   handleClose: () => void;
 }) => {
   const { t } = useTranslation();
-  const {
-    images,
-    ALLOWED_IMAGE_FILE_TYPES,
-    handleAddImageButtonClick,
-    handleImageFileChange,
-  } = useContext(ImageListContext);
+  const { images, handleAddImageButtonClick, handleImageFileChange } =
+    useContext(ImageListContext);
 
   const imageUrl = images[0] ? URL.createObjectURL(images[0]) : null;
 
@@ -37,9 +33,8 @@ const ModalContent = ({
       <h2 className="text-base mb-4">{t('profile.editProfile')}</h2>
 
       <div className="flex flex-col items-center gap-4">
-        <FileInput
+        <ImageFileInput
           className="relative"
-          ALLOWED_FILE_TYPES={ALLOWED_IMAGE_FILE_TYPES}
           handleImageFileChange={handleImageFileChange}
           handleClick={handleAddImageButtonClick}
         >
@@ -56,7 +51,7 @@ const ModalContent = ({
           >
             <CameraIcon className="border rounded-full shadow-md p-1 w-7 h-7 bg-white" />
           </button>
-        </FileInput>
+        </ImageFileInput>
 
         <CustomInput
           label={t('signup.name')}

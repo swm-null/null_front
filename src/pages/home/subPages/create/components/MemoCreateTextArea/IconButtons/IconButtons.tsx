@@ -1,5 +1,5 @@
 import { CameraIcon, MicIcon, RightArrowIcon } from 'assets/icons';
-import { FileInput } from 'pages/home/subPages/components';
+import { ImageFileInput } from 'pages/home/subPages/components';
 import { useContext } from 'react';
 import { ImageListContext } from 'utils';
 
@@ -12,11 +12,8 @@ const IconButtons = ({
   onMicButtonClick?: () => void;
   onSubmitButtonClick?: () => void;
 }) => {
-  const {
-    ALLOWED_IMAGE_FILE_TYPES,
-    handleAddImageButtonClick,
-    handleImageFilesChange,
-  } = useContext(ImageListContext);
+  const { handleAddImageButtonClick, handleImageFilesChange } =
+    useContext(ImageListContext);
 
   return (
     <div className="flex justify-end gap-1 items-center">
@@ -25,16 +22,13 @@ const IconButtons = ({
         className="w-7 h-7 cursor-pointer"
         onClick={onMicButtonClick}
       />
-      <FileInput
-        ALLOWED_FILE_TYPES={ALLOWED_IMAGE_FILE_TYPES}
-        handleImageFileChange={handleImageFilesChange}
-      >
+      <ImageFileInput handleImageFileChange={handleImageFilesChange}>
         <CameraIcon
           tabIndex={0}
           className="w-7 h-7 cursor-pointer"
           onClick={handleAddImageButtonClick}
         />
-      </FileInput>
+      </ImageFileInput>
       {submitAvailable && (
         <RightArrowIcon
           tabIndex={0}
