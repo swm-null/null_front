@@ -5,6 +5,7 @@ const useClickWithoutDrag = (onClickAction: () => void) => {
   const startX = useRef(0);
 
   const handleMouseDown = useCallback((e: MouseEvent) => {
+    e.stopPropagation();
     isDragging.current = false;
     startX.current = e.clientX;
   }, []);
@@ -19,6 +20,7 @@ const useClickWithoutDrag = (onClickAction: () => void) => {
     if (!isDragging.current) {
       onClickAction();
     }
+    isDragging.current = false;
   }, [onClickAction]);
 
   return {
