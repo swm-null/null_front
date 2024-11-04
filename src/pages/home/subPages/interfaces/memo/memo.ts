@@ -7,6 +7,8 @@ export interface Memo {
    */
   content: string;
   image_urls: string[];
+  voice_urls: string[];
+  metadata: string | null;
   created_at: string;
   updated_at: string;
   tags: Tag[];

@@ -1,27 +1,75 @@
-import { Memo, MemoSearchAnswer } from 'pages/home/subPages/interfaces';
+import {
+  Memo,
+  MemoSearchAnswerWithDB,
+  MemoSearchAnswerWithAI,
+} from 'pages/home/subPages/interfaces';
 import { errorResponse, validResponse } from '../interface';
 import { errorHandler, getMethodName } from '../utils';
 import { refreshableApi } from './_api';
 import { isValidResponse } from 'api';
 
-interface searchMemoResponse extends MemoSearchAnswer, validResponse {}
+interface searchMemoWithDBResponse extends MemoSearchAnswerWithDB, validResponse {}
+
+interface searchMemoWithAIResponse extends MemoSearchAnswerWithAI, validResponse {}
+
+interface SearchInitResponse extends validResponse {
+  id: string;
+  query: string;
+}
 
 export const searchMemo = async function (
-  inputContent: string
-): Promise<searchMemoResponse | errorResponse> {
+  query: string
+): Promise<SearchInitResponse | errorResponse> {
   const method = getMethodName();
-  const endpoint = '/memos/search';
+  const endpoint = '/memos/search/history';
+
   try {
-    const response = await refreshableApi.post(
-      endpoint,
-      JSON.stringify({ content: inputContent })
-    );
+    const response = await refreshableApi.post(endpoint, JSON.stringify({ query }));
+    const responseInfo = {
+      method,
+      status: response.status,
+      id: response.data.id,
+      query: response.data.query,
+    } as SearchInitResponse;
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
+export const searchMemoWithDB = async function (
+  searchHistoryId: string
+): Promise<searchMemoWithDBResponse | errorResponse> {
+  const method = getMethodName();
+  const endpoint = `/memos/search/db?searchHistoryId=${searchHistoryId}`;
+
+  try {
+    const response = await refreshableApi.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      memos: response.data.memos,
+    } as searchMemoWithDBResponse;
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
+export const searchMemoWithAI = async function (
+  searchHistoryId: string
+): Promise<searchMemoWithAIResponse | errorResponse> {
+  const method = getMethodName();
+  const endpoint = `/memos/search/ai?searchHistoryId=${searchHistoryId}`;
+
+  try {
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,
       processed_message: response.data.processed_message,
       memos: response.data.memos,
-    } as searchMemoResponse;
+    } as searchMemoWithAIResponse;
     return responseInfo;
   } catch (error) {
     return errorHandler(error, method);
@@ -32,7 +80,8 @@ interface cuMemoResponse extends Memo, validResponse {}
 
 export const createMemo = async (
   inputContent: string,
-  inputImageUrls?: string[]
+  inputImageUrls?: string[] | null,
+  inputVoiceUrls?: string[] | null
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = getMethodName();
   const endpoint = `/memo`;
@@ -42,19 +91,20 @@ export const createMemo = async (
       JSON.stringify({
         content: inputContent,
         image_urls: inputImageUrls ? inputImageUrls : [],
+        inputVoiceUrls: inputVoiceUrls ? inputVoiceUrls : [],
       })
     );
-    const { id, content, tags, image_urls, created_at, updated_at } =
-      response.data.memo;
     const responseInfo = {
       method,
       status: response.status,
-      id,
-      content,
-      tags,
-      image_urls,
-      created_at,
-      updated_at,
+      id: response.data.memo.id,
+      content: response.data.memo.content,
+      tags: response.data.memo.tags,
+      image_urls: response.data.memo.image_urls,
+      voice_urls: response.data.memo.voice_urls,
+      metadata: response.data.memo.metadata,
+      created_at: response.data.memo.created_at,
+      updated_at: response.data.memo.updated_at,
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
@@ -75,17 +125,17 @@ export const updateMemo = async (
   });
   try {
     const response = await refreshableApi.put(endpoint, data);
-    const { id, content, tags, image_urls, created_at, updated_at } =
-      response.data.memo;
     const responseInfo = {
       method,
       status: response.status,
-      id,
-      content,
-      tags,
-      image_urls,
-      created_at,
-      updated_at,
+      id: response.data.memo.id,
+      content: response.data.memo.content,
+      tags: response.data.memo.tags,
+      image_urls: response.data.memo.image_urls,
+      voice_urls: response.data.memo.voice_urls,
+      metadata: response.data.memo.metadata,
+      created_at: response.data.memo.created_at,
+      updated_at: response.data.memo.updated_at,
     } as cuMemoResponse;
     return responseInfo;
   } catch (error) {
@@ -110,10 +160,22 @@ export const deleteMemo = async (
   }
 };
 
-export const isSearchMemoResponse = (
-  response: searchMemoResponse | errorResponse
-): response is searchMemoResponse => {
-  return (response as searchMemoResponse).processed_message !== undefined;
+export const isSearchInitResponse = (
+  response: SearchInitResponse | errorResponse
+): response is SearchInitResponse => {
+  return (response as SearchInitResponse).id !== undefined;
+};
+
+export const isSearchMemoWithDBResponse = (
+  response: searchMemoWithDBResponse | errorResponse
+): response is searchMemoWithDBResponse => {
+  return (response as searchMemoWithDBResponse).memos !== undefined;
+};
+
+export const isSearchMemoWithAIResponse = (
+  response: searchMemoWithAIResponse | errorResponse
+): response is searchMemoWithAIResponse => {
+  return (response as searchMemoWithAIResponse).processed_message !== undefined;
 };
 
 export const isCreateMemoResponse = (
