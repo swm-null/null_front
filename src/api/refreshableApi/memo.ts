@@ -12,10 +12,11 @@ interface searchMemoWithDBResponse extends MemoSearchAnswerWithDB, validResponse
 
 interface searchMemoWithAIResponse extends MemoSearchAnswerWithAI, validResponse {}
 
-interface SearchInitResponse extends validResponse {
+export interface SearchInit {
   id: string;
   query: string;
 }
+interface SearchInitResponse extends SearchInit, validResponse {}
 
 export const searchMemo = async function (
   query: string
@@ -48,6 +49,7 @@ export const searchMemoWithDB = async function (
     const responseInfo = {
       method,
       status: response.status,
+      error: false,
       memos: response.data.memos,
     } as searchMemoWithDBResponse;
     return responseInfo;
@@ -67,6 +69,7 @@ export const searchMemoWithAI = async function (
     const responseInfo = {
       method,
       status: response.status,
+      error: false,
       processed_message: response.data.processed_message,
       memos: response.data.memos,
     } as searchMemoWithAIResponse;

@@ -14,7 +14,7 @@ export interface MemoSearchAnswerWithDB {
  * 메모 검색 기능 사용 후 받은 대답 객체
  */
 export interface MemoSearchAnswerWithAI {
-  processed_message: string;
+  processed_message: string | null;
   /**
    * 관련 메모 대신 자연어(text에 들어가는 내용)로 대답이 오는 경우도 있기 때문에 null 처리
    */
