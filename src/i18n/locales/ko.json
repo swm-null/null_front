@@ -36,7 +36,10 @@
     "dateFormatEdit": "수정된 시간: yyyy년 MM월 dd일 HH:mm",
     "tagRebuild": "태그 재생성",
     "save": "저장",
-    "close": "닫기"
+    "close": "닫기",
+    "delete": {
+      "alert": "메모를 정말 삭제하시겠습니까?"
+    }
   },
   "login": {
     "header": "로그인",

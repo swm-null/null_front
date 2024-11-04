@@ -7,11 +7,11 @@ import { useMemoManager } from '../hook';
 const UneditableMemo = ({
   memo,
   border,
-  handlePreProcess,
+  handleClose,
 }: {
   memo: Memo;
   border?: boolean;
-  handlePreProcess: () => void;
+  handleClose: () => void;
 }) => {
   const { t } = useTranslation();
   const { handleDeleteMemo } = useMemoManager();
@@ -25,9 +25,11 @@ const UneditableMemo = ({
         <MemoHeader
           updatedAt={memo.updated_at}
           dateFormat={t('memo.dateFormatEdit')}
-          handleDeleteMemo={() => handleDeleteMemo({ memo, handlePreProcess })}
+          handleDeleteMemo={() =>
+            handleDeleteMemo({ memo, handlePreProcess: handleClose })
+          }
         />
-        <ImageMemoText imageUrls={memo.image_urls} message={memo.content} editable />
+        <ImageMemoText imageUrls={memo.image_urls} message={memo.content} />
       </div>
       <div className="flex gap-2">
         <TagManager tags={memo.tags} />
@@ -36,6 +38,7 @@ const UneditableMemo = ({
             type="button"
             className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
                 rounded-[30px] border border-[#917360]"
+            onClick={handleClose}
           >
             {t('memo.close')}
           </button>

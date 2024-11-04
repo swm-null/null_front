@@ -25,7 +25,7 @@ const MemoModal = () => {
           <UneditableMemo
             key={memoModal.memo.id}
             memo={memoModal.memo}
-            handlePreProcess={closeMemoModal}
+            handleClose={closeMemoModal}
           />
         </div>
       </div>
