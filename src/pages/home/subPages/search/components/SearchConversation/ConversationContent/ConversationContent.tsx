@@ -7,6 +7,7 @@ import {
 } from 'pages/home/subPages/interfaces';
 import { CircularProgress, Divider } from '@mui/material';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
+import { useTranslation } from 'react-i18next';
 
 const ConversationContent = ({
   isOpen,
@@ -70,6 +71,8 @@ const ScrollableList = ({ children }: { children: React.ReactNode }) => {
 };
 
 const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
+  const { t } = useTranslation();
+
   const memoSearchAnswer = content ? content : { loading: false, memos: [] };
 
   return (
@@ -86,14 +89,16 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
             </ScrollableList>
           ) : (
             <p className="text-gray3 font-regular text-[11px]">
-              검색 결과가 없습니다.
+              {t('pages.search.conversation.noResults')}
             </p>
           )}
         </div>
       ) : (
         <div className="flex gap-3 text-sm">
           <CircularProgress className="self-center" size={15} />
-          <p className="text-gray3 font-regular text-[11px]">검색 중입니다.</p>
+          <p className="text-gray3 font-regular text-[11px]">
+            {t('pages.search.db.searching')}
+          </p>
         </div>
       )}
     </>
@@ -101,6 +106,8 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
 };
 
 const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
+  const { t } = useTranslation();
+
   const memoSearchAnswer = content
     ? content
     : { loading: false, processed_message: '', memos: [] };
@@ -120,12 +127,18 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
                 </div>
               ))}
             </ScrollableList>
-          ) : null}
+          ) : (
+            <p className="text-gray3 font-regular text-[11px]">
+              {t('pages.search.conversation.noResults')}
+            </p>
+          )}
         </div>
       ) : (
         <div className="flex gap-3 text-sm">
           <CircularProgress className="self-center" size={15} />
-          <p className="text-gray3 font-regular text-[11px]">답변을 생성중입니다.</p>
+          <p className="text-gray3 font-regular text-[11px]">
+            {t('pages.search.ai.generating')}
+          </p>
         </div>
       )}
     </>
