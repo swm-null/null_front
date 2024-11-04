@@ -89,7 +89,6 @@ const useSearchMemoManager = () => {
         memos: [],
       };
       updateSearchDataWithDBInQueries(searchHistoryId, dbErrorResponse);
-      throw error;
     }
   };
 
@@ -115,7 +114,6 @@ const useSearchMemoManager = () => {
         memos: null,
       };
       updateSearchDataWithAIInQueries(searchHistoryId, aiErrorResponse);
-      throw error;
     }
   };
 
