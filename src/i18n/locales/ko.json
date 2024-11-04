@@ -83,15 +83,13 @@
       "create": "메모추가",
       "search": "메모검색",
       "dashboard": "대시보드",
-      "searchHistory": "기록",
       "uploadData": "불러오기"
     },
     "main": {
       "mode": {
         "create": "추가",
         "search": "검색"
-      },
-      "searchHistory": "검색 기록"
+      }
     },
     "create": {
       "header": "메모 추가하기",
@@ -138,10 +136,6 @@
         "default": "메모 검색하기"
       },
       "searchButton": "검색"
-    },
-    "searchHistory": {
-      "header": "History",
-      "inputPlaceholder": "What are you looking for?"
     },
     "uploadData": {
       "header": "카카오톡 나와의 채팅 데이터 가져오기",

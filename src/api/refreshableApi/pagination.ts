@@ -122,11 +122,13 @@ export const getDashboardTagRelations = async ({
   }
 };
 
-export interface paginationSearchHistoriesResponse
-  extends paginationData,
-    validResponse {
+export interface paginationSearchHistories extends paginationData {
   search_histories: Interface.MemoSearchConversation[];
 }
+
+interface paginationSearchHistoriesResponse
+  extends paginationSearchHistories,
+    validResponse {}
 
 export const getSearchHistories = async ({
   query,

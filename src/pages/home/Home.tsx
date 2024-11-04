@@ -26,7 +26,7 @@ const Home = () => {
       <BottomNavProvider>
         <ImageListProvider>
           <ResponsiveLayout handleNavigation={handleNavigation}>
-            <HomeRouter setCurrentPage={handleNavigation} />
+            <HomeRouter />
           </ResponsiveLayout>
         </ImageListProvider>
       </BottomNavProvider>
