@@ -1,4 +1,4 @@
-import { MemosList, UneditableMemo } from 'pages/home/subPages/components';
+import { MemosList, SummaryMemo } from 'pages/home/subPages/components';
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
 import { useEffect, useState } from 'react';
 
@@ -37,7 +37,7 @@ const AccordionContent = ({
         {data.search_memos_response?.memos?.length !== 0 && (
           <MemosList>
             {data.search_memos_response?.memos?.map((memo) => (
-              <UneditableMemo key={memo.id} memo={memo} />
+              <SummaryMemo key={memo.id} memo={memo} />
             ))}
           </MemosList>
         )}

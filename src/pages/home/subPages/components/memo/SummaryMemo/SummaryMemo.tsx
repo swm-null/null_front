@@ -7,18 +7,13 @@ import { MemoHeader } from './MemoHeader';
 import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
 
-interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
+interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
   border?: boolean;
   shadow?: boolean;
 }
 
-const UneditableMemo = ({
-  memo,
-  border,
-  shadow,
-  ...divProps
-}: UneditableMemoProps) => {
+const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) => {
   const { t } = useTranslation();
 
   const { handleDeleteMemo } = useMemoManager();
@@ -97,4 +92,4 @@ const UneditableMemo = ({
   );
 };
 
-export default UneditableMemo;
+export default SummaryMemo;

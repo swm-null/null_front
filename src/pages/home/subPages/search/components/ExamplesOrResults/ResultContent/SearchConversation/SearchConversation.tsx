@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material';
 import { BookIcon } from 'assets/icons';
-import { MemosList, UneditableMemo } from 'pages/home/subPages/components';
+import { MemosList, SummaryMemo } from 'pages/home/subPages/components';
 import {
   MemoSearchAnswer,
   MemoSearchConversation,
@@ -58,7 +58,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswer | null }) => {
             <MemosList>
               {content.memos?.map((memo) => (
                 <div key={memo.id} className="inline rounded-lg min-w-72">
-                  <UneditableMemo memo={memo} />
+                  <SummaryMemo memo={memo} />
                 </div>
               ))}
             </MemosList>

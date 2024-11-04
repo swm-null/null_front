@@ -1,10 +1,10 @@
-import { UneditableMemo } from 'pages/home/subPages/components';
+import { SummaryMemo } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { HTMLProps, useContext } from 'react';
 import { useClickWithoutDrag } from 'pages/hooks';
 import { DashboardModalContext } from 'utils';
 
-interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
+interface SummaryMemoWithoutDragProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
   border?: boolean;
   shadow?: boolean;
@@ -12,21 +12,21 @@ interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
   softRevertMemo?: (memo: Memo) => void;
 }
 
-const UneditableMemoWithoutDrag = ({
+const SummaryMemoWithoutDrag = ({
   memo,
   border,
   shadow,
   softDeleteMemo,
   softRevertMemo,
   ...divProps
-}: UneditableMemoProps) => {
+}: SummaryMemoWithoutDragProps) => {
   const { openMemoEditModal } = useContext(DashboardModalContext);
   const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>
     openMemoEditModal(memo)
   );
 
   return (
-    <UneditableMemo
+    <SummaryMemo
       {...divProps}
       key={memo?.id}
       memo={memo}
@@ -39,4 +39,4 @@ const UneditableMemoWithoutDrag = ({
   );
 };
 
-export default UneditableMemoWithoutDrag;
+export default SummaryMemoWithoutDrag;
