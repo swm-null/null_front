@@ -135,7 +135,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
       alertLoginRequiredThenRedirect();
     } else {
-      alertLoginRequiredThenRedirect();
+      // alertLoginRequiredThenRedirect();
       return Promise.reject(error);
     }
   });

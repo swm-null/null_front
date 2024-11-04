@@ -35,7 +35,7 @@ const ConversationContent = ({
         transition: 'max-height 0.3s ease',
       }}
     >
-      <div className="flex flex-col flex-1 gap-4 px-5 pb-5">
+      <div className="flex flex-col flex-1 gap-4 px-5 pb-5 pl-[58px]">
         <DBAnswer content={data.db} />
         <Divider />
         <AIAnswer content={data.ai} />
@@ -53,17 +53,17 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
   const memoSearchAnswer = content ? content : { loading: false, memos: [] };
 
   return (
-    <div className="pl-[38px]">
+    <>
       {!memoSearchAnswer.loading ? (
         <div className="flex flex-col gap-[0.375rem]">
           {memoSearchAnswer.memos?.length ? (
-            <MemosList>
+            <div className="overflow-x-scroll h-20">
               {memoSearchAnswer.memos?.map((memo) => (
                 <div key={memo.id} className="inline rounded-lg min-w-72">
                   <UneditableMemo memo={memo} />
                 </div>
               ))}
-            </MemosList>
+            </div>
           ) : (
             <p className="text-gray3 font-regular text-[11px]">
               검색 결과가 없습니다.
@@ -76,7 +76,7 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
           <p className="text-gray3 font-regular text-[11px]">검색 중입니다.</p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
@@ -86,20 +86,20 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
     : { loading: false, processed_message: '', memos: [] };
 
   return (
-    <div className="pl-[38px]">
+    <>
       {!memoSearchAnswer.loading ? (
-        <div className="flex flex-col gap-[0.375rem]">
+        <div className="flex flex-col gap-5">
           <p className="font-regular text-brown2 whitespace-break-spaces">
             {memoSearchAnswer.processed_message}
           </p>
           {memoSearchAnswer.memos?.length ? (
-            <MemosList>
+            <div className="flex overflow-x-scroll gap-3">
               {memoSearchAnswer.memos?.map((memo) => (
-                <div key={memo.id} className="inline rounded-lg min-w-72">
+                <div key={memo.id} className="rounded-lg h-60 w-60">
                   <UneditableMemo memo={memo} />
                 </div>
               ))}
-            </MemosList>
+            </div>
           ) : null}
         </div>
       ) : (
@@ -108,7 +108,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
           <p className="text-gray3 font-regular text-[11px]">답변을 생성중입니다.</p>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
