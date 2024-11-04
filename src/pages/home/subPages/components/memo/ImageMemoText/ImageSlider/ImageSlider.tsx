@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Flickity from 'react-flickity-component';
 import { ImageListContext } from 'utils';
 import { ImageFileInput } from 'pages/home/subPages/components/utils';
 import { AddIcon, CloseIcon } from 'assets/icons';
-import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import { useClickWithoutDrag } from 'pages/hooks';
+import ImageLightbox from './ImageLigntbox';
 
 const ImageSlider = ({
   imageUrls,
@@ -23,14 +23,14 @@ const ImageSlider = ({
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
 
-  const allImages = [
-    ...(imageUrls || []),
-    ...images.map((img) => URL.createObjectURL(img)),
-  ];
+  const allImages = useMemo(() => {
+    const objectUrls = images.map((img) => URL.createObjectURL(img));
+
+    return [...(imageUrls || []), ...objectUrls];
+  }, [imageUrls, images]);
 
   const isNoImages = () => imageUrls?.length + images.length === 0;
-  const isLastImageIndex = (cellIndex: number) =>
-    cellIndex === imageUrls?.length + images.length;
+  const isLastImageIndex = (cellIndex: number) => cellIndex === allImages?.length;
 
   useEffect(() => {
     if (!flickityInstance) return;
@@ -88,7 +88,6 @@ const ImageSlider = ({
             editable={editable}
           />
         ))}
-
         {images?.map((image, index) => (
           <ImageItem
             key={`new-${index}`}
@@ -98,7 +97,6 @@ const ImageSlider = ({
             editable={editable}
           />
         ))}
-
         {editable && (
           <div className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
             <ImageFileInput handleImageFileChange={handleImageFilesChange}>
@@ -107,12 +105,13 @@ const ImageSlider = ({
           </div>
         )}
       </Flickity>
-      <Lightbox
-        open={isOpen}
-        close={() => setIsOpen(false)}
-        index={photoIndex}
-        slides={allImages.map((src) => ({ src }))}
-        carousel={{ finite: true }}
+
+      <ImageLightbox
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        photoIndex={photoIndex}
+        setPhotoIndex={setPhotoIndex}
+        images={allImages}
       />
     </div>
   );
