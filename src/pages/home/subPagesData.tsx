@@ -1,6 +1,6 @@
 import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
-import { DashboardModalProvider } from 'utils';
+import { MemoProvider, TagProvider } from 'utils';
 
 export const getSubPagesData = (
   setCurrentPage: (page: string) => void
@@ -26,9 +26,11 @@ export const getSubPagesData = (
     {
       path: 'dashboard',
       element: (
-        <DashboardModalProvider>
-          <Page.Dashboard />
-        </DashboardModalProvider>
+        <MemoProvider>
+          <TagProvider>
+            <Page.Dashboard />
+          </TagProvider>
+        </MemoProvider>
       ),
       title: 'dashboard',
     },

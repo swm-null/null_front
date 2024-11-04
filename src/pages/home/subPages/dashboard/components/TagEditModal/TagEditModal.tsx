@@ -1,11 +1,11 @@
 import { Modal } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { DashboardModalContext } from 'utils';
 import { ModalContent } from './ModalContent';
 import { useTagManager } from 'pages/home/subPages/components';
+import { TagContext } from 'utils';
 
 const TagEditModal = () => {
-  const { tagEditModal, closeTagEditModal } = useContext(DashboardModalContext);
+  const { tagEditModal, closeTagEditModal } = useContext(TagContext);
   const [newTagName, setTagName] = useState(tagEditModal?.tag.name || '');
 
   const { handleUpdateTag } = useTagManager();

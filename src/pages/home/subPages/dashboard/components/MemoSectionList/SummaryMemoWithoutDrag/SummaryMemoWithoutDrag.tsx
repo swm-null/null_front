@@ -2,7 +2,7 @@ import { SummaryMemo } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { HTMLProps, useContext } from 'react';
 import { useClickWithoutDrag } from 'pages/hooks';
-import { DashboardModalContext } from 'utils';
+import { MemoContext } from 'utils';
 
 interface SummaryMemoWithoutDragProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -20,7 +20,7 @@ const SummaryMemoWithoutDrag = ({
   softRevertMemo,
   ...divProps
 }: SummaryMemoWithoutDragProps) => {
-  const { openMemoEditModal } = useContext(DashboardModalContext);
+  const { openMemoEditModal } = useContext(MemoContext);
   const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>
     openMemoEditModal(memo)
   );

@@ -1,10 +1,10 @@
 import { Modal } from '@mui/material';
 import { EditableMemo } from 'pages/home/subPages/components';
 import { useContext } from 'react';
-import { DashboardModalContext } from 'utils';
+import { MemoContext } from 'utils';
 
 const MemoEditModal = () => {
-  const { memoEditModal, closeMemoEditModal } = useContext(DashboardModalContext);
+  const { memoEditModal, closeMemoEditModal } = useContext(MemoContext);
 
   if (!memoEditModal) return <></>;
 
