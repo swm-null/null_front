@@ -15,7 +15,7 @@ const ImageMemoText = ({
   removeImageUrl?: (index: number) => void;
   message: string;
   textColor?: string;
-  setMessage: (newMessage: string) => void;
+  setMessage?: (newMessage: string) => void;
   editable?: boolean;
 }) => {
   const { removeAllImage, handlePaste, getInputProps, getRootProps } =

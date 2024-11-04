@@ -35,7 +35,8 @@
     "dateFormat": "yyyy.MM.dd HH:mm",
     "dateFormatEdit": "수정된 시간: yyyy년 MM월 dd일 HH:mm",
     "tagRebuild": "태그 재생성",
-    "save": "저장"
+    "save": "저장",
+    "close": "닫기"
   },
   "login": {
     "header": "로그인",
