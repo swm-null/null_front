@@ -94,7 +94,7 @@ export const createMemo = async (
       JSON.stringify({
         content: inputContent,
         image_urls: inputImageUrls ? inputImageUrls : [],
-        input_voice_urls: inputVoiceUrls ? inputVoiceUrls : [],
+        voice_urls: inputVoiceUrls ? inputVoiceUrls : [],
       })
     );
     const responseInfo = {
