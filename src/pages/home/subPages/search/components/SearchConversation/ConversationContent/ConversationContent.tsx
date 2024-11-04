@@ -116,9 +116,11 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
     <>
       {!memoSearchAnswer.loading ? (
         <div className="flex flex-col gap-5">
-          <p className="font-regular text-brown2 whitespace-break-spaces">
-            {memoSearchAnswer.processed_message}
-          </p>
+          {memoSearchAnswer.processed_message && (
+            <p className="font-regular text-brown2 whitespace-break-spaces">
+              {memoSearchAnswer.processed_message}
+            </p>
+          )}
           {memoSearchAnswer.memos?.length ? (
             <ScrollableList>
               {memoSearchAnswer.memos?.map((memo) => (
