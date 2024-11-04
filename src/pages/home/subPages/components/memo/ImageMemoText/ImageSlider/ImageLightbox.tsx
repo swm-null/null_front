@@ -20,6 +20,7 @@ const ImageLightbox = ({
 }: ImageLightboxProps) => {
   return (
     <Lightbox
+      className="bg-black/30"
       open={isOpen}
       close={onClose}
       index={photoIndex}

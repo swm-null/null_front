@@ -1,11 +1,11 @@
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Flickity from 'react-flickity-component';
 import { ImageListContext } from 'utils';
 import { ImageFileInput } from 'pages/home/subPages/components/utils';
-import { AddIcon, CloseIcon } from 'assets/icons';
+import { AddIcon } from 'assets/icons';
 import 'yet-another-react-lightbox/styles.css';
-import { useClickWithoutDrag } from 'pages/hooks';
-import ImageLightbox from './ImageLigntbox';
+import ImageLightbox from './ImageLightbox';
+import ImageItem from './ImageItem';
 
 const ImageSlider = ({
   imageUrls,
@@ -113,55 +113,6 @@ const ImageSlider = ({
         setPhotoIndex={setPhotoIndex}
         images={allImages}
       />
-    </div>
-  );
-};
-
-const ImageItem = ({
-  image,
-  index,
-  editable,
-  onRemove,
-}: {
-  image: File | string;
-  index: number;
-  editable: boolean;
-  onRemove?: (index: number) => void;
-}) => {
-  const imageUrl = image instanceof File ? URL.createObjectURL(image) : image;
-
-  const removeButtonRef = useRef<HTMLDivElement>(null);
-
-  const { handleMouseDown, handleMouseMove } = useClickWithoutDrag(
-    onRemove ? () => onRemove(index) : () => {}
-  );
-
-  const handleRemove = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (removeButtonRef.current) {
-      removeButtonRef.current.dataset.isDragging = 'false';
-    }
-    handleMouseDown(e);
-  };
-
-  return (
-    <div className="carousel-cell w-full h-full xsm:w-60" key={index}>
-      <img
-        src={imageUrl}
-        alt={`Memo Image ${index + 1}`}
-        className="object-cover w-full h-full xsm:w-60"
-      />
-      {editable && (
-        <div
-          ref={removeButtonRef}
-          className="remove-button absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onClick={handleRemove}
-        >
-          <CloseIcon className="w-4 h-4" />
-        </div>
-      )}
     </div>
   );
 };
