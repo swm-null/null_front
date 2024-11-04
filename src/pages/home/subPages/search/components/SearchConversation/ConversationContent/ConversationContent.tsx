@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { MemosList, UneditableMemo } from 'pages/home/subPages/components';
+import { useEffect, useRef, useState } from 'react';
+import { UneditableMemo } from 'pages/home/subPages/components';
 import {
   MemoSearchAnswerWithDB,
   MemoSearchAnswerWithAI,
   MemoSearchConversation,
 } from 'pages/home/subPages/interfaces';
 import { CircularProgress, Divider } from '@mui/material';
+import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 
 const ConversationContent = ({
   isOpen,
@@ -50,6 +51,9 @@ const ConversationContent = ({
 };
 
 const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
+
   const memoSearchAnswer = content ? content : { loading: false, memos: [] };
 
   return (
@@ -57,7 +61,13 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
       {!memoSearchAnswer.loading ? (
         <div className="flex flex-col gap-[0.375rem]">
           {memoSearchAnswer.memos?.length ? (
-            <div className="overflow-x-scroll h-20">
+            <div
+              ref={scrollRef}
+              className="overflow-x-scroll h-20"
+              onMouseDown={onDragStart}
+              onMouseMove={onDragMove}
+              onMouseUp={onDragEnd}
+            >
               {memoSearchAnswer.memos?.map((memo) => (
                 <div key={memo.id} className="inline rounded-lg min-w-72">
                   <UneditableMemo memo={memo} />
@@ -81,6 +91,9 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
 };
 
 const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
+
   const memoSearchAnswer = content
     ? content
     : { loading: false, processed_message: '', memos: [] };
@@ -93,7 +106,13 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
             {memoSearchAnswer.processed_message}
           </p>
           {memoSearchAnswer.memos?.length ? (
-            <div className="flex overflow-x-scroll gap-3">
+            <div
+              ref={scrollRef}
+              className="flex overflow-x-scroll gap-3"
+              onMouseDown={onDragStart}
+              onMouseMove={onDragMove}
+              onMouseUp={onDragEnd}
+            >
               {memoSearchAnswer.memos?.map((memo) => (
                 <div key={memo.id} className="rounded-lg h-60 w-60">
                   <UneditableMemo memo={memo} />
