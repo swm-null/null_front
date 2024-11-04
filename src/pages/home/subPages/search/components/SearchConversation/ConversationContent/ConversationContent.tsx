@@ -50,10 +50,26 @@ const ConversationContent = ({
   );
 };
 
-const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
+const ScrollableList = ({ children }: { children: React.ReactNode }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
 
+  return (
+    <div className="flex w-full overflow-hidden">
+      <div
+        ref={scrollRef}
+        className="flex overflow-x-scroll gap-3 no-scrollbar"
+        onMouseDown={onDragStart}
+        onMouseMove={onDragMove}
+        onMouseUp={onDragEnd}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
   const memoSearchAnswer = content ? content : { loading: false, memos: [] };
 
   return (
@@ -61,19 +77,13 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
       {!memoSearchAnswer.loading ? (
         <div className="flex flex-col gap-[0.375rem]">
           {memoSearchAnswer.memos?.length ? (
-            <div
-              ref={scrollRef}
-              className="overflow-x-scroll h-20"
-              onMouseDown={onDragStart}
-              onMouseMove={onDragMove}
-              onMouseUp={onDragEnd}
-            >
+            <ScrollableList>
               {memoSearchAnswer.memos?.map((memo) => (
-                <div key={memo.id} className="inline rounded-lg min-w-72">
+                <div key={memo.id} className="rounded-lg h-60 w-60 flex-shrink-0">
                   <UneditableMemo memo={memo} />
                 </div>
               ))}
-            </div>
+            </ScrollableList>
           ) : (
             <p className="text-gray3 font-regular text-[11px]">
               검색 결과가 없습니다.
@@ -91,9 +101,6 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
 };
 
 const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
-
   const memoSearchAnswer = content
     ? content
     : { loading: false, processed_message: '', memos: [] };
@@ -106,19 +113,13 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
             {memoSearchAnswer.processed_message}
           </p>
           {memoSearchAnswer.memos?.length ? (
-            <div
-              ref={scrollRef}
-              className="flex overflow-x-scroll gap-3"
-              onMouseDown={onDragStart}
-              onMouseMove={onDragMove}
-              onMouseUp={onDragEnd}
-            >
+            <ScrollableList>
               {memoSearchAnswer.memos?.map((memo) => (
-                <div key={memo.id} className="rounded-lg h-60 w-60">
+                <div key={memo.id} className="rounded-lg h-60 w-60 flex-shrink-0">
                   <UneditableMemo memo={memo} />
                 </div>
               ))}
-            </div>
+            </ScrollableList>
           ) : null}
         </div>
       ) : (

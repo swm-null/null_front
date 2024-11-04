@@ -27,7 +27,7 @@ const SearchPage = () => {
 
   return (
     <div className="flex justify-center overflow-hidden h-full">
-      <div className="max-w-[740px] h-full flex flex-col flex-1 text-gray3">
+      <div className="w-full max-w-[740px] h-full flex flex-col flex-1 text-gray3">
         <MemoSearchTextArea
           value={message}
           onChange={handleMessageChange}
