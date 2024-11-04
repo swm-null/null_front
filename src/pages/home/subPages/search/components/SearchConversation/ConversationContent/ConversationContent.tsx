@@ -26,7 +26,7 @@ const ConversationContent = ({
     if (contentRef.current) {
       setAccordionHeight(contentRef.current.scrollHeight);
     }
-  }, [contentRef.current?.scrollHeight, isOpen]);
+  }, [contentRef.current?.scrollHeight, isOpen, data.db, data.ai]);
 
   return (
     <div
@@ -97,7 +97,7 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
         <div className="flex gap-3 text-sm">
           <CircularProgress className="self-center" size={15} />
           <p className="text-gray3 font-regular text-[11px]">
-            {t('pages.search.db.searching')}
+            {t('pages.search.conversation.db.searching')}
           </p>
         </div>
       )}
@@ -139,7 +139,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
         <div className="flex gap-3 text-sm">
           <CircularProgress className="self-center" size={15} />
           <p className="text-gray3 font-regular text-[11px]">
-            {t('pages.search.ai.generating')}
+            {t('pages.search.conversation.ai.generating')}
           </p>
         </div>
       )}
