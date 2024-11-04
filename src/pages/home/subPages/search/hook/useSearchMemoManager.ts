@@ -29,6 +29,7 @@ const useSearchMemoManager = () => {
       if (!Api.isSearchHistoriesResponse(response)) {
         throw new Error(t('pages.search.fetchHistoryErrorMessage'));
       }
+
       return response as Api.paginationSearchHistories;
     },
     getNextPageParam: (lastPage) => {
@@ -83,7 +84,10 @@ const useSearchMemoManager = () => {
       }
       updateSearchDataWithDBInQueries(searchHistoryId, response);
     } catch (error) {
-      const dbErrorResponse: Interface.MemoSearchAnswerWithDB = { memos: [] };
+      const dbErrorResponse: Interface.MemoSearchAnswerWithDB = {
+        loading: false,
+        memos: [],
+      };
       updateSearchDataWithDBInQueries(searchHistoryId, dbErrorResponse);
       throw error;
     }
@@ -106,6 +110,7 @@ const useSearchMemoManager = () => {
       updateSearchDataWithAIInQueries(searchHistoryId, response);
     } catch (error) {
       const aiErrorResponse: Interface.MemoSearchAnswerWithAI = {
+        loading: false,
         processed_message: null,
         memos: null,
       };
@@ -130,9 +135,14 @@ const useSearchMemoManager = () => {
       id: id,
       query: query,
       created_at: new Date().toISOString(),
-      search_memos_response: {
-        db: null,
-        ai: null,
+      ai: {
+        loading: true,
+        processed_message: null,
+        memos: [],
+      },
+      db: {
+        loading: true,
+        memos: [],
       },
     };
   };
@@ -165,10 +175,7 @@ const useSearchMemoManager = () => {
           if (history.id === conversationId) {
             return {
               ...history,
-              search_memos_response: {
-                ...history.search_memos_response,
-                ai: newAIAnswer,
-              },
+              ai: newAIAnswer,
             };
           }
           return history;
@@ -189,10 +196,7 @@ const useSearchMemoManager = () => {
           if (history.id === conversationId) {
             return {
               ...history,
-              search_memos_response: {
-                ...history.search_memos_response,
-                db: newDBAnswer,
-              },
+              db: newDBAnswer,
             };
           }
           return history;

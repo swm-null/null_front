@@ -8,7 +8,9 @@ import { ConversationContent } from './ConversationContent';
 
 const SearchConversation = ({ data }: { data: MemoSearchConversation }) => {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(data.search_memos_response ? false : true);
+  const [isOpen, setIsOpen] = useState(
+    !data.ai?.loading || !data.db?.loading ? false : true
+  );
   const contentRef = useRef<HTMLDivElement>(null);
 
   const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>

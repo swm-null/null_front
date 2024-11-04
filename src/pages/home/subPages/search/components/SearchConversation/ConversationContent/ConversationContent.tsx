@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { MemosList, UneditableMemo } from 'pages/home/subPages/components';
 import {
-  MemoSearchAnswer,
+  MemoSearchAnswerWithDB,
+  MemoSearchAnswerWithAI,
   MemoSearchConversation,
 } from 'pages/home/subPages/interfaces';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Divider } from '@mui/material';
 
 const ConversationContent = ({
   isOpen,
@@ -35,7 +36,9 @@ const ConversationContent = ({
       }}
     >
       <div className="flex flex-col flex-1 gap-4 px-5 pb-5">
-        <AIAnswer content={data.search_memos_response} />
+        <DBAnswer content={data.db} />
+        <Divider />
+        <AIAnswer content={data.ai} />
         {isOpen && (
           <p className="ml-auto text-sm font-regular text-brown2 flex-shrink-0">
             {formatDate(data.created_at)}
@@ -46,17 +49,52 @@ const ConversationContent = ({
   );
 };
 
-const AIAnswer = ({ content }: { content: MemoSearchAnswer | null }) => {
+const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
+  const memoSearchAnswer = content ? content : { loading: false, memos: [] };
+
   return (
     <div className="pl-[38px]">
-      {content ? (
+      {!memoSearchAnswer.loading ? (
+        <div className="flex flex-col gap-[0.375rem]">
+          {memoSearchAnswer.memos?.length ? (
+            <MemosList>
+              {memoSearchAnswer.memos?.map((memo) => (
+                <div key={memo.id} className="inline rounded-lg min-w-72">
+                  <UneditableMemo memo={memo} />
+                </div>
+              ))}
+            </MemosList>
+          ) : (
+            <p className="text-gray3 font-regular text-[11px]">
+              검색 결과가 없습니다.
+            </p>
+          )}
+        </div>
+      ) : (
+        <div className="flex gap-3 text-sm">
+          <CircularProgress className="self-center" size={15} />
+          <p className="text-gray3 font-regular text-[11px]">검색 중입니다.</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
+  const memoSearchAnswer = content
+    ? content
+    : { loading: false, processed_message: '', memos: [] };
+
+  return (
+    <div className="pl-[38px]">
+      {!memoSearchAnswer.loading ? (
         <div className="flex flex-col gap-[0.375rem]">
           <p className="font-regular text-brown2 whitespace-break-spaces">
-            {content.processed_message}
+            {memoSearchAnswer.processed_message}
           </p>
-          {content.memos?.length ? (
+          {memoSearchAnswer.memos?.length ? (
             <MemosList>
-              {content.memos?.map((memo) => (
+              {memoSearchAnswer.memos?.map((memo) => (
                 <div key={memo.id} className="inline rounded-lg min-w-72">
                   <UneditableMemo memo={memo} />
                 </div>

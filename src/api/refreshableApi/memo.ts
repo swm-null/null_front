@@ -49,7 +49,7 @@ export const searchMemoWithDB = async function (
     const responseInfo = {
       method,
       status: response.status,
-      error: false,
+      loading: false,
       memos: response.data.memos,
     } as searchMemoWithDBResponse;
     return responseInfo;
@@ -69,7 +69,7 @@ export const searchMemoWithAI = async function (
     const responseInfo = {
       method,
       status: response.status,
-      error: false,
+      loading: false,
       processed_message: response.data.processed_message,
       memos: response.data.memos,
     } as searchMemoWithAIResponse;
