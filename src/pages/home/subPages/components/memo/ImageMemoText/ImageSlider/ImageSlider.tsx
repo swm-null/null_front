@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState, useEffect } from 'react';
 import Flickity from 'react-flickity-component';
 import { ImageListContext } from 'utils';
 import { ImageFileInput } from 'pages/home/subPages/components/utils';
@@ -35,12 +35,16 @@ const ImageSlider = ({
   useEffect(() => {
     if (!flickityInstance) return;
 
-    const handleStaticClick = (event: any, __: any, ___: any, cellIndex: number) => {
+    const handleStaticClick = (event: any, _: any, __: any, cellIndex: number) => {
       const removeButton = (event.target as HTMLElement).closest('.remove-button');
       if (removeButton instanceof HTMLElement) {
         const { isDragging } = removeButton.dataset;
         if (isDragging !== 'true' && removeImageUrl) {
-          removeImageUrl(cellIndex);
+          if (cellIndex < imageUrls?.length) {
+            removeImageUrl(cellIndex);
+          } else {
+            removeImage(cellIndex - imageUrls?.length);
+          }
         }
         event.preventDefault();
         return;
@@ -59,7 +63,11 @@ const ImageSlider = ({
     return () => {
       flickityInstance.off('staticClick', handleStaticClick);
     };
-  }, [flickityInstance, imageUrls, editable]);
+  }, [flickityInstance, imageUrls, images, editable]);
+
+  if (isNoImages()) {
+    return <></>;
+  }
 
   const flickityOptions = {
     prevNextButtons: false,
@@ -67,15 +75,11 @@ const ImageSlider = ({
     setGallerySize: false,
   };
 
-  if (isNoImages()) {
-    return <></>;
-  }
-
   return (
     <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
       <Flickity
-        flickityRef={(instance) => setFlickityInstance(instance)}
         elementType="div"
+        flickityRef={(instance) => setFlickityInstance(instance)}
         className="carousel w-full h-full aspect-square"
         options={flickityOptions}
       >
@@ -84,7 +88,6 @@ const ImageSlider = ({
             key={`origin-${index}`}
             image={url}
             index={index}
-            onRemove={removeImageUrl}
             editable={editable}
           />
         ))}
@@ -93,7 +96,6 @@ const ImageSlider = ({
             key={`new-${index}`}
             image={image}
             index={index}
-            onRemove={removeImage}
             editable={editable}
           />
         ))}

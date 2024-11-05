@@ -1,11 +1,10 @@
 import { useRef, useCallback, MouseEvent } from 'react';
 
-const useClickWithoutDrag = (onClickAction: () => void) => {
+const useClickWithoutDrag = (onClickAction: (e?: MouseEvent) => void) => {
   const isDragging = useRef(false);
   const startX = useRef(0);
 
   const handleMouseDown = useCallback((e: MouseEvent) => {
-    e.stopPropagation();
     isDragging.current = false;
     startX.current = e.clientX;
   }, []);
@@ -16,12 +15,15 @@ const useClickWithoutDrag = (onClickAction: () => void) => {
     }
   }, []);
 
-  const handleClick = useCallback(() => {
-    if (!isDragging.current) {
-      onClickAction();
-    }
-    isDragging.current = false;
-  }, [onClickAction]);
+  const handleClick = useCallback(
+    (e?: MouseEvent) => {
+      if (!isDragging.current) {
+        onClickAction(e);
+      }
+      isDragging.current = false;
+    },
+    [onClickAction]
+  );
 
   return {
     handleMouseDown,
