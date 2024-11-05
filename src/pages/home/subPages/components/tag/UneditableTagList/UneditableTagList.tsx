@@ -1,30 +1,32 @@
 import { Tag } from 'pages/home/subPages/interfaces';
-import { LegacyRef } from 'react';
+import { useRef } from 'react';
 import TagItem from './TagItem';
+import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 
 interface UneditableTagListProps {
   tags: Tag[];
-  scrollRef: LegacyRef<HTMLDivElement>;
+  /**
+   * tag의 크기를 설정
+   * default: large
+   */
+  size?: 'small' | 'medium' | 'large';
   invalidCharsPattern: RegExp;
-  onChildTagClick: (tag: Tag) => void;
-  onDragStart: (e: React.MouseEvent) => void;
-  onDragMove: (e: React.MouseEvent) => void;
-  onDragEnd: (e: React.MouseEvent) => void;
+  onChildTagClick?: (tag: Tag) => void;
 }
 
 export const UneditableTagList = ({
   tags,
-  scrollRef,
   invalidCharsPattern,
+  size = 'medium',
   onChildTagClick,
-  onDragStart,
-  onDragMove,
-  onDragEnd,
 }: UneditableTagListProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
+
   return (
     <div
       ref={scrollRef}
-      className="flex flex-1 overflow-x-scroll no-scrollbar gap-1"
+      className="flex flex-none w-fit max-w-full overflow-x-scroll no-scrollbar gap-1"
       onMouseDown={onDragStart}
       onMouseMove={onDragMove}
       onMouseUp={onDragEnd}
@@ -34,6 +36,7 @@ export const UneditableTagList = ({
         <TagItem
           key={index}
           tag={tag}
+          size={size}
           onChildTagClick={onChildTagClick}
           invalidCharsPattern={invalidCharsPattern}
         />

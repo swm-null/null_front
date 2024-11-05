@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Breadcrumbs } from '@mui/material';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
@@ -6,7 +6,6 @@ import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
 import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
-import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -31,9 +30,6 @@ const CurrentTagPath = ({
   setSortOption,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
-
   const handleAllTagsClick = () => {
     setTagStack([]);
     handleTagOrAllTagsClick(null);
@@ -75,12 +71,9 @@ const CurrentTagPath = ({
       <div className="flex flex-row flex-1 p-4 pb-2 gap-2">
         <UneditableTagList
           tags={tags}
-          scrollRef={scrollRef}
+          size="large"
           invalidCharsPattern={invalidCharsPattern}
           onChildTagClick={handleChildTagClick}
-          onDragStart={onDragStart}
-          onDragMove={onDragMove}
-          onDragEnd={onDragEnd}
         />
         <div className="ml-auto">
           <SortToggle

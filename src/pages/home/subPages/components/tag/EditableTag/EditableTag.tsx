@@ -2,7 +2,7 @@ import { CloseIcon } from 'assets/icons';
 import { FormEvent, HTMLProps, useRef } from 'react';
 import { tv } from 'tailwind-variants';
 
-interface EditableTagProps extends HTMLProps<HTMLDivElement> {
+interface EditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
   text: string;
   editable?: boolean;
   /**
@@ -32,7 +32,16 @@ interface EditableTagProps extends HTMLProps<HTMLDivElement> {
    * default: 10
    */
   border?: 0 | 5 | 10;
+  /**
+   * tag에 그림자 효과를 줄 것인지 여부를 전달
+   * default: false
+   */
   shadow?: boolean;
+  /**
+   * tag의 크기를 설정
+   * default: medium
+   */
+  size?: 'small' | 'medium' | 'large';
   /**
    * tag의 text 변경사항을 받고 싶은 경우, text를 저장하는 메소드 전달
    */
@@ -75,6 +84,11 @@ const tagStyles = tv({
       true: 'shadow-custom backdrop-blur-lg',
       false: '',
     },
+    size: {
+      small: 'h-5 text-[10px]',
+      medium: 'h-6 text-[10px]',
+      large: 'h-[27px] text-[12px]',
+    },
   },
   defaultVariants: {
     color: 'peach0',
@@ -82,6 +96,7 @@ const tagStyles = tv({
     radius: 'large',
     border: 10,
     shadow: false,
+    size: 'medium',
   },
 });
 
@@ -94,6 +109,7 @@ const EditableTag = ({
   radius = 'large',
   border = 10,
   shadow = false,
+  size = 'medium',
   onTextChange,
   onDelete,
   className,
@@ -119,10 +135,11 @@ const EditableTag = ({
         radius: radius,
         border: border,
         shadow: shadow,
+        size: size,
       })} ${className}`}
     >
       <span
-        className={`focus:outline-none whitespace-nowrap text-[10px] font-medium ${divProps.onClick ? 'cursor-pointer' : ''}`}
+        className={`focus:outline-none whitespace-nowrap font-medium ${divProps.onClick ? 'cursor-pointer' : ''}`}
         contentEditable={editable}
         ref={ref}
         suppressContentEditableWarning

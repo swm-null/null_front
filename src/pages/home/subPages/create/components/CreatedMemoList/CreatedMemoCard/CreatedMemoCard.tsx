@@ -1,11 +1,13 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
+import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 import { useMemoManager } from 'pages/home/subPages/components';
+import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
+import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -14,7 +16,6 @@ interface CreatedMemoCardProps {
 const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState(memo.content);
-  const [tags, setTags] = useState(memo.tags);
 
   const { handleDeleteMemo } = useMemoManager();
 
@@ -35,10 +36,14 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           updatedAt={formatDate(memo.updated_at)}
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
-          {tags.length === 0 ? (
+          {memo.tags.length === 0 ? (
             <Skeleton animation="wave" width={50} />
           ) : (
-            <TagManager tags={tags} setTags={setTags} />
+            <UneditableTagList
+              tags={memo.tags}
+              size="large"
+              invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+            />
           )}
         </CreatedMemoCardHeader>
         <ImageMemoText
@@ -61,11 +66,11 @@ const CreatedMemoCardHeader = ({
   children: ReactNode;
 }) => {
   return (
-    <div className="flex">
-      <div className="flex gap-2 items-center mr-auto">{children}</div>
-      <div className="flex gap-2 items-center">
+    <div className="flex flex-row flex-wrap-reverse flex-1 gap-2">
+      {children}
+      <div className="flex gap-2 ml-auto">
         <p className="text-[#6A5344] select-none">{updatedAt}</p>
-        <button className="rounded-full">
+        <button type="button" className="rounded-full">
           <DeleteIcon onClick={handleDeleteMemo} />
         </button>
       </div>

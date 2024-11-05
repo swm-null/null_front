@@ -1,7 +1,7 @@
 import { EditableTag } from 'pages/home/subPages/components';
 import { HTMLProps } from 'react';
 
-interface UneditableTagProps extends HTMLProps<HTMLDivElement> {
+interface UneditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
   text: string;
   /**
    * tag에 제외하고 싶은 문자 Regex 규칙 전달
@@ -24,8 +24,22 @@ interface UneditableTagProps extends HTMLProps<HTMLDivElement> {
    * default: large
    */
   radius?: 'small' | 'large';
+  /**
+   * tag의 border opacity를 숫자로 전달
+   * 5 -> 5%
+   * default: 10
+   */
   border?: 0 | 5 | 10;
+  /**
+   * tag에 그림자 효과를 줄 것인지 여부를 전달
+   * default: false
+   */
   shadow?: boolean;
+  /**
+   * tag의 크기를 설정
+   * default: large
+   */
+  size?: 'small' | 'medium' | 'large';
 }
 
 const UneditableTag = ({
@@ -36,6 +50,7 @@ const UneditableTag = ({
   radius,
   border,
   shadow,
+  size = 'medium',
   ...divProps
 }: UneditableTagProps) => {
   return (
@@ -48,6 +63,7 @@ const UneditableTag = ({
       radius={radius}
       border={border}
       shadow={shadow}
+      size={size}
     />
   );
 };

@@ -1,9 +1,9 @@
-import { UneditableTag } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { RightIcon } from 'assets/icons';
 import { useClickWithoutDrag } from 'pages/hooks';
 import { TagWithOptions } from './TagWithOptions';
+import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
 
 interface MemoSectionHeaderProps {
   tag: Tag;
@@ -34,23 +34,15 @@ const MemoSectionHeader = ({
         </div>
       </div>
       <div className="flex overflow-hidden">
-        <div className="flex gap-1 overflow-x-auto no-scrollbar flex-nowrap">
-          {childTags.length > 0 ? (
-            childTags.map((childTag, index) => (
-              <UneditableTag
-                key={index}
-                className="px-2 py-1 h-6"
-                text={`#${childTag.name}`}
-                color="white"
-                fontColor="brown2"
-                border={5}
-                invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-              />
-            ))
-          ) : (
-            <div className="h-6" />
-          )}
-        </div>
+        {childTags.length > 0 ? (
+          <UneditableTagList
+            tags={childTags}
+            size="medium"
+            invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+          />
+        ) : (
+          <div className="h-6" />
+        )}
       </div>
     </div>
   );

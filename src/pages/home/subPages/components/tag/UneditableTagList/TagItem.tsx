@@ -4,25 +4,26 @@ import { useClickWithoutDrag } from 'pages/hooks';
 
 const TagItem = ({
   tag,
+  size = 'medium',
   onChildTagClick,
   invalidCharsPattern,
 }: {
   tag: Tag;
-  onChildTagClick: (tag: Tag) => void;
+  size?: 'small' | 'medium' | 'large';
+  onChildTagClick?: (tag: Tag) => void;
   invalidCharsPattern: RegExp;
 }) => {
-  const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>
-    onChildTagClick(tag)
+  const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(
+    onChildTagClick ? () => onChildTagClick(tag) : () => {}
   );
 
   return (
     <UneditableTag
-      className="h-[27px] text-[12px]"
       text={`#${tag.name}`}
       color="peach1-transparent"
       fontColor="brown2"
       border={10}
-      shadow
+      size={size}
       invalidCharsPattern={invalidCharsPattern}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
