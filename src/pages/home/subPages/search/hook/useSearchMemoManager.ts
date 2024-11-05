@@ -73,7 +73,6 @@ const useSearchMemoManager = () => {
     if (!Api.isSearchInitResponse(response)) {
       throw new Error('Memo Search Error');
     }
-    return response;
   };
 
   const handleSearchWithDB = async (searchHistoryId: string) => {
