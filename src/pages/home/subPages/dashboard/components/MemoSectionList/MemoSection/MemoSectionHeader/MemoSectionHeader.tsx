@@ -3,7 +3,7 @@ import { Tag } from 'pages/home/subPages/interfaces';
 import { RightIcon } from 'assets/icons';
 import { useClickWithoutDrag } from 'pages/hooks';
 import { TagWithOptions } from './TagWithOptions';
-import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
+import { UneditableTagList } from 'pages/home/subPages/components';
 
 interface MemoSectionHeaderProps {
   tag: Tag;

@@ -6,7 +6,7 @@ import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 import { useMemoManager } from 'pages/home/subPages/components';
-import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
+import { UneditableTagList } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 interface CreatedMemoCardProps {

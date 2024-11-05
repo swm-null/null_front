@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
+import { ImageMemoText, UneditableTagList } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
 import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 import { useMemoManager } from '../hook';
 import { isFilesResponse, uploadFile, uploadFiles } from 'api/index.ts';
 import { ImageListContext } from 'utils/index.ts';
+import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 const EditableMemo = ({
   memo,
@@ -85,9 +86,17 @@ const EditableMemo = ({
         />
       </div>
 
-      <div className="flex gap-2">
-        <TagManager tags={tags} setTags={setTags} editable />
-        <div className="flex ml-auto gap-6 items-center">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex mr-auto">
+          <UneditableTagList
+            tags={tags}
+            size="large"
+            color="peach2"
+            border={0}
+            invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+          />
+        </div>
+        <div className="flex ml-auto w-fit gap-6 items-center">
           <TagRebuildCheckbox
             checked={tagRebuild}
             setChecked={setTagRebuild}
@@ -96,7 +105,7 @@ const EditableMemo = ({
           <button
             type="button"
             className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
-                rounded-[30px] border border-[#917360]"
+              rounded-[30px] border border-[#917360]"
             onClick={handleUpdateMemoWithUploadImage}
           >
             {t('memo.save')}

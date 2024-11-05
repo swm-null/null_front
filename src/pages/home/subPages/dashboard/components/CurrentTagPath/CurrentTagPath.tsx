@@ -5,7 +5,7 @@ import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
-import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
+import { UneditableTagList } from 'pages/home/subPages/components';
 
 interface CurrentTagPathProps {
   allTagText: string;

@@ -1,11 +1,10 @@
 import { HTMLProps, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMemoManager } from 'pages/home/subPages/components';
+import { UneditableTagList, useMemoManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
-import { UneditableTagList } from '../../tag/UneditableTagList';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
