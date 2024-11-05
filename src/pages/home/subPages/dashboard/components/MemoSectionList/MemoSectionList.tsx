@@ -1,8 +1,11 @@
 import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
-import { useEffect, useRef, useState } from 'react';
-import { useIntersectionObserver } from 'pages/home/subPages/hooks';
+import { useEffect, useRef } from 'react';
+import {
+  useHorizontalScroll,
+  useIntersectionObserver,
+} from 'pages/home/subPages/hooks';
 import { SortOption } from 'pages/home/subPages/types';
 import { LeafMemoSection } from './LeafMemoSection';
 
@@ -24,8 +27,7 @@ const MemoSectionList = ({
   const observerRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const [isDrag, setIsDrag] = useState(false);
-  const [startX, setStartX] = useState(0);
+  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
 
   const hasNoSection = () => tagRelations.length === 0;
 
@@ -37,26 +39,6 @@ const MemoSectionList = ({
     },
     options: { threshold: 0.5 },
   });
-
-  const onDragStart = (e: any) => {
-    if (!scrollRef.current) return;
-
-    e.preventDefault();
-    setIsDrag(true);
-    setStartX(e.pageX + scrollRef.current.scrollLeft);
-  };
-
-  const onDragEnd = () => {
-    setIsDrag(false);
-  };
-
-  const onDragMove = (e: any) => {
-    if (!scrollRef.current) return;
-
-    if (isDrag && scrollRef.current) {
-      scrollRef.current.scrollLeft = startX - e.pageX;
-    }
-  };
 
   useEffect(() => {
     if (scrollRef.current) {

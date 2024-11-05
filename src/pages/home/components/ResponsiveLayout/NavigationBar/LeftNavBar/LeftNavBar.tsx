@@ -32,12 +32,6 @@ const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
             label={t('pages.sidebar.dashboard')}
             onClick={() => setCurrentPage('dashboard')}
           />
-          <SidebarTooltipButton
-            selected={currentPage === 'searchHistory'}
-            icon={<Icon.HistoryIcon />}
-            label={t('pages.sidebar.searchHistory')}
-            onClick={() => setCurrentPage('searchHistory')}
-          />
         </div>
       </div>
     </div>

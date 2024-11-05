@@ -2,9 +2,10 @@ import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchTextArea } from '../components';
 import { useSearchMemoManager } from './hook';
-import { ExamplesOrResults } from './components';
+import { SearchConversationList } from './components/SearchConversationList';
+import { MemoModal, SearchConversation } from './components';
 
-const SearchPage = ({ navigateToHistory }: { navigateToHistory: () => void }) => {
+const SearchPage = () => {
   const { t } = useTranslation();
 
   const [message, setMessage] = useState('');
@@ -15,34 +16,36 @@ const SearchPage = ({ navigateToHistory }: { navigateToHistory: () => void }) =>
     setMessage(e.target.value);
   };
 
-  const handleSubmit = (message: string) => {
-    searchMemoManager.trySearchMemoAndSetStatus(message, setMessage);
-  };
+  const handleSubmit = () => {
+    if (message.trim().length === 0) {
+      return;
+    }
 
-  const buttonData: [string, string, string, string] = [
-    '라면 레시피 메모 보여줘',
-    '민지 전화번호 알려줘',
-    '맛집 내가 저번에 적은 거 뭐더라',
-    '나 신발 사야하는데 사이즈 알려줘',
-  ];
+    searchMemoManager.handleSearchMemo(message);
+    setMessage('');
+  };
 
   return (
     <div className="flex justify-center overflow-hidden h-full">
-      <div className="max-w-[740px] h-full flex flex-col flex-1 text-gray3">
+      <div className="w-full max-w-[740px] h-full flex flex-col flex-1 text-gray3">
         <MemoSearchTextArea
           value={message}
           onChange={handleMessageChange}
           placeholder={t('pages.search.inputPlaceholder')}
-          onSubmit={() => handleSubmit(message)}
+          onSubmit={handleSubmit}
         />
-        <ExamplesOrResults
-          status={searchMemoManager.status}
-          searchConversation={searchMemoManager.searchConversation}
-          navigateToHistory={navigateToHistory}
-          buttonData={buttonData}
-          handleButtonClick={handleSubmit}
-        />
+        <div className={`overflow-scroll no-scrollbar`}>
+          <SearchConversationList fetchNextPage={searchMemoManager.fetchNextPage}>
+            {searchMemoManager.data.map((conversation, index) => (
+              <SearchConversation
+                key={conversation.id || index}
+                data={conversation}
+              />
+            ))}
+          </SearchConversationList>
+        </div>
       </div>
+      <MemoModal />
     </div>
   );
 };

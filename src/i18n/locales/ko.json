@@ -87,15 +87,13 @@
       "create": "메모추가",
       "search": "메모검색",
       "dashboard": "대시보드",
-      "searchHistory": "기록",
       "uploadData": "불러오기"
     },
     "main": {
       "mode": {
         "create": "추가",
         "search": "검색"
-      },
-      "searchHistory": "검색 기록"
+      }
     },
     "create": {
       "header": "메모 추가하기",
@@ -125,16 +123,15 @@
     "search": {
       "header": "메모 검색하기",
       "inputPlaceholder": "메모 검색...",
-      "ai": {
-        "name": "오트노트",
-        "url": "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
-      },
-      "user": {
-        "name": "유저",
-        "url": "https://imgv3.fotor.com/images/slider-image/A-clear-close-up-photo-of-a-woman.jpg"
-      },
       "conversation": {
-        "removeButton": "삭제"
+        "removeButton": "삭제",
+        "noResults": "검색 결과가 없습니다.",
+        "db": {
+          "searching": "검색 중입니다."
+        },
+        "ai": {
+          "generating": "답변을 생성중입니다."
+        }
       },
       "errorMessage": "검색을 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 검색해주세요",
       "memoSearchButton": {
@@ -142,10 +139,6 @@
         "default": "메모 검색하기"
       },
       "searchButton": "검색"
-    },
-    "searchHistory": {
-      "header": "History",
-      "inputPlaceholder": "What are you looking for?"
     },
     "uploadData": {
       "header": "카카오톡 나와의 채팅 데이터 가져오기",

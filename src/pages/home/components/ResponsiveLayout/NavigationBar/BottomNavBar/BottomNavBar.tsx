@@ -44,12 +44,6 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
           label={t('pages.sidebar.dashboard')}
           onClick={() => setCurrentPage('dashboard')}
         />
-        <BottomNavButton
-          selected={currentPage === 'searchHistory'}
-          icon={<Icon.HistoryIcon />}
-          label={t('pages.sidebar.searchHistory')}
-          onClick={() => setCurrentPage('searchHistory')}
-        />
       </div>
     </div>
   );

@@ -103,7 +103,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
         throw new Error('Invalid token response');
       }
     } catch (error) {
-      alertLoginRequiredThenRedirect();
+      // FIXME: 현재는 refresh 때, 예상치 못한 에러 뜨면 그냥 무시하고 끝
     } finally {
       isRefreshingRef.current = false;
     }
@@ -135,7 +135,7 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     } else if (isRefreshTokenExpired(errorStatus, errorCode)) {
       alertLoginRequiredThenRedirect();
     } else {
-      alertLoginRequiredThenRedirect();
+      // FIXME: 현재는 500에러 뜨면 reject 하고 끝
       return Promise.reject(error);
     }
   });
