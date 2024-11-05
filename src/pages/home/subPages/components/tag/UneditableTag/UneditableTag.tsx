@@ -1,6 +1,7 @@
 import { EditableTag } from 'pages/home/subPages/components';
+import { HTMLProps } from 'react';
 
-interface UneditableTagProps {
+interface UneditableTagProps extends HTMLProps<HTMLDivElement> {
   text: string;
   /**
    * tag에 제외하고 싶은 문자 Regex 규칙 전달
@@ -25,11 +26,6 @@ interface UneditableTagProps {
   radius?: 'small' | 'large';
   border?: 0 | 5 | 10;
   shadow?: boolean;
-  onClick?: () => void;
-  /**
-   * 추가적인 className을 설정할 수 있는 prop
-   */
-  className?: string;
 }
 
 const UneditableTag = ({
@@ -41,10 +37,11 @@ const UneditableTag = ({
   border,
   shadow,
   onClick,
-  className,
+  ...divProps
 }: UneditableTagProps) => {
   return (
     <EditableTag
+      {...divProps}
       text={text}
       invalidCharsPattern={invalidCharsPattern}
       color={color}
@@ -52,8 +49,6 @@ const UneditableTag = ({
       radius={radius}
       border={border}
       shadow={shadow}
-      onClick={onClick}
-      className={className}
     />
   );
 };

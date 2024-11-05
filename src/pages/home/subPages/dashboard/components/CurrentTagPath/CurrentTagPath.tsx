@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useRef } from 'react';
 import { Breadcrumbs } from '@mui/material';
 import { UneditableTag } from 'pages/home/subPages/components';
 import { RightIcon } from 'assets/icons';
@@ -6,6 +6,8 @@ import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
+import { useHorizontalScroll } from 'pages/home/subPages/hooks';
+import { useClickWithoutDrag } from 'pages/hooks';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -30,6 +32,14 @@ const CurrentTagPath = ({
   setSortOption,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
+
+  const createTagClickHandler = (tag: Tag) => {
+    return useClickWithoutDrag(() => handleChildTagClick(tag));
+  };
+
   const handleAllTagsClick = () => {
     setTagStack([]);
     handleTagOrAllTagsClick(null);
@@ -69,20 +79,33 @@ const CurrentTagPath = ({
       </Breadcrumbs>
 
       <div className="flex flex-row">
-        <div className="flex flex-1 overflow-x-scroll overflow-visible no-scrollbar gap-1 p-4 pb-2">
-          {tags.map((tag, index) => (
-            <UneditableTag
-              key={index}
-              className="h-[27px] text-[12px]"
-              text={`#${tag.name}`}
-              color="peach1-transparent"
-              fontColor="brown2"
-              border={10}
-              shadow
-              invalidCharsPattern={invalidCharsPattern}
-              onClick={() => handleChildTagClick(tag)}
-            />
-          ))}
+        <div
+          ref={scrollRef}
+          className="flex flex-1 overflow-x-scroll overflow-visible no-scrollbar gap-1 p-4 pb-2"
+          onMouseDown={onDragStart}
+          onMouseMove={onDragMove}
+          onMouseUp={onDragEnd}
+          onMouseLeave={onDragEnd}
+        >
+          {tags.map((tag, index) => {
+            const { handleMouseDown, handleMouseMove, handleClick } =
+              createTagClickHandler(tag);
+            return (
+              <UneditableTag
+                key={index}
+                className="h-[27px] text-[12px]"
+                text={`#${tag.name}`}
+                color="peach1-transparent"
+                fontColor="brown2"
+                border={10}
+                shadow
+                invalidCharsPattern={invalidCharsPattern}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onClick={handleClick}
+              />
+            );
+          })}
         </div>
         <div className="p-4 pb-2 ml-auto">
           <SortToggle
