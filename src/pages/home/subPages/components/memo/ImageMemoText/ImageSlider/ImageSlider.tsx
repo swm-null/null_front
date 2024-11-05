@@ -38,13 +38,10 @@ const ImageSlider = ({
     const handleStaticClick = (event: any, _: any, __: any, cellIndex: number) => {
       const removeButton = (event.target as HTMLElement).closest('.remove-button');
       if (removeButton instanceof HTMLElement) {
-        const { isDragging } = removeButton.dataset;
-        if (isDragging !== 'true' && removeImageUrl) {
-          if (cellIndex < imageUrls?.length) {
-            removeImageUrl(cellIndex);
-          } else {
-            removeImage(cellIndex - imageUrls?.length);
-          }
+        if (cellIndex < imageUrls?.length) {
+          removeImageUrl && removeImageUrl(cellIndex);
+        } else {
+          removeImage(cellIndex - imageUrls?.length);
         }
         event.preventDefault();
         return;
