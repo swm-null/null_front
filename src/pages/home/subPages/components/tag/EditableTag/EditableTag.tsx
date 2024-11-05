@@ -1,8 +1,8 @@
 import { CloseIcon } from 'assets/icons';
-import { FormEvent, useRef } from 'react';
+import { FormEvent, HTMLProps, useRef } from 'react';
 import { tv } from 'tailwind-variants';
 
-interface EditableTagProps {
+interface EditableTagProps extends HTMLProps<HTMLDivElement> {
   text: string;
   editable?: boolean;
   /**
@@ -41,7 +41,6 @@ interface EditableTagProps {
    * 태그 delete 기능을 넣고 싶은 경우, delete 설정 메소드 전달
    */
   onDelete?: () => void;
-  onClick?: () => void;
   /**
    * 추가적인 className을 설정할 수 있는 prop
    */
@@ -97,8 +96,8 @@ const EditableTag = ({
   shadow = false,
   onTextChange,
   onDelete,
-  onClick,
   className,
+  ...divProps
 }: EditableTagProps) => {
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -113,6 +112,7 @@ const EditableTag = ({
 
   return (
     <div
+      {...divProps}
       className={`${tagStyles({
         color: color,
         fontColor: fontColor,
@@ -120,10 +120,9 @@ const EditableTag = ({
         border: border,
         shadow: shadow,
       })} ${className}`}
-      onClick={onClick}
     >
       <span
-        className={`focus:outline-none whitespace-nowrap text-[10px] font-medium ${onClick ? 'cursor-pointer' : ''}`}
+        className={`focus:outline-none whitespace-nowrap text-[10px] font-medium ${divProps.onClick ? 'cursor-pointer' : ''}`}
         contentEditable={editable}
         ref={ref}
         suppressContentEditableWarning

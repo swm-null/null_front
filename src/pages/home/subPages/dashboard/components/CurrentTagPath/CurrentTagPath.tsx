@@ -5,7 +5,6 @@ import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
-import { useClickWithoutDrag } from 'pages/hooks';
 import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 
@@ -34,10 +33,6 @@ const CurrentTagPath = ({
 }: CurrentTagPathProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
-
-  const createTagClickHandler = (tag: Tag) => {
-    return useClickWithoutDrag(() => handleChildTagClick(tag));
-  };
 
   const handleAllTagsClick = () => {
     setTagStack([]);
@@ -81,8 +76,8 @@ const CurrentTagPath = ({
         <UneditableTagList
           tags={tags}
           scrollRef={scrollRef}
-          createTagClickHandler={createTagClickHandler}
           invalidCharsPattern={invalidCharsPattern}
+          onChildTagClick={handleChildTagClick}
           onDragStart={onDragStart}
           onDragMove={onDragMove}
           onDragEnd={onDragEnd}

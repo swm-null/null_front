@@ -36,7 +36,6 @@ const UneditableTag = ({
   radius,
   border,
   shadow,
-  onClick,
   ...divProps
 }: UneditableTagProps) => {
   return (
