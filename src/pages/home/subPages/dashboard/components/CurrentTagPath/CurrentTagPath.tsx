@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction, useRef } from 'react';
 import { Breadcrumbs } from '@mui/material';
-import { UneditableTag } from 'pages/home/subPages/components';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
-import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 import { useClickWithoutDrag } from 'pages/hooks';
+import { UneditableTagList } from 'pages/home/subPages/components/tag/UneditableTagList';
+import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -32,8 +32,7 @@ const CurrentTagPath = ({
   setSortOption,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-
+  const scrollRef = useRef<HTMLDivElement>(null);
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
 
   const createTagClickHandler = (tag: Tag) => {
@@ -78,36 +77,17 @@ const CurrentTagPath = ({
         ))}
       </Breadcrumbs>
 
-      <div className="flex flex-row">
-        <div
-          ref={scrollRef}
-          className="flex flex-1 overflow-x-scroll overflow-visible no-scrollbar gap-1 p-4 pb-2"
-          onMouseDown={onDragStart}
-          onMouseMove={onDragMove}
-          onMouseUp={onDragEnd}
-          onMouseLeave={onDragEnd}
-        >
-          {tags.map((tag, index) => {
-            const { handleMouseDown, handleMouseMove, handleClick } =
-              createTagClickHandler(tag);
-            return (
-              <UneditableTag
-                key={index}
-                className="h-[27px] text-[12px]"
-                text={`#${tag.name}`}
-                color="peach1-transparent"
-                fontColor="brown2"
-                border={10}
-                shadow
-                invalidCharsPattern={invalidCharsPattern}
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onClick={handleClick}
-              />
-            );
-          })}
-        </div>
-        <div className="p-4 pb-2 ml-auto">
+      <div className="flex flex-row flex-1 p-4 pb-2 gap-2">
+        <UneditableTagList
+          tags={tags}
+          scrollRef={scrollRef}
+          createTagClickHandler={createTagClickHandler}
+          invalidCharsPattern={invalidCharsPattern}
+          onDragStart={onDragStart}
+          onDragMove={onDragMove}
+          onDragEnd={onDragEnd}
+        />
+        <div className="ml-auto">
           <SortToggle
             height="1.6875rem"
             fontSize="0.75rem"
