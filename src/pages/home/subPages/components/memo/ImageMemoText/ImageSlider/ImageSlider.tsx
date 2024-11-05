@@ -20,7 +20,7 @@ const ImageSlider = ({
   const [photoIndex, setPhotoIndex] = useState(0);
 
   const allImages = useMemo(() => {
-    const objectUrls = images.map((img) => URL.createObjectURL(img));
+    const objectUrls = editable ? images.map((img) => URL.createObjectURL(img)) : [];
     return [...(imageUrls || []), ...objectUrls];
   }, [imageUrls, images]);
 
