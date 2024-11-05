@@ -34,9 +34,11 @@ const TagItem = ({
       border={border}
       size={size}
       invalidCharsPattern={invalidCharsPattern}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onClick={handleClick}
+      {...(onChildTagClick && {
+        onMouseDown: handleMouseDown,
+        onMouseMove: handleMouseMove,
+        onClick: handleClick,
+      })}
     />
   );
 };
