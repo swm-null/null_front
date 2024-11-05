@@ -35,7 +35,8 @@ const TagPathButton = ({
 
   return (
     <div
-      className={`inline-flex flex-shrink-0 bg-transparent text-[#6A5344] ${onClick ? 'cursor-pointer' : ''}`}
+      className={`inline-flex flex-shrink-0 bg-transparent text-[#6A5344] select-none 
+        ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       <span

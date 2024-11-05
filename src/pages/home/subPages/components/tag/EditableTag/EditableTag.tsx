@@ -123,7 +123,8 @@ const EditableTag = ({
       onClick={onClick}
     >
       <span
-        className="focus:outline-none whitespace-nowrap text-[10px] font-medium"
+        className={`focus:outline-none whitespace-nowrap text-[10px] font-medium 
+          ${!editable ? 'select-none' : ''} ${onClick ? 'cursor-pointer select-none' : ''}`}
         contentEditable={editable}
         ref={ref}
         suppressContentEditableWarning
