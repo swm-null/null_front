@@ -118,13 +118,15 @@ export const createMemo = async (
 export const updateMemo = async (
   id: string,
   content: string,
-  imageUrls?: string[] | null
+  imageUrls?: string[] | null,
+  voiceUrls?: string[] | null
 ): Promise<cuMemoResponse | errorResponse> => {
   const method = getMethodName();
   const endpoint = `/memo/${id}`;
   const data = JSON.stringify({
     content: content,
     image_urls: imageUrls ? imageUrls : [],
+    voice_urls: voiceUrls ? voiceUrls : [],
   });
   try {
     const response = await refreshableApi.put(endpoint, data);
