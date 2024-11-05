@@ -104,10 +104,7 @@ const EditableTag = ({
 
   const handleInput = (e: FormEvent<HTMLSpanElement>) => {
     if (invalidCharsPattern.test(e.currentTarget.innerHTML)) {
-      const innerText = e.currentTarget.innerText.replace(
-        invalidCharsPattern,
-        ''
-      );
+      const innerText = e.currentTarget.innerText.replace(invalidCharsPattern, '');
       e.currentTarget.innerText = innerText;
       ref.current?.blur();
       onTextChange && onTextChange(innerText);
@@ -122,7 +119,7 @@ const EditableTag = ({
         radius: radius,
         border: border,
         shadow: shadow,
-      })} ${className}`}
+      })} ${className} ${onClick && 'cursor-pointer'}`}
       onClick={onClick}
     >
       <span
@@ -134,9 +131,7 @@ const EditableTag = ({
       >
         {text}
       </span>
-      {editable && onDelete && (
-        <CloseIcon className="w-3 h-3" onClick={onDelete} />
-      )}
+      {editable && onDelete && <CloseIcon className="w-3 h-3" onClick={onDelete} />}
     </div>
   );
 };

@@ -56,7 +56,7 @@ const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) =>
       className={`relative flex p-4 min-h-[115px] h-auto flex-col rounded-2xl overflow-hidden
         ${border ? 'border border-black border-opacity-10 bg-clip-padding' : ''} 
         ${shadow ? 'shadow-custom' : ''} ${getStyleByImagePresence('bg-white', 'bg-cover bg-center')}
-        ${getStyleByImagePresence('', 'aspect-square')} 
+        ${getStyleByImagePresence('', 'aspect-square')} ${divProps.onClick ? 'cursor-pointer' : ''}
       `}
       style={{
         backgroundImage: getBackgroundImageStyleByImagePresence(

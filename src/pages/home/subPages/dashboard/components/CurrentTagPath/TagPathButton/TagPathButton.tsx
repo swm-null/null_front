@@ -26,10 +26,7 @@ const TagPathButton = ({
 
   const handleInput = (e: FormEvent<HTMLSpanElement>) => {
     if (invalidCharsPattern.test(e.currentTarget.innerHTML)) {
-      const innerText = e.currentTarget.innerText.replace(
-        invalidCharsPattern,
-        ''
-      );
+      const innerText = e.currentTarget.innerText.replace(invalidCharsPattern, '');
       e.currentTarget.innerText = innerText;
       ref.current?.blur();
       onTextChange && onTextChange(innerText);
@@ -38,7 +35,7 @@ const TagPathButton = ({
 
   return (
     <div
-      className="inline-flex flex-shrink-0 bg-transparent text-[#6A5344]"
+      className={`inline-flex flex-shrink-0 bg-transparent text-[#6A5344] ${onClick ? 'cursor-pointer' : ''}`}
       onClick={onClick}
     >
       <span
