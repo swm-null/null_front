@@ -1,8 +1,8 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { QueryKey, useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { AlertContext } from 'utils';
 
 interface InfiniteQueryData {
@@ -10,15 +10,29 @@ interface InfiniteQueryData {
   pageParams: number[];
 }
 
+const RECENT_MEMO_QUERY_KEY = ['recentMemo'];
+
 const useMemoManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
 
-  const allMemosQueriesData = queryClient.getQueriesData<Api.paginationMemos>({
+  const childTagMemosQueriesData = queryClient.getQueriesData<Api.paginationMemos>({
     queryKey: ['childTagMemos'],
     exact: false,
   });
+
+  const recentMemoQueryData =
+    queryClient.getQueryData<Api.paginationMemos>(RECENT_MEMO_QUERY_KEY);
+
+  const allMemosQueriesData = useMemo(() => {
+    const recentMemoQuery: [QueryKey, Api.paginationMemos | undefined] = [
+      RECENT_MEMO_QUERY_KEY,
+      recentMemoQueryData,
+    ];
+
+    return [...childTagMemosQueriesData, recentMemoQuery];
+  }, [childTagMemosQueriesData, recentMemoQueryData]);
 
   const backupMemoData = () => {
     const backupData = new Map();
