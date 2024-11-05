@@ -68,16 +68,18 @@ const CurrentTagPath = ({
         ))}
       </Breadcrumbs>
 
-      <div className="flex flex-row flex-1 p-4 pb-2 gap-2">
-        <UneditableTagList
-          tags={tags}
-          size="large"
-          color="cream0"
-          border={10}
-          invalidCharsPattern={invalidCharsPattern}
-          onChildTagClick={handleChildTagClick}
-        />
-        <div className="ml-auto">
+      <div className="flex w-full flex-wrap p-4 pb-2 gap-2">
+        <div className="flex max-w-full mr-auto">
+          <UneditableTagList
+            tags={tags}
+            size="large"
+            color="cream0"
+            border={10}
+            invalidCharsPattern={invalidCharsPattern}
+            onChildTagClick={handleChildTagClick}
+          />
+        </div>
+        <div className="flex ml-auto w-fit">
           <SortToggle
             height="1.6875rem"
             fontSize="0.75rem"
