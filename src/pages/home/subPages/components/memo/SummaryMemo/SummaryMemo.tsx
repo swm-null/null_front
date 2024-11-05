@@ -79,6 +79,8 @@ const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) =>
         <UneditableTagList
           tags={tags}
           size="small"
+          color="peach0"
+          border={0}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
         />
         <MemoText

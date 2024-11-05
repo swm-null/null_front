@@ -38,6 +38,8 @@ const MemoSectionHeader = ({
           <UneditableTagList
             tags={childTags}
             size="medium"
+            color="white"
+            border={5}
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
           />
         ) : (

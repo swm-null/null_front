@@ -23,6 +23,7 @@ export default {
         'peach1-transparent': '#FCF3E6',
         peach2: '#F7DBC2',
         'peach2-transparent': '#F7DBC2CC',
+        cream0: '#FFF6E3',
       },
       backgroundImage: {
         'custom-gradient-basic':

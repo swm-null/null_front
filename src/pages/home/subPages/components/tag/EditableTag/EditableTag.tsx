@@ -14,7 +14,7 @@ interface EditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
    * tag에 적용하고 싶은 배경색을 전달
    * default: peach0
    */
-  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2';
+  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2' | 'cream0';
   /**
    * tag font에 적용하고 싶은 색을 전달
    * default: black
@@ -50,10 +50,6 @@ interface EditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
    * 태그 delete 기능을 넣고 싶은 경우, delete 설정 메소드 전달
    */
   onDelete?: () => void;
-  /**
-   * 추가적인 className을 설정할 수 있는 prop
-   */
-  className?: string;
 }
 
 const tagStyles = tv({
@@ -65,6 +61,7 @@ const tagStyles = tv({
       peach1: 'bg-peach1',
       'peach1-transparent': 'bg-peach1-transparent',
       peach2: 'bg-peach2',
+      cream0: 'bg-cream0',
     },
     fontColor: {
       brown0: 'text-brown0',
@@ -112,7 +109,6 @@ const EditableTag = ({
   size = 'medium',
   onTextChange,
   onDelete,
-  className,
   ...divProps
 }: EditableTagProps) => {
   const ref = useRef<HTMLSpanElement>(null);
@@ -136,7 +132,7 @@ const EditableTag = ({
         border: border,
         shadow: shadow,
         size: size,
-      })} ${className}`}
+      })}`}
     >
       <span
         className={`focus:outline-none whitespace-nowrap font-medium ${divProps.onClick ? 'cursor-pointer' : ''}`}

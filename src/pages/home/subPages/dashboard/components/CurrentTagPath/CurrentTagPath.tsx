@@ -72,6 +72,8 @@ const CurrentTagPath = ({
         <UneditableTagList
           tags={tags}
           size="large"
+          color="cream0"
+          border={10}
           invalidCharsPattern={invalidCharsPattern}
           onChildTagClick={handleChildTagClick}
         />

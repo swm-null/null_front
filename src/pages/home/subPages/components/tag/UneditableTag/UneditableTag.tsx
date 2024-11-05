@@ -12,7 +12,7 @@ interface UneditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
    * tag에 적용하고 싶은 배경색을 전달
    * default: peach0
    */
-  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2';
+  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2' | 'cream0';
   /**
    * tag font에 적용하고 싶은 색을 전달
    * default: black
