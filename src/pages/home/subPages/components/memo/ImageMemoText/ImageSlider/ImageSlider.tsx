@@ -1,11 +1,8 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
-import Flickity from 'react-flickity-component';
+import { useContext, useMemo, useState } from 'react';
 import { ImageListContext } from 'utils';
-import { ImageFileInput } from 'pages/home/subPages/components/utils';
-import { AddIcon } from 'assets/icons';
-import 'yet-another-react-lightbox/styles.css';
-import ImageLightbox from './ImageLightbox';
-import ImageItem from './ImageItem';
+import { ImageLightbox } from './ImageLightbox';
+import { FlickityWrapper } from './FlickityWrapper';
+import { AddItem, ImageItem } from './item';
 
 const ImageSlider = ({
   imageUrls,
@@ -19,52 +16,27 @@ const ImageSlider = ({
   const { images, removeImage, handleAddImageButtonClick, handleImageFilesChange } =
     useContext(ImageListContext);
 
-  const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
 
   const allImages = useMemo(() => {
     const objectUrls = images.map((img) => URL.createObjectURL(img));
-
     return [...(imageUrls || []), ...objectUrls];
   }, [imageUrls, images]);
 
-  const isNoImages = () => imageUrls?.length + images.length === 0;
-  const isLastImageIndex = (cellIndex: number) => cellIndex === allImages?.length;
+  const isNoImages = () => allImages.length === 0;
 
-  useEffect(() => {
-    if (!flickityInstance) return;
+  const handleRemoveClick = (index: number) => {
+    if (index < imageUrls?.length) {
+      removeImageUrl?.(index);
+    } else {
+      removeImage(index - imageUrls?.length);
+    }
+  };
 
-    const handleStaticClick = (event: any, __: any, ___: any, cellIndex: number) => {
-      const removeButton = (event.target as HTMLElement).closest('.remove-button');
-      if (removeButton instanceof HTMLElement) {
-        const { isDragging } = removeButton.dataset;
-        if (isDragging !== 'true' && removeImageUrl) {
-          removeImageUrl(cellIndex);
-        }
-        event.preventDefault();
-        return;
-      }
-
-      if (cellIndex && isLastImageIndex(cellIndex)) {
-        handleAddImageButtonClick();
-      } else {
-        setPhotoIndex(cellIndex);
-        setIsOpen(true);
-      }
-    };
-
-    flickityInstance.on('staticClick', handleStaticClick);
-
-    return () => {
-      flickityInstance.off('staticClick', handleStaticClick);
-    };
-  }, [flickityInstance, imageUrls, editable]);
-
-  const flickityOptions = {
-    prevNextButtons: false,
-    pageDots: imageUrls ? true : undefined,
-    setGallerySize: false,
+  const handleImageClick = (index: number) => {
+    setPhotoIndex(index);
+    setIsOpen(true);
   };
 
   if (isNoImages()) {
@@ -73,38 +45,23 @@ const ImageSlider = ({
 
   return (
     <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
-      <Flickity
-        flickityRef={(instance) => setFlickityInstance(instance)}
-        elementType="div"
-        className="carousel w-full h-full aspect-square"
-        options={flickityOptions}
+      <FlickityWrapper
+        showPageDots={!!imageUrls}
+        onImageClick={handleImageClick}
+        onRemoveClick={editable ? handleRemoveClick : null}
+        onAddClick={editable ? handleAddImageButtonClick : null}
+        totalImageCount={allImages.length}
       >
-        {imageUrls?.map((url, index) => (
+        {allImages.map((image, index) => (
           <ImageItem
             key={`origin-${index}`}
-            image={url}
-            index={index}
-            onRemove={removeImageUrl}
-            editable={editable}
-          />
-        ))}
-        {images?.map((image, index) => (
-          <ImageItem
-            key={`new-${index}`}
             image={image}
             index={index}
-            onRemove={removeImage}
             editable={editable}
           />
         ))}
-        {editable && (
-          <div className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
-            <ImageFileInput handleImageFileChange={handleImageFilesChange}>
-              <AddIcon className="w-10 h-10" />
-            </ImageFileInput>
-          </div>
-        )}
-      </Flickity>
+        {editable && <AddItem handleImageFilesChange={handleImageFilesChange} />}
+      </FlickityWrapper>
 
       <ImageLightbox
         isOpen={isOpen}
