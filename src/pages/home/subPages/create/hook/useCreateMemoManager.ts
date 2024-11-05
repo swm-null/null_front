@@ -1,13 +1,8 @@
+import { useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
-import { useState } from 'react';
 import { Status } from 'pages/home/subPages/types';
 
 const useCreateMemoManager = () => {
@@ -37,22 +32,27 @@ const useCreateMemoManager = () => {
   const allMemos =
     !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
 
-  const tryCreateMemoAndSetStatus = async (
-    message: string,
-    setMessage: (message: string) => void,
-    images?: string[]
-  ) => {
-    if (message.trim() || images?.length) {
-      setMessage('');
-      setStatus('loading');
-
-      try {
-        await mutateAsync({ message, images });
-        setStatus('success');
-      } catch (error) {
-        setStatus('error');
-      }
+  const handleCreateMemo = async (message: string, images?: File[]) => {
+    try {
+      const imageUrls = images ? await getImageUrls(images) : [];
+      await createMemo({ message, images: imageUrls });
+      setStatus('success');
+    } catch (error) {
+      setStatus('error');
     }
+  };
+
+  const getImageUrls = async (images: File[]): Promise<string[]> => {
+    if (images.length === 0) return [];
+
+    const response =
+      images.length === 1
+        ? await Api.uploadFile(images[0])
+        : await Api.uploadFiles(images);
+    if (!Api.isFilesResponse(response))
+      throw new Error('파일 업로드에 문제가 생겼습니다.');
+
+    return response.urls;
   };
 
   const createMemo = async ({
@@ -61,12 +61,21 @@ const useCreateMemoManager = () => {
   }: {
     message: string;
     images?: string[];
-  }): Promise<Interface.Memo> => {
-    const response = await Api.createMemo(message, images);
-    if (!Api.isValidResponse(response)) {
-      throw new Error('Memo Create Error');
+  }) => {
+    const temporaryMemo = await createTemporaryMemo({ message, images });
+    addMemoInQueries(temporaryMemo);
+
+    try {
+      const response = await Api.createMemo(message, images);
+
+      if (Api.isCreateMemoResponse(response)) {
+        updateMemoInQueries(temporaryMemo.id, response as Interface.Memo);
+      } else {
+        throw new Error('Memo Create Error');
+      }
+    } catch (error) {
+      deleteMemoInQueries(temporaryMemo.id);
     }
-    return response;
   };
 
   const createTemporaryMemo = async ({
@@ -78,8 +87,6 @@ const useCreateMemoManager = () => {
     images?: string[];
     voices?: string[];
   }) => {
-    await queryClient.cancelQueries({ queryKey: ['recentMemo'] });
-
     const optimisticMemo: Interface.Memo = {
       id: uuid_v4(),
       content: message,
@@ -91,25 +98,39 @@ const useCreateMemoManager = () => {
       tags: [],
     };
 
+    return optimisticMemo;
+  };
+
+  const addMemoInQueries = (memo: Interface.Memo) => {
     queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
       return {
         pages: oldData?.pages.map((page: any) => ({
           ...page,
-          memos: [optimisticMemo, ...page?.memos],
+          memos: [memo, ...page?.memos],
         })),
         pageParams: oldData?.pageParams as any,
       };
     });
-
-    return { optimisticMemoId: optimisticMemo.id };
   };
 
-  const deleteTemporaryMemo = (
-    _: AxiosError<unknown, any>,
-    __: { message: string; images?: string[] },
-    context: { optimisticMemoId: string } | undefined
+  const updateMemoInQueries = (
+    optimisticMemoId: string,
+    updateMemo: Interface.Memo
   ) => {
-    const optimisticMemoId = context?.optimisticMemoId;
+    queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+      return {
+        pages: oldData?.pages.map((page: any) => ({
+          ...page,
+          memos: page?.memos.map((memo: any) =>
+            memo.id === optimisticMemoId ? updateMemo : memo
+          ),
+        })),
+        pageParams: oldData?.pageParams as any,
+      };
+    });
+  };
+
+  const deleteMemoInQueries = (optimisticMemoId: string) => {
     if (optimisticMemoId) {
       queryClient.setQueryData<Interface.Memo[]>(
         ['recentMemo'],
@@ -118,61 +139,13 @@ const useCreateMemoManager = () => {
     }
   };
 
-  const updateTemporaryMemoData = (
-    data: Interface.Memo | undefined,
-    _: AxiosError<unknown, any> | null,
-    __: { message: string; images?: string[] },
-    context: { optimisticMemoId: string } | undefined
-  ) => {
-    const optimisticMemoId = context?.optimisticMemoId;
-
-    if (data) {
-      const updatedMemo = {
-        id: data.id,
-        content: data.content,
-        image_urls: data.image_urls,
-        voice_urls: data.voice_urls,
-        metadata: data.metadata,
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-        tags: data.tags,
-      } as Interface.Memo;
-
-      queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
-        return {
-          pages: oldData?.pages.map((page: any) => ({
-            ...page,
-            memos: page?.memos.map((memo: any) =>
-              memo.id === optimisticMemoId ? updatedMemo : memo
-            ),
-          })),
-          pageParams: oldData?.pageParams as any,
-        };
-      });
-    } else if (optimisticMemoId) {
-      queryClient.invalidateQueries({ queryKey: ['recentMemo'] });
-    }
-  };
-
-  const { mutateAsync } = useMutation<
-    Interface.Memo,
-    AxiosError,
-    { message: string; images?: string[] },
-    { optimisticMemoId: string }
-  >({
-    mutationFn: createMemo,
-    onMutate: createTemporaryMemo,
-    onError: deleteTemporaryMemo,
-    onSettled: updateTemporaryMemoData,
-  });
-
   return {
     data: allMemos,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     status,
-    tryCreateMemoAndSetStatus,
+    handleCreateMemo,
   };
 };
 

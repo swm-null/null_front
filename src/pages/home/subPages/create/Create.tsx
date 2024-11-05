@@ -6,7 +6,8 @@ import { MemoCreateTextArea, CreatedMemoList } from './components';
 
 const CreatePage = () => {
   const { t } = useTranslation();
-  const { getInputProps, getRootProps } = useContext(ImageListContext);
+  const { images, getInputProps, getRootProps, removeAllImage } =
+    useContext(ImageListContext);
 
   const [message, setMessage] = useState('');
   const createMemoManager = useCreateMemoManager();
@@ -15,8 +16,15 @@ const CreatePage = () => {
     setMessage(e.target.value);
   };
 
-  const handleSubmit = (message: string, images?: string[]) => {
-    createMemoManager.tryCreateMemoAndSetStatus(message, setMessage, images);
+  const handleSubmit = () => {
+    if (message.trim().length === 0 && images.length === 0) {
+      return;
+    }
+
+    createMemoManager.handleCreateMemo(message, images);
+
+    setMessage('');
+    removeAllImage();
   };
 
   return (
@@ -31,7 +39,7 @@ const CreatePage = () => {
             value={message}
             onChange={handleMessageChange}
             placeholder={t('pages.create.inputPlaceholder')}
-            onSubmit={(images: string[]) => handleSubmit(message, images)}
+            onSubmit={handleSubmit}
           />
           <div className={`overflow-scroll no-scrollbar`}>
             <CreatedMemoList

@@ -5,14 +5,13 @@ import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
 import { ImageList } from './ImageList';
 import { ImageListContext } from 'utils';
-import { isFilesResponse, uploadFile, uploadFiles } from 'api';
 import { useHiddenTextareaManager } from './hook';
 
 interface MemoCreateTextAreaProps {
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (images: string[]) => void;
+  onSubmit: () => void;
 }
 
 const MemoCreateTextArea = ({
@@ -21,8 +20,7 @@ const MemoCreateTextArea = ({
   onChange,
   onSubmit,
 }: MemoCreateTextAreaProps) => {
-  const { images, removeImage, removeAllImage, handlePaste } =
-    useContext(ImageListContext);
+  const { images, removeImage, handlePaste } = useContext(ImageListContext);
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [hiddenTextareaWidth, setHiddenTextareaWidth] = useState<number | null>(
@@ -31,26 +29,8 @@ const MemoCreateTextArea = ({
 
   const { hiddenTextareaRef, isMultiline } = useHiddenTextareaManager(value, images);
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleEnterWithCtrl: handleSubmit,
+    handleEnterWithCtrl: onSubmit,
   });
-
-  async function handleSubmit() {
-    setFocus(false);
-    const imageUrls = await getImageUrls(images);
-    onSubmit(imageUrls);
-    removeAllImage();
-  }
-
-  const getImageUrls = async (images: File[]): Promise<string[]> => {
-    if (images.length === 0) return [];
-
-    const response =
-      images.length === 1 ? await uploadFile(images[0]) : await uploadFiles(images);
-    if (!isFilesResponse(response))
-      throw new Error('파일 업로드에 문제가 생겼습니다.');
-
-    return response.urls;
-  };
 
   const handleBlur = (e: React.FocusEvent) => {
     if (containerRef.current && !containerRef.current.contains(e.relatedTarget)) {
@@ -101,7 +81,7 @@ const MemoCreateTextArea = ({
           <IconButtons
             submitAvailable={focus || isMultiline}
             onMicButtonClick={handleMicButtonClick}
-            onSubmitButtonClick={handleSubmit}
+            onSubmitButtonClick={onSubmit}
           />
         </div>
       </div>
