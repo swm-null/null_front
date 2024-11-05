@@ -1,97 +1,48 @@
-import { HTMLProps, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMemoManager } from 'pages/home/subPages/components';
+import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
-import { MemoFooter } from './MemoFooter';
 import { MemoHeader } from './MemoHeader';
-import { ImageBlur } from './ImageBlur';
-import { MemoText } from './MemoText';
-
-interface UneditableMemoProps extends HTMLProps<HTMLDivElement> {
-  memo: Memo;
-  border?: boolean;
-  shadow?: boolean;
-}
+import { useMemoManager } from '../hook';
 
 const UneditableMemo = ({
   memo,
   border,
-  shadow,
-  ...divProps
-}: UneditableMemoProps) => {
+  handleClose,
+}: {
+  memo: Memo;
+  border?: boolean;
+  handleClose: () => void;
+}) => {
   const { t } = useTranslation();
-
   const { handleDeleteMemo } = useMemoManager();
-
-  const memoRef = useRef<HTMLDivElement>(null);
-  const memoTextRef = useRef<HTMLParagraphElement>(null);
-  const [tags] = useState(memo.tags);
-  const [maxHeight, setMaxHeight] = useState<number | undefined>();
-  const [isEllipsis, setIsEllipsis] = useState(false);
-
-  useEffect(() => {
-    if (memoRef.current) {
-      setMaxHeight(memoRef.current.clientWidth);
-    }
-  }, [memoRef.current?.offsetWidth]);
-
-  useEffect(() => {
-    if (memoTextRef.current) {
-      const newIsTextEllipsis =
-        memoTextRef.current.scrollHeight > memoTextRef.current.offsetHeight;
-
-      setIsEllipsis(newIsTextEllipsis);
-    }
-  }, [memoTextRef.current]);
-
-  const haveImageUrl = memo.image_urls && memo.image_urls.length > 0;
-
-  const getStyleByImagePresence = (
-    defaultStyle: string,
-    styleByImagePresence: string
-  ) => (haveImageUrl ? styleByImagePresence : defaultStyle);
-  const getBackgroundImageStyleByImagePresence = (
-    imageUrl: string | undefined,
-    defaultBackground: string
-  ) => (haveImageUrl ? `url(${imageUrl})` : defaultBackground);
 
   return (
     <div
-      {...divProps}
-      className={`relative flex p-4 min-h-[115px] h-full flex-col rounded-2xl overflow-hidden
-        ${border ? 'border border-black border-opacity-10 bg-clip-padding' : ''} 
-        ${shadow ? 'shadow-custom' : ''} ${getStyleByImagePresence('bg-white', 'bg-cover bg-center')}
-        ${getStyleByImagePresence('', 'aspect-square')} 
-      `}
-      style={{
-        backgroundImage: getBackgroundImageStyleByImagePresence(
-          memo.image_urls?.[0],
-          'none'
-        ),
-      }}
+      className={`p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-md gap-8 
+        ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
-      {haveImageUrl && <ImageBlur />}
-
-      <div
-        ref={memoRef}
-        className={`flex flex-col flex-1 h-full gap-2 relative z-10 overflow-hidden`}
-        style={{
-          maxHeight: maxHeight,
-          minHeight: isEllipsis ? maxHeight : undefined,
-        }}
-      >
-        <MemoHeader tags={tags} />
-        <MemoText
-          ref={memoTextRef}
-          textColor={getStyleByImagePresence('#111111', 'white')}
-          message={memo.content}
-        />
-        <MemoFooter
-          textColor={getStyleByImagePresence('gray2', 'white')}
+      <div className="flex flex-1 flex-col gap-[1.14rem]">
+        <MemoHeader
           updatedAt={memo.updated_at}
-          dateFormat={t('memo.dateFormat')}
-          handleDeleteMemo={() => handleDeleteMemo({ memo })}
+          dateFormat={t('memo.dateFormatEdit')}
+          handleDeleteMemo={() =>
+            handleDeleteMemo({ memo, handlePreProcess: handleClose })
+          }
         />
+        <ImageMemoText imageUrls={memo.image_urls} message={memo.content} />
+      </div>
+      <div className="flex gap-2">
+        <TagManager tags={memo.tags} />
+        <div className="flex ml-auto gap-6 items-center">
+          <button
+            type="button"
+            className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
+                rounded-[30px] border border-[#917360]"
+            onClick={handleClose}
+          >
+            {t('memo.close')}
+          </button>
+        </div>
       </div>
     </div>
   );

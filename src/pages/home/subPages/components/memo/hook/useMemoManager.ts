@@ -2,6 +2,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
 import { useTranslation } from 'react-i18next';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { useContext } from 'react';
+import { AlertContext } from 'utils';
 
 interface InfiniteQueryData {
   pages: Api.paginationMemos[];
@@ -11,6 +13,7 @@ interface InfiniteQueryData {
 const useMemoManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
+  const { alert, confirmAlert } = useContext(AlertContext);
 
   const allMemosQueriesData = queryClient.getQueriesData<Api.paginationMemos>({
     queryKey: ['childTagMemos'],
@@ -106,6 +109,9 @@ const useMemoManager = () => {
     memo: Memo;
     handlePreProcess?: () => void;
   }) => {
+    const confirmed = await confirmAlert(t('memo.delete.alert'));
+    if (!confirmed) return;
+
     handlePreProcess && handlePreProcess();
 
     const backupData = backupMemoData();
@@ -113,7 +119,7 @@ const useMemoManager = () => {
 
     const response = await Api.deleteMemo(memo.id);
     if (!Api.isValidResponse(response)) {
-      alert(t('pages.memo.deleteErrorMessage'));
+      alert(t('memo.deleteErrorMessage'));
       restoreMemoData(backupData);
     }
   };

@@ -72,9 +72,11 @@ const useCreateMemoManager = () => {
   const createTemporaryMemo = async ({
     message,
     images,
+    voices,
   }: {
     message: string;
     images?: string[];
+    voices?: string[];
   }) => {
     await queryClient.cancelQueries({ queryKey: ['recentMemo'] });
 
@@ -82,6 +84,8 @@ const useCreateMemoManager = () => {
       id: uuid_v4(),
       content: message,
       image_urls: images || [],
+      voice_urls: voices || [],
+      metadata: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       tags: [],
@@ -127,10 +131,12 @@ const useCreateMemoManager = () => {
         id: data.id,
         content: data.content,
         image_urls: data.image_urls,
+        voice_urls: data.voice_urls,
+        metadata: data.metadata,
         created_at: data.created_at,
         updated_at: data.updated_at,
         tags: data.tags,
-      };
+      } as Interface.Memo;
 
       queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
         return {

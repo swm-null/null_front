@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { UneditableMemo } from 'pages/home/subPages/components';
 import {
   MemoSearchAnswerWithDB,
   MemoSearchAnswerWithAI,
@@ -8,6 +7,7 @@ import {
 import { CircularProgress, Divider } from '@mui/material';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 import { useTranslation } from 'react-i18next';
+import { SummaryMemoWithoutDrag } from 'pages/home/subPages/search/components';
 
 const ConversationContent = ({
   isOpen,
@@ -83,7 +83,7 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
             <ScrollableList>
               {memoSearchAnswer.memos?.map((memo) => (
                 <div key={memo.id} className="rounded-lg h-60 w-60 flex-shrink-0">
-                  <UneditableMemo memo={memo} />
+                  <SummaryMemoWithoutDrag memo={memo} />
                 </div>
               ))}
             </ScrollableList>
@@ -125,7 +125,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
             <ScrollableList>
               {memoSearchAnswer.memos?.map((memo) => (
                 <div key={memo.id} className="rounded-lg h-60 w-60 flex-shrink-0">
-                  <UneditableMemo memo={memo} />
+                  <SummaryMemoWithoutDrag memo={memo} />
                 </div>
               ))}
             </ScrollableList>

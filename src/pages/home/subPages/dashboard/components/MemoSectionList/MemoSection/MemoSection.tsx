@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
 import { SortOption } from 'pages/home/subPages/types';
-import { UneditableMemoWithoutDrag } from '../UneditableMemoWithoutDrag';
+import { SummaryMemoWithoutDrag } from '../SummaryMemoWithoutDrag';
 
 interface MemoSectionProps {
   tag: Tag | null;
@@ -64,12 +64,7 @@ const MemoSection = ({
           {memos.map(
             (memo) =>
               memo && (
-                <UneditableMemoWithoutDrag
-                  key={memo?.id}
-                  memo={memo}
-                  shadow
-                  border
-                />
+                <SummaryMemoWithoutDrag key={memo?.id} memo={memo} shadow border />
               )
           )}
         </div>

@@ -10,14 +10,14 @@ const MemoText = ({
 }: {
   message: string;
   textColor?: string;
-  setMessage: (newMessage: string) => void;
+  setMessage?: (newMessage: string) => void;
   handleBlur?: () => void;
   editable?: boolean;
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
+    setMessage && setMessage(e.target.value);
   };
 
   useEffect(() => {

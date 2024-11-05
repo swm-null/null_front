@@ -1,23 +1,28 @@
-import { Tag } from 'pages/home/subPages/interfaces';
-import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
-import { UneditableTag } from 'pages/home/subPages/components';
+import { DeleteIcon } from 'assets/icons';
+import { format } from 'date-fns';
 
-const MemoHeader = ({ tags }: { tags: Tag[] }) => {
+const MemoHeader = ({
+  updatedAt,
+  dateFormat,
+  handleDeleteMemo,
+}: {
+  updatedAt: string;
+  dateFormat: string;
+  handleDeleteMemo: () => void;
+}) => {
+  const formatDate = (date: string): string => {
+    if (date.endsWith('Z')) {
+      return format(new Date(date), dateFormat);
+    }
+    return format(`${date}Z`, dateFormat);
+  };
+
   return (
-    <div className="flex items-center">
-      <div className="flex flex-1 gap-1 overflow-x-auto ">
-        {tags.map((tag, index) => (
-          <UneditableTag
-            key={index}
-            text={`#${tag.name}`}
-            invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-            color="peach0"
-            fontColor="brown0"
-            radius="small"
-            border={0}
-          />
-        ))}
-      </div>
+    <div className="flex gap-[1.44rem] items-center">
+      <p className="ml-auto text-center font-medium text-sm text-brown2">
+        {formatDate(updatedAt)}
+      </p>
+      <DeleteIcon className="text-brown2 w-5 h-5" onClick={handleDeleteMemo} />
     </div>
   );
 };

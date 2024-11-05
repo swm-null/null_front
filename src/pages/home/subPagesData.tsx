@@ -1,6 +1,6 @@
 import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
-import { DashboardModalProvider } from 'utils';
+import { MemoProvider, TagProvider } from 'utils';
 
 export const getSubPagesData = (): routerType[] => {
   return [
@@ -11,15 +11,21 @@ export const getSubPagesData = (): routerType[] => {
     },
     {
       path: 'search',
-      element: <Page.Search />,
+      element: (
+        <MemoProvider>
+          <Page.Search />
+        </MemoProvider>
+      ),
       title: 'search',
     },
     {
       path: 'dashboard',
       element: (
-        <DashboardModalProvider>
-          <Page.Dashboard />
-        </DashboardModalProvider>
+        <MemoProvider>
+          <TagProvider>
+            <Page.Dashboard />
+          </TagProvider>
+        </MemoProvider>
       ),
       title: 'dashboard',
     },

@@ -4,7 +4,7 @@ import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/types';
 import { MemosList } from 'pages/home/subPages/components';
-import { UneditableMemoWithoutDrag } from '../UneditableMemoWithoutDrag';
+import { SummaryMemoWithoutDrag } from '../SummaryMemoWithoutDrag';
 
 const SINGLE_MEMO_LIMIT = 20;
 
@@ -42,7 +42,7 @@ const LeafMemoSection = ({
     >
       <MemosList>
         {memos.map((memo) => (
-          <UneditableMemoWithoutDrag key={memo.id} memo={memo} shadow border />
+          <SummaryMemoWithoutDrag key={memo.id} memo={memo} shadow border />
         ))}
         <div ref={observerRef} className="min-h-[1px] bg-transparent" />
       </MemosList>

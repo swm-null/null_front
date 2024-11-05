@@ -7,7 +7,7 @@ import { Tag } from 'pages/home/subPages/interfaces';
 interface TagManagerProps {
   tags: Tag[];
   editable?: boolean;
-  setTags: (tags: Tag[]) => void;
+  setTags?: (tags: Tag[]) => void;
 }
 const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
   const [tagInput, setTagInput] = useState('');
@@ -17,7 +17,7 @@ const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
   const addTag = (text: string) => {
     if (text) {
       setTagInput('');
-      setTags([...tags, { id: 'temp', name: text }]);
+      setTags && setTags([...tags, { id: 'temp', name: text }]);
     }
   };
 
@@ -27,12 +27,12 @@ const TagManager = ({ tags, editable, setTags }: TagManagerProps) => {
     const updatedTags = tags.map((tag, i) =>
       i === index ? { id: 'temp', name: newTagName } : tag
     );
-    setTags(updatedTags);
+    setTags && setTags(updatedTags);
   };
 
   const deleteTag = (index: number) => {
     const updatedTags = tags.filter((_, i) => i !== index);
-    setTags(updatedTags);
+    setTags && setTags(updatedTags);
   };
 
   return (

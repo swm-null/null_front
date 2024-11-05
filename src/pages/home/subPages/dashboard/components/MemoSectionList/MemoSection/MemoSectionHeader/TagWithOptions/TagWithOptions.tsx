@@ -4,7 +4,7 @@ import { useTagManager } from 'pages/home/subPages/components';
 import { useClickWithoutDrag } from 'pages/hooks';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { FunctionComponent, SVGProps, useContext } from 'react';
-import { DashboardModalContext } from 'utils';
+import { TagContext } from 'utils';
 
 export interface InfiniteQueryData {
   pages: paginationDashboardTagRelations[];
@@ -12,7 +12,7 @@ export interface InfiniteQueryData {
 }
 
 const TagWithOptions = ({ tag }: { tag: Tag }) => {
-  const { openTagEditModal } = useContext(DashboardModalContext);
+  const { openTagEditModal } = useContext(TagContext);
   const { handleDeleteTag } = useTagManager();
 
   return (

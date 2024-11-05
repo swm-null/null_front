@@ -1,8 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Flickity from 'react-flickity-component';
 import { ImageListContext } from 'utils';
 import { ImageFileInput } from 'pages/home/subPages/components/utils';
-import { AddIcon, CloseIcon } from 'assets/icons';
+import { AddIcon } from 'assets/icons';
+import 'yet-another-react-lightbox/styles.css';
+import ImageLightbox from './ImageLightbox';
+import ImageItem from './ImageItem';
 
 const ImageSlider = ({
   imageUrls,
@@ -17,25 +20,45 @@ const ImageSlider = ({
     useContext(ImageListContext);
 
   const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  const allImages = useMemo(() => {
+    const objectUrls = images.map((img) => URL.createObjectURL(img));
+
+    return [...(imageUrls || []), ...objectUrls];
+  }, [imageUrls, images]);
 
   const isNoImages = () => imageUrls?.length + images.length === 0;
-  const isLastImageIndex = (cellIndex: number) =>
-    cellIndex === imageUrls?.length + images.length;
+  const isLastImageIndex = (cellIndex: number) => cellIndex === allImages?.length;
 
   useEffect(() => {
-    if (flickityInstance) {
-      const handleStaticClick = (_: any, __: any, ___: any, cellIndex: number) => {
-        if (cellIndex && isLastImageIndex(cellIndex)) {
-          handleAddImageButtonClick();
+    if (!flickityInstance) return;
+
+    const handleStaticClick = (event: any, __: any, ___: any, cellIndex: number) => {
+      const removeButton = (event.target as HTMLElement).closest('.remove-button');
+      if (removeButton instanceof HTMLElement) {
+        const { isDragging } = removeButton.dataset;
+        if (isDragging !== 'true' && removeImageUrl) {
+          removeImageUrl(cellIndex);
         }
-      };
+        event.preventDefault();
+        return;
+      }
 
-      flickityInstance.on('staticClick', handleStaticClick);
+      if (cellIndex && isLastImageIndex(cellIndex)) {
+        handleAddImageButtonClick();
+      } else {
+        setPhotoIndex(cellIndex);
+        setIsOpen(true);
+      }
+    };
 
-      return () => {
-        flickityInstance.off('staticClick', handleStaticClick);
-      };
-    }
+    flickityInstance.on('staticClick', handleStaticClick);
+
+    return () => {
+      flickityInstance.off('staticClick', handleStaticClick);
+    };
   }, [flickityInstance, imageUrls, editable]);
 
   const flickityOptions = {
@@ -65,7 +88,6 @@ const ImageSlider = ({
             editable={editable}
           />
         ))}
-
         {images?.map((image, index) => (
           <ImageItem
             key={`new-${index}`}
@@ -75,47 +97,22 @@ const ImageSlider = ({
             editable={editable}
           />
         ))}
-
         {editable && (
           <div className="carousel-cell flex items-center justify-center w-full h-full bg-gray-200 xsm:w-60">
             <ImageFileInput handleImageFileChange={handleImageFilesChange}>
-              <AddIcon className="w-10 h-10" onClick={handleAddImageButtonClick} />
+              <AddIcon className="w-10 h-10" />
             </ImageFileInput>
           </div>
         )}
       </Flickity>
-    </div>
-  );
-};
 
-const ImageItem = ({
-  image,
-  index,
-  editable,
-  onRemove,
-}: {
-  image: File | string;
-  index: number;
-  editable: boolean;
-  onRemove?: (index: number) => void;
-}) => {
-  const imageUrl = image instanceof File ? URL.createObjectURL(image) : image;
-
-  return (
-    <div className="carousel-cell w-full h-full xsm:w-60" key={index}>
-      <img
-        src={imageUrl}
-        alt={`Memo Image ${index + 1}`}
-        className="object-cover w-full h-full xsm:w-60"
+      <ImageLightbox
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        photoIndex={photoIndex}
+        setPhotoIndex={setPhotoIndex}
+        images={allImages}
       />
-      {editable && (
-        <div
-          className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
-          onClick={() => onRemove && onRemove(index)}
-        >
-          <CloseIcon className="w-4 h-4" />
-        </div>
-      )}
     </div>
   );
 };
