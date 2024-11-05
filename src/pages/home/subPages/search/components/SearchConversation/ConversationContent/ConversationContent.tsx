@@ -129,11 +129,13 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
                 </div>
               ))}
             </ScrollableList>
-          ) : (
-            <p className="text-gray3 font-regular text-[11px]">
-              {t('pages.search.conversation.noResults')}
-            </p>
-          )}
+          ) : null}
+          {!memoSearchAnswer.processed_message &&
+            !memoSearchAnswer.memos?.length && (
+              <p className="text-gray3 font-regular text-[11px]">
+                {t('pages.search.conversation.noResults')}
+              </p>
+            )}
         </div>
       ) : (
         <div className="flex gap-3 text-sm">
