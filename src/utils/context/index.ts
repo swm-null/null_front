@@ -4,3 +4,4 @@ export { default as ImageListContext } from './ImageListContext';
 export { default as BottomNavContext } from './BottomNavContext';
 export * from './MemoContext';
 export * from './TagContext';
+export * from './RecordingContext';

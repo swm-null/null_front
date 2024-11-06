@@ -1,12 +1,17 @@
 import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
 import { MemoProvider, TagProvider } from 'utils';
+import { RecordingProvider } from 'utils';
 
 export const getSubPagesData = (): routerType[] => {
   return [
     {
       path: '',
-      element: <Page.Create />,
+      element: (
+        <RecordingProvider>
+          <Page.Create />
+        </RecordingProvider>
+      ),
       title: 'create',
     },
     {

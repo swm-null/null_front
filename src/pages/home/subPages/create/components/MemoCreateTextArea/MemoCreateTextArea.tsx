@@ -4,7 +4,7 @@ import { usePressEnterFetch } from 'pages/home/subPages/hooks';
 import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
 import { ImageList } from './ImageList';
-import { ImageListContext } from 'utils';
+import { ImageListContext, RecordingContext } from 'utils';
 import { useHiddenTextareaManager } from './hook';
 
 interface MemoCreateTextAreaProps {
@@ -21,6 +21,8 @@ const MemoCreateTextArea = ({
   onSubmit,
 }: MemoCreateTextAreaProps) => {
   const { images, removeImage, handlePaste } = useContext(ImageListContext);
+  const { openRecordingModal } = useContext(RecordingContext);
+
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [hiddenTextareaWidth, setHiddenTextareaWidth] = useState<number | null>(
@@ -40,6 +42,7 @@ const MemoCreateTextArea = ({
 
   const handleMicButtonClick = () => {
     // TODO: 마이크 버튼 클릭시 하는 메소드 생기면 추가
+    openRecordingModal();
   };
 
   useEffect(() => {
