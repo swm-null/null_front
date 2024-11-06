@@ -1,8 +1,8 @@
 import { CloseIcon } from 'assets/icons';
-import { FormEvent, useRef } from 'react';
+import { FormEvent, HTMLProps, useRef } from 'react';
 import { tv } from 'tailwind-variants';
 
-interface EditableTagProps {
+interface EditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
   text: string;
   editable?: boolean;
   /**
@@ -11,41 +11,33 @@ interface EditableTagProps {
    */
   invalidCharsPattern: RegExp;
   /**
-   * tag에 적용하고 싶은 배경색을 전달
    * default: peach0
    */
-  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2';
+  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2' | 'cream0';
   /**
-   * tag font에 적용하고 싶은 색을 전달
    * default: black
    */
   fontColor?: 'brown0' | 'brown2' | 'black';
   /**
-   * tag의 border-radius 크기를 string으로 전달
-   * 'small', 'large'와 같이 사용
    * default: large
    */
-  radius?: 'small' | 'large';
+  borderRadius?: 'small' | 'large';
   /**
-   * tag의 border opacity를 숫자로 전달
    * 5 -> 5%
    * default: 10
    */
-  border?: 0 | 5 | 10;
+  borderOpacity?: 0 | 5 | 10;
+  /**
+   * tag에 그림자 효과를 줄 것인지 여부를 전달
+   * default: false
+   */
   shadow?: boolean;
   /**
-   * tag의 text 변경사항을 받고 싶은 경우, text를 저장하는 메소드 전달
+   * default: medium
    */
+  size?: 'small' | 'medium' | 'large';
   onTextChange?: (text: string) => void;
-  /**
-   * 태그 delete 기능을 넣고 싶은 경우, delete 설정 메소드 전달
-   */
   onDelete?: () => void;
-  onClick?: () => void;
-  /**
-   * 추가적인 className을 설정할 수 있는 prop
-   */
-  className?: string;
 }
 
 const tagStyles = tv({
@@ -57,6 +49,7 @@ const tagStyles = tv({
       peach1: 'bg-peach1',
       'peach1-transparent': 'bg-peach1-transparent',
       peach2: 'bg-peach2',
+      cream0: 'bg-cream0',
     },
     fontColor: {
       brown0: 'text-brown0',
@@ -76,6 +69,11 @@ const tagStyles = tv({
       true: 'shadow-custom backdrop-blur-lg',
       false: '',
     },
+    size: {
+      small: 'h-5 text-[10px]',
+      medium: 'h-6 text-[10px]',
+      large: 'h-[27px] text-[12px]',
+    },
   },
   defaultVariants: {
     color: 'peach0',
@@ -83,6 +81,7 @@ const tagStyles = tv({
     radius: 'large',
     border: 10,
     shadow: false,
+    size: 'medium',
   },
 });
 
@@ -92,13 +91,13 @@ const EditableTag = ({
   invalidCharsPattern,
   color = 'peach0',
   fontColor = 'black',
-  radius = 'large',
-  border = 10,
+  borderRadius = 'large',
+  borderOpacity = 10,
   shadow = false,
+  size = 'medium',
   onTextChange,
   onDelete,
-  onClick,
-  className,
+  ...divProps
 }: EditableTagProps) => {
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -113,18 +112,19 @@ const EditableTag = ({
 
   return (
     <div
+      {...divProps}
       className={`${tagStyles({
         color: color,
         fontColor: fontColor,
-        radius: radius,
-        border: border,
+        radius: borderRadius,
+        border: borderOpacity,
         shadow: shadow,
-      })} ${className} ${onClick && 'cursor-pointer'}`}
-      onClick={onClick}
+        size: size,
+      })}`}
     >
       <span
         className={`focus:outline-none whitespace-nowrap text-[10px] font-medium 
-          ${!editable ? 'select-none' : ''} ${onClick ? 'cursor-pointer select-none' : ''}`}
+          ${!editable ? 'select-none' : ''} ${divProps.onClick ? 'cursor-pointer select-none' : ''}`}
         contentEditable={editable}
         ref={ref}
         suppressContentEditableWarning

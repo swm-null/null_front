@@ -11,21 +11,26 @@ export const useHorizontalScroll = ({ scrollRef }: UseHorizontalScrollProps) => 
   const onDragStart = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
 
-    e.preventDefault();
+    const target = e.target as Node;
+    if (!scrollRef.current.contains(target)) return;
+
+    e.stopPropagation();
     setIsDrag(true);
     setStartX(e.pageX + scrollRef.current.scrollLeft);
-  };
-
-  const onDragEnd = () => {
-    setIsDrag(false);
   };
 
   const onDragMove = (e: React.MouseEvent) => {
     if (!scrollRef.current) return;
 
+    e.stopPropagation();
     if (isDrag && scrollRef.current) {
       scrollRef.current.scrollLeft = startX - e.pageX;
     }
+  };
+
+  const onDragEnd = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDrag(false);
   };
 
   useEffect(() => {

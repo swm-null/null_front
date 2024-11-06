@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { Breadcrumbs } from '@mui/material';
-import { UneditableTag } from 'pages/home/subPages/components';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
+import { UneditableTagList } from 'pages/home/subPages/components';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -68,23 +68,18 @@ const CurrentTagPath = ({
         ))}
       </Breadcrumbs>
 
-      <div className="flex flex-row">
-        <div className="flex flex-1 overflow-x-scroll overflow-visible no-scrollbar gap-1 p-4 pb-2">
-          {tags.map((tag, index) => (
-            <UneditableTag
-              key={index}
-              className="h-[27px] text-[12px]"
-              text={`#${tag.name}`}
-              color="peach1-transparent"
-              fontColor="brown2"
-              border={10}
-              shadow
-              invalidCharsPattern={invalidCharsPattern}
-              onClick={() => handleChildTagClick(tag)}
-            />
-          ))}
+      <div className="flex w-full flex-wrap p-4 pb-2 gap-2">
+        <div className="flex max-w-full mr-auto">
+          <UneditableTagList
+            tags={tags}
+            size="large"
+            color="cream0"
+            border={10}
+            invalidCharsPattern={invalidCharsPattern}
+            onChildTagClick={handleChildTagClick}
+          />
         </div>
-        <div className="p-4 pb-2 ml-auto">
+        <div className="flex ml-auto w-fit">
           <SortToggle
             height="1.6875rem"
             fontSize="0.75rem"

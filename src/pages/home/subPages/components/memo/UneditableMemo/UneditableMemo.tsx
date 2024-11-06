@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
+import { ImageMemoText, UneditableTagList } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
 import { useMemoManager } from '../hook';
+import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 const UneditableMemo = ({
   memo,
@@ -32,7 +33,13 @@ const UneditableMemo = ({
         <ImageMemoText imageUrls={memo.image_urls} message={memo.content} />
       </div>
       <div className="flex gap-2">
-        <TagManager tags={memo.tags} />
+        <UneditableTagList
+          tags={memo.tags}
+          size="large"
+          color="peach2"
+          border={0}
+          invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+        />
         <div className="flex ml-auto gap-6 items-center">
           <button
             type="button"

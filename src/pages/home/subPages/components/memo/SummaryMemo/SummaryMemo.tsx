@@ -1,11 +1,11 @@
 import { HTMLProps, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMemoManager } from 'pages/home/subPages/components';
+import { UneditableTagList, useMemoManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
-import { MemoHeader } from './MemoHeader';
 import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
+import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -75,7 +75,13 @@ const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) =>
           minHeight: isEllipsis ? maxHeight : undefined,
         }}
       >
-        <MemoHeader tags={tags} />
+        <UneditableTagList
+          tags={tags}
+          size="small"
+          color="peach0"
+          border={0}
+          invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+        />
         <MemoText
           ref={memoTextRef}
           textColor={getStyleByImagePresence('#111111', 'white')}

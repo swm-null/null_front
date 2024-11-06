@@ -1,6 +1,7 @@
 import { EditableTag } from 'pages/home/subPages/components';
+import { HTMLProps } from 'react';
 
-interface UneditableTagProps {
+interface UneditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
   text: string;
   /**
    * tag에 제외하고 싶은 문자 Regex 규칙 전달
@@ -8,28 +9,31 @@ interface UneditableTagProps {
    */
   invalidCharsPattern: RegExp;
   /**
-   * tag에 적용하고 싶은 배경색을 전달
    * default: peach0
    */
-  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2';
+  color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2' | 'cream0';
   /**
-   * tag font에 적용하고 싶은 색을 전달
    * default: black
    */
   fontColor?: 'brown0' | 'brown2' | 'black';
   /**
-   * tag의 border-radius 크기를 string으로 전달
-   * 'small', 'large'와 같이 사용
    * default: large
    */
-  radius?: 'small' | 'large';
-  border?: 0 | 5 | 10;
-  shadow?: boolean;
-  onClick?: () => void;
+  borderRadius?: 'small' | 'large';
   /**
-   * 추가적인 className을 설정할 수 있는 prop
+   * 5 -> 5%
+   * default: 10
    */
-  className?: string;
+  borderOpacity?: 0 | 5 | 10;
+  /**
+   * tag에 그림자 효과를 줄 것인지 여부를 전달
+   * default: false
+   */
+  shadow?: boolean;
+  /**
+   * default: medium
+   */
+  size?: 'small' | 'medium' | 'large';
 }
 
 const UneditableTag = ({
@@ -37,23 +41,23 @@ const UneditableTag = ({
   invalidCharsPattern,
   color,
   fontColor,
-  radius,
-  border,
+  borderRadius,
+  borderOpacity,
   shadow,
-  onClick,
-  className,
+  size = 'medium',
+  ...divProps
 }: UneditableTagProps) => {
   return (
     <EditableTag
+      {...divProps}
       text={text}
       invalidCharsPattern={invalidCharsPattern}
       color={color}
       fontColor={fontColor}
-      radius={radius}
-      border={border}
+      borderRadius={borderRadius}
+      borderOpacity={borderOpacity}
       shadow={shadow}
-      onClick={onClick}
-      className={className}
+      size={size}
     />
   );
 };
