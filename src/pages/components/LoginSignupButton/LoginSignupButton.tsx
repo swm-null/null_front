@@ -1,6 +1,6 @@
 interface LoginSignupButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   type?: 'button' | 'submit';
   additionalClasses?: string;
   disabled?: boolean;

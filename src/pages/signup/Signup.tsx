@@ -99,8 +99,8 @@ const Signup = () => {
 
   return (
     <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
-      <form className="bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
-        <div className="flex flex-col mb-6 gap-3">
+      <div className="bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
+        <div className="flex flex-col gap-3">
           <Components.EmailButtonForm
             email={changeHandlerManager.form.email}
             buttonText={t('signup.checkEmail')}
@@ -109,7 +109,7 @@ const Signup = () => {
               changeHandlerManager.handleEmailChange(newEmail);
               validationManager.validateEmail(newEmail);
             }}
-            handleClickButton={handleCheckEmail}
+            handleSubmit={handleCheckEmail}
             success={emailSuccess}
             error={validationManager.error.email}
           />
@@ -142,25 +142,26 @@ const Signup = () => {
             }}
             error={validationManager.error.password}
           />
-          <Components.HiddenInput
-            label={t('utils.auth.confirmPassword')}
-            value={changeHandlerManager.form.confirmPassword}
-            setValue={(value) => {
-              changeHandlerManager.handleConfirmPasswordChange(value);
-              validationManager.validateConfirmPassword(
-                changeHandlerManager.form.password,
-                value
-              );
-            }}
-            error={validationManager.error.confirmPassword}
-          />
+          <form onSubmit={handleSignUp} className="flex flex-col gap-6">
+            <Components.HiddenInput
+              label={t('utils.auth.confirmPassword')}
+              value={changeHandlerManager.form.confirmPassword}
+              setValue={(value) => {
+                changeHandlerManager.handleConfirmPasswordChange(value);
+                validationManager.validateConfirmPassword(
+                  changeHandlerManager.form.password,
+                  value
+                );
+              }}
+              error={validationManager.error.confirmPassword}
+            />
+            <Components.LoginSignupButton
+              label={t('signup.signupButton')}
+              disabled={!isValid}
+            />
+          </form>
         </div>
-        <Components.LoginSignupButton
-          label={t('signup.signupButton')}
-          onClick={handleSignUp}
-          disabled={!isValid}
-        />
-      </form>
+      </div>
     </div>
   );
 };
