@@ -74,8 +74,10 @@ const Signup = () => {
     }
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     if (!isValid) return;
+
+    e.preventDefault();
 
     try {
       const response = await signup(
@@ -158,6 +160,7 @@ const Signup = () => {
             <Components.LoginSignupButton
               label={t('signup.signupButton')}
               disabled={!isValid}
+              type="submit"
             />
           </form>
         </div>
