@@ -131,6 +131,7 @@ const Signup = () => {
               validationManager.validateName(value);
             }}
             error={validationManager.error.name}
+            autoComplete="username"
           />
           <Components.HiddenInput
             label={t('utils.auth.password')}

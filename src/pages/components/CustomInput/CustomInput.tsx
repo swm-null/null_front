@@ -8,6 +8,7 @@ const CustomInput = ({
   hidden = false,
   useHiddenToggle = false,
   editable = true,
+  autoComplete = 'off',
   error,
 }: {
   label: string;
@@ -16,6 +17,7 @@ const CustomInput = ({
   hidden?: boolean;
   useHiddenToggle?: boolean;
   editable?: boolean;
+  autoComplete?: 'username' | 'email' | 'off';
   error?: { flag: boolean; message: string };
 }) => {
   const [isHidden, setIsHidden] = useState(hidden);
@@ -38,6 +40,7 @@ const CustomInput = ({
           readOnly={!editable}
           onChange={(e) => setValue(e.target.value)}
           className="flex-1 w-full focus:outline-none"
+          autoComplete={isHidden ? 'current-password' : autoComplete}
         />
         {useHiddenToggle &&
           (isHidden ? (
