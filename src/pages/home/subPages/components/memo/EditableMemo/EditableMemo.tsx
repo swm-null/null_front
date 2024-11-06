@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { ImageMemoText, TagManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
-import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 import { useMemoManager } from '../hook';
 import { isFilesResponse, uploadFile, uploadFiles } from 'api/index.ts';
 import { ImageListContext } from 'utils/index.ts';
@@ -18,13 +17,11 @@ const EditableMemo = ({
   handlePreProcess: () => void;
 }) => {
   const { t } = useTranslation();
-
   const { images } = useContext(ImageListContext);
 
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
   const [imageUrls, setImageUrls] = useState(memo.image_urls);
-  const [tagRebuild, setTagRebuild] = useState(false);
 
   const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
 
@@ -88,11 +85,6 @@ const EditableMemo = ({
       <div className="flex gap-2">
         <TagManager tags={tags} setTags={setTags} editable />
         <div className="flex ml-auto gap-6 items-center">
-          <TagRebuildCheckbox
-            checked={tagRebuild}
-            setChecked={setTagRebuild}
-            label={t('memo.tagRebuild')}
-          />
           <button
             type="button"
             className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
