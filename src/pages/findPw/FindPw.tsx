@@ -36,8 +36,10 @@ const FindPw = () => {
     }
   };
 
-  const handleFindPassword = async () => {
+  const handleFindPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     if (!isValid) return;
+
+    e.preventDefault();
 
     try {
       const response = await resetPassword(
@@ -53,14 +55,12 @@ const FindPw = () => {
       } else {
         alert(response.exceptionMessage);
       }
-    } catch {
-      alert();
-    }
+    } catch {}
   };
 
   return (
     <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
-      <form className="flex flex-col gap-4 bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
+      <div className="flex flex-col gap-4 bg-[#FFF6E3CC] p-8 rounded-2xl shadow-custom w-full max-w-lg overflow-y-auto">
         <>
           <InfoText />
           <Components.EmailButtonForm
@@ -71,13 +71,13 @@ const FindPw = () => {
               changeHandlerManager.handleEmailChange(newEmail);
               validationManager.validateEmail(newEmail);
             }}
-            handleClickButton={handleSendCode}
+            handleSubmit={handleSendCode}
             success={emailSuccess}
             error={validationManager.error.email}
           />
         </>
 
-        <div className="flex flex-col gap-5">
+        <form className="flex flex-col gap-5" onSubmit={handleFindPassword}>
           <div className="flex flex-col gap-2">
             <Components.CustomInput
               label={t('utils.auth.code')}
@@ -111,12 +111,12 @@ const FindPw = () => {
             />
           </div>
           <Components.LoginSignupButton
+            type="submit"
             label={t('findPw.resetPwButton')}
-            onClick={handleFindPassword}
             disabled={!isValid}
           />
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

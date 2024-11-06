@@ -13,8 +13,13 @@ const ModalContent = ({
 }) => {
   const { t } = useTranslation();
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleEdit();
+  };
+
   return (
-    <div className="flex flex-col p-4 w-full flex-1">
+    <form className="flex flex-col p-4 w-full flex-1" onSubmit={handleSubmit}>
       <p className="mb-2 text-base">{t('pages.dashboard.tag.edit.title')}</p>
       <div className="w-full flex flex-col flex-1">
         <input
@@ -28,9 +33,8 @@ const ModalContent = ({
       </div>
       <div className="flex justify-end mt-auto gap-2">
         <button
-          type="button"
+          type="submit"
           className="px-3 py-1 text-sm bg-[#F4CDB1] border-[#F4CDB1] border rounded"
-          onClick={handleEdit}
         >
           {t('utils.alert.ok')}
         </button>
@@ -42,7 +46,7 @@ const ModalContent = ({
           {t('utils.alert.cancel')}
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

@@ -37,15 +37,28 @@ const Login = () => {
     }
   }, []);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleLogin();
+  };
+
   if (loading) {
     return <></>;
   }
 
   return (
     <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
-      <div className="flex flex-col bg-[#FFF6E3CC] p-8 shadow-custom w-full max-w-lg rounded-2xl gap-6">
+      <form
+        className="flex flex-col bg-[#FFF6E3CC] p-8 shadow-custom w-full max-w-lg rounded-2xl gap-6"
+        onSubmit={handleSubmit}
+      >
         <div className="flex flex-col gap-2">
-          <CustomInput label={t('login.email')} value={email} setValue={setEmail} />
+          <CustomInput
+            label={t('login.email')}
+            value={email}
+            setValue={setEmail}
+            autoComplete="email"
+          />
           <HiddenInput
             label={t('login.password')}
             value={password}
@@ -65,13 +78,19 @@ const Login = () => {
         </div>
 
         <div className="flex gap-2 flex-col">
-          <LoginSignupButton label={t('login.loginButton')} onClick={handleLogin} />
+          <div className="flex gap-2 flex-col mt-4">
+            <LoginSignupButton
+              type="submit"
+              label={t('login.loginButton')}
+              onClick={handleLogin}
+            />
+          </div>
           <LoginSignupButton
             label={t('login.signupButton')}
             onClick={handleSignup}
           />
         </div>
-      </div>
+      </form>
     </div>
   );
 };
