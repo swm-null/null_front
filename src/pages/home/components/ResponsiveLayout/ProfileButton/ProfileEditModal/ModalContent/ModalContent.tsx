@@ -28,10 +28,14 @@ const ModalContent = ({
 
   const imageUrl = images[0] ? URL.createObjectURL(images[0]) : null;
 
-  return (
-    <>
-      <h2 className="text-base mb-4">{t('profile.editProfile')}</h2>
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSave(profileName, imageUrl);
+  };
 
+  return (
+    <div className="flex flex-col gap-4">
+      <h2 className="text-base">{t('profile.editProfile')}</h2>
       <div className="flex flex-col items-center gap-4">
         <ImageFileInput
           className="relative"
@@ -52,35 +56,38 @@ const ModalContent = ({
             <CameraIcon className="border rounded-full shadow-md p-1 w-7 h-7 bg-white" />
           </button>
         </ImageFileInput>
-
-        <CustomInput
-          label={t('signup.name')}
-          value={profileName}
-          setValue={setProfileName}
-        />
-        <CustomInput
-          label={t('signup.email')}
-          value={userProfile.email}
-          setValue={() => {}}
-          editable={false}
-        />
       </div>
-
-      <div className="flex justify-end mt-4 gap-2">
-        <button
-          className="btn-primary px-3 py-1 text-sm bg-[#F4CDB1] rounded"
-          onClick={() => onSave(profileName, imageUrl)}
-        >
-          {t('utils.alert.ok')}
-        </button>
-        <button
-          className="btn-secondary px-3 py-1 text-sm bg-white border rounded"
-          onClick={handleClose}
-        >
-          {t('utils.alert.cancel')}
-        </button>
-      </div>
-    </>
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col items-center gap-4">
+          <CustomInput
+            label={t('signup.name')}
+            value={profileName}
+            setValue={setProfileName}
+          />
+          <CustomInput
+            label={t('signup.email')}
+            value={userProfile.email}
+            setValue={() => {}}
+            editable={false}
+          />
+        </div>
+        <div className="flex justify-end mt-4 gap-2">
+          <button
+            type="submit"
+            className="btn-primary px-3 py-1 text-sm bg-[#F4CDB1] rounded"
+          >
+            {t('utils.alert.ok')}
+          </button>
+          <button
+            type="button"
+            className="btn-secondary px-3 py-1 text-sm bg-white border rounded"
+            onClick={handleClose}
+          >
+            {t('utils.alert.cancel')}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
