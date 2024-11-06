@@ -1,6 +1,7 @@
 interface LoginSignupButtonProps {
   label: string;
   onClick: () => void;
+  type?: 'button' | 'submit';
   additionalClasses?: string;
   disabled?: boolean;
 }
@@ -8,6 +9,7 @@ interface LoginSignupButtonProps {
 const LoginSignupButton = ({
   label,
   onClick,
+  type = 'button',
   additionalClasses = '',
   disabled = false,
 }: LoginSignupButtonProps) => {
@@ -16,7 +18,7 @@ const LoginSignupButton = ({
 
   return (
     <button
-      type="button"
+      type={type}
       onClick={onClick}
       className={`w-full py-2 rounded-lg focus:outline-none ${additionalClasses} 
         bg-[#F4CDB1] border border-black border-opacity-10 bg-clip-padding text-[#6A5344]
