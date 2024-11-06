@@ -11,44 +11,32 @@ interface EditableTagProps extends Omit<HTMLProps<HTMLDivElement>, 'size'> {
    */
   invalidCharsPattern: RegExp;
   /**
-   * tag에 적용하고 싶은 배경색을 전달
    * default: peach0
    */
   color?: 'white' | 'peach0' | 'peach1' | 'peach1-transparent' | 'peach2' | 'cream0';
   /**
-   * tag font에 적용하고 싶은 색을 전달
    * default: black
    */
   fontColor?: 'brown0' | 'brown2' | 'black';
   /**
-   * tag의 border-radius 크기를 string으로 전달
-   * 'small', 'large'와 같이 사용
    * default: large
    */
-  radius?: 'small' | 'large';
+  borderRadius?: 'small' | 'large';
   /**
-   * tag의 border opacity를 숫자로 전달
    * 5 -> 5%
    * default: 10
    */
-  border?: 0 | 5 | 10;
+  borderOpacity?: 0 | 5 | 10;
   /**
    * tag에 그림자 효과를 줄 것인지 여부를 전달
    * default: false
    */
   shadow?: boolean;
   /**
-   * tag의 크기를 설정
    * default: medium
    */
   size?: 'small' | 'medium' | 'large';
-  /**
-   * tag의 text 변경사항을 받고 싶은 경우, text를 저장하는 메소드 전달
-   */
   onTextChange?: (text: string) => void;
-  /**
-   * 태그 delete 기능을 넣고 싶은 경우, delete 설정 메소드 전달
-   */
   onDelete?: () => void;
 }
 
@@ -103,8 +91,8 @@ const EditableTag = ({
   invalidCharsPattern,
   color = 'peach0',
   fontColor = 'black',
-  radius = 'large',
-  border = 10,
+  borderRadius = 'large',
+  borderOpacity = 10,
   shadow = false,
   size = 'medium',
   onTextChange,
@@ -128,8 +116,8 @@ const EditableTag = ({
       className={`${tagStyles({
         color: color,
         fontColor: fontColor,
-        radius: radius,
-        border: border,
+        radius: borderRadius,
+        border: borderOpacity,
         shadow: shadow,
         size: size,
       })}`}
