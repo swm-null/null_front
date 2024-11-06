@@ -12,8 +12,8 @@ const SearchPage = () => {
 
   const searchMemoManager = useSearchMemoManager();
 
-  const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
+  const handleMessageChange = (e: ChangeEvent) => {
+    setMessage((e.target as HTMLInputElement).value);
   };
 
   const handleSubmit = () => {

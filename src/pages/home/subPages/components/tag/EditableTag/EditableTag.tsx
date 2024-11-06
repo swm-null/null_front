@@ -123,7 +123,8 @@ const EditableTag = ({
       })}`}
     >
       <span
-        className={`focus:outline-none whitespace-nowrap font-medium ${divProps.onClick ? 'cursor-pointer' : ''}`}
+        className={`focus:outline-none whitespace-nowrap text-[10px] font-medium 
+          ${!editable ? 'select-none' : ''} ${divProps.onClick ? 'cursor-pointer select-none' : ''}`}
         contentEditable={editable}
         ref={ref}
         suppressContentEditableWarning
