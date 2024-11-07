@@ -79,11 +79,7 @@ const Login = () => {
 
         <div className="flex gap-2 flex-col">
           <div className="flex gap-2 flex-col mt-4">
-            <LoginSignupButton
-              type="submit"
-              label={t('login.loginButton')}
-              onClick={handleLogin}
-            />
+            <LoginSignupButton type="submit" label={t('login.loginButton')} />
           </div>
           <LoginSignupButton
             label={t('login.signupButton')}
