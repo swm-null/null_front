@@ -9,7 +9,7 @@ export const errorHandler = (error: unknown, method: string): errorResponse => {
     if (error.response) {
       const httpErrorCode = error.response.status;
       const errorCode = error.response?.data ? error.response.data.code : '';
-      const errorDetails = error.response?.data ? error.response.data.message : '';
+      const errorDetails = error.response?.data ? error.response.data.detail : '';
 
       errorInfo = {
         method,
