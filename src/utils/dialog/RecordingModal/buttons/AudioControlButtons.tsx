@@ -17,8 +17,13 @@ export const RecordButton = ({
   isRecording,
   onToggleRecording,
 }: RecordButtonProps) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onToggleRecording();
+  };
+
   return (
-    <button type="button" onClick={onToggleRecording} className={baseButtonStyles}>
+    <button type="button" onClick={handleClick} className={baseButtonStyles}>
       {isRecording ? (
         <StopIcon className={baseIconStyles} />
       ) : (
@@ -37,8 +42,13 @@ export const PlaybackButton = ({
   isPlaying,
   onTogglePlayback,
 }: PlaybackButtonProps) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onTogglePlayback();
+  };
+
   return (
-    <button type="button" onClick={onTogglePlayback} className={baseButtonStyles}>
+    <button type="button" onClick={handleClick} className={baseButtonStyles}>
       {isPlaying ? (
         <PauseIcon className={baseIconStyles} />
       ) : (
@@ -53,8 +63,13 @@ interface ResetButtonProps {
 }
 
 export const ResetButton = ({ onReset }: ResetButtonProps) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onReset();
+  };
+
   return (
-    <button type="button" onClick={onReset} className={baseButtonStyles}>
+    <button type="button" onClick={handleClick} className={baseButtonStyles}>
       <RefreshIcon className={baseIconStyles} />
     </button>
   );

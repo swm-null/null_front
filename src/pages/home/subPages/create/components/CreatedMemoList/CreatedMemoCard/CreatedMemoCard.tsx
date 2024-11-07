@@ -1,10 +1,10 @@
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText } from 'pages/home/subPages/components';
+import { ImageMemoText, RecordingControls } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
-import { Skeleton } from '@mui/material';
+import { Divider, Skeleton } from '@mui/material';
 import { useMemoManager } from 'pages/home/subPages/components';
 import { UneditableTagList } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
@@ -16,6 +16,8 @@ interface CreatedMemoCardProps {
 const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState(memo.content);
+  const parsedMetadata = memo.metadata ? JSON.parse(memo.metadata) : null;
+  const voiceDescriptions = parsedMetadata?.voice_record_descriptions || [];
 
   const { handleDeleteMemo } = useMemoManager();
 
@@ -24,6 +26,11 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       return format(new Date(date), t('memo.dateFormat'));
     }
     return format(`${date}Z`, t('memo.dateFormat'));
+  };
+
+  const getProxiedUrl = (url: string) => {
+    const originalUrl = new URL(url);
+    return `/audio${originalUrl.pathname}`;
   };
 
   return (
@@ -53,6 +60,21 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           message={message}
           setMessage={setMessage}
         />
+        {memo.voice_urls && memo.voice_urls.length > 0 && (
+          <>
+            <Divider />
+            <div className="flex mb-auto flex-col xsm:flex-row w-full flex-1 gap-5 xsm:gap-9 flex-wrap">
+              <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
+                <RecordingControls audioUrl={getProxiedUrl(memo.voice_urls[0])} />
+              </div>
+              {voiceDescriptions[0] && (
+                <div className="flex flex-1 flex-col w-full text-sm">
+                  <p>{voiceDescriptions[0].transcription_summary}</p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

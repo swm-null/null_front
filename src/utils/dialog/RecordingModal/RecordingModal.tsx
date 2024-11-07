@@ -16,10 +16,7 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
 
   const handleStartRecording = async () => {
     try {
-      await recordingManager.startRecording(
-        visualizerManager.setAudioWaveform,
-        visualizerManager.startVisualizer
-      );
+      await recordingManager.startRecording(visualizerManager.startVisualizer);
     } catch (err) {
       // TODO: 시스템 설정에서 브라우저의 마이크 접근이 차단되어 있을 때 혹은, 다른 탭에서 마이크를 사용중일 때 나는 오류
     }
@@ -51,24 +48,16 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
         <div className="flex w-full h-36 items-center gap-4">
           <RecordingControls
             audioUrl={recordingManager.audioUrl}
-            isPlaying={recordingManager.isPlaying}
             recordingTime={recordingManager.recordingTime}
-            audioWaveform={visualizerManager.audioWaveform}
             editable={{
               isRecording: recordingManager.isRecording,
               visualizerData: visualizerManager.visualizerData,
               handleStopRecording: handleStopRecording,
               handleStartRecording: handleStartRecording,
             }}
-            togglePlayback={recordingManager.togglePlayback}
           />
           {recordingManager.audioUrl && <ResetButton onReset={handleReset} />}
         </div>
-        <audio
-          ref={recordingManager.audioRef}
-          src={recordingManager.audioUrl || undefined}
-          onEnded={() => recordingManager.setIsPlaying(false)}
-        />
         <ModalActionButtons
           disabled={!recordingManager.audioUrl}
           onSubmit={handleSend}

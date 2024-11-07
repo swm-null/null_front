@@ -4,7 +4,6 @@ export const useRecordingManager = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -18,38 +17,7 @@ export const useRecordingManager = () => {
     };
   }, []);
 
-  const analyzeAudio = async (
-    audioBlob: Blob,
-    setAudioWaveform: (waveform: number[]) => void
-  ) => {
-    const audioContext = new AudioContext();
-    const arrayBuffer = await audioBlob.arrayBuffer();
-    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    const channelData = audioBuffer.getChannelData(0);
-
-    const samples = 64;
-    const blockSize = Math.floor(channelData.length / samples);
-    const waveform = [];
-
-    for (let i = 0; i < samples; i++) {
-      let sum = 0;
-      for (let j = 0; j < blockSize; j++) {
-        const idx = i * blockSize + j;
-        if (idx < channelData.length) {
-          sum += Math.abs(channelData[idx]);
-        }
-      }
-      const normalizedValue = (sum / blockSize) * 8000;
-      waveform.push(Math.min(100, normalizedValue));
-    }
-
-    setAudioWaveform(waveform);
-  };
-
-  const startRecording = async (
-    setAudioWaveform: (waveform: number[]) => void,
-    startVisualizer: (stream: MediaStream) => void
-  ) => {
+  const startRecording = async (startVisualizer: (stream: MediaStream) => void) => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorderRef.current = mediaRecorder;
@@ -65,7 +33,6 @@ export const useRecordingManager = () => {
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
       setAudioBlob(blob);
-      analyzeAudio(blob, setAudioWaveform);
     };
 
     setRecordingTime(0);
@@ -93,22 +60,10 @@ export const useRecordingManager = () => {
     }
   };
 
-  const togglePlayback = () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
-
   const handleDelete = (resetVisualizer: () => void) => {
     if (audioRef.current) {
       audioRef.current.pause();
     }
-    setIsPlaying(false);
     setAudioUrl(null);
     setAudioBlob(null);
     setRecordingTime(0);
@@ -119,14 +74,11 @@ export const useRecordingManager = () => {
     isRecording,
     audioUrl,
     audioBlob,
-    isPlaying,
-    recordingTime,
     audioRef,
+    recordingTime,
     startRecording,
     stopRecording,
-    togglePlayback,
     handleDelete,
-    setIsPlaying,
   };
 };
 

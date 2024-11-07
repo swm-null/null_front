@@ -3,29 +3,27 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { AudioVisualizer } from 'utils/dialog/RecordingModal/AudioVisualizer';
 import { PlaybackButton, RecordButton } from 'utils/dialog/RecordingModal/buttons';
+import { useAudioPlayer, useAudioWaveform } from './hooks';
 
 interface RecordingControlsProps {
-  audioUrl?: string | null;
-  isPlaying: boolean;
-  recordingTime: number;
-  audioWaveform: number[];
+  audioUrl: string | null;
+  recordingTime?: number;
   editable?: {
     isRecording: boolean;
     visualizerData: number[];
     handleStopRecording: () => void;
     handleStartRecording: () => void;
   };
-  togglePlayback: () => void;
 }
 
 const RecordingControls = ({
   audioUrl,
-  isPlaying,
-  recordingTime,
-  audioWaveform,
+  recordingTime: originalRecordingTime,
   editable,
-  togglePlayback,
 }: RecordingControlsProps) => {
+  const { isPlaying, recordingTime, togglePlayback } = useAudioPlayer(audioUrl);
+  const [audioWaveform] = useAudioWaveform(audioUrl);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -40,6 +38,8 @@ const RecordingControls = ({
       setScale(1);
     }
   }, [audioUrl, isPlaying, recordingTime, audioWaveform]);
+
+  if (audioWaveform.length <= 0) return;
 
   return (
     <div ref={containerRef} className="flex w-full h-full">
@@ -71,7 +71,11 @@ const RecordingControls = ({
                 }
               : null
           }
-          recordingTime={recordingTime}
+          recordingTime={
+            audioUrl || !originalRecordingTime
+              ? recordingTime
+              : originalRecordingTime
+          }
           audioWaveform={audioWaveform}
         />
       </div>

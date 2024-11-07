@@ -19,7 +19,7 @@ const AudioVisualizer = ({
   };
 
   return (
-    <div className="flex flex-col flex-1 h-full bg-[#e8e1d9] rounded-2xl p-3">
+    <div className="flex flex-col flex-1 min-h-24 bg-[#e8e1d9] rounded-2xl p-3 flex-shrink-0">
       <div className="flex items-center gap-2">
         {isRecording?.isRecording && (
           <span className="text-red-500 animate-pulse">●</span>

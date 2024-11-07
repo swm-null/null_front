@@ -43,7 +43,7 @@ const MemoText = forwardRef<
       >
         {message}
       </p>
-      {isOverflowed && <span className="text-gray2">...</span>}
+      {isOverflowed && <span style={{ color: textColor }}>...</span>}
     </>
   );
 });

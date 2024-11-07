@@ -57,12 +57,14 @@ const useMemoManager = () => {
     newMessage,
     newTags,
     newImageUrls,
+    newVoiceUrls,
     handlePreProcess,
   }: {
     memo: Memo;
     newMessage: string;
     newTags: Tag[];
     newImageUrls: string[];
+    newVoiceUrls: string[];
     handlePreProcess: () => void;
   }) => {
     handlePreProcess();
@@ -72,6 +74,7 @@ const useMemoManager = () => {
       content: newMessage,
       tags: newTags,
       image_urls: newImageUrls,
+      voice_urls: newVoiceUrls,
     };
 
     const isContentChanged = memo.content !== newMemo.content;
@@ -86,7 +89,8 @@ const useMemoManager = () => {
       const response = await Api.updateMemo(
         newMemo.id,
         newMemo.content,
-        newMemo.image_urls
+        newMemo.image_urls,
+        newMemo.voice_urls
       );
       if (!Api.isUpdateMemoResponse(response)) {
         alert(t('pages.memo.updateErrorMessage'));
