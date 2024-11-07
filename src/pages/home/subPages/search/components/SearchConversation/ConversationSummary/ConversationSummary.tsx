@@ -1,18 +1,30 @@
 import { DownIcon } from 'assets/icons';
 
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
+import { useClickWithoutDrag } from 'pages/hooks';
 
 const ConversationSummary = ({
   isOpen,
+  setIsOpen,
   data,
   formatDate,
 }: {
   isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
   data: MemoSearchConversation;
   formatDate: (date: string) => string;
 }) => {
+  const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>
+    setIsOpen(!isOpen)
+  );
+
   return (
-    <div className="px-5 py-4 flex justify-start cursor-pointer gap-[0.87rem]">
+    <div
+      className="px-5 py-4 flex justify-start cursor-pointer gap-[0.87rem]"
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onClick={handleClick}
+    >
       <DownIcon
         className="text-brown1 flex-shrink-0 transition-transform duration-300"
         style={{
