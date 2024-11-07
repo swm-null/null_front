@@ -41,6 +41,10 @@
       "alert": "메모를 정말 삭제하시겠습니까?"
     }
   },
+  "voice": {
+    "save": "저장",
+    "cancel": "취소"
+  },
   "login": {
     "header": "로그인",
     "email": "Email",

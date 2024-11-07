@@ -1,10 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Modal } from '@mui/material';
-import MicIcon from '@mui/icons-material/Mic';
-import StopIcon from '@mui/icons-material/Stop';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { AudioVisualizer } from './AudioVisualizer';
+import { RecordButton, PlaybackButton, ResetButton } from './buttons';
+import { ModalActionButtons } from './ModalActionButtons';
 
 interface RecordingModalProps {
   open: boolean;
@@ -42,14 +40,13 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
     analyserRef.current = audioContextRef.current.createAnalyser();
     const source = audioContextRef.current.createMediaStreamSource(stream);
     source.connect(analyserRef.current);
-    analyserRef.current.fftSize = 128; // 더 상세한 데이터를 위해 128로 설정
+    analyserRef.current.fftSize = 128;
 
     const updateVisualizer = () => {
       if (!analyserRef.current) return;
       const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
       analyserRef.current.getByteFrequencyData(dataArray);
 
-      // 데이터 정규화 (0-100 범위로)
       const normalizedData = Array.from(dataArray).map(
         (value) => (value / 255) * 100
       );
@@ -163,12 +160,6 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
     }
   };
 
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   return (
     <Modal
       open={open}
@@ -179,87 +170,31 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
         <div className="flex w-full flex-col items-center gap-4">
           <div className="w-full flex items-center gap-4">
             {!audioUrl ? (
-              <button
-                type="button"
-                onClick={isRecording ? stopRecording : startRecording}
-                className="bg-[#e8e1d9] hover:bg-[#d8d1c9] rounded-full p-3 transition-colors"
-              >
-                {isRecording ? (
-                  <StopIcon className="text-[#8b7e74]" />
-                ) : (
-                  <MicIcon className="text-[#8b7e74]" />
-                )}
-              </button>
+              <RecordButton
+                isRecording={isRecording}
+                onToggleRecording={isRecording ? stopRecording : startRecording}
+              />
             ) : (
-              <button
-                type="button"
-                onClick={togglePlayback}
-                className="bg-[#e8e1d9] hover:bg-[#d8d1c9] rounded-full p-3 transition-colors"
-              >
-                {isPlaying ? (
-                  <PauseIcon className="text-[#8b7e74]" />
-                ) : (
-                  <PlayArrowIcon className="text-[#8b7e74]" />
-                )}
-              </button>
+              <PlaybackButton
+                isPlaying={isPlaying}
+                onTogglePlayback={togglePlayback}
+              />
             )}
-            <div className="flex-1 bg-[#e8e1d9] rounded-2xl p-3">
-              <div className="flex items-center gap-2">
-                {isRecording && (
-                  <span className="text-red-500 animate-pulse">●</span>
-                )}
-                <span className="text-[#8b7e74]">{formatTime(recordingTime)}</span>
-              </div>
-              <div className="h-12 mt-2 flex items-center">
-                {isRecording
-                  ? visualizerData.map((value, index) => (
-                      <div
-                        key={index}
-                        className="flex-1 bg-[#8b7e74] rounded-full mx-[1px]"
-                        style={{ height: `${value}%` }}
-                      />
-                    ))
-                  : audioWaveform.map((value, index) => (
-                      <div
-                        key={index}
-                        className="flex-1 bg-[#8b7e74] rounded-full mx-[1px]"
-                        style={{ height: `${value}%` }}
-                      />
-                    ))}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="bg-[#e8e1d9] hover:bg-[#d8d1c9] rounded-full p-3 transition-colors"
-            >
-              <RefreshIcon className="text-[#8b7e74]" />
-            </button>
+            <AudioVisualizer
+              isRecording={isRecording}
+              recordingTime={recordingTime}
+              visualizerData={visualizerData}
+              audioWaveform={audioWaveform}
+            />
+            {audioUrl && <ResetButton onReset={handleDelete} />}
           </div>
-
           <audio
             ref={audioRef}
             src={audioUrl || undefined}
             onEnded={() => setIsPlaying(false)}
           />
         </div>
-
-        <form className="flex justify-end mt-4 gap-2" onSubmit={handleSend}>
-          <button
-            type="submit"
-            className="btn-primary px-3 py-1 text-sm bg-[#F4CDB1] rounded"
-          >
-            저장
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="btn-secondary px-3 py-1 text-sm bg-white border rounded"
-          >
-            취소
-          </button>
-        </form>
+        <ModalActionButtons onSubmit={handleSend} onClose={onClose} />
       </div>
     </Modal>
   );
