@@ -66,16 +66,8 @@ const MediaList = ({
   return (
     <div className="w-full flex gap-5 overflow-x-auto no-scrollbar">
       {audioBlob && (
-        <div className="relative flex h-24 w-fit gap-3 flex-shrink-0">
-          <audio
-            ref={audioRef}
-            src={audioUrl}
-            onEnded={() => setIsPlaying(false)}
-            onError={(e) => {
-              console.error('Audio error:', e);
-              setIsPlaying(false);
-            }}
-          />
+        <div className="relative flex h-24 gap-3 flex-shrink-0">
+          <audio ref={audioRef} src={audioUrl} onEnded={() => setIsPlaying(false)} />
           <RecordingControls
             audioUrl={URL.createObjectURL(audioBlob)}
             isPlaying={isPlaying}

@@ -48,29 +48,27 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
       className="flex items-center justify-center"
     >
       <div className="bg-[#f5f0ea] p-6 rounded-3xl shadow-lg w-[480px] relative">
-        <div className="flex w-full flex-col items-center gap-4">
-          <div className="w-full h-36 flex items-center gap-2">
-            <RecordingControls
-              audioUrl={recordingManager.audioUrl}
-              isPlaying={recordingManager.isPlaying}
-              recordingTime={recordingManager.recordingTime}
-              audioWaveform={visualizerManager.audioWaveform}
-              editable={{
-                isRecording: recordingManager.isRecording,
-                visualizerData: visualizerManager.visualizerData,
-                handleStopRecording: handleStopRecording,
-                handleStartRecording: handleStartRecording,
-              }}
-              togglePlayback={recordingManager.togglePlayback}
-            />
-            {recordingManager.audioUrl && <ResetButton onReset={handleReset} />}
-          </div>
-          <audio
-            ref={recordingManager.audioRef}
-            src={recordingManager.audioUrl || undefined}
-            onEnded={() => recordingManager.setIsPlaying(false)}
+        <div className="flex w-full h-36 items-center gap-4">
+          <RecordingControls
+            audioUrl={recordingManager.audioUrl}
+            isPlaying={recordingManager.isPlaying}
+            recordingTime={recordingManager.recordingTime}
+            audioWaveform={visualizerManager.audioWaveform}
+            editable={{
+              isRecording: recordingManager.isRecording,
+              visualizerData: visualizerManager.visualizerData,
+              handleStopRecording: handleStopRecording,
+              handleStartRecording: handleStartRecording,
+            }}
+            togglePlayback={recordingManager.togglePlayback}
           />
+          {recordingManager.audioUrl && <ResetButton onReset={handleReset} />}
         </div>
+        <audio
+          ref={recordingManager.audioRef}
+          src={recordingManager.audioUrl || undefined}
+          onEnded={() => recordingManager.setIsPlaying(false)}
+        />
         <ModalActionButtons
           disabled={!recordingManager.audioUrl}
           onSubmit={handleSend}

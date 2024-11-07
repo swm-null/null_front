@@ -1,3 +1,6 @@
+import { useRef } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { AudioVisualizer } from 'utils/dialog/RecordingModal/AudioVisualizer';
 import { PlaybackButton, RecordButton } from 'utils/dialog/RecordingModal/buttons';
 
@@ -23,34 +26,55 @@ const RecordingControls = ({
   editable,
   togglePlayback,
 }: RecordingControlsProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const containerWidth = containerRef.current?.offsetWidth || 0;
+    const contentWidth = contentRef.current?.offsetWidth || 0;
+
+    if (contentWidth > containerWidth) {
+      setScale(containerWidth / contentWidth);
+    } else {
+      setScale(1);
+    }
+  }, [audioUrl, isPlaying, recordingTime, audioWaveform]);
+
   return (
-    <div className="flex gap-2 w-full h-full">
-      {!audioUrl ? (
-        editable && (
-          <RecordButton
-            isRecording={editable.isRecording}
-            onToggleRecording={
-              editable.isRecording
-                ? editable.handleStopRecording
-                : editable.handleStartRecording
-            }
-          />
-        )
-      ) : (
-        <PlaybackButton isPlaying={isPlaying} onTogglePlayback={togglePlayback} />
-      )}
-      <AudioVisualizer
-        isRecording={
-          editable?.visualizerData && editable.visualizerData.length > 0
-            ? {
-                isRecording: editable.isRecording,
-                visualizerData: editable.visualizerData,
+    <div ref={containerRef} className="flex w-full h-full">
+      <div
+        ref={contentRef}
+        className={`flex ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
+        style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}
+      >
+        {!audioUrl ? (
+          editable && (
+            <RecordButton
+              isRecording={editable.isRecording}
+              onToggleRecording={
+                editable.isRecording
+                  ? editable.handleStopRecording
+                  : editable.handleStartRecording
               }
-            : null
-        }
-        recordingTime={recordingTime}
-        audioWaveform={audioWaveform}
-      />
+            />
+          )
+        ) : (
+          <PlaybackButton isPlaying={isPlaying} onTogglePlayback={togglePlayback} />
+        )}
+        <AudioVisualizer
+          isRecording={
+            editable?.visualizerData && editable.visualizerData.length > 0
+              ? {
+                  isRecording: editable.isRecording,
+                  visualizerData: editable.visualizerData,
+                }
+              : null
+          }
+          recordingTime={recordingTime}
+          audioWaveform={audioWaveform}
+        />
+      </div>
     </div>
   );
 };
