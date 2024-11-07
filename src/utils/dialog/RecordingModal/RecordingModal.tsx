@@ -7,7 +7,7 @@ import { ModalActionButtons } from './ModalActionButtons';
 interface RecordingModalProps {
   open: boolean;
   onClose: () => void;
-  onSend?: (audioBlob: Blob) => void;
+  onSend?: (audioBlob: Blob, waveform: number[]) => void;
 }
 
 const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
@@ -32,7 +32,7 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (recordingManager.audioBlob && onSend) {
-      onSend(recordingManager.audioBlob);
+      onSend(recordingManager.audioBlob, visualizerManager.audioWaveform);
       onClose();
     }
   };

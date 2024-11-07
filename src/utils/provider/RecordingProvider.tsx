@@ -6,13 +6,15 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
     null
   );
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioWaveform, setAudioWaveform] = useState<number[]>([]);
 
   const closeRecordingModal = useCallback(() => {
     setRecordingModal(null);
   }, []);
 
-  const handleSaveAudio = useCallback((blob: Blob) => {
+  const handleSaveAudio = useCallback((blob: Blob, waveform: number[]) => {
     setAudioBlob(blob);
+    setAudioWaveform(waveform);
     closeRecordingModal();
   }, []);
 
@@ -31,6 +33,8 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
         openRecordingModal,
         closeRecordingModal,
         audioBlob,
+        audioWaveform,
+        setAudioWaveform,
       }}
     >
       {children}
