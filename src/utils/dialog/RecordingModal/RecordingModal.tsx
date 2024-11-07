@@ -42,13 +42,18 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
     analyserRef.current = audioContextRef.current.createAnalyser();
     const source = audioContextRef.current.createMediaStreamSource(stream);
     source.connect(analyserRef.current);
-    analyserRef.current.fftSize = 64;
+    analyserRef.current.fftSize = 128; // 더 상세한 데이터를 위해 128로 설정
 
     const updateVisualizer = () => {
       if (!analyserRef.current) return;
       const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
       analyserRef.current.getByteFrequencyData(dataArray);
-      setVisualizerData(Array.from(dataArray));
+
+      // 데이터 정규화 (0-100 범위로)
+      const normalizedData = Array.from(dataArray).map(
+        (value) => (value / 255) * 100
+      );
+      setVisualizerData(normalizedData);
       animationFrameRef.current = requestAnimationFrame(updateVisualizer);
     };
 
@@ -92,8 +97,8 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
     const audioContext = new AudioContext();
     const arrayBuffer = await audioBlob.arrayBuffer();
     const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
     const channelData = audioBuffer.getChannelData(0);
+
     const samples = 64;
     const blockSize = Math.floor(channelData.length / samples);
     const waveform = [];
@@ -101,9 +106,13 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
     for (let i = 0; i < samples; i++) {
       let sum = 0;
       for (let j = 0; j < blockSize; j++) {
-        sum += Math.abs(channelData[i * blockSize + j]);
+        const idx = i * blockSize + j;
+        if (idx < channelData.length) {
+          sum += Math.abs(channelData[idx]);
+        }
       }
-      waveform.push((sum / blockSize) * 255);
+      const normalizedValue = (sum / blockSize) * 8000;
+      waveform.push(Math.min(100, normalizedValue));
     }
 
     setAudioWaveform(waveform);
@@ -142,6 +151,8 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
     setAudioUrl(null);
     setAudioBlob(null);
     setRecordingTime(0);
+    setVisualizerData([]);
+    setAudioWaveform([]);
   };
 
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
@@ -165,7 +176,7 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
       className="flex items-center justify-center"
     >
       <div className="bg-[#f5f0ea] p-6 rounded-3xl shadow-lg w-[480px] relative">
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex w-full flex-col items-center gap-4">
           <div className="w-full flex items-center gap-4">
             {!audioUrl ? (
               <button
@@ -181,6 +192,7 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
               </button>
             ) : (
               <button
+                type="button"
                 onClick={togglePlayback}
                 className="bg-[#e8e1d9] hover:bg-[#d8d1c9] rounded-full p-3 transition-colors"
               >
@@ -198,26 +210,27 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
                 )}
                 <span className="text-[#8b7e74]">{formatTime(recordingTime)}</span>
               </div>
-              <div className="h-12 mt-2 flex items-center gap-0.5">
+              <div className="h-12 mt-2 flex items-center">
                 {isRecording
                   ? visualizerData.map((value, index) => (
                       <div
                         key={index}
-                        className="w-1 bg-[#8b7e74] rounded-full"
-                        style={{ height: `${(value / 255) * 100}%` }}
+                        className="flex-1 bg-[#8b7e74] rounded-full mx-[1px]"
+                        style={{ height: `${value}%` }}
                       />
                     ))
                   : audioWaveform.map((value, index) => (
                       <div
                         key={index}
-                        className="w-1 bg-[#8b7e74] rounded-full"
-                        style={{ height: `${(value / 255) * 100}%` }}
+                        className="flex-1 bg-[#8b7e74] rounded-full mx-[1px]"
+                        style={{ height: `${value}%` }}
                       />
                     ))}
               </div>
             </div>
 
             <button
+              type="button"
               onClick={handleDelete}
               className="bg-[#e8e1d9] hover:bg-[#d8d1c9] rounded-full p-3 transition-colors"
             >
