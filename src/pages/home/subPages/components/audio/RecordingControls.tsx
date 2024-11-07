@@ -24,7 +24,7 @@ const RecordingControls = ({
   togglePlayback,
 }: RecordingControlsProps) => {
   return (
-    <div className="flex gap-2 h-full">
+    <div className="flex gap-2 w-full h-full">
       {!audioUrl ? (
         editable && (
           <RecordButton

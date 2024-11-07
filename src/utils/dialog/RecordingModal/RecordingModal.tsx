@@ -49,7 +49,7 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
     >
       <div className="bg-[#f5f0ea] p-6 rounded-3xl shadow-lg w-[480px] relative">
         <div className="flex w-full flex-col items-center gap-4">
-          <div className="w-full flex items-center gap-4">
+          <div className="w-full h-36 flex items-center gap-2">
             <RecordingControls
               audioUrl={recordingManager.audioUrl}
               isPlaying={recordingManager.isPlaying}
@@ -71,7 +71,11 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
             onEnded={() => recordingManager.setIsPlaying(false)}
           />
         </div>
-        <ModalActionButtons onSubmit={handleSend} onClose={onClose} />
+        <ModalActionButtons
+          disabled={!recordingManager.audioUrl}
+          onSubmit={handleSend}
+          onClose={onClose}
+        />
       </div>
     </Modal>
   );
