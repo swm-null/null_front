@@ -31,7 +31,7 @@ const TagItem = ({
       text={`#${tag.name}`}
       color={color}
       fontColor="brown2"
-      border={border}
+      borderOpacity={border}
       size={size}
       invalidCharsPattern={invalidCharsPattern}
       {...(onChildTagClick && {

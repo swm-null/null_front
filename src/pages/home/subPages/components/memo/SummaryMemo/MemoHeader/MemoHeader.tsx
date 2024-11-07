@@ -13,8 +13,8 @@ const MemoHeader = ({ tags }: { tags: Tag[] }) => {
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
             color="peach0"
             fontColor="brown0"
-            radius="small"
-            border={0}
+            borderRadius="small"
+            borderOpacity={0}
           />
         ))}
       </div>
