@@ -39,13 +39,13 @@ const RecordingControls = ({
     }
   }, [audioUrl, isPlaying, recordingTime, audioWaveform]);
 
-  if (audioWaveform.length <= 0) return;
+  if (audioUrl && audioWaveform.length <= 0) return;
 
   return (
     <div ref={containerRef} className="flex w-full h-full">
       <div
         ref={contentRef}
-        className={`flex ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
+        className={`flex h-full ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
         style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}
       >
         {!audioUrl ? (
