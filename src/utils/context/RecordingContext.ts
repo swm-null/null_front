@@ -10,7 +10,7 @@ type RecordingContextType = {
   recordingModal: RecordingModalState | null;
   openRecordingModal: () => void;
   closeRecordingModal: () => void;
-  audioBlob: Blob | null;
+  audioBlobs: Blob[];
   audioWaveform: number[];
   setAudioWaveform: (waveform: number[]) => void;
   removeAudio: () => void;
@@ -20,7 +20,7 @@ export const RecordingContext = createContext<RecordingContextType>({
   recordingModal: null,
   openRecordingModal: () => {},
   closeRecordingModal: () => {},
-  audioBlob: null,
+  audioBlobs: [],
   audioWaveform: [],
   setAudioWaveform: () => {},
   removeAudio: () => {},

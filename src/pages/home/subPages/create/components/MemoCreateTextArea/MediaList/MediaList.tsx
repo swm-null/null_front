@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 interface MediaListProps {
   images: File[];
   removeImage: (index: number) => void;
-  audioBlob: Blob | null;
+  audioBlobs: Blob[];
   audioWaveform: number[];
   removeAudio: () => void;
 }
@@ -14,7 +14,7 @@ interface MediaListProps {
 const MediaList = ({
   images,
   removeImage,
-  audioBlob,
+  audioBlobs,
   audioWaveform,
   removeAudio,
 }: MediaListProps) => {
@@ -24,8 +24,8 @@ const MediaList = ({
   const [audioUrl, setAudioUrl] = useState<string>('');
 
   useEffect(() => {
-    if (audioBlob) {
-      const url = URL.createObjectURL(audioBlob);
+    if (audioBlobs.length > 0) {
+      const url = URL.createObjectURL(audioBlobs[0]);
       setAudioUrl(url);
 
       const context = new AudioContext();
@@ -39,14 +39,14 @@ const MediaList = ({
         setRecordingTime(duration);
       };
 
-      reader.readAsArrayBuffer(audioBlob);
+      reader.readAsArrayBuffer(audioBlobs[0]);
 
       return () => {
         URL.revokeObjectURL(url);
         context.close();
       };
     }
-  }, [audioBlob]);
+  }, [audioBlobs]);
   const togglePlayback = () => {
     if (!audioRef.current) return;
 
@@ -61,15 +61,15 @@ const MediaList = ({
     setIsPlaying(!isPlaying);
   };
 
-  if (images.length === 0 && !audioBlob) return null;
+  if (images.length === 0 && audioBlobs.length === 0) return null;
 
   return (
     <div className="w-full flex gap-5 overflow-x-auto no-scrollbar">
-      {audioBlob && (
+      {audioBlobs.length > 0 && (
         <div className="relative flex h-24 gap-3 flex-shrink-0">
           <audio ref={audioRef} src={audioUrl} onEnded={() => setIsPlaying(false)} />
           <RecordingControls
-            audioUrl={URL.createObjectURL(audioBlob)}
+            audioUrl={URL.createObjectURL(audioBlobs[0])}
             isPlaying={isPlaying}
             recordingTime={recordingTime}
             audioWaveform={audioWaveform}

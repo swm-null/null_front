@@ -28,7 +28,7 @@ const MemoCreateTextArea = ({
   onSubmit,
 }: MemoCreateTextAreaProps) => {
   const { images, removeImage, handlePaste } = useContext(ImageListContext);
-  const { audioBlob, audioWaveform, removeAudio } = useContext(RecordingContext);
+  const { audioBlobs, audioWaveform, removeAudio } = useContext(RecordingContext);
 
   const { openRecordingModal } = useContext(RecordingContext);
 
@@ -54,8 +54,8 @@ const MemoCreateTextArea = ({
   };
 
   const handleTextareaMultiline = useCallback(
-    () => isMultiline || images.length !== 0 || audioBlob,
-    [isMultiline, images, audioBlob]
+    () => isMultiline || images.length !== 0 || audioBlobs.length !== 0,
+    [isMultiline, images, audioBlobs]
   );
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const MemoCreateTextArea = ({
           <MediaList
             images={images}
             removeImage={removeImage}
-            audioBlob={audioBlob}
+            audioBlobs={audioBlobs}
             audioWaveform={audioWaveform}
             removeAudio={removeAudio}
           />

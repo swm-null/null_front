@@ -32,23 +32,32 @@ const useCreateMemoManager = () => {
   const allMemos =
     !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
 
-  const handleCreateMemo = async (message: string, images?: File[]) => {
+  const handleCreateMemo = async (
+    message: string,
+    images: File[],
+    audioBlobs: Blob[]
+  ) => {
     try {
-      const imageUrls = images ? await getImageUrls(images) : [];
-      await createMemo({ message, images: imageUrls });
+      const imageUrls = await getFileUrls(images);
+      const voiceUrls = await getFileUrls(
+        audioBlobs.map(
+          (blob) => new File([blob], 'audio.webm', { type: 'audio/webm' })
+        )
+      );
+      await createMemo({ message, images: imageUrls, voiceUrls });
       setStatus('success');
     } catch (error) {
       setStatus('error');
     }
   };
 
-  const getImageUrls = async (images: File[]): Promise<string[]> => {
-    if (images.length === 0) return [];
+  const getFileUrls = async (files: File[]): Promise<string[]> => {
+    if (files.length === 0) return [];
 
     const response =
-      images.length === 1
-        ? await Api.uploadFile(images[0])
-        : await Api.uploadFiles(images);
+      files.length === 1
+        ? await Api.uploadFile(files[0])
+        : await Api.uploadFiles(files);
     if (!Api.isFilesResponse(response))
       throw new Error('파일 업로드에 문제가 생겼습니다.');
 
@@ -58,15 +67,17 @@ const useCreateMemoManager = () => {
   const createMemo = async ({
     message,
     images,
+    voiceUrls,
   }: {
     message: string;
     images?: string[];
+    voiceUrls?: string[];
   }) => {
     const temporaryMemo = await createTemporaryMemo({ message, images });
     addMemoInQueries(temporaryMemo);
 
     try {
-      const response = await Api.createMemo(message, images);
+      const response = await Api.createMemo(message, images, voiceUrls);
 
       if (Api.isCreateMemoResponse(response)) {
         updateMemoInQueries(temporaryMemo.id, response as Interface.Memo);

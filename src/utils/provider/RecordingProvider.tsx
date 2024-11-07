@@ -5,7 +5,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
   const [recordingModal, setRecordingModal] = useState<RecordingModalState | null>(
     null
   );
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioBlobs, setAudioBlobs] = useState<Blob[]>([]);
   const [audioWaveform, setAudioWaveform] = useState<number[]>([]);
 
   const closeRecordingModal = useCallback(() => {
@@ -13,7 +13,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const handleSaveAudio = useCallback((blob: Blob, waveform: number[]) => {
-    setAudioBlob(blob);
+    setAudioBlobs([blob]);
     setAudioWaveform(waveform);
     closeRecordingModal();
   }, []);
@@ -27,7 +27,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const removeAudio = useCallback(() => {
-    setAudioBlob(null);
+    setAudioBlobs([]);
     setAudioWaveform([]);
   }, []);
 
@@ -37,7 +37,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
         recordingModal,
         openRecordingModal,
         closeRecordingModal,
-        audioBlob,
+        audioBlobs,
         audioWaveform,
         setAudioWaveform,
         removeAudio,
