@@ -1,8 +1,8 @@
 import { Modal } from '@mui/material';
-import { AudioVisualizer } from './AudioVisualizer';
-import { RecordButton, PlaybackButton, ResetButton } from './buttons';
+import { ResetButton } from './buttons';
 import { useRecordingManager, useVisualizerManager } from './hooks';
 import { ModalActionButtons } from './ModalActionButtons';
+import { RecordingControls } from 'pages/home/subPages/components';
 
 interface RecordingModalProps {
   open: boolean;
@@ -50,26 +50,18 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
       <div className="bg-[#f5f0ea] p-6 rounded-3xl shadow-lg w-[480px] relative">
         <div className="flex w-full flex-col items-center gap-4">
           <div className="w-full flex items-center gap-4">
-            {!recordingManager.audioUrl ? (
-              <RecordButton
-                isRecording={recordingManager.isRecording}
-                onToggleRecording={
-                  recordingManager.isRecording
-                    ? handleStopRecording
-                    : handleStartRecording
-                }
-              />
-            ) : (
-              <PlaybackButton
-                isPlaying={recordingManager.isPlaying}
-                onTogglePlayback={recordingManager.togglePlayback}
-              />
-            )}
-            <AudioVisualizer
-              isRecording={recordingManager.isRecording}
+            <RecordingControls
+              audioUrl={recordingManager.audioUrl}
+              isPlaying={recordingManager.isPlaying}
               recordingTime={recordingManager.recordingTime}
-              visualizerData={visualizerManager.visualizerData}
               audioWaveform={visualizerManager.audioWaveform}
+              editable={{
+                isRecording: recordingManager.isRecording,
+                visualizerData: visualizerManager.visualizerData,
+                handleStopRecording: handleStopRecording,
+                handleStartRecording: handleStartRecording,
+              }}
+              togglePlayback={recordingManager.togglePlayback}
             />
             {recordingManager.audioUrl && <ResetButton onReset={handleReset} />}
           </div>

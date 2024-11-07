@@ -1,9 +1,16 @@
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { TextareaAutosize } from '@mui/material';
 import { usePressEnterFetch } from 'pages/home/subPages/hooks';
 import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
-import { ImageList } from './ImageList';
+import { MediaList } from './MediaList';
 import { ImageListContext, RecordingContext } from 'utils';
 import { useHiddenTextareaManager } from './hook';
 
@@ -21,6 +28,8 @@ const MemoCreateTextArea = ({
   onSubmit,
 }: MemoCreateTextAreaProps) => {
   const { images, removeImage, handlePaste } = useContext(ImageListContext);
+  const { audioBlob, audioWaveform } = useContext(RecordingContext);
+
   const { openRecordingModal } = useContext(RecordingContext);
 
   const [focus, setFocus] = useState(false);
@@ -41,9 +50,13 @@ const MemoCreateTextArea = ({
   };
 
   const handleMicButtonClick = () => {
-    // TODO: 마이크 버튼 클릭시 하는 메소드 생기면 추가
     openRecordingModal();
   };
+
+  const handleTextareaMultiline = useCallback(
+    () => isMultiline || images.length !== 0 || audioBlob,
+    [isMultiline, images, audioBlob]
+  );
 
   useEffect(() => {
     if (containerRef.current) {
@@ -54,7 +67,8 @@ const MemoCreateTextArea = ({
   return (
     <div className="p-4">
       <div
-        className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
+        className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border
+        border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
         onBlur={handleBlur}
         onPaste={handlePaste}
       >
@@ -65,11 +79,11 @@ const MemoCreateTextArea = ({
         />
         <div
           ref={containerRef}
-          className={`flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row items-center'}`}
+          className={`w-full flex flex-1 ${handleTextareaMultiline() ? 'flex-col' : 'flex-row items-center'}`}
         >
           <TextareaAutosize
             className="flex-auto focus:outline-none resize-none min-h-9 content-center
-            text-[#111111] bg-transparent placeholder-custom"
+              text-[#111111] bg-transparent placeholder-custom"
             value={value}
             onFocus={() => {
               setFocus(true);
@@ -80,7 +94,12 @@ const MemoCreateTextArea = ({
             minRows={1}
             maxRows={20}
           />
-          <ImageList images={images} removeImage={removeImage} />
+          <MediaList
+            images={images}
+            removeImage={removeImage}
+            audioBlob={audioBlob}
+            audioWaveform={audioWaveform}
+          />
           <IconButtons
             submitAvailable={focus || isMultiline}
             onMicButtonClick={handleMicButtonClick}
