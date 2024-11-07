@@ -26,11 +26,13 @@ export const getSubPagesData = (): routerType[] => {
     {
       path: 'dashboard',
       element: (
-        <MemoProvider>
-          <TagProvider>
-            <Page.Dashboard />
-          </TagProvider>
-        </MemoProvider>
+        <RecordingProvider>
+          <MemoProvider>
+            <TagProvider>
+              <Page.Dashboard />
+            </TagProvider>
+          </MemoProvider>
+        </RecordingProvider>
       ),
       title: 'dashboard',
     },

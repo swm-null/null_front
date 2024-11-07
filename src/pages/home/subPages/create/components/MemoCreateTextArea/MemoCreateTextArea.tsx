@@ -28,7 +28,7 @@ const MemoCreateTextArea = ({
   onSubmit,
 }: MemoCreateTextAreaProps) => {
   const { images, removeImage, handlePaste } = useContext(ImageListContext);
-  const { audioBlobs, audioWaveform, removeAudio } = useContext(RecordingContext);
+  const { audioBlobs, removeAudio } = useContext(RecordingContext);
 
   const { openRecordingModal } = useContext(RecordingContext);
 
@@ -64,6 +64,12 @@ const MemoCreateTextArea = ({
     }
   }, [containerRef.current]);
 
+  useEffect(() => {
+    return () => {
+      removeAudio();
+    };
+  }, []);
+
   return (
     <div className="p-4">
       <div
@@ -98,7 +104,6 @@ const MemoCreateTextArea = ({
             images={images}
             removeImage={removeImage}
             audioBlobs={audioBlobs}
-            audioWaveform={audioWaveform}
             removeAudio={removeAudio}
           />
           <IconButtons
