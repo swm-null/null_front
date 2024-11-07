@@ -1,4 +1,4 @@
-import { HTMLProps, useEffect, useRef, useState } from 'react';
+import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UneditableTagList, useMemoManager } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -18,26 +18,7 @@ const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) =>
 
   const { handleDeleteMemo } = useMemoManager();
 
-  const memoRef = useRef<HTMLDivElement>(null);
-  const memoTextRef = useRef<HTMLParagraphElement>(null);
   const [tags] = useState(memo.tags);
-  const [maxHeight, setMaxHeight] = useState<number | undefined>();
-  const [isEllipsis, setIsEllipsis] = useState(false);
-
-  useEffect(() => {
-    if (memoRef.current) {
-      setMaxHeight(memoRef.current.clientWidth);
-    }
-  }, [memoRef.current?.offsetWidth]);
-
-  useEffect(() => {
-    if (memoTextRef.current) {
-      const newIsTextEllipsis =
-        memoTextRef.current.scrollHeight > memoTextRef.current.offsetHeight;
-
-      setIsEllipsis(newIsTextEllipsis);
-    }
-  }, [memoTextRef.current]);
 
   const haveImageUrl = memo.image_urls && memo.image_urls.length > 0;
 
@@ -68,12 +49,7 @@ const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) =>
       {haveImageUrl && <ImageBlur />}
 
       <div
-        ref={memoRef}
         className={`flex flex-col flex-1 h-full gap-2 relative z-10 overflow-hidden`}
-        style={{
-          maxHeight: maxHeight,
-          minHeight: isEllipsis ? maxHeight : undefined,
-        }}
       >
         <UneditableTagList
           tags={tags}
@@ -83,7 +59,6 @@ const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) =>
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
         />
         <MemoText
-          ref={memoTextRef}
           textColor={getStyleByImagePresence('#111111', 'white')}
           message={memo.content}
         />
