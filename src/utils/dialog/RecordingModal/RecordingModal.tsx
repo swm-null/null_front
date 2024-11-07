@@ -21,7 +21,7 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
         visualizerManager.startVisualizer
       );
     } catch (err) {
-      console.error('Failed to start recording:', err);
+      // TODO: 시스템 설정에서 브라우저의 마이크 접근이 차단되어 있을 때 혹은, 다른 탭에서 마이크를 사용중일 때 나는 오류
     }
   };
 
