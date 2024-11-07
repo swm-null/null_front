@@ -24,7 +24,7 @@ const MemoEditModal = () => {
         onClick={handleClick}
       >
         <div
-          className="flex w-full max-w-[816px] min-h-[411px] rounded-2xl overflow-hidden shadow-custom backdrop-blur-lg"
+          className="flex w-full max-w-[816px] min-h-[411px] max-h-full rounded-2xl overflow-hidden shadow-custom backdrop-blur-lg"
           onClick={handleContentClick}
         >
           <EditableMemo

@@ -68,19 +68,21 @@ const EditableMemo = ({
       className={`p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-md gap-8 
         ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
-      <div className="flex flex-1 flex-col gap-[1.14rem]">
+      <div className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden">
         <MemoHeader
           updatedAt={memo.updated_at}
           dateFormat={t('memo.dateFormatEdit')}
           handleDeleteMemo={() => handleDeleteMemo({ memo, handlePreProcess })}
         />
-        <ImageMemoText
-          imageUrls={imageUrls}
-          removeImageUrl={removeImageUrl}
-          message={message}
-          setMessage={setMessage}
-          editable
-        />
+        <div className="flex overflow-y-scroll no-scrollbar">
+          <ImageMemoText
+            imageUrls={imageUrls}
+            removeImageUrl={removeImageUrl}
+            message={message}
+            setMessage={setMessage}
+            editable
+          />
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">

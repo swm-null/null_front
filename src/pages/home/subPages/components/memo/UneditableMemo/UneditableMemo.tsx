@@ -22,7 +22,7 @@ const UneditableMemo = ({
       className={`p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-md gap-8 
         ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
-      <div className="flex flex-1 flex-col gap-[1.14rem]">
+      <div className="flex flex-1 flex-col gap-[1.14rem] overflow-hidden">
         <MemoHeader
           updatedAt={memo.updated_at}
           dateFormat={t('memo.dateFormatEdit')}
@@ -30,7 +30,9 @@ const UneditableMemo = ({
             handleDeleteMemo({ memo, handlePreProcess: handleClose })
           }
         />
-        <ImageMemoText imageUrls={memo.image_urls} message={memo.content} />
+        <div className="flex overflow-y-scroll no-scrollbar">
+          <ImageMemoText imageUrls={memo.image_urls} message={memo.content} />
+        </div>
       </div>
       <div className="flex gap-2">
         <UneditableTagList
