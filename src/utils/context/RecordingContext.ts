@@ -13,6 +13,7 @@ type RecordingContextType = {
   audioBlob: Blob | null;
   audioWaveform: number[];
   setAudioWaveform: (waveform: number[]) => void;
+  removeAudio: () => void;
 };
 
 export const RecordingContext = createContext<RecordingContextType>({
@@ -22,4 +23,5 @@ export const RecordingContext = createContext<RecordingContextType>({
   audioBlob: null,
   audioWaveform: [],
   setAudioWaveform: () => {},
+  removeAudio: () => {},
 });

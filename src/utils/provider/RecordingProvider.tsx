@@ -26,6 +26,11 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
+  const removeAudio = useCallback(() => {
+    setAudioBlob(null);
+    setAudioWaveform([]);
+  }, []);
+
   return (
     <RecordingContext.Provider
       value={{
@@ -35,6 +40,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
         audioBlob,
         audioWaveform,
         setAudioWaveform,
+        removeAudio,
       }}
     >
       {children}

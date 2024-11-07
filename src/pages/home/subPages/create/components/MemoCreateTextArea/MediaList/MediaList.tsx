@@ -8,6 +8,7 @@ interface MediaListProps {
   removeImage: (index: number) => void;
   audioBlob: Blob | null;
   audioWaveform: number[];
+  removeAudio: () => void;
 }
 
 const MediaList = ({
@@ -15,6 +16,7 @@ const MediaList = ({
   removeImage,
   audioBlob,
   audioWaveform,
+  removeAudio,
 }: MediaListProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -64,7 +66,7 @@ const MediaList = ({
   return (
     <div className="w-full flex gap-5 overflow-x-auto no-scrollbar">
       {audioBlob && (
-        <div className="flex h-24 w-fit gap-3 flex-shrink-0">
+        <div className="relative flex h-24 w-fit gap-3 flex-shrink-0">
           <audio
             ref={audioRef}
             src={audioUrl}
@@ -81,6 +83,12 @@ const MediaList = ({
             audioWaveform={audioWaveform}
             togglePlayback={togglePlayback}
           />
+          <div
+            className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
+            onClick={removeAudio}
+          >
+            <CloseIcon className="w-4 h-4" />
+          </div>
         </div>
       )}
       {images.map((image, index) => (

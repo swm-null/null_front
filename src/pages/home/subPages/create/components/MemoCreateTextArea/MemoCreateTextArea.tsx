@@ -28,7 +28,7 @@ const MemoCreateTextArea = ({
   onSubmit,
 }: MemoCreateTextAreaProps) => {
   const { images, removeImage, handlePaste } = useContext(ImageListContext);
-  const { audioBlob, audioWaveform } = useContext(RecordingContext);
+  const { audioBlob, audioWaveform, removeAudio } = useContext(RecordingContext);
 
   const { openRecordingModal } = useContext(RecordingContext);
 
@@ -99,6 +99,7 @@ const MemoCreateTextArea = ({
             removeImage={removeImage}
             audioBlob={audioBlob}
             audioWaveform={audioWaveform}
+            removeAudio={removeAudio}
           />
           <IconButtons
             submitAvailable={focus || isMultiline}
