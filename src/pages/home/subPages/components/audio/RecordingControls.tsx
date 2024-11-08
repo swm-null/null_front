@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { AudioVisualizer } from 'utils/dialog/RecordingModal/AudioVisualizer';
 import { PlaybackButton, RecordButton } from 'utils/dialog/RecordingModal/buttons';
 import { useAudioPlayer, useAudioWaveform } from './hooks';
+import { Skeleton } from '@mui/material';
 
 interface RecordingControlsProps {
   audioUrl: string | null;
@@ -39,7 +40,28 @@ const RecordingControls = ({
     }
   }, [audioUrl, isPlaying, recordingTime, audioWaveform]);
 
-  if (audioUrl && audioWaveform.length <= 0) return;
+  if (audioUrl && audioWaveform.length <= 0) {
+    return (
+      <div ref={containerRef} className="flex w-full h-full">
+        <div
+          className={`flex h-full ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
+        >
+          <Skeleton
+            className="self-center"
+            variant="circular"
+            width={48}
+            height={48}
+          />
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height="100%"
+            className="flex flex-col flex-1 min-h-24 rounded-xl"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className="flex w-full h-full">

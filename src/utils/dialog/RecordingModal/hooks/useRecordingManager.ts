@@ -1,10 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  useCallback,
+  ChangeEvent,
+} from 'react';
+import { RecordingContext } from 'utils/context';
 
 export const useRecordingManager = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
+
+  const { isValidFileType } = useContext(RecordingContext);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -60,6 +70,21 @@ export const useRecordingManager = () => {
     }
   };
 
+  const handleAudioFileChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files && files.length > 0) {
+        if (isValidFileType(files[0])) {
+          const blob = new Blob([files[0]], { type: files[0].type });
+          const url = URL.createObjectURL(blob);
+          setAudioUrl(url);
+          setAudioBlob(blob);
+        }
+      }
+    },
+    [alert]
+  );
+
   const handleDelete = (resetVisualizer: () => void) => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -76,6 +101,7 @@ export const useRecordingManager = () => {
     audioBlob,
     audioRef,
     recordingTime,
+    handleAudioFileChange,
     startRecording,
     stopRecording,
     handleDelete,

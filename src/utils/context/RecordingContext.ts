@@ -11,9 +11,13 @@ type RecordingContextType = {
   openRecordingModal: () => void;
   closeRecordingModal: () => void;
   audioBlobs: Blob[];
-  audioWaveform: number[];
-  setAudioWaveform: (waveform: number[]) => void;
   removeAudio: () => void;
+  setAudioBlobs: (blobs: Blob[]) => void;
+  ALLOWED_AUDIO_FILE_TYPES: string[];
+  isValidFileType: (file: File) => boolean;
+  getRootProps: any;
+  getInputProps: any;
+  handleAddAudioButtonClick: () => void;
 };
 
 export const RecordingContext = createContext<RecordingContextType>({
@@ -21,7 +25,11 @@ export const RecordingContext = createContext<RecordingContextType>({
   openRecordingModal: () => {},
   closeRecordingModal: () => {},
   audioBlobs: [],
-  audioWaveform: [],
-  setAudioWaveform: () => {},
   removeAudio: () => {},
+  setAudioBlobs: () => {},
+  ALLOWED_AUDIO_FILE_TYPES: [],
+  isValidFileType: () => false,
+  getRootProps: () => {},
+  getInputProps: () => {},
+  handleAddAudioButtonClick: () => {},
 });
