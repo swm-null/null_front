@@ -29,17 +29,24 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    const newOpenIds = new Set(openConversationIds);
-    searchMemoManager.data.forEach((conversation) => {
-      if (
-        conversation.id &&
-        !conversation.ai?.loading &&
-        !conversation.db?.loading
-      ) {
-        newOpenIds.add(conversation.id);
-      }
+    setOpenConversationIds((prev) => {
+      const newOpenIds = new Set(prev);
+      let hasChanges = false;
+
+      searchMemoManager.data.forEach((conversation) => {
+        if (
+          conversation.id &&
+          !conversation.ai?.loading &&
+          !conversation.db?.loading &&
+          !prev.has(conversation.id)
+        ) {
+          newOpenIds.add(conversation.id);
+          hasChanges = true;
+        }
+      });
+
+      return hasChanges ? newOpenIds : prev;
     });
-    setOpenConversationIds(newOpenIds);
   }, [searchMemoManager.data]);
 
   return (
