@@ -19,6 +19,7 @@ const ImageFileInput = ({
   return (
     <form className={className} onClick={handleClick}>
       <input
+        id="image-file-input"
         title="input-file"
         type="file"
         accept={ALLOWED_IMAGE_FILE_TYPES.join(', ')}

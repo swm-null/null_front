@@ -11,5 +11,14 @@ export default defineConfig({
       plugins: [tailwindcss()],
     },
   },
+  server: {
+    proxy: {
+      '/audio': {
+        target: 'https://static-stage.oatnote.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/audio/, ''),
+      },
+    },
+  },
   plugins: [react(), svgr(), tsconfigPaths()],
 });

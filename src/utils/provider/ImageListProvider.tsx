@@ -111,7 +111,7 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
 
   const handleAddImageButtonClick = () => {
     const inputFile = document.querySelector(
-      'input[type="file"]'
+      '#image-file-input'
     ) as HTMLInputElement;
     if (inputFile) inputFile.click();
   };

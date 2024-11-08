@@ -1,13 +1,14 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCreateMemoManager } from './hook';
-import { ImageListContext } from 'utils';
+import { ImageListContext, RecordingContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 
 const CreatePage = () => {
   const { t } = useTranslation();
   const { images, getInputProps, getRootProps, removeAllImage } =
     useContext(ImageListContext);
+  const { audioBlobs, removeAudio } = useContext(RecordingContext);
 
   const [message, setMessage] = useState('');
   const createMemoManager = useCreateMemoManager();
@@ -17,14 +18,19 @@ const CreatePage = () => {
   };
 
   const handleSubmit = () => {
-    if (message.trim().length === 0 && images.length === 0) {
+    if (
+      message.trim().length === 0 &&
+      images.length === 0 &&
+      audioBlobs.length === 0
+    ) {
       return;
     }
 
-    createMemoManager.handleCreateMemo(message, images);
+    createMemoManager.handleCreateMemo(message, images, audioBlobs);
 
     setMessage('');
     removeAllImage();
+    removeAudio();
   };
 
   return (

@@ -82,7 +82,7 @@ const DBAnswer = ({ content }: { content: MemoSearchAnswerWithDB | null }) => {
           {memoSearchAnswer.memos?.length ? (
             <ScrollableList>
               {memoSearchAnswer.memos?.map((memo) => (
-                <div key={memo.id} className="rounded-lg h-60 w-60 flex-shrink-0">
+                <div key={memo.id} className="rounded-lg w-60 h-fit flex-shrink-0">
                   <SummaryMemoWithoutDrag memo={memo} />
                 </div>
               ))}
@@ -124,7 +124,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
           {memoSearchAnswer.memos?.length ? (
             <ScrollableList>
               {memoSearchAnswer.memos?.map((memo) => (
-                <div key={memo.id} className="rounded-lg h-60 w-60 flex-shrink-0">
+                <div key={memo.id} className="rounded-lg h-fit w-60 flex-shrink-0">
                   <SummaryMemoWithoutDrag memo={memo} />
                 </div>
               ))}

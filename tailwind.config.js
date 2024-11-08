@@ -43,5 +43,5 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-filters')],
+  plugins: [require('tailwindcss-filters'), require('@tailwindcss/line-clamp')],
 };
