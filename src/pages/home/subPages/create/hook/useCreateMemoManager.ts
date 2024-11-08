@@ -26,8 +26,7 @@ const useCreateMemoManager = () => {
           : undefined;
       },
       initialPageParam: 1,
-      staleTime: 10 * 1000,
-      refetchInterval: () => (document.hidden ? false : 5000),
+      staleTime: 600000,
     });
 
   const allMemos =

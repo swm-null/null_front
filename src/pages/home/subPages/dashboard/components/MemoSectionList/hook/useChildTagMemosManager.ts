@@ -43,11 +43,9 @@ const useChildTagMemosManager = (
       return nextPage <= lastPage.total_page ? nextPage : undefined;
     },
     initialPageParam: 1,
-    staleTime: 0,
-    refetchInterval: () => (document.hidden ? false : 3000),
+    staleTime: 600000,
+    gcTime: 900000,
     refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   });
 
   const memos = useMemo(() => {
