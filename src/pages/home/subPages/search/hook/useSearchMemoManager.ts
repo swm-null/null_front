@@ -38,7 +38,12 @@ const useSearchMemoManager = () => {
         : undefined;
     },
     initialPageParam: 1,
-    staleTime: 60 * 1000,
+    staleTime: 0,
+    gcTime: 1000 * 60 * 5,
+    refetchInterval: () => (document.hidden ? false : 10 * 1000),
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 
   const allSearchHistories =
