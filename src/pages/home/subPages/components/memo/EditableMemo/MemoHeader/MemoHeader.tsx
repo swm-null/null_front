@@ -27,14 +27,17 @@ const MemoHeader = ({
     <div className="flex gap-[1.44rem] items-center">
       <ImageFileInput handleImageFileChange={handleImageFilesChange}>
         <CameraIcon
-          className="text-brown2 w-6 h-6"
+          className="text-brown2 w-6 h-6 cursor-pointer"
           onClick={handleAddImageButtonClick}
         />
       </ImageFileInput>
       <p className="ml-auto text-center font-medium text-sm text-brown2">
         {formatDate(updatedAt)}
       </p>
-      <DeleteIcon className="text-brown2 w-5 h-5" onClick={handleDeleteMemo} />
+      <DeleteIcon
+        className="text-brown2 w-5 h-5 cursor-pointer"
+        onClick={handleDeleteMemo}
+      />
     </div>
   );
 };
