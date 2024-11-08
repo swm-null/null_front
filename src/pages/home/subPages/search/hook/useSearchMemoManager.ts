@@ -40,7 +40,7 @@ const useSearchMemoManager = () => {
     initialPageParam: 1,
     staleTime: 0,
     gcTime: 1000 * 60 * 5,
-    refetchInterval: () => (document.hidden ? false : 10 * 1000),
+    refetchInterval: () => (document.hidden ? false : 5000),
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
