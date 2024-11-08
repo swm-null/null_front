@@ -45,7 +45,7 @@ const MemoHeader = ({
         handleImageFileChange={handleImageFilesChange}
       >
         <CameraIcon
-          className="text-brown2 w-6 h-6"
+          className="text-brown2 w-6 h-6 cursor-pointer"
           onClick={handleAddImageButtonClick}
         />
         <MicIcon
@@ -57,7 +57,7 @@ const MemoHeader = ({
         {formatDate(updatedAt)}
       </p>
       <DeleteIcon
-        className="text-brown2 w-5 h-5 flex-shrink-0"
+        className="text-brown2 w-5 h-5 flex-shrink-0 cursor-pointer"
         onClick={handleDeleteMemo}
       />
     </div>
