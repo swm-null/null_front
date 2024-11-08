@@ -1,5 +1,6 @@
 import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
+import { MouseEvent } from 'react';
 
 const MemoFooter = ({
   updatedAt,
@@ -19,13 +20,18 @@ const MemoFooter = ({
     return format(`${date}Z`, dateFormat);
   };
 
+  const handleDeleteMemoWidthEvent = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    handleDeleteMemo();
+  };
+
   return (
     <div className="flex items-center mt-auto" style={{ color: textColor }}>
       <p className="font-medium text-[10px]">{formatDate(updatedAt)}</p>
 
       <button
         className="text-right justify-self-end ml-auto rounded-full"
-        onClick={handleDeleteMemo}
+        onClick={handleDeleteMemoWidthEvent}
       >
         <DeleteIcon className="w-[1.125rem] h-[1.125rem]" />
       </button>
