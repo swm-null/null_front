@@ -81,8 +81,10 @@ const useMemoManager = () => {
     const isTagsChanged = JSON.stringify(memo.tags) !== JSON.stringify(newMemo.tags);
     const isImagesChanged =
       JSON.stringify(memo.image_urls) !== JSON.stringify(newMemo.image_urls);
+    const isVoicesChange =
+      JSON.stringify(memo.voice_urls) !== JSON.stringify(newMemo.voice_urls);
 
-    if (isContentChanged || isTagsChanged || isImagesChanged) {
+    if (isContentChanged || isTagsChanged || isImagesChanged || isVoicesChange) {
       const backupData = backupMemoData();
       updateMemoDataInQueries(newMemo);
 

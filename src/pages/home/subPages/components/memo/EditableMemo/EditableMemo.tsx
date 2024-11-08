@@ -44,18 +44,18 @@ const EditableMemo = ({
     return `/audio${originalUrl.pathname}`;
   };
 
-  const getFileUrls = async (images: File[]): Promise<string[]> => {
-    if (images.length === 0) return [];
+  const getFileUrls = async (files: File[]): Promise<string[]> => {
+    if (files.length === 0) return [];
 
     const response =
-      images.length === 1 ? await uploadFile(images[0]) : await uploadFiles(images);
+      files.length === 1 ? await uploadFile(files[0]) : await uploadFiles(files);
     if (!isFilesResponse(response))
       throw new Error('파일 업로드에 문제가 생겼습니다.');
 
     return response.urls;
   };
 
-  const handleUpdateMemoWithUploadImage = async () => {
+  const handleUpdateMemoWithUploadFiles = async () => {
     try {
       const newImageUrls = await getFileUrls(images);
       const newVoiceUrls = await getFileUrls(
@@ -69,7 +69,7 @@ const EditableMemo = ({
         newMessage: message,
         newTags: tags,
         newImageUrls: [...imageUrls, ...newImageUrls],
-        newVoiceUrls: newVoiceUrls || memo.voice_urls,
+        newVoiceUrls: newVoiceUrls.length ? newVoiceUrls : memo.voice_urls,
         handlePreProcess,
       });
     } catch {
@@ -180,7 +180,7 @@ const EditableMemo = ({
             type="button"
             className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
               rounded-[30px] border border-[#917360]"
-            onClick={handleUpdateMemoWithUploadImage}
+            onClick={handleUpdateMemoWithUploadFiles}
           >
             {t('memo.save')}
           </button>
