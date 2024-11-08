@@ -55,7 +55,9 @@ const SummaryMemo = ({
     >
       {haveImageUrl && <ImageBlur />}
 
-      <div className={`flex flex-col flex-1 h-full gap-2 relative overflow-hidden`}>
+      <div
+        className={`flex flex-col flex-1 h-full gap-2 relative overflow-hidden select-none`}
+      >
         <UneditableTagList
           tags={tags}
           size="small"
