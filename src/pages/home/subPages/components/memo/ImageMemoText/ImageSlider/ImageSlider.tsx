@@ -46,7 +46,10 @@ const ImageSlider = ({
   return (
     <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
       <FlickityWrapper
-        showPageDots={!!imageUrls}
+        showPageDots={
+          (imageUrls.length + images.length >= 1 && editable) ||
+          imageUrls.length >= 2
+        }
         onImageClick={handleImageClick}
         onRemoveClick={editable ? handleRemoveClick : null}
         onAddClick={editable ? handleAddImageButtonClick : null}
