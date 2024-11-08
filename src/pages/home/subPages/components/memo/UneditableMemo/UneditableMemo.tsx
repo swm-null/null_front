@@ -6,7 +6,6 @@ import {
 } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
-import { useMemoManager } from '../hook';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Divider } from '@mui/material';
 
@@ -20,7 +19,6 @@ const UneditableMemo = ({
   handleClose: () => void;
 }) => {
   const { t } = useTranslation();
-  const { handleDeleteMemo } = useMemoManager();
 
   const parsedMetadata = memo.metadata ? JSON.parse(memo.metadata) : null;
   const voiceDescriptions = parsedMetadata?.voice_record_descriptions || [];
@@ -36,13 +34,7 @@ const UneditableMemo = ({
         ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
       <div className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden">
-        <MemoHeader
-          updatedAt={memo.updated_at}
-          dateFormat={t('memo.dateFormat')}
-          handleDeleteMemo={() =>
-            handleDeleteMemo({ memo, handlePreProcess: handleClose })
-          }
-        />
+        <MemoHeader updatedAt={memo.updated_at} dateFormat={t('memo.dateFormat')} />
         <div className="flex flex-col flex-1 overflow-y-scroll no-scrollbar gap-4">
           <ImageMemoText imageUrls={memo.image_urls} message={memo.content} />
           {memo.voice_urls && memo.voice_urls.length > 0 && (

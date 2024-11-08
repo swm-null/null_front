@@ -32,6 +32,7 @@ const SummaryMemoWithoutDrag = ({
       memo={memo}
       shadow
       border
+      readonly
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onClick={handleClick}

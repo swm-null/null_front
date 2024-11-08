@@ -16,9 +16,16 @@ interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
   border?: boolean;
   shadow?: boolean;
+  readonly?: boolean;
 }
 
-const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) => {
+const SummaryMemo = ({
+  memo,
+  border,
+  shadow,
+  readonly = false,
+  ...divProps
+}: SummaryMemoProps) => {
   const { t } = useTranslation();
   const { handleDeleteMemo } = useMemoManager();
 
@@ -101,6 +108,7 @@ const SummaryMemo = ({ memo, border, shadow, ...divProps }: SummaryMemoProps) =>
           textColor={getStyleByImagePresence('gray2', 'white')}
           updatedAt={memo.updated_at}
           dateFormat={t('memo.dateFormat')}
+          readonly={readonly}
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         />
       </div>
