@@ -35,7 +35,7 @@ const DashboardPage = () => {
       const { tagStack: prevTagStack } = event.state;
       setTagStack(prevTagStack || []);
       tagsManager.handleTagOrAllTagsClick(
-        prevTagStack[prevTagStack.length - 1] || null
+        prevTagStack?.length > 0 ? prevTagStack[prevTagStack.length - 1] : null
       );
     }
   };
