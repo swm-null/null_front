@@ -109,6 +109,8 @@ const useMemoManager = () => {
         if (!oldData) return oldData;
 
         const updatedPages = oldData.pages.map((page) => {
+          if (!page) return page;
+
           const memoIndex = page.memos.findIndex((m) => m.id === newMemo.id);
           if (memoIndex !== -1) {
             const updatedMemos = [...page.memos];
@@ -151,6 +153,8 @@ const useMemoManager = () => {
         if (!oldData) return oldData;
 
         const updatedPages = oldData.pages.map((page) => {
+          if (!page) return page;
+
           const newMemos = page.memos.filter((m) => m.id !== memoId);
           return { ...page, memos: newMemos };
         });
