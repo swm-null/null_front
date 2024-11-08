@@ -1,15 +1,20 @@
 import { format } from 'date-fns';
 import { MemoSearchConversation } from 'pages/home/subPages/interfaces';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ConversationSummary } from './ConversationSummary';
 import { ConversationContent } from './ConversationContent';
 
-const SearchConversation = ({ data }: { data: MemoSearchConversation }) => {
+const SearchConversation = ({
+  data,
+  isOpen,
+  onToggle,
+}: {
+  data: MemoSearchConversation;
+  isOpen: boolean;
+  onToggle: (isOpen: boolean) => void;
+}) => {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(
-    !data.ai?.loading || !data.db?.loading ? false : true
-  );
   const contentRef = useRef<HTMLDivElement>(null);
 
   const formatDate = (date: string): string => {
@@ -27,7 +32,7 @@ const SearchConversation = ({ data }: { data: MemoSearchConversation }) => {
     >
       <ConversationSummary
         isOpen={isOpen}
-        setIsOpen={setIsOpen}
+        setIsOpen={onToggle}
         data={data}
         formatDate={formatDate}
       />
