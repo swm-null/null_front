@@ -28,9 +28,8 @@ const MemoCreateTextArea = ({
   onSubmit,
 }: MemoCreateTextAreaProps) => {
   const { images, removeImage, handlePaste } = useContext(ImageListContext);
-  const { audioBlobs, removeAudio } = useContext(RecordingContext);
-
-  const { openRecordingModal } = useContext(RecordingContext);
+  const { audioBlobs, removeAudio, openRecordingModal } =
+    useContext(RecordingContext);
 
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
