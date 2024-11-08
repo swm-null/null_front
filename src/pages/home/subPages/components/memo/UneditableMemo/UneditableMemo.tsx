@@ -38,7 +38,7 @@ const UneditableMemo = ({
       <div className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden">
         <MemoHeader
           updatedAt={memo.updated_at}
-          dateFormat={t('memo.dateFormatEdit')}
+          dateFormat={t('memo.dateFormat')}
           handleDeleteMemo={() =>
             handleDeleteMemo({ memo, handlePreProcess: handleClose })
           }
