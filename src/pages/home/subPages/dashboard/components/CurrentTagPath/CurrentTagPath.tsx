@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import { Breadcrumbs } from '@mui/material';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
@@ -6,6 +6,7 @@ import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
 import { UneditableTagList } from 'pages/home/subPages/components';
+import { TagContext } from 'utils';
 
 interface CurrentTagPathProps {
   allTagText: string;
@@ -30,7 +31,10 @@ const CurrentTagPath = ({
   setSortOption,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
+  const { onReset } = useContext(TagContext);
+
   const handleAllTagsClick = () => {
+    onReset();
     setTagStack([]);
     handleTagOrAllTagsClick(null);
   };

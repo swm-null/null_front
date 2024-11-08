@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import * as Icon from 'assets/icons';
 import { useTranslation } from 'react-i18next';
+import { TagContext } from 'utils';
 
 interface LeftNavBarProps {
   currentPage: string;
@@ -9,6 +10,12 @@ interface LeftNavBarProps {
 
 const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
   const { t } = useTranslation();
+  const { onReset } = useContext(TagContext);
+
+  const handleClickDashboard = () => {
+    onReset();
+    setCurrentPage('dashboard');
+  };
 
   return (
     <div className="flex w-full h-full">
@@ -30,7 +37,7 @@ const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
             selected={currentPage === 'dashboard'}
             icon={<Icon.DashboardIcon />}
             label={t('pages.sidebar.dashboard')}
-            onClick={() => setCurrentPage('dashboard')}
+            onClick={handleClickDashboard}
           />
         </div>
       </div>

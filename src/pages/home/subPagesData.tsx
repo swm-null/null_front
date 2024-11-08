@@ -1,6 +1,6 @@
 import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
-import { MemoProvider, TagProvider } from 'utils';
+import { MemoProvider } from 'utils';
 import { RecordingProvider } from 'utils';
 
 export const getSubPagesData = (): routerType[] => {
@@ -28,9 +28,7 @@ export const getSubPagesData = (): routerType[] => {
       element: (
         <RecordingProvider>
           <MemoProvider>
-            <TagProvider>
-              <Page.Dashboard />
-            </TagProvider>
+            <Page.Dashboard />
           </MemoProvider>
         </RecordingProvider>
       ),

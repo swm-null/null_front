@@ -42,6 +42,7 @@ const useDashboardTagManager = () => {
     initialPageParam: 1,
     staleTime: 600000,
     gcTime: 900000,
+    refetchOnWindowFocus: true,
   });
 
   const { data: childTags } = useQuery({

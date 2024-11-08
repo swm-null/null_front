@@ -1,8 +1,9 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/types';
-import { useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
+import { TagContext } from 'utils';
 
 const MEMO_LIMIT = 10;
 
@@ -12,6 +13,9 @@ const useChildTagMemosManager = (
   sortOption: SortOption,
   memoLimit?: number
 ) => {
+  const { subscribeToReset } = useContext(TagContext);
+  const queryClient = useQueryClient();
+
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: [
       'childTagMemos',
@@ -42,10 +46,10 @@ const useChildTagMemosManager = (
       const nextPage = lastPage.current_page + 1;
       return nextPage <= lastPage.total_page ? nextPage : undefined;
     },
+    enabled: !!tagId,
+    gcTime: 0,
     initialPageParam: 1,
-    staleTime: 600000,
-    gcTime: 900000,
-    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   const memos = useMemo(() => {
@@ -56,6 +60,21 @@ const useChildTagMemosManager = (
       ) || []
     );
   }, [data]);
+
+  useEffect(() => {
+    subscribeToReset(() => {
+      queryClient.resetQueries({
+        queryKey: [
+          'childTagMemos',
+          tagId,
+          sortOption,
+          isLinked,
+          memoLimit ? memoLimit : MEMO_LIMIT,
+        ],
+        exact: true,
+      });
+    });
+  }, []);
 
   return {
     memos,

@@ -5,6 +5,23 @@ import { TagContext, TagModalState } from 'utils';
 const TagProvider = ({ children }: { children: ReactNode }) => {
   const [tagEditModal, setTagEditModal] = useState<TagModalState | null>(null);
 
+  const [eventListeners] = useState(new Set<() => void>());
+
+  const subscribeToReset = useCallback(
+    (listener: () => void) => {
+      eventListeners.add(listener);
+      return () => {
+        eventListeners.delete(listener);
+      };
+    },
+    [eventListeners]
+  );
+
+  const onReset = useCallback(() => {
+    eventListeners.forEach((listener) => listener());
+    closeTagEditModal();
+  }, [eventListeners]);
+
   const openTagEditModal = (tag: Tag) => {
     setTagEditModal({
       isOpen: true,
@@ -23,6 +40,8 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
         tagEditModal,
         openTagEditModal,
         closeTagEditModal,
+        subscribeToReset,
+        onReset,
       }}
     >
       {children}
