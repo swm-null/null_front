@@ -23,9 +23,11 @@ const EditableMemo = ({
 
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
+  const [tagRebuild, setTagRebuild] = useState(false);
   const [originImageUrls, setOriginalImageUrls] = useState(memo.image_urls);
 
-  const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
+  const { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo } =
+    useMemoManager();
 
   const {
     images,
@@ -54,14 +56,24 @@ const EditableMemo = ({
     try {
       const newImageUrls = await getFileUrls(images);
 
-      handleUpdateMemo({
-        memo,
-        newMessage: message,
-        newTags: tags,
-        newImageUrls: [...originImageUrls, ...newImageUrls],
-        newVoiceUrls: memo.voice_urls,
-        handlePreProcess,
-      });
+      if (tagRebuild) {
+        handleUpdateMemoWithRecreateTags({
+          memo,
+          newMessage: message,
+          newTags: tags,
+          newImageUrls: [...originImageUrls, ...newImageUrls],
+          handlePreProcess,
+        });
+      } else {
+        handleUpdateMemo({
+          memo,
+          newMessage: message,
+          newTags: tags,
+          newImageUrls: [...originImageUrls, ...newImageUrls],
+          newVoiceUrls: [],
+          handlePreProcess,
+        });
+      }
     } catch {
       // FIXME: 에러 처리 어캐 하지...
 
@@ -107,6 +119,8 @@ const EditableMemo = ({
         </div>
       </div>
       <EditOptions
+        tagRebuild={tagRebuild}
+        setTagRebuild={setTagRebuild}
         handleImageFilesChange={handleImageFilesChange}
         handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
       />
