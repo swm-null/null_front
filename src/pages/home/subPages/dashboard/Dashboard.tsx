@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tag } from 'pages/home/subPages/interfaces';
 import * as Components from './components';
@@ -17,11 +17,36 @@ const DashboardPage = () => {
   const tagsManager = Hooks.useDashboardTagManager();
 
   const handleChildTagClick = (tag: Tag | null) => {
+    history.pushState(
+      {
+        tagStack: [...tagStack, tag],
+      },
+      '',
+      window.location.href
+    );
     if (tag) {
       setTagStack((prevStack) => [...prevStack, tag]);
     }
     tagsManager.handleTagOrAllTagsClick(tag);
   };
+
+  const handleGoBack = (event: PopStateEvent) => {
+    if (event.state) {
+      const { tagStack: prevTagStack } = event.state;
+      setTagStack(prevTagStack || []);
+      tagsManager.handleTagOrAllTagsClick(
+        prevTagStack[prevTagStack.length - 1] || null
+      );
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('popstate', handleGoBack);
+
+    return () => {
+      window.removeEventListener('popstate', handleGoBack);
+    };
+  }, [tagsManager.selectedTag]);
 
   return (
     <div

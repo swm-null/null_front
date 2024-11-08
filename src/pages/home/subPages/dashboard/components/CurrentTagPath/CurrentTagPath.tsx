@@ -40,6 +40,14 @@ const CurrentTagPath = ({
   };
 
   const handleMiddleTagClick = (index: number) => {
+    history.pushState(
+      {
+        tagStack: tagStack,
+      },
+      '',
+      window.location.href
+    );
+
     const newStack = tagStack.slice(0, index + 1);
     setTagStack(newStack);
     handleTagOrAllTagsClick(newStack[index]);
