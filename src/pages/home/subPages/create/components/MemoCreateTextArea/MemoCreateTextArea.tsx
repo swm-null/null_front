@@ -57,6 +57,17 @@ const MemoCreateTextArea = ({
     [isMultiline, images, audioBlobs]
   );
 
+  const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length > 2000) {
+      onChange({
+        ...e,
+        target: { ...e.target, value: e.target.value.slice(0, 2000) },
+      });
+      return;
+    }
+    onChange(e);
+  };
+
   useEffect(() => {
     if (containerRef.current) {
       setHiddenTextareaWidth(containerRef.current?.clientWidth);
@@ -93,7 +104,7 @@ const MemoCreateTextArea = ({
             onFocus={() => {
               setFocus(true);
             }}
-            onChange={onChange}
+            onChange={handleTextareaChange}
             placeholder={placeholder}
             onKeyDown={handlePressEnterFetch}
             minRows={1}
@@ -106,6 +117,7 @@ const MemoCreateTextArea = ({
             removeAudio={removeAudio}
           />
           <IconButtons
+            message={value}
             submitAvailable={focus || isMultiline}
             onMicButtonClick={handleMicButtonClick}
             onSubmitButtonClick={onSubmit}

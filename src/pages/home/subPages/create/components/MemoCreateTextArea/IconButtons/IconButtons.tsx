@@ -4,9 +4,11 @@ import { useContext } from 'react';
 import { ImageListContext } from 'utils';
 
 const IconButtons = ({
+  message,
   submitAvailable,
   onSubmitButtonClick,
 }: {
+  message: string;
   submitAvailable: boolean;
   onMicButtonClick?: () => void;
   onSubmitButtonClick?: () => void;
@@ -16,6 +18,7 @@ const IconButtons = ({
 
   return (
     <div className="flex justify-end gap-1 items-center">
+      {`${message ? message.length : 0} / 2000`}
       <ImageFileInput handleImageFileChange={handleImageFilesChange}>
         <CameraIcon
           tabIndex={0}

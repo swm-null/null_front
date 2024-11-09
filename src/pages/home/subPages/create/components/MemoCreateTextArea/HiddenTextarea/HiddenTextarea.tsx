@@ -25,6 +25,7 @@ const HiddenTextarea = ({
       ref={hiddenTextareaRef}
     />
     <IconButtons
+      message={value}
       submitAvailable={true}
       onMicButtonClick={() => {}}
       onSubmitButtonClick={() => {}}

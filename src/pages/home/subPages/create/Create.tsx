@@ -41,13 +41,13 @@ const CreatePage = () => {
         {...getRootProps()}
       >
         <div className="w-full max-w-[740px] h-full flex flex-col flex-1 text-gray3">
-          <MemoCreateTextArea
-            value={message}
-            onChange={handleMessageChange}
-            placeholder={t('pages.create.inputPlaceholder')}
-            onSubmit={handleSubmit}
-          />
           <div className={`overflow-scroll no-scrollbar`}>
+            <MemoCreateTextArea
+              value={message}
+              onChange={handleMessageChange}
+              placeholder={t('pages.create.inputPlaceholder')}
+              onSubmit={handleSubmit}
+            />
             <CreatedMemoList
               memos={createMemoManager.data}
               fetchNextPage={createMemoManager.fetchNextPage}
