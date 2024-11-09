@@ -1,11 +1,10 @@
-import { CameraIcon, MicIcon, RightArrowIcon } from 'assets/icons';
+import { CameraIcon, RightArrowIcon } from 'assets/icons';
 import { ImageFileInput } from 'pages/home/subPages/components';
 import { useContext } from 'react';
 import { ImageListContext } from 'utils';
 
 const IconButtons = ({
   submitAvailable,
-  onMicButtonClick,
   onSubmitButtonClick,
 }: {
   submitAvailable: boolean;
@@ -17,11 +16,6 @@ const IconButtons = ({
 
   return (
     <div className="flex justify-end gap-1 items-center">
-      <MicIcon
-        tabIndex={0}
-        className="w-7 h-7 cursor-pointer"
-        onClick={onMicButtonClick}
-      />
       <ImageFileInput handleImageFileChange={handleImageFilesChange}>
         <CameraIcon
           tabIndex={0}
