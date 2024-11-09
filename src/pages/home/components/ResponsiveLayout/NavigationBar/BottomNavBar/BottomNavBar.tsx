@@ -1,7 +1,7 @@
 import * as Icon from 'assets/icons';
 import { useContext, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BottomNavContext } from 'utils';
+import { BottomNavContext, TagContext } from 'utils';
 
 interface BottomNavBarProps {
   currentPage: string;
@@ -11,6 +11,7 @@ interface BottomNavBarProps {
 const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
   const { t } = useTranslation();
   const { setBottomNavHeight } = useContext(BottomNavContext);
+  const { onReset } = useContext(TagContext);
 
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
 
@@ -19,6 +20,11 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
       setBottomNavHeight(bottomNavRef.current.offsetHeight);
     }
   }, [bottomNavRef]);
+
+  const handleClickDashboard = () => {
+    onReset();
+    setCurrentPage('dashboard');
+  };
 
   return (
     <div ref={bottomNavRef} className="fixed w-full bottom-0">
@@ -42,7 +48,7 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
           selected={currentPage === 'dashboard'}
           icon={<Icon.DashboardIcon />}
           label={t('pages.sidebar.dashboard')}
-          onClick={() => setCurrentPage('dashboard')}
+          onClick={handleClickDashboard}
         />
       </div>
     </div>
