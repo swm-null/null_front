@@ -1,13 +1,16 @@
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoginSignupButton, CustomInput, HiddenInput } from 'pages/components';
 import { isLoginResponse, login } from 'api';
+import { AlertContext } from 'utils';
 
 const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const { alert } = useContext(AlertContext);
 
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');

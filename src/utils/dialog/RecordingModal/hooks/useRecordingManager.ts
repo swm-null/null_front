@@ -70,20 +70,17 @@ export const useRecordingManager = () => {
     }
   };
 
-  const handleAudioFileChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const files = e.target.files;
-      if (files && files.length > 0) {
-        if (isValidFileType(files[0])) {
-          const blob = new Blob([files[0]], { type: files[0].type });
-          const url = URL.createObjectURL(blob);
-          setAudioUrl(url);
-          setAudioBlob(blob);
-        }
+  const handleAudioFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      if (isValidFileType(files[0])) {
+        const blob = new Blob([files[0]], { type: files[0].type });
+        const url = URL.createObjectURL(blob);
+        setAudioUrl(url);
+        setAudioBlob(blob);
       }
-    },
-    [alert]
-  );
+    }
+  }, []);
 
   const handleDelete = (resetVisualizer: () => void) => {
     if (audioRef.current) {

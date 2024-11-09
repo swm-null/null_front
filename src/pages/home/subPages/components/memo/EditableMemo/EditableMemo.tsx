@@ -5,7 +5,7 @@ import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
 import { useMemoManager } from '../hook';
 import { isFilesResponse, uploadFile, uploadFiles } from 'api/index.ts';
-import { ImageListContext } from 'utils/index.ts';
+import { AlertContext, ImageListContext } from 'utils/index.ts';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 
 const EditableMemo = ({
@@ -19,6 +19,7 @@ const EditableMemo = ({
 }) => {
   const { t } = useTranslation();
   const { images } = useContext(ImageListContext);
+  const { alert } = useContext(AlertContext);
 
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);

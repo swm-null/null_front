@@ -1,7 +1,9 @@
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AlertContext } from 'utils';
 
 const SEARCH_HISTORY_LIMIT = 10;
 const SEARCH_QUERY_KEY = ['search'] as const;
@@ -13,6 +15,7 @@ interface SearchQueryData {
 
 const useSearchMemoManager = () => {
   const queryClient = useQueryClient();
+  const { alert } = useContext(AlertContext);
   const { t } = useTranslation();
 
   const { data, fetchNextPage, isLoading } = useInfiniteQuery<
