@@ -28,16 +28,16 @@ const MemoSearchTextArea = ({
   return (
     <div className="p-4">
       <div
-        className={`flex flex-shrink-0 px-4 py-3 items-start rounded-2xl overflow-hidden gap-4
+        className={`flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 h-[62px] items-center
           ${getBackgroundColor()} border-[1px] border-[#E3BFA4] font-regular shadow-custom`}
       >
-        <form className="flex flex-1 gap-2" onSubmit={handleSubmit}>
+        <form className="flex flex-1 gap-2 h-fit" onSubmit={handleSubmit}>
           <LightSearchIcon
             className={`self-center text-brown1 ${isSmallScreen ? 'w-[1.125rem] h-[1.125rem]' : 'w-[1.375rem] h-[1.375rem]'}`}
           />
           <input
-            className="flex-1 flex-shrink-0 focus:outline-none resize-none min-h-9 content-center 
-            text-[#111111] bg-transparent placeholder-custom"
+            className="flex flex-1 flex-shrink-0 focus:outline-none resize-none content-center h-full
+            text-[#111111] bg-transparent placeholder-custom self-center"
             value={value}
             onChange={onChange}
             onFocus={() => setFocus(true)}
