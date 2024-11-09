@@ -5,11 +5,12 @@ import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
 import { SortOption } from 'pages/home/subPages/types';
-import { BottomNavContext } from 'utils';
+import { BottomNavContext, TagContext } from 'utils';
 
 const DashboardPage = () => {
   const { t } = useTranslation();
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
+  const { subscribeToReset, unsubscribeFromReset } = useContext(TagContext);
 
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
   const [tagStack, setTagStack] = useState<Tag[]>([]);
@@ -47,6 +48,19 @@ const DashboardPage = () => {
       window.removeEventListener('popstate', handleGoBack);
     };
   }, [tagsManager.selectedTag]);
+
+  useEffect(() => {
+    const resetTagStack = () => {
+      setTagStack([]);
+      handleChildTagClick(null);
+    };
+
+    subscribeToReset(resetTagStack);
+
+    return () => {
+      unsubscribeFromReset(resetTagStack);
+    };
+  }, []);
 
   return (
     <div

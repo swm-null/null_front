@@ -10,9 +10,13 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
   const subscribeToReset = useCallback(
     (listener: () => void) => {
       eventListeners.add(listener);
-      return () => {
-        eventListeners.delete(listener);
-      };
+    },
+    [eventListeners]
+  );
+
+  const unsubscribeFromReset = useCallback(
+    (listener: () => void) => {
+      eventListeners.delete(listener);
     },
     [eventListeners]
   );
@@ -41,6 +45,7 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
         openTagEditModal,
         closeTagEditModal,
         subscribeToReset,
+        unsubscribeFromReset,
         onReset,
       }}
     >

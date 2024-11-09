@@ -13,7 +13,7 @@ const useChildTagMemosManager = (
   sortOption: SortOption,
   memoLimit?: number
 ) => {
-  const { subscribeToReset } = useContext(TagContext);
+  const { subscribeToReset, unsubscribeFromReset } = useContext(TagContext);
   const queryClient = useQueryClient();
 
   const { data, fetchNextPage } = useInfiniteQuery({
@@ -62,7 +62,7 @@ const useChildTagMemosManager = (
   }, [data]);
 
   useEffect(() => {
-    subscribeToReset(() => {
+    const resetQueriesCurrentQuery = () => {
       queryClient.resetQueries({
         queryKey: [
           'childTagMemos',
@@ -73,8 +73,14 @@ const useChildTagMemosManager = (
         ],
         exact: true,
       });
-    });
-  }, []);
+    };
+
+    subscribeToReset(resetQueriesCurrentQuery);
+
+    return () => {
+      unsubscribeFromReset(resetQueriesCurrentQuery);
+    };
+  }, [tagId]);
 
   return {
     memos,

@@ -11,7 +11,8 @@ interface TagContextType {
   tagEditModal: TagModalState | null;
   openTagEditModal: (tag: Tag) => void;
   closeTagEditModal: () => void;
-  subscribeToReset: (listener: () => void) => () => void;
+  subscribeToReset: (listener: () => void) => void;
+  unsubscribeFromReset: (listener: () => void) => void;
   onReset: () => void;
 }
 
@@ -19,6 +20,7 @@ export const TagContext = createContext<TagContextType>({
   tagEditModal: null,
   openTagEditModal: (_: Tag) => {},
   closeTagEditModal: () => {},
-  subscribeToReset: () => () => {},
+  subscribeToReset: () => {},
+  unsubscribeFromReset: () => {},
   onReset: () => {},
 });
