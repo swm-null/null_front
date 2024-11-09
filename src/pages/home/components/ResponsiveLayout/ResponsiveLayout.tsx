@@ -32,9 +32,13 @@ const ResponsiveLayout = ({
         <div
           className={`flex w-full ${isSmallScreen ? 'py-4' : 'py-5'} pl-4 pr-6 items-center`}
         >
-          <LogoIcon
-            className={`${isSmallScreen ? 'h-10' : 'h-14'} w-auto mr-auto`}
-          />
+          <button
+            type="button"
+            className="mr-auto"
+            onClick={() => handleNavigation('')}
+          >
+            <LogoIcon className={`${isSmallScreen ? 'h-10' : 'h-14'} w-auto`} />
+          </button>
           <ProfileButton />
         </div>
         <div
