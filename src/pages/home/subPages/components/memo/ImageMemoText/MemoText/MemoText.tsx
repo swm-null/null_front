@@ -61,7 +61,7 @@ const MemoText = ({
       />
       <div
         className={`w-full bg-transparent font-regular text-[15px] whitespace-break-spaces 
-          [&_a]:pointer-events-auto ${!isBlurred || !editable ? '' : 'hidden'}`}
+          [&_a]:pointer-events-auto [&_a]:break-all ${!isBlurred || !editable ? '' : 'hidden'}`}
         style={{ color: textColor }}
         dangerouslySetInnerHTML={{ __html: convertToHyperlinks(message) }}
         onClick={handleFocus}
