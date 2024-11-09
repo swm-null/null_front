@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Components from 'pages/components';
 import { useNavigate } from 'react-router-dom';
@@ -57,6 +57,14 @@ const FindPw = () => {
       }
     } catch {}
   };
+
+  useEffect(() => {
+    changeHandlerManager.form.confirmPassword &&
+      validationManager.validateConfirmPassword(
+        changeHandlerManager.form.password,
+        changeHandlerManager.form.confirmPassword
+      );
+  }, [changeHandlerManager.form.password]);
 
   return (
     <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
