@@ -27,7 +27,7 @@ const MemoCreateTextArea = ({
   onChange,
   onSubmit,
 }: MemoCreateTextAreaProps) => {
-  const { images, removeImage, handlePaste } = useContext(ImageListContext);
+  const { imageUrls, removeImage, handlePaste } = useContext(ImageListContext);
   const { audioBlobs, removeAudio, openRecordingModal } =
     useContext(RecordingContext);
 
@@ -37,7 +37,10 @@ const MemoCreateTextArea = ({
     null
   );
 
-  const { hiddenTextareaRef, isMultiline } = useHiddenTextareaManager(value, images);
+  const { hiddenTextareaRef, isMultiline } = useHiddenTextareaManager(
+    value,
+    imageUrls
+  );
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleEnterWithCtrl: onSubmit,
   });
@@ -53,8 +56,8 @@ const MemoCreateTextArea = ({
   };
 
   const handleTextareaMultiline = useCallback(
-    () => isMultiline || images.length !== 0 || audioBlobs.length !== 0,
-    [isMultiline, images, audioBlobs]
+    () => isMultiline || imageUrls.length !== 0 || audioBlobs.length !== 0,
+    [isMultiline, imageUrls, audioBlobs]
   );
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -111,7 +114,7 @@ const MemoCreateTextArea = ({
             maxRows={20}
           />
           <MediaList
-            images={images}
+            images={imageUrls}
             removeImage={removeImage}
             audioBlobs={audioBlobs}
             removeAudio={removeAudio}

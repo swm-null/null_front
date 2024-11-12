@@ -3,6 +3,7 @@ import React, {
   ReactNode,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -15,6 +16,11 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
   const [images, setImages] = useState<File[]>([]);
   const { t } = useTranslation();
   const { alert } = useContext(AlertContext);
+
+  const imageUrls = useMemo(
+    () => images.map((image) => URL.createObjectURL(image)),
+    [images]
+  );
 
   const addImage = useCallback((image: File) => {
     setImages((prev) => [...prev, image]);
@@ -120,6 +126,7 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
     <ImageListContext.Provider
       value={{
         images,
+        imageUrls,
         ALLOWED_IMAGE_FILE_TYPES,
         removeImage,
         removeAllImage,
