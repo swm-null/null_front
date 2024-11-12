@@ -4,7 +4,7 @@ const MemoText = forwardRef<
   HTMLParagraphElement,
   { message: string; textColor?: string }
 >(({ message, textColor = '#111111' }, ref) => {
-  const paragraphRef = useRef<HTMLParagraphElement | null>(null);
+  const paragraphRef = useRef<HTMLDivElement | null>(null);
   const [isOverflowed, setIsOverflowed] = useState(false);
 
   useEffect(() => {
@@ -22,9 +22,17 @@ const MemoText = forwardRef<
     }
   }, [message]);
 
+  const convertToHyperlinks = (text: string) => {
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    return text.replace(
+      urlPattern,
+      '<a id="memo-link" class="underline" href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
+  };
+
   return (
     <>
-      <p
+      <div
         ref={(node) => {
           paragraphRef.current = node;
           if (typeof ref === 'function') {
@@ -34,15 +42,20 @@ const MemoText = forwardRef<
           }
         }}
         className={`flex-col h-full bg-transparent focus:outline-none font-regular text-[15px] 
-          overflow-hidden text-ellipsis whitespace-break-spaces leading-5`}
+          overflow-hidden text-ellipsis whitespace-break-spaces break-all leading-5`}
         style={{
           color: textColor,
           display: '-webkit-box',
           WebkitBoxOrient: 'vertical',
         }}
-      >
-        {message}
-      </p>
+        onClick={(event) => {
+          const target = event.target as HTMLElement;
+          if (target.id === 'memo-link') {
+            event.stopPropagation();
+          }
+        }}
+        dangerouslySetInnerHTML={{ __html: convertToHyperlinks(message) }}
+      />
       {isOverflowed && <span style={{ color: textColor }}>...</span>}
     </>
   );
