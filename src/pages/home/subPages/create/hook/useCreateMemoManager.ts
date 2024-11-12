@@ -52,6 +52,10 @@ const useCreateMemoManager = () => {
         )
       );
 
+      temporaryMemo.image_urls = imageUrls;
+      temporaryMemo.voice_urls = voiceUrls;
+      updateMemoInQueries(temporaryMemo.id, temporaryMemo);
+
       await createMemo({ temporaryMemo, message, images: imageUrls, voiceUrls });
       setStatus('success');
     } catch (error) {
