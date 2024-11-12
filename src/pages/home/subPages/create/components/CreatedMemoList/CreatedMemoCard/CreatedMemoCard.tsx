@@ -71,7 +71,9 @@ const CreatedMemoCardHeader = ({
     <div className="flex flex-row flex-wrap-reverse flex-1 gap-2">
       {children}
       <div className="flex gap-2 ml-auto">
-        <p className="text-[#6A5344] select-none">{updatedAt}</p>
+        <p className="text-[#6A5344] select-none content-center text-sm">
+          {updatedAt}
+        </p>
         <button type="button" className="rounded-full">
           <DeleteIcon onClick={handleDeleteMemo} />
         </button>
