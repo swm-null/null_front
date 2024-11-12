@@ -53,7 +53,8 @@ const MemoSectionList = ({
   return (
     <div
       ref={scrollRef}
-      className="flex flex-1 overflow-x-scroll no-scrollbar p-4 pt-2"
+      className="flex flex-1 overflow-x-scroll mx-4 pb-2 pt-2
+        scrollbar-thin scrollbar-thumb-peach0 scrollbar-track-transparent hover:scrollbar-thumb-peach0"
       onMouseDown={onDragStart}
       onMouseMove={onDragMove}
       onMouseUp={onDragEnd}
