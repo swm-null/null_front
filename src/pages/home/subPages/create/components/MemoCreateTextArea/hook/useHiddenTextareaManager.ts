@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const useHiddenTextareaManager = (value: string, images: File[]) => {
+const useHiddenTextareaManager = (value: string, images: string[]) => {
   const hiddenTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [isMultiline, setIsMultiline] = useState(false);
 

@@ -2,7 +2,7 @@ import { CloseIcon } from 'assets/icons';
 import { RecordingControls } from 'pages/home/subPages/components';
 
 interface MediaListProps {
-  images: File[];
+  images: string[];
   removeImage: (index: number) => void;
   audioBlobs: Blob[];
   removeAudio: () => void;
@@ -32,7 +32,7 @@ const MediaList = ({
       {images.map((image, index) => (
         <div key={index} className="relative h-24 min-w-[7rem] flex-shrink-0">
           <img
-            src={URL.createObjectURL(image)}
+            src={image}
             alt="Pasted content"
             className="h-full w-full object-contain rounded-lg"
           />

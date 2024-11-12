@@ -6,7 +6,7 @@ import { MemoCreateTextArea, CreatedMemoList } from './components';
 
 const CreatePage = () => {
   const { t } = useTranslation();
-  const { images, getInputProps, getRootProps, removeAllImage } =
+  const { images, imageUrls, getInputProps, getRootProps, removeAllImage } =
     useContext(ImageListContext);
   const { audioBlobs, removeAudio } = useContext(RecordingContext);
 
@@ -26,7 +26,7 @@ const CreatePage = () => {
       return;
     }
 
-    createMemoManager.handleCreateMemo(message, images, audioBlobs);
+    createMemoManager.handleCreateMemo(message, images, imageUrls, audioBlobs);
 
     setMessage('');
     removeAllImage();

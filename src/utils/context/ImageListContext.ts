@@ -2,6 +2,7 @@ import { ChangeEvent, createContext } from 'react';
 
 interface ImageListContextType {
   images: File[];
+  imageUrls: string[];
   ALLOWED_IMAGE_FILE_TYPES: string[];
   removeImage: (index: number) => void;
   removeAllImage: () => void;
@@ -15,6 +16,7 @@ interface ImageListContextType {
 
 const ImageListContext = createContext<ImageListContextType>({
   images: [],
+  imageUrls: [],
   ALLOWED_IMAGE_FILE_TYPES: [],
   removeImage: (_: number) => {},
   removeAllImage: () => {},

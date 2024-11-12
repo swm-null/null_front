@@ -35,16 +35,28 @@ const useCreateMemoManager = () => {
   const handleCreateMemo = async (
     message: string,
     images: File[],
+    imagesLocalUrls: string[],
     audioBlobs: Blob[]
   ) => {
     try {
+      const temporaryMemo = await createTemporaryMemo({
+        message,
+        images: imagesLocalUrls,
+      });
+      addMemoInQueries(temporaryMemo);
+
       const imageUrls = await getFileUrls(images);
       const voiceUrls = await getFileUrls(
         audioBlobs.map(
           (blob) => new File([blob], 'audio.webm', { type: 'audio/webm' })
         )
       );
-      await createMemo({ message, images: imageUrls, voiceUrls });
+
+      temporaryMemo.image_urls = imageUrls;
+      temporaryMemo.voice_urls = voiceUrls;
+      updateMemoInQueries(temporaryMemo.id, temporaryMemo);
+
+      await createMemo({ temporaryMemo, message, images: imageUrls, voiceUrls });
       setStatus('success');
     } catch (error) {
       setStatus('error');
@@ -65,17 +77,16 @@ const useCreateMemoManager = () => {
   };
 
   const createMemo = async ({
+    temporaryMemo,
     message,
     images,
     voiceUrls,
   }: {
+    temporaryMemo: Interface.Memo;
     message: string;
     images?: string[];
     voiceUrls?: string[];
   }) => {
-    const temporaryMemo = await createTemporaryMemo({ message, images });
-    addMemoInQueries(temporaryMemo);
-
     try {
       const response = await Api.createMemo(message, images, voiceUrls);
 
