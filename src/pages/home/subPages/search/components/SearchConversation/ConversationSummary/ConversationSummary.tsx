@@ -41,7 +41,7 @@ const ConversationSummary = ({
         </p>
       )}
       {!isOpen && (
-        <p className="ml-auto text-sm font-regular text-brown2 flex-shrink-0">
+        <p className="ml-auto text-sm font-regular text-brown2 flex-shrink-0 content-center">
           {formatDate(data.created_at)}
         </p>
       )}
