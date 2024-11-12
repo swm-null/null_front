@@ -3,7 +3,6 @@ import React, {
   ReactNode,
   useCallback,
   useContext,
-  useMemo,
   useState,
 } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -14,24 +13,25 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
   const ALLOWED_IMAGE_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
   const [images, setImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const { t } = useTranslation();
   const { alert } = useContext(AlertContext);
 
-  const imageUrls = useMemo(
-    () => images.map((image) => URL.createObjectURL(image)),
-    [images]
-  );
+  const convertImageToObjectUrl = (image: File) => URL.createObjectURL(image);
 
   const addImage = useCallback((image: File) => {
     setImages((prev) => [...prev, image]);
+    setImageUrls((prev) => [...prev, convertImageToObjectUrl(image)]);
   }, []);
 
   const removeImage = useCallback((index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
+    setImageUrls((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
   const removeAllImage = useCallback(() => {
     setImages([]);
+    setImageUrls([]);
   }, []);
 
   const isValidFileType = (file: File) => {
@@ -86,10 +86,11 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const handleImageFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      if (isValidFileType(files[0])) {
-        setImages([files[0]]);
+    const images = e.target.files;
+    if (images && images.length > 0) {
+      if (isValidFileType(images[0])) {
+        setImages([images[0]]);
+        setImageUrls([convertImageToObjectUrl(images[0])]);
       } else {
         alert(t('utils.file.invalidImageType'));
       }
