@@ -32,7 +32,7 @@ const UneditableMemo = ({
           tags={memo.tags}
           size="large"
           color="peach2"
-          border={0}
+          borderOpacity={0}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
         />
         <div className="flex ml-auto gap-6 items-center">

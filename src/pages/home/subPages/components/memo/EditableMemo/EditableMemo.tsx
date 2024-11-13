@@ -95,7 +95,7 @@ const EditableMemo = ({
             tags={tags}
             size="large"
             color="peach2"
-            border={0}
+            borderOpacity={0}
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
           />
         </div>

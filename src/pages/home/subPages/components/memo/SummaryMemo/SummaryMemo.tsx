@@ -1,7 +1,7 @@
 import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UneditableTagList, useMemoManager } from 'pages/home/subPages/components';
-import { Memo } from 'pages/home/subPages/interfaces';
+import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
@@ -62,8 +62,11 @@ const SummaryMemo = ({
           tags={tags}
           size="small"
           color="peach0"
-          border={0}
+          borderOpacity={0}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+          onChildTagClick={(_: Tag) => {
+            // FIXME : server에서 특정 태그의 부모 태그를 알 수 있는 api를 주면, 해당 api로 부모 태그를 알아내고, context의
+          }}
         />
         {memo.content && (
           <MemoText
