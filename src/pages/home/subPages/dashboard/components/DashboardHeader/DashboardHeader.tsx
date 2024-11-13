@@ -8,7 +8,7 @@ import { SortOption } from 'pages/home/subPages/types';
 import { UneditableTagList } from 'pages/home/subPages/components';
 import { TagContext } from 'utils';
 
-interface CurrentTagPathProps {
+interface DashboardHeaderProps {
   allTagText: string;
   tags: Tag[];
   handleTagOrAllTagsClick: (tag: Tag | null) => void;
@@ -18,7 +18,7 @@ interface CurrentTagPathProps {
   invalidCharsPattern: RegExp;
 }
 
-const CurrentTagPath = ({
+const DashboardHeader = ({
   allTagText,
   tags,
   handleTagOrAllTagsClick,
@@ -26,7 +26,7 @@ const CurrentTagPath = ({
   sortOption,
   setSortOption,
   invalidCharsPattern,
-}: CurrentTagPathProps) => {
+}: DashboardHeaderProps) => {
   const { onReset, tagStack, setTagStack } = useContext(TagContext);
 
   const handleAllTagsClick = () => {
@@ -58,20 +58,15 @@ const CurrentTagPath = ({
       >
         <TagPathButton
           key="all"
-          text={allTagText}
-          invalidCharsPattern={invalidCharsPattern}
+          tag={{ id: '@', name: allTagText }}
           onClick={handleAllTagsClick}
         />
         {tagStack.map((tag, index) => (
           <TagPathButton
             key={tag.id}
-            text={tag.name}
-            invalidCharsPattern={invalidCharsPattern}
-            onClick={
-              index !== tagStack.length - 1
-                ? () => handleMiddleTagClick(index)
-                : undefined
-            }
+            tag={tag}
+            isCurrentTag={index === tagStack.length - 1}
+            onClick={() => handleMiddleTagClick(index)}
           />
         ))}
       </Breadcrumbs>
@@ -100,4 +95,4 @@ const CurrentTagPath = ({
   );
 };
 
-export default CurrentTagPath;
+export default DashboardHeader;

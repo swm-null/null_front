@@ -2,7 +2,7 @@ import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { RightIcon } from 'assets/icons';
 import { useClickWithoutDrag } from 'pages/hooks';
-import { TagWithOptions } from './TagWithOptions';
+import { TagOptions } from 'pages/home/subPages/dashboard/components';
 import { UneditableTagList } from 'pages/home/subPages/components';
 import { useTranslation } from 'react-i18next';
 
@@ -37,7 +37,8 @@ const MemoSectionHeader = ({
       })}
     >
       <div className="flex w-full items-center gap-3">
-        <TagWithOptions tag={tag} />
+        <p className="text-[#3e3e3e]">{tag.name}</p>
+        <TagOptions tag={tag} isLinked={isLinked} />
         <div className="ml-auto flex items-center ">
           {!isLinked && <RightIcon color="black" />}
         </div>

@@ -84,7 +84,7 @@ const DashboardPage = () => {
     >
       <div className="w-full h-full flex flex-col max-w-[1102px] self-center gap-4">
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">
-          <Components.CurrentTagPath
+          <Components.DashboardHeader
             allTagText={t('pages.dashboard.allMemoButton')}
             tags={tagsManager.childTags}
             sortOption={sortOption}
