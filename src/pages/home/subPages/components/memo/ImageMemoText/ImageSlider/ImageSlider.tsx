@@ -3,6 +3,7 @@ import { ImageListContext } from 'utils';
 import { ImageLightbox } from './ImageLightbox';
 import { FlickityWrapper } from './FlickityWrapper';
 import { AddItem, ImageItem } from './item';
+import { PageDots } from './PageDots';
 
 const ImageSlider = ({
   imageUrls,
@@ -18,6 +19,9 @@ const ImageSlider = ({
 
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
+
+  const showPageDots =
+    (imageUrls.length + images.length >= 1 && editable) || imageUrls.length >= 2;
 
   const allImages = useMemo(() => {
     const objectUrls = editable ? images.map((img) => URL.createObjectURL(img)) : [];
@@ -44,28 +48,35 @@ const ImageSlider = ({
   }
 
   return (
-    <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
-      <FlickityWrapper
-        showPageDots={
-          (imageUrls.length + images.length >= 1 && editable) ||
-          imageUrls.length >= 2
-        }
-        onImageClick={handleImageClick}
-        onRemoveClick={editable ? handleRemoveClick : null}
-        onAddClick={editable ? handleAddImageButtonClick : null}
-        totalImageCount={allImages.length}
-      >
-        {allImages.map((image, index) => (
-          <ImageItem
-            key={`origin-${index}`}
-            image={image}
-            index={index}
-            editable={editable}
-          />
-        ))}
-        {editable && <AddItem handleImageFilesChange={handleImageFilesChange} />}
-      </FlickityWrapper>
-
+    <>
+      <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
+        <FlickityWrapper
+          onImageClick={handleImageClick}
+          onRemoveClick={editable ? handleRemoveClick : null}
+          onAddClick={editable ? handleAddImageButtonClick : null}
+          totalImageCount={allImages.length}
+          onChange={setPhotoIndex}
+          currentIndex={photoIndex}
+        >
+          {allImages.map((image, index) => (
+            <ImageItem
+              key={`origin-${index}`}
+              image={image}
+              index={index}
+              editable={editable}
+            />
+          ))}
+          {editable && <AddItem handleImageFilesChange={handleImageFilesChange} />}
+        </FlickityWrapper>
+      </div>
+      {showPageDots && (
+        <PageDots
+          allImages={allImages}
+          photoIndex={photoIndex}
+          setPhotoIndex={setPhotoIndex}
+          editable={editable}
+        />
+      )}
       <ImageLightbox
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -73,7 +84,7 @@ const ImageSlider = ({
         setPhotoIndex={setPhotoIndex}
         images={allImages}
       />
-    </div>
+    </>
   );
 };
 
