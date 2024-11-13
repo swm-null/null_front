@@ -10,8 +10,13 @@ import { BottomNavContext, TagContext } from 'utils';
 const DashboardPage = () => {
   const { t } = useTranslation();
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
-  const { subscribeToReset, unsubscribeFromReset, tagStack, setTagStack } =
-    useContext(TagContext);
+  const {
+    subscribeToReset,
+    unsubscribeFromReset,
+    selectedTag,
+    tagStack,
+    setTagStack,
+  } = useContext(TagContext);
 
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
 
@@ -57,7 +62,7 @@ const DashboardPage = () => {
     return () => {
       window.removeEventListener('popstate', handleGoBack);
     };
-  }, [tagsManager.selectedTag]);
+  }, [selectedTag]);
 
   useEffect(() => {
     const resetTagStack = () => {
@@ -79,7 +84,7 @@ const DashboardPage = () => {
     >
       <div className="w-full h-full flex flex-col max-w-[1102px] self-center gap-4">
         <div className="flex flex-col flex-1 gap-[0.9rem] overflow-hidden">
-          <Components.CurrentTagPath
+          <Components.DashboardHeader
             allTagText={t('pages.dashboard.allMemoButton')}
             tags={tagsManager.childTags}
             sortOption={sortOption}
@@ -89,7 +94,6 @@ const DashboardPage = () => {
             invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
           />
           <Components.MemoSectionList
-            parentTag={tagsManager.selectedTag}
             tagRelations={tagsManager.tagRelations}
             sortOption={sortOption}
             addTagToStack={handleChildTagClick}

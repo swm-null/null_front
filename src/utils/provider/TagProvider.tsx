@@ -4,6 +4,7 @@ import { TagContext, TagModalState } from 'utils';
 
 const TagProvider = ({ children }: { children: ReactNode }) => {
   const [tagEditModal, setTagEditModal] = useState<TagModalState | null>(null);
+  const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
   const [tagStack, setTagStack] = useState<Tag[]>([]);
 
   const [eventListeners] = useState(new Set<() => void>());
@@ -42,6 +43,8 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
   return (
     <TagContext.Provider
       value={{
+        selectedTag,
+        setSelectedTag,
         tagStack,
         setTagStack,
         tagEditModal,

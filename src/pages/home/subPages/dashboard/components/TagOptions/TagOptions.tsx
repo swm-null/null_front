@@ -11,23 +11,24 @@ export interface InfiniteQueryData {
   pageParams: number[];
 }
 
-const TagWithOptions = ({ tag }: { tag: Tag }) => {
+const TagWithOptions = ({ tag, isLinked }: { tag: Tag; isLinked: boolean }) => {
   const { openTagEditModal } = useContext(TagContext);
   const { handleDeleteTag } = useTagManager();
 
   return (
     <>
-      <p className="text-[#3e3e3e]">{tag.name}</p>
-      <div className="flex gap-1">
-        <IconWrapper
-          IconComponent={EditIcon}
-          handleStaticClick={() => openTagEditModal(tag)}
-        />
-        <IconWrapper
-          IconComponent={DeleteIcon}
-          handleStaticClick={() => handleDeleteTag(tag)}
-        />
-      </div>
+      {!isLinked && (
+        <div className="flex gap-1">
+          <IconWrapper
+            IconComponent={EditIcon}
+            handleStaticClick={() => openTagEditModal(tag)}
+          />
+          <IconWrapper
+            IconComponent={DeleteIcon}
+            handleStaticClick={() => handleDeleteTag(tag)}
+          />
+        </div>
+      )}
     </>
   );
 };
@@ -56,7 +57,7 @@ const IconWrapper = ({
       }}
       width="1.125rem"
       height="1.125rem"
-      className="text-brown0"
+      className="text-brown0 cursor-pointer self-center"
     />
   );
 };
