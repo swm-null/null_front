@@ -54,14 +54,15 @@ const MemoSection = ({
       className="flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border 
       border-black border-opacity-10 bg-clip-padding shadow-custom backdrop-blur-lg"
     >
-      {!isLinked && (
-        <MemoSectionHeader
-          tag={tag!}
-          childTags={childTags}
-          handleTagClick={handleTagClick}
-          handleChildTagClick={handleChildTagClick}
-        />
-      )}
+      <MemoSectionHeader
+        tag={tag!}
+        isLinked={isLinked}
+        childTags={isLinked ? [] : childTags}
+        {...(!isLinked && {
+          handleTagClick: handleTagClick,
+        })}
+        handleChildTagClick={handleChildTagClick}
+      />
       <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10">
         <div key={updateKey} className="flex flex-col flex-1 gap-[0.4rem] w-60 ">
           {memos.map(

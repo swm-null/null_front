@@ -115,8 +115,9 @@
         "oldest": "오래된순"
       },
       "tag": {
+        "linkedTag": "현재 태그",
         "edit": {
-          "title": "메모 이름 수정하기",
+          "title": "태그 이름 수정하기",
           "placeholder": "새로운 이름"
         },
         "delete": {

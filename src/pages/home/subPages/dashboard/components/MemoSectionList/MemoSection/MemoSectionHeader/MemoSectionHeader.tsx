@@ -4,35 +4,42 @@ import { RightIcon } from 'assets/icons';
 import { useClickWithoutDrag } from 'pages/hooks';
 import { TagWithOptions } from './TagWithOptions';
 import { UneditableTagList } from 'pages/home/subPages/components';
+import { useTranslation } from 'react-i18next';
 
 interface MemoSectionHeaderProps {
   tag: Tag;
   childTags: Tag[];
-  handleTagClick: () => void;
+  isLinked: boolean;
+  handleTagClick?: () => void;
   handleChildTagClick: (tag: Tag) => void;
 }
 
 const MemoSectionHeader = ({
   tag,
   childTags,
+  isLinked,
   handleTagClick,
   handleChildTagClick,
 }: MemoSectionHeaderProps) => {
-  const { handleMouseDown, handleMouseMove, handleClick } =
-    useClickWithoutDrag(handleTagClick);
+  const { t } = useTranslation();
+  const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(
+    handleTagClick ? handleTagClick : () => {}
+  );
 
   return (
     // FIXME: 일단 width 때러박고 나중에, css 만질때 수정하기
     <div
-      className="flex flex-col px-3 py-4 bg-[#FFF6E380] gap-4 w-[268px] cursor-pointer"
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onClick={handleClick}
+      className={`flex flex-col px-3 py-4  gap-4 w-[268px] bg-[#FFF6E380] ${isLinked ? '' : 'cursor-pointer'}`}
+      {...(!isLinked && {
+        onMouseDown: handleMouseDown,
+        onMouseMove: handleMouseMove,
+        onClick: handleClick,
+      })}
     >
       <div className="flex w-full items-center gap-3">
         <TagWithOptions tag={tag} />
-        <div className="ml-auto flex items-center">
-          <RightIcon color="black" />
+        <div className="ml-auto flex items-center ">
+          {!isLinked && <RightIcon color="black" />}
         </div>
       </div>
       <div className="flex overflow-hidden">
@@ -46,7 +53,13 @@ const MemoSectionHeader = ({
             onChildTagClick={handleChildTagClick}
           />
         ) : (
-          <div className="h-6" />
+          <div className="h-6">
+            {isLinked && (
+              <p className="text-xs select-none">
+                {t('pages.dashboard.tag.linkedTag')}
+              </p>
+            )}
+          </div>
         )}
       </div>
     </div>

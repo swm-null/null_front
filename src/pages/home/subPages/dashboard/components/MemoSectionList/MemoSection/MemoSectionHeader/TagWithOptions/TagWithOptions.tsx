@@ -56,7 +56,7 @@ const IconWrapper = ({
       }}
       width="1.125rem"
       height="1.125rem"
-      className="text-brown0"
+      className="text-brown0 cursor-pointer"
     />
   );
 };
