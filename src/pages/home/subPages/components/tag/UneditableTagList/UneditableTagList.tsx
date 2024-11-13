@@ -22,7 +22,7 @@ interface UneditableTagListProps {
    * 10 -> 10%
    * default: 10
    */
-  border?: 0 | 5 | 10;
+  borderOpacity?: 0 | 5 | 10;
   invalidCharsPattern: RegExp;
   onChildTagClick?: (tag: Tag) => void;
 }
@@ -32,7 +32,7 @@ export const UneditableTagList = ({
   invalidCharsPattern,
   size = 'medium',
   color = 'peach2',
-  border = 10,
+  borderOpacity = 10,
   onChildTagClick,
 }: UneditableTagListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export const UneditableTagList = ({
           tag={tag}
           size={size}
           color={color}
-          border={border}
+          borderOpacity={borderOpacity}
           onChildTagClick={onChildTagClick}
           invalidCharsPattern={invalidCharsPattern}
         />

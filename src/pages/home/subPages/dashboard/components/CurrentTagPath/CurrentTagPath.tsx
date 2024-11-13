@@ -86,7 +86,7 @@ const CurrentTagPath = ({
             tags={tags}
             size="large"
             color="cream0"
-            border={10}
+            borderOpacity={10}
             invalidCharsPattern={invalidCharsPattern}
             onChildTagClick={handleChildTagClick}
           />
