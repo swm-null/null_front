@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
-import { ImageSlider } from './ImageSlider';
 import { MemoText } from './MemoText';
 import { ImageListContext } from 'utils';
+import { ImageSlider } from './ImageSlider';
 
 const ImageMemoText = ({
   imageUrls,
@@ -35,18 +35,24 @@ const ImageMemoText = ({
         {...getRootProps()}
         onPaste={handlePaste}
       >
-        <ImageSlider
-          imageUrls={imageUrls}
-          removeImageUrl={removeImageUrl}
-          editable={editable}
-        />
         {message || editable ? (
-          <MemoText
-            textColor={textColor}
-            message={message}
-            setMessage={setMessage}
-            editable={editable}
-          />
+          <div className="w-full overflow-hidden">
+            {imageUrls && (
+              <div className="xsm:float-left mr-4">
+                <ImageSlider
+                  imageUrls={imageUrls}
+                  removeImageUrl={removeImageUrl}
+                  editable={editable}
+                />
+              </div>
+            )}
+            <MemoText
+              textColor={textColor}
+              message={message}
+              setMessage={setMessage}
+              editable={editable}
+            />
+          </div>
         ) : (
           <></>
         )}
