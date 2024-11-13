@@ -38,6 +38,8 @@ const MemoText = ({
   };
 
   const handleClick = (event: React.MouseEvent) => {
+    if (!editable) return;
+
     setIsBlurred(false);
 
     const target = event.target as HTMLAnchorElement;
