@@ -17,18 +17,24 @@ const DashboardPage = () => {
 
   const tagsManager = Hooks.useDashboardTagManager();
 
-  const handleChildTagClick = (tag: Tag | null) => {
+  const handleChildTagClick = (tag: Tag | Tag[] | null) => {
     history.pushState(
       {
-        tagStack: [...tagStack, tag],
+        tagStack: Array.isArray(tag) ? [...tagStack, ...tag] : [...tagStack, tag],
       },
       '',
       window.location.href
     );
-    if (tag) {
+
+    if (Array.isArray(tag)) {
+      setTagStack((prevStack) => [...prevStack, ...tag]);
+    } else if (tag) {
       setTagStack((prevStack) => [...prevStack, tag]);
     }
-    tagsManager.handleTagOrAllTagsClick(tag);
+
+    tagsManager.handleTagOrAllTagsClick(
+      Array.isArray(tag) ? tag[tag.length - 1] : tag
+    );
   };
 
   const handleGoBack = (event: PopStateEvent) => {
