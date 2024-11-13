@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext } from 'react';
+import { useContext } from 'react';
 import { Breadcrumbs } from '@mui/material';
 import { RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
@@ -10,8 +10,6 @@ import { TagContext } from 'utils';
 
 interface CurrentTagPathProps {
   allTagText: string;
-  tagStack: Tag[];
-  setTagStack: Dispatch<SetStateAction<Tag[]>>;
   tags: Tag[];
   handleTagOrAllTagsClick: (tag: Tag | null) => void;
   handleChildTagClick: (tag: Tag) => void;
@@ -22,8 +20,6 @@ interface CurrentTagPathProps {
 
 const CurrentTagPath = ({
   allTagText,
-  tagStack,
-  setTagStack,
   tags,
   handleTagOrAllTagsClick,
   handleChildTagClick,
@@ -31,7 +27,7 @@ const CurrentTagPath = ({
   setSortOption,
   invalidCharsPattern,
 }: CurrentTagPathProps) => {
-  const { onReset } = useContext(TagContext);
+  const { onReset, tagStack, setTagStack } = useContext(TagContext);
 
   const handleAllTagsClick = () => {
     onReset();
@@ -86,7 +82,7 @@ const CurrentTagPath = ({
             tags={tags}
             size="large"
             color="cream0"
-            border={10}
+            borderOpacity={10}
             invalidCharsPattern={invalidCharsPattern}
             onChildTagClick={handleChildTagClick}
           />

@@ -9,12 +9,14 @@ interface MemoSectionHeaderProps {
   tag: Tag;
   childTags: Tag[];
   handleTagClick: () => void;
+  handleChildTagClick: (tag: Tag) => void;
 }
 
 const MemoSectionHeader = ({
   tag,
   childTags,
   handleTagClick,
+  handleChildTagClick,
 }: MemoSectionHeaderProps) => {
   const { handleMouseDown, handleMouseMove, handleClick } =
     useClickWithoutDrag(handleTagClick);
@@ -39,8 +41,9 @@ const MemoSectionHeader = ({
             tags={childTags}
             size="medium"
             color="white"
-            border={5}
+            borderOpacity={5}
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+            onChildTagClick={handleChildTagClick}
           />
         ) : (
           <div className="h-6" />

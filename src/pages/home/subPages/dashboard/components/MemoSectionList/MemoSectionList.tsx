@@ -13,7 +13,7 @@ interface MemoSectionListProps {
   parentTag: Tag | null;
   tagRelations: TagRelation[];
   sortOption: SortOption;
-  addTagToStack: (tag: Tag | null) => void;
+  addTagToStack: (tag: Tag | Tag[] | null) => void;
   fetchNextPage: () => void;
 }
 
@@ -69,6 +69,9 @@ const MemoSectionList = ({
             isLinked={true}
             sortOption={sortOption}
             handleTagClick={() => addTagToStack(parentTag)}
+            handleChildTagClick={(childTag: Tag) =>
+              addTagToStack([parentTag, childTag])
+            }
           />
         )}
         {tagRelations.map((tagRelation) => {
@@ -83,6 +86,7 @@ const MemoSectionList = ({
               isLinked={false}
               sortOption={sortOption}
               handleTagClick={() => addTagToStack(tag)}
+              handleChildTagClick={(childTag: Tag) => addTagToStack([tag, childTag])}
             />
           );
         })}

@@ -12,6 +12,7 @@ interface MemoSectionProps {
   isLinked: boolean;
   sortOption: SortOption;
   handleTagClick: () => void;
+  handleChildTagClick: (childTag: Tag) => void;
 }
 
 const MemoSection = ({
@@ -20,6 +21,7 @@ const MemoSection = ({
   isLinked,
   sortOption,
   handleTagClick,
+  handleChildTagClick,
 }: MemoSectionProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
   const [updateKey, setUpdateKey] = useState(0);
@@ -57,6 +59,7 @@ const MemoSection = ({
           tag={tag!}
           childTags={childTags}
           handleTagClick={handleTagClick}
+          handleChildTagClick={handleChildTagClick}
         />
       )}
       <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10">
