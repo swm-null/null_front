@@ -8,7 +8,7 @@ const IconButtons = ({
   submitAvailable,
   onSubmitButtonClick,
 }: {
-  message: string;
+  message?: string;
   submitAvailable: boolean;
   onMicButtonClick?: () => void;
   onSubmitButtonClick?: () => void;
@@ -18,7 +18,7 @@ const IconButtons = ({
 
   return (
     <div className="flex justify-end gap-1 items-center">
-      {`${message ? message.length : 0} / 2000`}
+      {submitAvailable && `${message ? message.length : 0} / 2000`}
       <ImageFileInput handleImageFileChange={handleImageFilesChange}>
         <CameraIcon
           tabIndex={0}
