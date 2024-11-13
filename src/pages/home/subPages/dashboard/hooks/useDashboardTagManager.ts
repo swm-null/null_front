@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import {
@@ -7,11 +7,12 @@ import {
   isDashboardTagRelationsResponse,
   isGetTagsResponse,
 } from 'api';
+import { TagContext } from 'utils';
 
 const TAG_LIMIT = 10;
 
 const useDashboardTagManager = () => {
-  const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+  const { selectedTag, setSelectedTag } = useContext(TagContext);
   const [tagRelations, setTagRelations] = useState<TagRelation[]>([]);
 
   const { data: tagData, fetchNextPage } = useInfiniteQuery({
@@ -83,7 +84,6 @@ const useDashboardTagManager = () => {
   }, [tagData]);
 
   return {
-    selectedTag,
     childTags: childTags ? childTags : [],
     tagRelations,
     handleTagOrAllTagsClick,

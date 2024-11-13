@@ -8,6 +8,8 @@ export type TagModalState = {
 };
 
 interface TagContextType {
+  selectedTag: Tag | null;
+  setSelectedTag: Dispatch<SetStateAction<Tag | null>>;
   tagStack: Tag[];
   setTagStack: Dispatch<SetStateAction<Tag[]>>;
   tagEditModal: TagModalState | null;
@@ -19,6 +21,8 @@ interface TagContextType {
 }
 
 export const TagContext = createContext<TagContextType>({
+  selectedTag: null,
+  setSelectedTag: (_: SetStateAction<Tag | null>) => {},
   tagStack: [],
   setTagStack: (_: SetStateAction<Tag[]>) => {},
   tagEditModal: null,

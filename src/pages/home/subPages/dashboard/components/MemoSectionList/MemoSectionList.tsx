@@ -1,16 +1,16 @@
 import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import {
   useHorizontalScroll,
   useIntersectionObserver,
 } from 'pages/home/subPages/hooks';
 import { SortOption } from 'pages/home/subPages/types';
 import { LeafMemoSection } from './LeafMemoSection';
+import { TagContext } from 'utils';
 
 interface MemoSectionListProps {
-  parentTag: Tag | null;
   tagRelations: TagRelation[];
   sortOption: SortOption;
   addTagToStack: (tag: Tag | Tag[] | null) => void;
@@ -18,12 +18,12 @@ interface MemoSectionListProps {
 }
 
 const MemoSectionList = ({
-  parentTag,
   tagRelations,
   sortOption,
   addTagToStack,
   fetchNextPage,
 }: MemoSectionListProps) => {
+  const { selectedTag } = useContext(TagContext);
   const observerRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -44,10 +44,10 @@ const MemoSectionList = ({
     if (scrollRef.current) {
       scrollRef.current.scrollLeft = 0;
     }
-  }, [parentTag, scrollRef?.current]);
+  }, [selectedTag, scrollRef?.current]);
 
   if (hasNoSection()) {
-    return <LeafMemoSection parentTag={parentTag} sortOption={sortOption} />;
+    return <LeafMemoSection parentTag={selectedTag} sortOption={sortOption} />;
   }
 
   return (
@@ -61,16 +61,16 @@ const MemoSectionList = ({
       onMouseLeave={onDragEnd}
     >
       <div className="flex gap-4">
-        {parentTag && (
+        {selectedTag && (
           <MemoSection
-            key={`section-${parentTag.id}`}
-            tag={parentTag}
+            key={`section-${selectedTag.id}`}
+            tag={selectedTag}
             childTags={[]}
             isLinked={true}
             sortOption={sortOption}
-            handleTagClick={() => addTagToStack(parentTag)}
+            handleTagClick={() => addTagToStack(selectedTag)}
             handleChildTagClick={(childTag: Tag) =>
-              addTagToStack([parentTag, childTag])
+              addTagToStack([selectedTag, childTag])
             }
           />
         )}

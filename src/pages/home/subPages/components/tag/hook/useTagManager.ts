@@ -3,7 +3,7 @@ import * as Api from 'api';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertContext } from 'utils';
+import { AlertContext, TagContext } from 'utils';
 
 interface TagInfiniteQueryData {
   pages: Api.paginationDashboardTagRelations[];
@@ -19,6 +19,7 @@ const useTagManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
+  const { selectedTag, setSelectedTag, setTagStack } = useContext(TagContext);
 
   const allTagRelationsQueriesData =
     queryClient.getQueriesData<Api.paginationDashboardTagRelations>({
@@ -118,6 +119,24 @@ const useTagManager = () => {
   };
 
   const updateTagDataInQueries = (updateTarget: Tag) => {
+    if (selectedTag?.id === updateTarget.id) {
+      setSelectedTag((prev) => {
+        if (prev) return { id: prev?.id, name: updateTarget?.name };
+        return null;
+      });
+    }
+
+    setTagStack((prev) => {
+      if (prev.length === 0) return [];
+
+      return prev.map((tag) => {
+        if (tag?.id === updateTarget.id) {
+          return { id: tag.id, name: updateTarget.name };
+        }
+        return tag;
+      });
+    });
+
     allTagRelationsQueriesData.forEach(([queryKey, queryData]) => {
       if (!queryData) return;
 
