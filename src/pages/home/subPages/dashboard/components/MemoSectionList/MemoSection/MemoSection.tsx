@@ -52,7 +52,7 @@ const MemoSection = ({
   return (
     <div
       className="flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border 
-      border-black border-opacity-10 shadow-custom backdrop-blur-lg"
+      border-black border-opacity-10 bg-clip-padding shadow-custom backdrop-blur-lg"
     >
       {!isLinked && (
         <MemoSectionHeader

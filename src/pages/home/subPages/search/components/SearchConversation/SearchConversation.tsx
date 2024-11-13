@@ -19,7 +19,7 @@ const SearchConversation = ({ data }: { data: MemoSearchConversation }) => {
 
   return (
     <div
-      className="flex flex-shrink-0 flex-col w-full rounded-2xl border border-shadow0 shadow-custom"
+      className="flex flex-shrink-0 flex-col w-full rounded-2xl border border-black border-opacity-10 bg-clip-padding shadow-custom"
       style={{
         backgroundColor: isOpen ? '#FFF6E3' : '#FFF6E366',
         transition: 'background-color 0.3s ease',

@@ -51,7 +51,7 @@ const MemoSearchTextArea = ({
     <div className="p-4">
       <div
         className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border
-        border-black border-opacity-10 font-regular shadow-custom backdrop-blur-lg"
+        border-black border-opacity-10 bg-clip-padding font-regular shadow-custom backdrop-blur-lg"
         onBlur={handleBlur}
       >
         <form
