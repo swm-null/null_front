@@ -38,7 +38,7 @@ const ImageMemoText = ({
         {message || editable ? (
           <div className="w-full overflow-hidden">
             {imageUrls && (
-              <div className="xsm:float-left mr-4">
+              <div className="xsm:float-left mr-4 mb-1">
                 <ImageSlider
                   imageUrls={imageUrls}
                   removeImageUrl={removeImageUrl}
