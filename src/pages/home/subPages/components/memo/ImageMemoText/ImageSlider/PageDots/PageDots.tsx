@@ -33,7 +33,7 @@ const PageDots = ({
         <AddOutlinedIcon
           sx={{ width: 16, height: 16, padding: 0, margin: 0 }}
           className={`cursor-pointer ${
-            photoIndex === allImages.length ? 'text-black' : 'text-gray1'
+            photoIndex === allImages.length ? 'text-black' : 'text-gray2'
           }`}
           onClick={() => setPhotoIndex(allImages.length)}
         />
