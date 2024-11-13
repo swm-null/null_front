@@ -1,12 +1,4 @@
-import {
-  ChangeEvent,
-  FocusEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { TextareaAutosize } from '@mui/material';
+import { FocusEvent, useRef, useState } from 'react';
 
 const MemoText = ({
   message,
@@ -19,54 +11,56 @@ const MemoText = ({
   setMessage?: (newMessage: string) => void;
   editable?: boolean;
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const editableDivRef = useRef<HTMLDivElement>(null);
   const [isBlurred, setIsBlurred] = useState(true);
 
   const convertToHyperlinks = (text: string) => {
     const urlPattern = /(https?:\/\/[^\s]+)/g;
     return text.replace(
       urlPattern,
-      '<a class="underline" href="$1" target="_blank">$1</a>'
+      '<a id="memo-link" class="underline cursor-pointer" href="$1" target="_blank">$1</a>'
     );
   };
 
-  const handleFocus = useCallback(() => {
-    if (textareaRef.current) {
-      setIsBlurred(true);
-    }
-  }, [textareaRef.current]);
+  const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
+    if (!editable) return;
 
-  const handleBlur = (e: FocusEvent<HTMLTextAreaElement>) => {
-    e.target.blur();
+    const cleanText = e.target.innerHTML
+      .replace(/<div>/g, '')
+      .replace(/<\/div>/g, '\n')
+      .replace(/<br>/g, '\n')
+      .replace(/<a[^>]*href="([^"]*)"[^>]*>[^<]*<\/a>/g, '$1')
+      .replace(/<[^>]*>/g, '')
+      .trim();
+    setMessage && setMessage(cleanText);
+    setIsBlurred(true);
+    editableDivRef.current?.blur();
+  };
+
+  const handleClick = (event: React.MouseEvent) => {
     setIsBlurred(false);
-  };
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage && setMessage(e.target.value);
+    const target = event.target as HTMLAnchorElement;
+    if (target.id === 'memo-link') {
+      window.open(target.href, '_blank');
+      editableDivRef.current?.blur();
+    }
   };
-
-  useEffect(() => {
-    textareaRef.current?.focus();
-  }, [isBlurred]);
 
   return (
-    <div className="flex flex-1 w-full">
-      <TextareaAutosize
-        ref={textareaRef}
-        className={`w-full bg-transparent focus:outline-none resize-none font-regular text-[15px] ${isBlurred && editable ? '' : 'hidden'}`}
-        style={{ color: textColor }}
-        value={message}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      <div
-        className={`w-full bg-transparent font-regular text-[15px] whitespace-break-spaces 
-          [&_a]:pointer-events-auto [&_a]:break-all ${!isBlurred || !editable ? '' : 'hidden'}`}
-        style={{ color: textColor }}
-        dangerouslySetInnerHTML={{ __html: convertToHyperlinks(message) }}
-        onClick={handleFocus}
-      />
-    </div>
+    <div
+      ref={editableDivRef}
+      className={`w-full bg-transparent font-regular text-[15px] whitespace-break-spaces focus:outline-none
+        [&_a]:pointer-events-auto [&_a]:break-all select-text`}
+      style={{ color: textColor }}
+      contentEditable={editable}
+      onClick={handleClick}
+      suppressContentEditableWarning
+      onBlur={handleBlur}
+      dangerouslySetInnerHTML={{
+        __html: isBlurred ? convertToHyperlinks(message) : message,
+      }}
+    />
   );
 };
 
