@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const useHiddenTextareaManager = (value: string, images: string[]) => {
+const useHiddenTextareaManager = (value: string, images?: string[]) => {
   const hiddenTextareaRef = useRef<HTMLTextAreaElement>(null);
   const [isMultiline, setIsMultiline] = useState(false);
 
@@ -12,7 +12,7 @@ const useHiddenTextareaManager = (value: string, images: string[]) => {
       const maxLines = Math.floor(
         hiddenTextareaRef.current.clientHeight / lineHeight
       );
-      setIsMultiline(maxLines > 1 || images.length >= 1);
+      setIsMultiline(maxLines > 1 || (images && images.length >= 1) || false);
     }
   }, [value, images]);
 
