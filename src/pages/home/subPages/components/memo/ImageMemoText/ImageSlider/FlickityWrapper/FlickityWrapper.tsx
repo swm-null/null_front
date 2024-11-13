@@ -3,26 +3,28 @@ import { ReactNode, useEffect, useState } from 'react';
 
 interface FlickityWrapperProps {
   children: ReactNode;
-  showPageDots?: boolean;
   onImageClick: (index: number) => void;
   onRemoveClick: ((index: number) => void) | null;
   onAddClick: (() => void) | null;
   totalImageCount?: number;
+  onChange?: (index: number) => void;
+  currentIndex?: number;
 }
 
 const FlickityWrapper = ({
   children,
-  showPageDots = false,
   onImageClick,
   onRemoveClick,
   onAddClick,
   totalImageCount = 0,
+  onChange,
+  currentIndex,
 }: FlickityWrapperProps) => {
   const [flickityInstance, setFlickityInstance] = useState<Flickity | null>(null);
 
   const flickityOptions = {
     prevNextButtons: false,
-    pageDots: showPageDots,
+    pageDots: false,
     setGallerySize: false,
   };
 
@@ -44,11 +46,23 @@ const FlickityWrapper = ({
       }
     };
 
+    const handleChange = (index: number) => {
+      onChange?.(index);
+    };
+
     flickityInstance.on('staticClick', handleStaticClick);
+    flickityInstance.on('change', handleChange);
+
     return () => {
       flickityInstance.off('staticClick', handleStaticClick);
+      flickityInstance.off('change', handleChange);
     };
   }, [flickityInstance, onImageClick, onRemoveClick, onAddClick, totalImageCount]);
+
+  useEffect(() => {
+    if (!flickityInstance || currentIndex === undefined) return;
+    flickityInstance.select(currentIndex);
+  }, [flickityInstance, currentIndex]);
 
   return (
     <Flickity
