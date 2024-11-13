@@ -10,17 +10,21 @@ import { BottomNavContext, TagContext } from 'utils';
 const DashboardPage = () => {
   const { t } = useTranslation();
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
-  const { subscribeToReset, unsubscribeFromReset } = useContext(TagContext);
+  const { subscribeToReset, unsubscribeFromReset, tagStack, setTagStack } =
+    useContext(TagContext);
 
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
-  const [tagStack, setTagStack] = useState<Tag[]>([]);
 
   const tagsManager = Hooks.useDashboardTagManager();
 
   const handleChildTagClick = (tag: Tag | Tag[] | null) => {
     history.pushState(
       {
-        tagStack: Array.isArray(tag) ? [...tagStack, ...tag] : [...tagStack, tag],
+        tagStack: tag
+          ? Array.isArray(tag)
+            ? [...tagStack, ...tag]
+            : [...tagStack, tag]
+          : [],
       },
       '',
       window.location.href
@@ -78,8 +82,6 @@ const DashboardPage = () => {
           <Components.CurrentTagPath
             allTagText={t('pages.dashboard.allMemoButton')}
             tags={tagsManager.childTags}
-            tagStack={tagStack}
-            setTagStack={setTagStack}
             sortOption={sortOption}
             setSortOption={setSortOption}
             handleTagOrAllTagsClick={tagsManager.handleTagOrAllTagsClick}
