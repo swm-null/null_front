@@ -12,7 +12,6 @@ export { default as DeleteIcon } from './trash.svg?react';
 export { default as ExportIcon } from './export.svg?react';
 export { default as HomeIcon } from './home.svg?react';
 export { default as MicIcon } from './mic.svg?react';
-export { default as CameraIcon } from './camera.svg?react';
 export { default as ExIcon1 } from './ex1.svg?react';
 export { default as ExIcon2 } from './ex2.svg?react';
 export { default as ExIcon3 } from './ex3.svg?react';

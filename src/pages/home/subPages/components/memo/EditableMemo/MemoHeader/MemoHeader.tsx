@@ -1,8 +1,9 @@
-import { CameraIcon, DeleteIcon } from 'assets/icons';
+import { DeleteIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { useContext } from 'react';
 import { ImageListContext } from 'utils';
 import { ImageFileInput } from 'pages/home/subPages/components';
+import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 
 const MemoHeader = ({
   updatedAt,
@@ -30,8 +31,9 @@ const MemoHeader = ({
         className="flex gap-4 flex-shrink-0"
         handleImageFileChange={handleImageFilesChange}
       >
-        <CameraIcon
-          className="text-brown2 w-6 h-6 cursor-pointer"
+        <AddAPhotoOutlinedIcon
+          sx={{ width: 20, height: 20 }}
+          className="text-brown2 cursor-pointer"
           onClick={handleAddImageButtonClick}
         />
       </ImageFileInput>

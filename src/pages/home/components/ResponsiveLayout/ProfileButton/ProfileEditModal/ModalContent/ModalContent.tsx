@@ -1,7 +1,7 @@
 import { profile } from 'api';
-import { CameraIcon } from 'assets/icons';
 import { oatmealUrl } from 'assets/images';
 import { CustomInput } from 'pages/components';
+import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import { ImageFileInput } from 'pages/home/subPages/components';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +53,10 @@ const ModalContent = ({
             aria-label="upload picture"
             className="absolute p-1 -bottom-1 -right-1 bg-[#FFF6E3] rounded-full"
           >
-            <CameraIcon className="border rounded-full shadow-md p-1 w-7 h-7 bg-white" />
+            <AddAPhotoOutlinedIcon
+              sx={{ width: 28, height: 28 }}
+              className="border rounded-full shadow-md p-1 bg-white"
+            />
           </button>
         </ImageFileInput>
       </div>

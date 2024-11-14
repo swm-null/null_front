@@ -14,6 +14,8 @@ import { MediaList } from './MediaList';
 import { ImageListContext, RecordingContext } from 'utils';
 import { useHiddenTextareaManager } from './hook';
 
+const MAX_TEXT_LENGTH = 1000;
+
 interface MemoCreateTextAreaProps {
   value: string;
   placeholder: string;
@@ -61,10 +63,10 @@ const MemoCreateTextArea = ({
   );
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length > 2000) {
+    if (e.target.value.length > MAX_TEXT_LENGTH) {
       onChange({
         ...e,
-        target: { ...e.target, value: e.target.value.slice(0, 2000) },
+        target: { ...e.target, value: e.target.value.slice(0, MAX_TEXT_LENGTH) },
       });
       return;
     }
@@ -122,6 +124,7 @@ const MemoCreateTextArea = ({
           <IconButtons
             message={value}
             submitAvailable={focus || isMultiline}
+            MAX_TEXT_LENGTH={MAX_TEXT_LENGTH}
             onMicButtonClick={handleMicButtonClick}
             onSubmitButtonClick={onSubmit}
           />
