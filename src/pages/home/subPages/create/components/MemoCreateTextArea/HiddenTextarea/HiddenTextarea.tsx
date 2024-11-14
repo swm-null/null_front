@@ -3,10 +3,12 @@ import { IconButtons } from '../IconButtons';
 
 const HiddenTextarea = ({
   value,
+  MAX_TEXT_LENGTH,
   hiddenTextareaWidth,
   hiddenTextareaRef,
 }: {
   value: string;
+  MAX_TEXT_LENGTH: number;
   hiddenTextareaWidth: number | null;
   hiddenTextareaRef: React.RefObject<HTMLTextAreaElement>;
 }) => (
@@ -26,6 +28,7 @@ const HiddenTextarea = ({
     />
     <IconButtons
       message={value}
+      MAX_TEXT_LENGTH={MAX_TEXT_LENGTH}
       submitAvailable={true}
       onMicButtonClick={() => {}}
       onSubmitButtonClick={() => {}}

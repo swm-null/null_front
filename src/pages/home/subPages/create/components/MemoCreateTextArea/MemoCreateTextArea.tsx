@@ -95,6 +95,7 @@ const MemoCreateTextArea = ({
       >
         <HiddenTextarea
           value={value}
+          MAX_TEXT_LENGTH={MAX_TEXT_LENGTH}
           hiddenTextareaWidth={hiddenTextareaWidth}
           hiddenTextareaRef={hiddenTextareaRef}
         />
