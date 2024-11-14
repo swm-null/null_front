@@ -20,9 +20,9 @@ const SummaryMemoWithoutDrag = ({
   softRevertMemo,
   ...divProps
 }: SummaryMemoWithoutDragProps) => {
-  const { openMemoModal } = useContext(MemoContext);
+  const { openMemoEditModal } = useContext(MemoContext);
   const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(() =>
-    openMemoModal(memo)
+    openMemoEditModal(memo)
   );
 
   return (

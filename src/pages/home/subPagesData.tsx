@@ -1,7 +1,6 @@
 import { routerType } from 'pages/types/router.types';
 import * as Page from 'pages/home/subPages';
-import { MemoProvider } from 'utils';
-import { RecordingProvider } from 'utils';
+import { MemoProvider, RecordingProvider } from 'utils';
 
 export const getSubPagesData = (): routerType[] => {
   return [
@@ -9,7 +8,9 @@ export const getSubPagesData = (): routerType[] => {
       path: '',
       element: (
         <RecordingProvider>
-          <Page.Create />
+          <MemoProvider>
+            <Page.Create />
+          </MemoProvider>
         </RecordingProvider>
       ),
       title: 'create',

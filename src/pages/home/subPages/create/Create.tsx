@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useCreateMemoManager } from './hook';
 import { ImageListContext, RecordingContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
+import { MemoEditModal } from '../dashboard/components';
 
 const CreatePage = () => {
   const { t } = useTranslation();
@@ -55,6 +56,7 @@ const CreatePage = () => {
           </div>
         </div>
       </div>
+      <MemoEditModal />
     </>
   );
 };

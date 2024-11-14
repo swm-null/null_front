@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { MemoSearchTextArea } from '../components';
 import { useSearchMemoManager } from './hook';
 import { SearchConversationList } from './components/SearchConversationList';
-import { MemoModal, SearchConversation } from './components';
+import { SearchConversation } from './components';
+import { MemoEditModal } from '../dashboard/components';
 
 const SearchPage = () => {
   const { t } = useTranslation();
@@ -46,7 +47,7 @@ const SearchPage = () => {
           </SearchConversationList>
         </div>
       </div>
-      <MemoModal />
+      <MemoEditModal />
     </div>
   );
 };

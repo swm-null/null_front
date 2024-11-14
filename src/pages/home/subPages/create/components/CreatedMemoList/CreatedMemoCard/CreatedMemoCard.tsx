@@ -1,13 +1,14 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
-import { DeleteIcon } from 'assets/icons';
+import { DeleteIcon, EditIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 import { useMemoManager } from 'pages/home/subPages/components';
 import { UneditableTagList } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
+import { MemoContext } from 'utils';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -18,6 +19,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const [message, setMessage] = useState(memo.content);
 
   const { handleDeleteMemo } = useMemoManager();
+  const { openMemoEditModal } = useContext(MemoContext);
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
@@ -34,6 +36,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
           updatedAt={formatDate(memo.updated_at)}
+          handleEditMemo={() => openMemoEditModal(memo)}
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
           {memo.tags.length === 0 ? (
@@ -60,10 +63,12 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
 const CreatedMemoCardHeader = ({
   updatedAt,
+  handleEditMemo,
   handleDeleteMemo,
   children,
 }: {
   updatedAt: string;
+  handleEditMemo: () => void;
   handleDeleteMemo: () => void;
   children: ReactNode;
 }) => {
@@ -74,6 +79,9 @@ const CreatedMemoCardHeader = ({
         <p className="text-[#6A5344] select-none content-center text-sm">
           {updatedAt}
         </p>
+        <button type="button" className="rounded-full">
+          <EditIcon className="w-5 h-5" onClick={handleEditMemo} />
+        </button>
         <button type="button" className="rounded-full">
           <DeleteIcon onClick={handleDeleteMemo} />
         </button>
