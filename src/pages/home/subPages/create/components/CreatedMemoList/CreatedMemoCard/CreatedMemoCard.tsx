@@ -33,6 +33,15 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
   const handleUpdateMemoWithUploadFiles = async () => {};
 
+  const toggleEditable = () => {
+    if (editable) {
+      setEditable(false);
+      setMessage(memo.content);
+    } else {
+      setEditable(true);
+    }
+  };
+
   return (
     <div
       className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border border-black border-opacity-10 
@@ -41,9 +50,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
           editable={editable}
-          toggleEditable={() => {
-            setEditable((prev) => !prev);
-          }}
+          toggleEditable={toggleEditable}
           updatedAt={formatDate(memo.updated_at)}
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
