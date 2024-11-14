@@ -35,7 +35,7 @@ const ImageMemoText = ({
         {...getRootProps()}
         onPaste={handlePaste}
       >
-        {message || editable ? (
+        {message || imageUrls.length !== 0 || editable ? (
           <div className="w-full overflow-hidden">
             {imageUrls.length !== 0 && (
               <div className="xsm:float-left mr-4 mb-1">
