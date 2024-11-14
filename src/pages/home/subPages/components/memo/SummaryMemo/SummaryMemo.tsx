@@ -92,7 +92,9 @@ const SummaryMemo = ({
         )}
         {descriptions && (
           <>
-            {memo.content && <Divider className="pt-2" />}
+            {memo.content && (
+              <Divider sx={{ borderColor: '#eeeeee90' }} className="pt-2" />
+            )}
             <MemoText
               textColor={getStyleByImagePresence('gray2', 'white')}
               lines={3}
