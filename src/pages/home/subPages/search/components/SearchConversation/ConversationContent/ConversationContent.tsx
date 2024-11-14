@@ -122,7 +122,16 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
               className="font-regular text-brown2 whitespace-break-spaces [&>br]:display-none"
               disallowedElements={['br']}
               components={{
-                li: ({ children }) => <li className="flex">{children}</li>,
+                ol: ({ node, ...props }) => (
+                  <ol {...props} className={`${props.className || ''} grid`}>
+                    {props.children}
+                  </ol>
+                ),
+                a: ({ node, ...props }) => (
+                  <a {...props} className={`${props.className || ''} underline`}>
+                    {props.children}
+                  </a>
+                ),
               }}
             >
               {memoSearchAnswer.processed_message}
