@@ -19,5 +19,6 @@ export { default as ExIcon4 } from './ex4.svg?react';
 export { default as EditIcon } from './edit.svg?react';
 export { default as CheckedIcon } from './checked.svg?react';
 export { default as NotCheckedIcon } from './notChecked.svg?react';
-export { default as RightArrowIcon } from './rightArrow.svg?react';
 export { default as LogoIcon } from './Logo.svg?react';
+export { default as RightArrowIcon } from './rightArrow.svg?react';
+export { default as CameraIcon } from './camera.svg?react';

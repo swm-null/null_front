@@ -80,10 +80,13 @@ const CreatedMemoCardHeader = ({
           {updatedAt}
         </p>
         <button type="button" className="rounded-full">
-          <EditIcon className="w-5 h-5" onClick={handleEditMemo} />
+          <EditIcon className="w-5 h-5 text-[#887262]" onClick={handleEditMemo} />
         </button>
         <button type="button" className="rounded-full">
-          <DeleteIcon onClick={handleDeleteMemo} />
+          <DeleteIcon
+            className="w-5 h-5 text-[#887262]"
+            onClick={handleDeleteMemo}
+          />
         </button>
       </div>
     </div>
