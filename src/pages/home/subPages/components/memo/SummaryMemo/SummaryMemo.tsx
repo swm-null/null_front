@@ -6,6 +6,7 @@ import { MemoFooter } from './MemoFooter';
 import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
+import { Divider } from '@mui/material';
 
 interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -37,6 +38,21 @@ const SummaryMemo = ({
     imageUrl: string | undefined,
     defaultBackground: string
   ) => (haveImageUrl ? `url(${imageUrl})` : defaultBackground);
+
+  const parsedMetadata = memo.metadata ? JSON.parse(memo.metadata) : null;
+
+  const voiceDescriptions = parsedMetadata?.voice_descriptions || null;
+  const linkDescriptions = parsedMetadata?.link_descriptions || null;
+  const imageDescriptions =
+    parsedMetadata?.image_descriptions?.[0]?.image_description || null;
+
+  const descriptions = voiceDescriptions
+    ? voiceDescriptions[0]
+    : linkDescriptions
+      ? linkDescriptions[0]
+      : imageDescriptions
+        ? imageDescriptions
+        : null;
 
   return (
     <div
@@ -73,6 +89,16 @@ const SummaryMemo = ({
             textColor={getStyleByImagePresence('#111111', 'white')}
             message={memo.content}
           />
+        )}
+        {descriptions && (
+          <>
+            {memo.content && <Divider className="pt-2" />}
+            <MemoText
+              textColor={getStyleByImagePresence('gray2', 'white')}
+              lines={3}
+              message={descriptions}
+            />
+          </>
         )}
         <MemoFooter
           textColor={getStyleByImagePresence('gray2', 'white')}

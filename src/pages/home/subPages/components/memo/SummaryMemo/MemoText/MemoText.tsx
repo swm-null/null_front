@@ -2,8 +2,8 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 
 const MemoText = forwardRef<
   HTMLParagraphElement,
-  { message: string; textColor?: string }
->(({ message, textColor = '#111111' }, ref) => {
+  { message: string; textColor?: string; lines?: number }
+>(({ message, textColor = '#111111', lines = 6 }, ref) => {
   const paragraphRef = useRef<HTMLDivElement | null>(null);
   const [isOverflowed, setIsOverflowed] = useState(false);
 
@@ -11,7 +11,7 @@ const MemoText = forwardRef<
     const element = paragraphRef.current;
     if (element) {
       const lineHeight = parseInt(window.getComputedStyle(element).lineHeight, 10);
-      const maxHeight = lineHeight * 6;
+      const maxHeight = lineHeight * lines;
       if (element.scrollHeight > maxHeight) {
         element.style.height = `${maxHeight}px`;
         element.style.overflow = 'hidden';

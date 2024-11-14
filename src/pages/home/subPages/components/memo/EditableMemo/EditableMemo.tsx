@@ -83,6 +83,7 @@ const EditableMemo = ({
             imageUrls={imageUrls}
             removeImageUrl={removeImageUrl}
             message={message}
+            metadata={memo.metadata}
             setMessage={setMessage}
             editable
           />

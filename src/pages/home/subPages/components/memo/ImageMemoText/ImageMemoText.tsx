@@ -8,12 +8,14 @@ const ImageMemoText = ({
   removeImageUrl,
   textColor,
   message,
+  metadata,
   setMessage,
   editable,
 }: {
   imageUrls: string[];
   removeImageUrl?: (index: number) => void;
   message: string;
+  metadata: string | null;
   textColor?: string;
   setMessage?: (newMessage: string) => void;
   editable?: boolean;
@@ -49,6 +51,7 @@ const ImageMemoText = ({
             <MemoText
               textColor={textColor}
               message={message}
+              metadata={metadata}
               setMessage={setMessage}
               editable={editable}
             />
