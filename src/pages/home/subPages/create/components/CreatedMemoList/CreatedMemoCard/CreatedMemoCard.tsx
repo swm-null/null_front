@@ -54,6 +54,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         <ImageMemoText
           imageUrls={memo.image_urls}
           message={message}
+          metadata={memo.metadata}
           setMessage={setMessage}
         />
       </div>
