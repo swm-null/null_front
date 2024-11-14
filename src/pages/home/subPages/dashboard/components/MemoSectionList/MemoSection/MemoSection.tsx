@@ -5,6 +5,7 @@ import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
 import { SortOption } from 'pages/home/subPages/types';
 import { SummaryMemoWithoutDrag } from '../SummaryMemoWithoutDrag';
+import { AddIcon } from 'assets/icons';
 
 interface MemoSectionProps {
   tag: Tag | null;
@@ -71,6 +72,12 @@ const MemoSection = ({
                 <SummaryMemoWithoutDrag key={memo?.id} memo={memo} shadow border />
               )
           )}
+          <div
+            className="relative flex px-4 h-full flex-col rounded-2xl overflow-hidden  bg-white min-h-[115px]
+            border border-black border-opacity-10 bg-clip-padding items-center justify-center"
+          >
+            <AddIcon className="text-brown1" />
+          </div>
         </div>
         <div ref={observerRef} className="min-h-[1px] bg-transparent" />
       </div>
