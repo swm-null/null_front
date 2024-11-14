@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText, UneditableTagList } from 'pages/home/subPages/components';
+import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
 import { useMemoManager } from '../hook';
-import { isFilesResponse, uploadFile, uploadFiles } from 'api/index.ts';
-import { AlertContext, ImageListContext } from 'utils/index.ts';
-import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
+import { isFilesResponse, uploadFile, uploadFiles } from 'api';
+import { AlertContext, ImageListContext } from 'utils';
+import { EditOptions } from './EditOptions';
 
 const EditableMemo = ({
   memo,
@@ -26,6 +26,9 @@ const EditableMemo = ({
   const [imageUrls, setImageUrls] = useState(memo.image_urls);
 
   const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
+
+  const { handleImageFilesChange, handleAddImageButtonClick } =
+    useContext(ImageListContext);
 
   const getFileUrls = async (files: File[]): Promise<string[]> => {
     if (files.length === 0) return [];
@@ -73,7 +76,7 @@ const EditableMemo = ({
     >
       <div className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden">
         <MemoHeader
-          haveAudio={memo.voice_urls && memo.voice_urls.length > 0}
+          tags={tags}
           updatedAt={memo.updated_at}
           dateFormat={t('memo.dateFormat')}
           handleDeleteMemo={() => handleDeleteMemo({ memo, handlePreProcess })}
@@ -88,28 +91,11 @@ const EditableMemo = ({
           />
         </div>
       </div>
-
-      <div className="flex flex-wrap gap-2">
-        <div className="flex mr-auto">
-          <UneditableTagList
-            tags={tags}
-            size="large"
-            color="peach2"
-            borderOpacity={0}
-            invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-          />
-        </div>
-        <div className="flex ml-auto w-fit gap-6 items-center">
-          <button
-            type="button"
-            className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
-              rounded-[30px] border border-[#917360]"
-            onClick={handleUpdateMemoWithUploadFiles}
-          >
-            {t('memo.save')}
-          </button>
-        </div>
-      </div>
+      <EditOptions
+        handleImageFilesChange={handleImageFilesChange}
+        handleAddImageButtonClick={handleAddImageButtonClick}
+        handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
+      />
     </div>
   );
 };
