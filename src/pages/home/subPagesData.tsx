@@ -1,6 +1,6 @@
-import { routerType } from 'pages/types/router.types';
-import * as Page from 'pages/home/subPages';
+import { routerType } from 'pages/types';
 import { MemoProvider, RecordingProvider } from 'utils';
+import * as Page from 'pages/home/subPages';
 
 export const getSubPagesData = (): routerType[] => {
   return [
