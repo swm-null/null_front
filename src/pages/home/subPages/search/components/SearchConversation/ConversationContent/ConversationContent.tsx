@@ -8,6 +8,7 @@ import { CircularProgress, Divider } from '@mui/material';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 import { useTranslation } from 'react-i18next';
 import { SummaryMemoWithoutDrag } from 'pages/home/subPages/search/components';
+import ReactMarkdown from 'react-markdown';
 
 const ConversationContent = ({
   isOpen,
@@ -117,9 +118,15 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
       {!memoSearchAnswer.loading ? (
         <div className="flex flex-col gap-5">
           {memoSearchAnswer.processed_message && (
-            <p className="font-regular text-brown2 whitespace-break-spaces">
+            <ReactMarkdown
+              className="font-regular text-brown2 whitespace-break-spaces [&>br]:display-none"
+              disallowedElements={['br']}
+              components={{
+                li: ({ children }) => <li className="flex">{children}</li>,
+              }}
+            >
               {memoSearchAnswer.processed_message}
-            </p>
+            </ReactMarkdown>
           )}
           {memoSearchAnswer.memos?.length ? (
             <ScrollableList>
