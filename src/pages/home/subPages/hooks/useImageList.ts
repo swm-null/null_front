@@ -1,19 +1,14 @@
-import React, {
-  ChangeEvent,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useCallback, useContext, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { AlertContext, ImageListContext } from 'utils';
+import { AlertContext } from 'utils';
 
-const ImageListProvider = ({ children }: { children: ReactNode }) => {
+const useImageList = () => {
   const ALLOWED_IMAGE_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
   const [images, setImages] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+
   const { t } = useTranslation();
   const { alert } = useContext(AlertContext);
 
@@ -123,25 +118,19 @@ const ImageListProvider = ({ children }: { children: ReactNode }) => {
     if (inputFile) inputFile.click();
   };
 
-  return (
-    <ImageListContext.Provider
-      value={{
-        images,
-        imageUrls,
-        ALLOWED_IMAGE_FILE_TYPES,
-        removeImage,
-        removeAllImage,
-        getRootProps,
-        getInputProps,
-        handlePaste,
-        handleImageFileChange,
-        handleImageFilesChange,
-        handleAddImageButtonClick,
-      }}
-    >
-      {children}
-    </ImageListContext.Provider>
-  );
+  return {
+    images,
+    imageUrls,
+    ALLOWED_IMAGE_FILE_TYPES,
+    removeImage,
+    removeAllImage,
+    getRootProps,
+    getInputProps,
+    handlePaste,
+    handleImageFileChange,
+    handleImageFilesChange,
+    handleAddImageButtonClick,
+  };
 };
 
-export default ImageListProvider;
+export default useImageList;

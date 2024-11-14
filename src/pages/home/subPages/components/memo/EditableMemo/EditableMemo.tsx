@@ -5,8 +5,9 @@ import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
 import { useMemoManager } from '../hook';
 import { isFilesResponse, uploadFile, uploadFiles } from 'api';
-import { AlertContext, ImageListContext } from 'utils';
+import { AlertContext } from 'utils';
 import { EditOptions } from './EditOptions';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 const EditableMemo = ({
   memo,
@@ -18,7 +19,6 @@ const EditableMemo = ({
   handlePreProcess: () => void;
 }) => {
   const { t } = useTranslation();
-  const { images } = useContext(ImageListContext);
   const { alert } = useContext(AlertContext);
 
   const [message, setMessage] = useState(memo.content);
@@ -27,8 +27,8 @@ const EditableMemo = ({
 
   const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
 
-  const { handleImageFilesChange, handleAddImageButtonClick } =
-    useContext(ImageListContext);
+  const { images, handleImageFilesChange, handleAddImageButtonClick } =
+    useImageList();
 
   const getFileUrls = async (files: File[]): Promise<string[]> => {
     if (files.length === 0) return [];

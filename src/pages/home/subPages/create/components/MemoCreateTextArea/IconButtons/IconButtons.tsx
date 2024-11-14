@@ -1,8 +1,7 @@
 import { RightArrowIcon } from 'assets/icons';
 import { ImageFileInput } from 'pages/home/subPages/components';
-import { useContext } from 'react';
-import { ImageListContext } from 'utils';
 import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 const IconButtons = ({
   message,
@@ -16,8 +15,7 @@ const IconButtons = ({
   onMicButtonClick?: () => void;
   onSubmitButtonClick?: () => void;
 }) => {
-  const { handleAddImageButtonClick, handleImageFilesChange } =
-    useContext(ImageListContext);
+  const { handleAddImageButtonClick, handleImageFilesChange } = useImageList();
 
   return (
     <div className="flex justify-end gap-1 items-center">

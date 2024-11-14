@@ -1,7 +1,7 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { MemoText } from './MemoText';
-import { ImageListContext } from 'utils';
 import { ImageSlider } from './ImageSlider';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 const ImageMemoText = ({
   imageUrls,
@@ -19,7 +19,7 @@ const ImageMemoText = ({
   editable?: boolean;
 }) => {
   const { removeAllImage, handlePaste, getInputProps, getRootProps } =
-    useContext(ImageListContext);
+    useImageList();
 
   useEffect(() => {
     return () => {

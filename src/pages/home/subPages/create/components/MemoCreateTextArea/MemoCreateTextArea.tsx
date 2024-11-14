@@ -7,11 +7,11 @@ import {
   useState,
 } from 'react';
 import { TextareaAutosize } from '@mui/material';
-import { usePressEnterFetch } from 'pages/home/subPages/hooks';
+import { useImageList, usePressEnterFetch } from 'pages/home/subPages/hooks';
 import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
 import { MediaList } from './MediaList';
-import { ImageListContext, RecordingContext } from 'utils';
+import { RecordingContext } from 'utils';
 import { useHiddenTextareaManager } from './hook';
 
 const MAX_TEXT_LENGTH = 1000;
@@ -29,7 +29,7 @@ const MemoCreateTextArea = ({
   onChange,
   onSubmit,
 }: MemoCreateTextAreaProps) => {
-  const { imageUrls, removeImage, handlePaste } = useContext(ImageListContext);
+  const { imageUrls, removeImage, handlePaste } = useImageList();
   const { audioBlobs, removeAudio, openRecordingModal } =
     useContext(RecordingContext);
 

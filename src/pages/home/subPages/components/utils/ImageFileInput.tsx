@@ -1,5 +1,5 @@
-import { ChangeEvent, ReactNode, useContext } from 'react';
-import ImageListContext from 'utils/context/ImageListContext';
+import { ChangeEvent, ReactNode } from 'react';
+import { useImageList } from '../../hooks';
 
 interface ImageFileInputProps {
   handleClick?: () => void;
@@ -14,7 +14,7 @@ const ImageFileInput = ({
   children,
   className,
 }: ImageFileInputProps) => {
-  const { ALLOWED_IMAGE_FILE_TYPES } = useContext(ImageListContext);
+  const { ALLOWED_IMAGE_FILE_TYPES } = useImageList();
 
   return (
     <form className={className} onClick={handleClick}>

@@ -1,14 +1,15 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCreateMemoManager } from './hook';
-import { ImageListContext, RecordingContext } from 'utils';
+import { RecordingContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
+import { useImageList } from '../hooks';
 
 const CreatePage = () => {
   const { t } = useTranslation();
   const { images, imageUrls, getInputProps, getRootProps, removeAllImage } =
-    useContext(ImageListContext);
+    useImageList();
   const { audioBlobs, removeAudio } = useContext(RecordingContext);
 
   const [message, setMessage] = useState('');

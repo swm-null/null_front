@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -7,8 +7,8 @@ import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 import { useMemoManager, UneditableTagList } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
-import { ImageListContext } from 'utils';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -19,8 +19,9 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
   const [editable, setEditable] = useState(false);
   const [message, setMessage] = useState(memo.content);
-  const { handleImageFilesChange, handleAddImageButtonClick } =
-    useContext(ImageListContext);
+  const [imageUrls, setImageUrls] = useState(memo.image_urls);
+
+  const { handleImageFilesChange, handleAddImageButtonClick } = useImageList();
 
   const { handleDeleteMemo } = useMemoManager();
 
@@ -31,12 +32,17 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     return format(`${date}Z`, t('memo.dateFormat'));
   };
 
+  const removeImageUrl = useCallback((index: number) => {
+    setImageUrls((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
   const handleUpdateMemoWithUploadFiles = async () => {};
 
   const toggleEditable = () => {
     if (editable) {
       setEditable(false);
       setMessage(memo.content);
+      setImageUrls(memo.image_urls);
     } else {
       setEditable(true);
     }
@@ -67,8 +73,9 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           )}
         </CreatedMemoCardHeader>
         <ImageMemoText
-          imageUrls={memo.image_urls}
+          imageUrls={imageUrls}
           message={message}
+          removeImageUrl={removeImageUrl}
           setMessage={setMessage}
           editable={editable}
         />

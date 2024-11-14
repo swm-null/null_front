@@ -4,7 +4,7 @@ interface UseHorizontalScrollProps {
   scrollRef: RefObject<HTMLDivElement>;
 }
 
-export const useHorizontalScroll = ({ scrollRef }: UseHorizontalScrollProps) => {
+const useHorizontalScroll = ({ scrollRef }: UseHorizontalScrollProps) => {
   const [isDrag, setIsDrag] = useState(false);
   const [startX, setStartX] = useState(0);
 
@@ -45,3 +45,5 @@ export const useHorizontalScroll = ({ scrollRef }: UseHorizontalScrollProps) => 
     onDragEnd,
   };
 };
+
+export default useHorizontalScroll;

@@ -3,9 +3,8 @@ import { oatmealUrl } from 'assets/images';
 import { CustomInput } from 'pages/components';
 import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import { ImageFileInput } from 'pages/home/subPages/components';
-import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageListContext } from 'utils';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 const ModalContent = ({
   profileName,
@@ -24,7 +23,7 @@ const ModalContent = ({
 }) => {
   const { t } = useTranslation();
   const { images, handleAddImageButtonClick, handleImageFileChange } =
-    useContext(ImageListContext);
+    useImageList();
 
   const imageUrl = images[0] ? URL.createObjectURL(images[0]) : null;
 

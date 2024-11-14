@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from '@mui/material';
 import { profile } from 'api';
-import { ImageListContext } from 'utils';
 import { ModalContent } from './ModalContent';
 import { useClickWithoutDrag } from 'pages/hooks';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -24,7 +24,7 @@ const ProfileEditModal = ({
   const { handleMouseDown, handleMouseMove, handleClick } =
     useClickWithoutDrag(handleClose);
 
-  const { removeAllImage } = useContext(ImageListContext);
+  const { removeAllImage } = useImageList();
 
   useEffect(() => {
     if (isOpen) {

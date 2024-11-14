@@ -1,9 +1,9 @@
-import { useContext, useMemo, useState } from 'react';
-import { ImageListContext } from 'utils';
+import { useMemo, useState } from 'react';
 import { ImageLightbox } from './ImageLightbox';
 import { FlickityWrapper } from './FlickityWrapper';
 import { AddItem, ImageItem } from './item';
 import { PageDots } from './PageDots';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 const ImageSlider = ({
   imageUrls,
@@ -15,7 +15,7 @@ const ImageSlider = ({
   editable?: boolean;
 }) => {
   const { images, removeImage, handleAddImageButtonClick, handleImageFilesChange } =
-    useContext(ImageListContext);
+    useImageList();
 
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
