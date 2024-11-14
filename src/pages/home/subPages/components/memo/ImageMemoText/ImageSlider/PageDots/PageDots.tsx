@@ -14,7 +14,7 @@ const PageDots = ({
   editable,
 }: PageDotsProps) => {
   return (
-    <div className="flex gap-1 justify-center mt-2 h-4">
+    <div className="flex gap-1 justify-center mt-2 h-4 xs:w-60 w-full max-w-72">
       {Array.from({ length: allImages.length }).map((_, index) => (
         <button
           type="button"
