@@ -23,6 +23,7 @@
     "header": "설정",
     "logoutButton": "로그아웃",
     "editProfile": "프로필 수정",
+    "uploadDataButton": "카카오톡 데이터 가져오기",
     "deleteAccountButton": "회원탈퇴",
     "accountDeletionConfirmation": "회원탈퇴 하시겠습니까?",
     "accountDeleted": "회원탈퇴가 성공적으로 완료되었습니다.",

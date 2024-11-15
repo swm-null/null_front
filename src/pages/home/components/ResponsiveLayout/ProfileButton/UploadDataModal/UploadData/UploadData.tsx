@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { KakaoDropzone } from './components/KakaoDropzone';
 import { CopyTextField } from './components';
 
-const UploadData = ({}: {}) => {
+const UploadData = ({ handleProProcess }: { handleProProcess: () => void }) => {
   const { t } = useTranslation();
 
   // TODO: 서버에 메일을 요청하는 api 추가되면 변경
@@ -11,15 +11,14 @@ const UploadData = ({}: {}) => {
   return (
     <div className="flex flex-col flex-1 h-screen text-gray3">
       <div className="pb-4 px-4 flex flex-col flex-1 overflow-hidden gap-2">
-        <p>{t('pages.uploadData.emailInstruction.header')}</p>
+        <p className="py-2">{t('pages.uploadData.emailInstruction.header')}</p>
         <p>{t('pages.uploadData.emailInstruction.text1')}</p>
         <CopyTextField text={serverMail} />
-
         {/* TODO: 튜토리얼 추가하기 */}
         <p>{t('pages.uploadData.emailInstruction.text2')}</p>
         <p className="mb-5">{t('pages.uploadData.emailInstruction.text3')}</p>
 
-        <p>{t('pages.uploadData.uploadFileInstruction.header')}</p>
+        <p className="py-2">{t('pages.uploadData.uploadFileInstruction.header')}</p>
         <p>{t('pages.uploadData.uploadFileInstruction.text')}</p>
         <div className="flex flex-col flex-1">
           <KakaoDropzone />
@@ -27,7 +26,9 @@ const UploadData = ({}: {}) => {
         <button
           type="button"
           className="mt-2 bg-gray2 text-white rounded-lg py-2 px-6"
-          onClick={() => {}}
+          onClick={() => {
+            handleProProcess();
+          }}
         >
           {t('pages.uploadData.createMemoButton')}
         </button>

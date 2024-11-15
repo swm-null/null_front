@@ -3,10 +3,22 @@ import { oatmealUrl } from 'assets/images';
 import { ProfileEditModal } from './ProfileEditModal';
 import { useProfileMenuManager, useProfileManager } from './hooks';
 import { ProfileMenu } from './ProfileMenu';
+import { useState } from 'react';
+import UploadDataModal from './UploadDataModal/UploadDataModal';
 
 const ProfileButton = () => {
   const profileManager = useProfileManager();
   const profileMenuManager = useProfileMenuManager();
+
+  const [isUploadDataModalOpen, setIsUploadDataModalOpen] = useState(false);
+
+  const handleUploadData = () => {
+    setIsUploadDataModalOpen(true);
+  };
+
+  const handleCloseUploadData = () => {
+    setIsUploadDataModalOpen(false);
+  };
 
   return (
     <>
@@ -23,6 +35,7 @@ const ProfileButton = () => {
         userProfile={profileManager.userProfile}
         onClose={profileMenuManager.handleMenuClose}
         onEditProfile={profileMenuManager.handleProfileEditModalOpen}
+        onUploadData={handleUploadData}
         onDeleteAccount={profileManager.handleDeleteAccount}
         onLogout={profileManager.handleLogout}
       />
@@ -39,6 +52,12 @@ const ProfileButton = () => {
               profileMenuManager.handleProfileEditModalClose
             )
           }
+        />
+      )}
+      {isUploadDataModalOpen && (
+        <UploadDataModal
+          isOpen={isUploadDataModalOpen}
+          handleClose={handleCloseUploadData}
         />
       )}
     </>
