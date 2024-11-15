@@ -11,25 +11,21 @@ export interface InfiniteQueryData {
   pageParams: number[];
 }
 
-const TagWithOptions = ({ tag, isLinked }: { tag: Tag; isLinked: boolean }) => {
+const TagWithOptions = ({ tag }: { tag: Tag }) => {
   const { openTagEditModal } = useContext(TagContext);
   const { handleDeleteTag } = useTagManager();
 
   return (
-    <>
-      {!isLinked && (
-        <div className="flex gap-1">
-          <IconWrapper
-            IconComponent={EditIcon}
-            handleStaticClick={() => openTagEditModal(tag)}
-          />
-          <IconWrapper
-            IconComponent={DeleteIcon}
-            handleStaticClick={() => handleDeleteTag(tag)}
-          />
-        </div>
-      )}
-    </>
+    <div className="flex gap-1">
+      <IconWrapper
+        IconComponent={EditIcon}
+        handleStaticClick={() => openTagEditModal(tag)}
+      />
+      <IconWrapper
+        IconComponent={DeleteIcon}
+        handleStaticClick={() => handleDeleteTag(tag)}
+      />
+    </div>
   );
 };
 

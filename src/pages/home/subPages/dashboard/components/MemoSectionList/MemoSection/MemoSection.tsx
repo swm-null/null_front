@@ -11,7 +11,8 @@ import { AddIcon } from 'assets/icons';
 interface MemoSectionProps {
   tag: Tag | null;
   childTags: Tag[];
-  isLinked: boolean;
+  isLinked?: boolean;
+  isLeaf?: boolean;
   sortOption: SortOption;
   handleTagClick: () => void;
   handleChildTagClick: (childTag: Tag) => void;
@@ -20,7 +21,8 @@ interface MemoSectionProps {
 const MemoSection = ({
   tag,
   childTags,
-  isLinked,
+  isLinked = false,
+  isLeaf = false,
   sortOption,
   handleTagClick,
   handleChildTagClick,
@@ -59,6 +61,7 @@ const MemoSection = ({
       <MemoSectionHeader
         tag={tag!}
         isLinked={isLinked}
+        isLeaf={isLeaf}
         childTags={isLinked ? [] : childTags}
         {...(!isLinked && {
           handleTagClick: handleTagClick,

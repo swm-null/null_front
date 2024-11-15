@@ -23,7 +23,7 @@ const TagPathButton = ({
           {tag.name}
         </span>
       </div>
-      <TagOptions tag={tag} isLinked={!isCurrentTag} />
+      {isCurrentTag && <TagOptions tag={tag} />}
     </div>
   );
 };

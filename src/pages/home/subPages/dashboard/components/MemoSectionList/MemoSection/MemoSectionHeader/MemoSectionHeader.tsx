@@ -10,6 +10,7 @@ interface MemoSectionHeaderProps {
   tag: Tag;
   childTags: Tag[];
   isLinked: boolean;
+  isLeaf: boolean;
   handleTagClick?: () => void;
   handleChildTagClick: (tag: Tag) => void;
 }
@@ -18,6 +19,7 @@ const MemoSectionHeader = ({
   tag,
   childTags,
   isLinked,
+  isLeaf,
   handleTagClick,
   handleChildTagClick,
 }: MemoSectionHeaderProps) => {
@@ -38,9 +40,9 @@ const MemoSectionHeader = ({
     >
       <div className="flex w-full items-center gap-3">
         <p className="text-[#3e3e3e]">{tag.name}</p>
-        <TagOptions tag={tag} isLinked={isLinked} />
+        {!isLinked && !isLeaf && <TagOptions tag={tag} />}
         <div className="ml-auto flex items-center ">
-          {!isLinked && <RightIcon color="black" />}
+          {!isLinked && !isLeaf && <RightIcon color="black" />}
         </div>
       </div>
       <div className="flex overflow-hidden">

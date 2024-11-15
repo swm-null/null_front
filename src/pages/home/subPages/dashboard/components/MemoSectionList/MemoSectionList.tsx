@@ -7,7 +7,6 @@ import {
   useIntersectionObserver,
 } from 'pages/home/subPages/hooks';
 import { SortOption } from 'pages/home/subPages/types';
-import { LeafMemoSection } from './LeafMemoSection';
 import { TagContext } from 'utils';
 
 interface MemoSectionListProps {
@@ -46,8 +45,22 @@ const MemoSectionList = ({
     }
   }, [selectedTag, scrollRef?.current]);
 
+  // return <LeafMemoSection parentTag={selectedTag} sortOption={sortOption} />;
   if (hasNoSection()) {
-    return <LeafMemoSection parentTag={selectedTag} sortOption={sortOption} />;
+    return (
+      <div className="flex flex-1 mx-4 pb-2 pt-2">
+        <MemoSection
+          key={`section-${selectedTag?.id}`}
+          tag={selectedTag}
+          sortOption={sortOption}
+          childTags={[]}
+          isLeaf
+          isLinked
+          handleTagClick={() => {}}
+          handleChildTagClick={() => {}}
+        />
+      </div>
+    );
   }
 
   return (
@@ -66,7 +79,7 @@ const MemoSectionList = ({
             key={`section-${selectedTag.id}`}
             tag={selectedTag}
             childTags={[]}
-            isLinked={true}
+            isLinked
             sortOption={sortOption}
             handleTagClick={() => addTagToStack(selectedTag)}
             handleChildTagClick={(childTag: Tag) =>
@@ -83,7 +96,6 @@ const MemoSectionList = ({
               key={`section-${tag?.id}` || uuid_v4()}
               tag={tag}
               childTags={childTags}
-              isLinked={false}
               sortOption={sortOption}
               handleTagClick={() => addTagToStack(tag)}
               handleChildTagClick={(childTag: Tag) => addTagToStack([tag, childTag])}
