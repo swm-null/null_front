@@ -56,7 +56,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
               <Skeleton
                 animation="wave"
                 height={27}
-                className="px-[0.5625rem] self-center content-center text-[10px]"
+                className="self-center content-center px-[0.5625rem] text-[10px]"
                 style={{ transform: 'scale(1, 1)' }}
               >
                 {skeletonText}
