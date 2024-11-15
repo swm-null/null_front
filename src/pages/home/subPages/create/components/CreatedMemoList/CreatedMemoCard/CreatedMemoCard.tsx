@@ -48,6 +48,18 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     }
   };
 
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  const haveLink = urlPattern.test(memo.content);
+
+  const skeletonText =
+    memo.voice_urls.length > 0
+      ? '음성 분석 중...'
+      : haveLink
+        ? '링크 분석 중...'
+        : memo.image_urls.length > 0
+          ? '이미지 분석 중...'
+          : '텍스트 분석 중...';
+
   return (
     <div
       className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border border-black border-opacity-10 
@@ -61,7 +73,16 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
           {memo.tags.length === 0 ? (
-            <Skeleton animation="wave" width={50} />
+            <div className="rounded-2xl overflow-hidden">
+              <Skeleton
+                animation="wave"
+                height={27}
+                className="self-center content-center px-[0.5625rem] text-[10px]"
+                style={{ transform: 'scale(1, 1)' }}
+              >
+                {skeletonText}
+              </Skeleton>
+            </div>
           ) : (
             <UneditableTagList
               tags={memo.tags}
@@ -76,6 +97,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           imageUrls={imageUrls}
           message={message}
           removeImageUrl={removeImageUrl}
+          metadata={memo.metadata}
           setMessage={setMessage}
           editable={editable}
         />
@@ -113,13 +135,19 @@ const CreatedMemoCardHeader = ({
         </p>
         <button type="button" className="rounded-full">
           {editable ? (
-            <NoEditIcon className="w-5 h-5" onClick={toggleEditable} />
+            <NoEditIcon
+              className="w-5 h-5 text-[#887262]"
+              onClick={toggleEditable}
+            />
           ) : (
-            <EditIcon className="w-5 h-5" onClick={toggleEditable} />
+            <EditIcon className="w-5 h-5 text-[#887262]" onClick={toggleEditable} />
           )}
         </button>
         <button type="button" className="rounded-full">
-          <DeleteIcon onClick={handleDeleteMemo} />
+          <DeleteIcon
+            className="w-5 h-5 text-[#887262]"
+            onClick={handleDeleteMemo}
+          />
         </button>
       </div>
     </div>

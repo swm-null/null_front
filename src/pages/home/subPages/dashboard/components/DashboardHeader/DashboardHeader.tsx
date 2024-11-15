@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { Breadcrumbs } from '@mui/material';
-import { RightIcon } from 'assets/icons';
+import { Breadcrumbs, CircularProgress } from '@mui/material';
+import { AddIcon, RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
@@ -51,28 +51,34 @@ const DashboardHeader = ({
 
   return (
     <div className="flex flex-col w-full">
-      <Breadcrumbs
-        className="px-4"
-        separator={<RightIcon />}
-        aria-label="breadcrumb"
-      >
-        <TagPathButton
-          key="all"
-          tag={{ id: '@', name: allTagText }}
-          onClick={handleAllTagsClick}
-        />
-        {tagStack.map((tag, index) => (
+      <div className="flex w-full">
+        <Breadcrumbs
+          className="px-4"
+          separator={<RightIcon />}
+          aria-label="breadcrumb"
+        >
           <TagPathButton
-            key={tag.id}
-            tag={tag}
-            isCurrentTag={index === tagStack.length - 1}
-            onClick={() => handleMiddleTagClick(index)}
+            key="all"
+            tag={{ id: '@', name: allTagText }}
+            onClick={handleAllTagsClick}
           />
-        ))}
-      </Breadcrumbs>
+          {tagStack.map((tag, index) => (
+            <TagPathButton
+              key={tag.id}
+              tag={tag}
+              isCurrentTag={index === tagStack.length - 1}
+              onClick={() => handleMiddleTagClick(index)}
+            />
+          ))}
+        </Breadcrumbs>
+        <p className="flex ml-auto pr-4 text-sm self-center gap-2 text-[#6A5344E6]">
+          배치 중입니다
+          <CircularProgress className="self-center" size={14} />
+        </p>
+      </div>
 
       <div className="flex w-full flex-wrap p-4 pb-2 gap-2">
-        <div className="flex max-w-full mr-auto">
+        <div className="flex max-w-full mr-auto gap-1">
           <UneditableTagList
             tags={tags}
             size="large"
@@ -81,6 +87,7 @@ const DashboardHeader = ({
             invalidCharsPattern={invalidCharsPattern}
             onChildTagClick={handleChildTagClick}
           />
+          <AddIcon className="text-brown2 bg-cream0 p-[7px] h-[27px] w-[27px] rounded-full border border-black border-opacity-10 bg-clip-padding" />
         </div>
         <div className="flex ml-auto w-fit">
           <SortToggle

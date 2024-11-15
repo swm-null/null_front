@@ -24,7 +24,7 @@ const PageDots = ({
         >
           <div
             className={`w-1.5 h-1.5 rounded-full p-1 self-center ${
-              index === photoIndex ? 'bg-black' : 'bg-gray1'
+              index === photoIndex ? 'bg-brown2' : 'bg-[#E6DDCF]'
             }`}
           />
         </button>
@@ -33,7 +33,7 @@ const PageDots = ({
         <AddOutlinedIcon
           sx={{ width: 16, height: 16, padding: 0, margin: 0 }}
           className={`cursor-pointer ${
-            photoIndex === allImages.length ? 'text-black' : 'text-gray2'
+            photoIndex === allImages.length ? 'text-brown2' : 'text-[#CCC5BA]'
           }`}
           onClick={() => setPhotoIndex(allImages.length)}
         />

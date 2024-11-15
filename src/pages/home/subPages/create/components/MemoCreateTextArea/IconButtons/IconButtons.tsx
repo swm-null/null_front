@@ -1,6 +1,5 @@
-import { RightArrowIcon } from 'assets/icons';
+import { CameraIcon, MicIcon, RightArrowIcon } from 'assets/icons';
 import { ImageFileInput } from 'pages/home/subPages/components';
-import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import { useImageList } from 'pages/home/subPages/hooks';
 
 const IconButtons = ({
@@ -21,13 +20,12 @@ const IconButtons = ({
     <div className="flex justify-end gap-1 items-center">
       {submitAvailable && `${message ? message.length : 0} / ${MAX_TEXT_LENGTH}`}
       <ImageFileInput handleImageFileChange={handleImageFilesChange}>
-        <AddAPhotoOutlinedIcon
-          tabIndex={0}
-          sx={{ width: 20, height: 20 }}
-          className="cursor-pointer mx-1"
+        <CameraIcon
+          className="w-6 h-6 p-[2px] text-brown2 cursor-pointer"
           onClick={handleAddImageButtonClick}
         />
       </ImageFileInput>
+      <MicIcon className="w-7 h-7 text-brown2 " />
       {submitAvailable && (
         <RightArrowIcon
           tabIndex={0}

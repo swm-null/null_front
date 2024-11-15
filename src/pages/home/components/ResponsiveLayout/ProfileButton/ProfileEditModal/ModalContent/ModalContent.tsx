@@ -1,10 +1,10 @@
 import { profile } from 'api';
 import { oatmealUrl } from 'assets/images';
 import { CustomInput } from 'pages/components';
-import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import { ImageFileInput } from 'pages/home/subPages/components';
 import { useTranslation } from 'react-i18next';
 import { useImageList } from 'pages/home/subPages/hooks';
+import { CameraIcon } from 'assets/icons';
 
 const ModalContent = ({
   profileName,
@@ -52,10 +52,13 @@ const ModalContent = ({
             aria-label="upload picture"
             className="absolute p-1 -bottom-1 -right-1 bg-[#FFF6E3] rounded-full"
           >
-            <AddAPhotoOutlinedIcon
-              sx={{ width: 28, height: 28 }}
-              className="border rounded-full shadow-md p-1 bg-white"
-            />
+            <div className="border rounded-full shadow-md p-1 bg-white">
+              <CameraIcon
+                tabIndex={0}
+                className="h-5 w-5 text-brown2"
+                onClick={handleAddImageButtonClick}
+              />
+            </div>
           </button>
         </ImageFileInput>
       </div>
