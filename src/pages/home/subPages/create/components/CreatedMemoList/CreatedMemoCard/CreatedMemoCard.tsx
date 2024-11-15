@@ -9,6 +9,7 @@ import { useMemoManager, UneditableTagList } from 'pages/home/subPages/component
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
+import { isFilesResponse, uploadFile, uploadFiles } from 'api';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -21,17 +22,18 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const [message, setMessage] = useState(memo.content);
   const [originImageUrls, setOriginalImageUrls] = useState(memo.image_urls);
   const {
+    images,
     imageUrls: newImageUrls,
     handleImageFilesChange,
     removeImage,
   } = useImageList();
 
+  const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
+
   const imageUrls = useMemo(
     () => [...originImageUrls, ...newImageUrls],
     [originImageUrls, newImageUrls]
   );
-
-  const { handleDeleteMemo } = useMemoManager();
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
@@ -48,7 +50,35 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     }
   }, []);
 
-  const handleUpdateMemoWithUploadFiles = async () => {};
+  const getFileUrls = async (files: File[]): Promise<string[]> => {
+    if (files.length === 0) return [];
+
+    const response =
+      files.length === 1 ? await uploadFile(files[0]) : await uploadFiles(files);
+    if (!isFilesResponse(response))
+      throw new Error('파일 업로드에 문제가 생겼습니다.');
+
+    return response.urls;
+  };
+
+  const handleUpdateMemoWithUploadFiles = async () => {
+    try {
+      const newImageUrls = await getFileUrls(images);
+
+      handleUpdateMemo({
+        memo,
+        newMessage: message,
+        newTags: memo.tags,
+        newImageUrls: [...originImageUrls, ...newImageUrls],
+        newVoiceUrls: memo.voice_urls,
+        handlePreProcess: () => setEditable(false),
+      });
+    } catch {
+      // FIXME: 에러 처리 어캐 하지...
+
+      alert('메모 수정 실패');
+    }
+  };
 
   const toggleEditable = () => {
     if (editable) {

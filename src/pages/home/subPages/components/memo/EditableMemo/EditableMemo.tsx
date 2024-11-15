@@ -58,7 +58,7 @@ const EditableMemo = ({
         memo,
         newMessage: message,
         newTags: tags,
-        newImageUrls: [...imageUrls, ...newImageUrls],
+        newImageUrls: [...originImageUrls, ...newImageUrls],
         newVoiceUrls: memo.voice_urls,
         handlePreProcess,
       });
