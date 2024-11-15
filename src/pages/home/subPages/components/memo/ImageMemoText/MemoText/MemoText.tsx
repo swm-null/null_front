@@ -25,6 +25,9 @@ const MemoText = ({
     );
   };
 
+  const urlPattern = /^https?:\/\/[^\s]+$/;
+  const haveOnlyLink = urlPattern.test(message || '');
+
   const parsedMetadata = metadata ? JSON.parse(metadata) : null;
 
   const voiceDescriptions = parsedMetadata?.voice_descriptions || null;
@@ -32,13 +35,14 @@ const MemoText = ({
   const imageDescriptions =
     parsedMetadata?.image_descriptions?.[0]?.image_description || null;
 
-  const descriptions = voiceDescriptions
-    ? voiceDescriptions[0]
-    : linkDescriptions
-      ? linkDescriptions[0]
-      : imageDescriptions
-        ? imageDescriptions
-        : null;
+  const descriptions =
+    !message && voiceDescriptions
+      ? voiceDescriptions[0]
+      : haveOnlyLink && linkDescriptions
+        ? linkDescriptions[0]
+        : !message && imageDescriptions
+          ? imageDescriptions
+          : null;
 
   const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
     if (!editable) return;
