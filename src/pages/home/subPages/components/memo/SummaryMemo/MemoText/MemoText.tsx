@@ -2,8 +2,8 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 
 const MemoText = forwardRef<
   HTMLParagraphElement,
-  { message: string; textColor?: string; lines?: number }
->(({ message, textColor = '#111111', lines = 6 }, ref) => {
+  { message: string; textColor?: string; lines?: number; fontSize?: number }
+>(({ message, textColor = '#111111', lines = 6, fontSize }, ref) => {
   const paragraphRef = useRef<HTMLDivElement | null>(null);
   const [isOverflowed, setIsOverflowed] = useState(false);
 
@@ -41,12 +41,13 @@ const MemoText = forwardRef<
             ref.current = node;
           }
         }}
-        className={`flex-col h-full bg-transparent focus:outline-none font-regular text-[15px] 
+        className={`flex-col h-full bg-transparent focus:outline-none font-regular 
           overflow-hidden text-ellipsis whitespace-break-spaces break-all leading-5`}
         style={{
           color: textColor,
           display: '-webkit-box',
           WebkitBoxOrient: 'vertical',
+          fontSize: fontSize ? fontSize : 15,
         }}
         onClick={(event) => {
           const target = event.target as HTMLElement;

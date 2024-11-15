@@ -99,6 +99,7 @@ const SummaryMemo = ({
             <MemoText
               textColor={getStyleByImagePresence('gray2', 'white')}
               lines={3}
+              fontSize={14}
               message={descriptions}
             />
           </>
