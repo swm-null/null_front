@@ -6,6 +6,7 @@ import { MemoFooter } from './MemoFooter';
 import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
+import { Divider } from '@mui/material';
 
 interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -50,11 +51,11 @@ const SummaryMemo = ({
 
   const descriptions =
     !memo.content && voiceDescriptions
-      ? voiceDescriptions[0]
+      ? voiceDescriptions[0].simple_description
       : haveOnlyLink && linkDescriptions
-        ? linkDescriptions[0]
+        ? linkDescriptions[0].simple_description
         : !memo.content && imageDescriptions
-          ? imageDescriptions
+          ? imageDescriptions.simple_description
           : null;
 
   return (
@@ -94,11 +95,14 @@ const SummaryMemo = ({
           />
         )}
         {descriptions && (
-          <MemoText
-            textColor={getStyleByImagePresence('gray2', 'white')}
-            lines={3}
-            message={descriptions}
-          />
+          <>
+            {haveOnlyLink && <Divider />}
+            <MemoText
+              textColor={getStyleByImagePresence('gray2', 'white')}
+              lines={3}
+              message={descriptions}
+            />
+          </>
         )}
         <MemoFooter
           textColor={getStyleByImagePresence('gray2', 'white')}
