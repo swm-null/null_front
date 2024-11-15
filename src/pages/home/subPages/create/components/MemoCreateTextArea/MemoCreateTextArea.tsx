@@ -11,25 +11,32 @@ import { usePressEnterFetch } from 'pages/home/subPages/hooks';
 import { IconButtons } from './IconButtons';
 import { HiddenTextarea } from './HiddenTextarea';
 import { MediaList } from './MediaList';
-import { ImageListContext, RecordingContext } from 'utils';
+import { RecordingContext } from 'utils';
 import { useHiddenTextareaManager } from './hook';
 
 const MAX_TEXT_LENGTH = 1000;
 
 interface MemoCreateTextAreaProps {
+  imageUrls: string[];
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: () => void;
+  onImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  removeImage: (index: number) => void;
+  onPaste: (e: React.ClipboardEvent) => void;
 }
 
 const MemoCreateTextArea = ({
+  imageUrls,
   value,
   placeholder,
   onChange,
   onSubmit,
+  onImageFilesChange,
+  removeImage,
+  onPaste,
 }: MemoCreateTextAreaProps) => {
-  const { imageUrls, removeImage, handlePaste } = useContext(ImageListContext);
   const { audioBlobs, removeAudio, openRecordingModal } =
     useContext(RecordingContext);
 
@@ -91,7 +98,7 @@ const MemoCreateTextArea = ({
         className="flex flex-shrink-0 px-4 py-3 rounded-2xl gap-4 bg-[#FFF6E3CC] border
         border-black border-opacity-10 bg-clip-padding font-regular shadow-custom backdrop-blur-lg"
         onBlur={handleBlur}
-        onPaste={handlePaste}
+        onPaste={onPaste}
       >
         <HiddenTextarea
           value={value}
@@ -127,6 +134,7 @@ const MemoCreateTextArea = ({
             submitAvailable={focus || isMultiline}
             MAX_TEXT_LENGTH={MAX_TEXT_LENGTH}
             onMicButtonClick={handleMicButtonClick}
+            onImageFilesChange={onImageFilesChange}
             onSubmitButtonClick={onSubmit}
           />
         </div>

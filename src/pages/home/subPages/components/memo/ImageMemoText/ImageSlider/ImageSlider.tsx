@@ -1,5 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
-import { ImageListContext } from 'utils';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { ImageLightbox } from './ImageLightbox';
 import { FlickityWrapper } from './FlickityWrapper';
 import { AddItem, ImageItem } from './item';
@@ -8,34 +7,23 @@ import { PageDots } from './PageDots';
 const ImageSlider = ({
   imageUrls,
   removeImageUrl,
+  handleImageFilesChange,
   editable = false,
 }: {
   imageUrls: string[];
   removeImageUrl?: (index: number) => void;
+  handleImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
   editable?: boolean;
 }) => {
-  const { images, removeImage, handleAddImageButtonClick, handleImageFilesChange } =
-    useContext(ImageListContext);
-
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const addImageInputRef = useRef<HTMLInputElement>(null);
+  const showPageDots = (imageUrls.length >= 1 && editable) || imageUrls.length >= 2;
 
-  const showPageDots =
-    (imageUrls.length + images.length >= 1 && editable) || imageUrls.length >= 2;
-
-  const allImages = useMemo(() => {
-    const objectUrls = editable ? images.map((img) => URL.createObjectURL(img)) : [];
-    return [...(imageUrls || []), ...objectUrls];
-  }, [imageUrls, images]);
-
-  const isNoImages = () => allImages.length === 0;
+  const isNoImages = () => imageUrls.length === 0;
 
   const handleRemoveClick = (index: number) => {
-    if (index < imageUrls?.length) {
-      removeImageUrl?.(index);
-    } else {
-      removeImage(index - imageUrls?.length);
-    }
+    removeImageUrl?.(index);
   };
 
   const handleImageClick = (index: number) => {
@@ -43,8 +31,27 @@ const ImageSlider = ({
     setIsOpen(true);
   };
 
+  const imageItems = imageUrls.map((image, index) => (
+    <ImageItem
+      key={`image-${image}`}
+      image={image}
+      index={index}
+      editable={editable}
+    />
+  ));
+
+  useEffect(() => {
+    if (photoIndex >= imageUrls.length) {
+      setPhotoIndex(0);
+    }
+  }, [editable]);
+
+  useEffect(() => {
+    setPhotoIndex(0);
+  }, [imageUrls]);
+
   if (isNoImages()) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -52,26 +59,24 @@ const ImageSlider = ({
       <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
         <FlickityWrapper
           onImageClick={handleImageClick}
+          addImageInputRef={addImageInputRef}
           onRemoveClick={editable ? handleRemoveClick : null}
-          onAddClick={editable ? handleAddImageButtonClick : null}
-          totalImageCount={allImages.length}
+          totalImageCount={imageUrls.length}
           onChange={setPhotoIndex}
           currentIndex={photoIndex}
         >
-          {allImages.map((image, index) => (
-            <ImageItem
-              key={`origin-${index}`}
-              image={image}
-              index={index}
-              editable={editable}
+          {imageItems}
+          {editable && (
+            <AddItem
+              addImageInputRef={addImageInputRef}
+              handleImageFilesChange={handleImageFilesChange}
             />
-          ))}
-          {editable && <AddItem handleImageFilesChange={handleImageFilesChange} />}
+          )}
         </FlickityWrapper>
       </div>
       {showPageDots && (
         <PageDots
-          allImages={allImages}
+          allImages={imageUrls}
           photoIndex={photoIndex}
           setPhotoIndex={setPhotoIndex}
           editable={editable}
@@ -82,7 +87,7 @@ const ImageSlider = ({
         onClose={() => setIsOpen(false)}
         photoIndex={photoIndex}
         setPhotoIndex={setPhotoIndex}
-        images={allImages}
+        images={imageUrls}
       />
     </>
   );

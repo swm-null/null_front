@@ -1,15 +1,16 @@
 import { useContext } from 'react';
-import { AlertContext, ImageListContext } from 'utils/context';
+import { AlertContext } from 'utils/context';
 import Cookies from 'js-cookie';
 import * as Api from 'api';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useValidationManager } from 'pages/hooks';
+import { useImageList } from 'pages/home/subPages/hooks';
 
 const useProfileManager = () => {
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
-  const { images } = useContext(ImageListContext);
+  const { images } = useImageList();
   const { validateName } = useValidationManager();
 
   const queryClient = useQueryClient();

@@ -1,15 +1,16 @@
 import { Checkbox } from '@mui/material';
 import { CheckedIcon, NotCheckedIcon } from 'assets/icons';
+import { useTranslation } from 'react-i18next';
 
 const TagRebuildCheckBox = ({
   checked,
   setChecked,
-  label,
 }: {
   checked: boolean;
   setChecked: (checked: boolean) => void;
-  label: string;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex gap-[0.62rem] items-center">
       <Checkbox
@@ -23,7 +24,7 @@ const TagRebuildCheckBox = ({
         checkedIcon={<CheckedIcon />}
         sx={{ padding: 0 }}
       />
-      <p className="text-brown2 font-medium text-sm">{label}</p>
+      <p className="text-brown2 font-medium text-sm">{t('memo.tagRebuild')}</p>
     </div>
   );
 };

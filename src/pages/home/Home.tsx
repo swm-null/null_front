@@ -4,12 +4,7 @@ import { ResponsiveLayout } from './components';
 import { useNavigate } from 'react-router-dom';
 import { HomeRouter } from './router';
 import { useContext, useEffect } from 'react';
-import {
-  ApiContext,
-  BottomNavProvider,
-  ImageListProvider,
-  TagProvider,
-} from 'utils';
+import { ApiContext, BottomNavProvider, TagProvider } from 'utils';
 import 'flickity/css/flickity.css';
 
 const queryClient = new QueryClient();
@@ -29,13 +24,11 @@ const Home = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BottomNavProvider>
-        <ImageListProvider>
-          <TagProvider>
-            <ResponsiveLayout handleNavigation={handleNavigation}>
-              <HomeRouter />
-            </ResponsiveLayout>
-          </TagProvider>
-        </ImageListProvider>
+        <TagProvider>
+          <ResponsiveLayout handleNavigation={handleNavigation}>
+            <HomeRouter />
+          </ResponsiveLayout>
+        </TagProvider>
       </BottomNavProvider>
       <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>

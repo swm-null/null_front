@@ -2,9 +2,8 @@ import { profile } from 'api';
 import { oatmealUrl } from 'assets/images';
 import { CustomInput } from 'pages/components';
 import { ImageFileInput } from 'pages/home/subPages/components';
-import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageListContext } from 'utils';
+import { useImageList } from 'pages/home/subPages/hooks';
 import { CameraIcon } from 'assets/icons';
 
 const ModalContent = ({
@@ -23,8 +22,7 @@ const ModalContent = ({
   handleClose: () => void;
 }) => {
   const { t } = useTranslation();
-  const { images, handleAddImageButtonClick, handleImageFileChange } =
-    useContext(ImageListContext);
+  const { images, handleImageFileChange } = useImageList();
 
   const imageUrl = images[0] ? URL.createObjectURL(images[0]) : null;
 
@@ -37,11 +35,7 @@ const ModalContent = ({
     <div className="flex flex-col gap-4">
       <h2 className="text-base">{t('profile.editProfile')}</h2>
       <div className="flex flex-col items-center gap-4">
-        <ImageFileInput
-          className="relative"
-          handleImageFileChange={handleImageFileChange}
-          handleClick={handleAddImageButtonClick}
-        >
+        <ImageFileInput className="relative" onFileChange={handleImageFileChange}>
           <img
             src={imageUrl || profileImage || oatmealUrl}
             alt="Profile"
@@ -54,11 +48,7 @@ const ModalContent = ({
             className="absolute p-1 -bottom-1 -right-1 bg-[#FFF6E3] rounded-full"
           >
             <div className="border rounded-full shadow-md p-1 bg-white">
-              <CameraIcon
-                tabIndex={0}
-                className="h-5 w-5 text-brown2"
-                onClick={handleAddImageButtonClick}
-              />
+              <CameraIcon tabIndex={0} className="h-5 w-5 text-brown2" />
             </div>
           </button>
         </ImageFileInput>

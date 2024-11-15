@@ -30,7 +30,7 @@ const HiddenTextarea = ({
       message={value}
       MAX_TEXT_LENGTH={MAX_TEXT_LENGTH}
       submitAvailable={true}
-      onMicButtonClick={() => {}}
+      onImageFilesChange={() => {}}
       onSubmitButtonClick={() => {}}
     />
   </div>

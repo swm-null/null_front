@@ -1,11 +1,11 @@
 import Flickity from 'react-flickity-component';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, RefObject, useEffect, useState } from 'react';
 
 interface FlickityWrapperProps {
   children: ReactNode;
+  addImageInputRef: RefObject<HTMLInputElement>;
   onImageClick: (index: number) => void;
   onRemoveClick: ((index: number) => void) | null;
-  onAddClick: (() => void) | null;
   totalImageCount?: number;
   onChange?: (index: number) => void;
   currentIndex?: number;
@@ -13,9 +13,9 @@ interface FlickityWrapperProps {
 
 const FlickityWrapper = ({
   children,
+  addImageInputRef,
   onImageClick,
   onRemoveClick,
-  onAddClick,
   totalImageCount = 0,
   onChange,
   currentIndex,
@@ -39,10 +39,10 @@ const FlickityWrapper = ({
         return;
       }
 
-      if (cellIndex === totalImageCount && onAddClick) {
-        onAddClick();
-      } else {
+      if (cellIndex < totalImageCount) {
         onImageClick?.(cellIndex);
+      } else {
+        addImageInputRef.current?.click();
       }
     };
 
@@ -57,7 +57,7 @@ const FlickityWrapper = ({
       flickityInstance.off('staticClick', handleStaticClick);
       flickityInstance.off('change', handleChange);
     };
-  }, [flickityInstance, onImageClick, onRemoveClick, onAddClick, totalImageCount]);
+  }, [flickityInstance, onImageClick, onRemoveClick, totalImageCount]);
 
   useEffect(() => {
     if (!flickityInstance || currentIndex === undefined) return;

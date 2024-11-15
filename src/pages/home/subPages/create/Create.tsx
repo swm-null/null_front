@@ -1,14 +1,23 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCreateMemoManager } from './hook';
-import { ImageListContext, RecordingContext } from 'utils';
+import { RecordingContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
+import { useImageList } from '../hooks';
 
 const CreatePage = () => {
   const { t } = useTranslation();
-  const { images, imageUrls, getInputProps, getRootProps, removeAllImage } =
-    useContext(ImageListContext);
+  const {
+    images,
+    imageUrls,
+    getInputProps,
+    getRootProps,
+    removeImage,
+    removeAllImage,
+    handleImageFilesChange,
+    handlePaste,
+  } = useImageList();
   const { audioBlobs, removeAudio } = useContext(RecordingContext);
 
   const [message, setMessage] = useState('');
@@ -45,9 +54,13 @@ const CreatePage = () => {
           <div className={`overflow-scroll no-scrollbar`}>
             <MemoCreateTextArea
               value={message}
-              onChange={handleMessageChange}
               placeholder={t('pages.create.inputPlaceholder')}
+              imageUrls={imageUrls}
+              onImageFilesChange={handleImageFilesChange}
+              onPaste={handlePaste}
+              onChange={handleMessageChange}
               onSubmit={handleSubmit}
+              removeImage={removeImage}
             />
             <CreatedMemoList
               memos={createMemoManager.data}
