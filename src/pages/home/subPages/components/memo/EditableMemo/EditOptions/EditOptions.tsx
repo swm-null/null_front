@@ -6,11 +6,9 @@ import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 
 const EditOptions = ({
   handleImageFilesChange,
-  handleAddImageButtonClick,
   handleUpdateMemoWithUploadFiles,
 }: {
   handleImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleAddImageButtonClick: () => void;
   handleUpdateMemoWithUploadFiles: () => void;
 }) => {
   const { t } = useTranslation();
@@ -21,12 +19,11 @@ const EditOptions = ({
     <div className="flex flex-wrap gap-2">
       <ImageFileInput
         className="flex gap-4 flex-shrink-0 "
-        handleImageFileChange={handleImageFilesChange}
+        onFileChange={handleImageFilesChange}
       >
         <AddAPhotoOutlinedIcon
           sx={{ width: 20, height: 20 }}
           className="text-brown2 cursor-pointer"
-          onClick={handleAddImageButtonClick}
         />
       </ImageFileInput>
       <div className="flex ml-auto w-fit gap-6 items-center">

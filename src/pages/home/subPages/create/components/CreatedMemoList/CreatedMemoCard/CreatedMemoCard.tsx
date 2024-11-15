@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -19,9 +19,17 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
   const [editable, setEditable] = useState(false);
   const [message, setMessage] = useState(memo.content);
-  const [imageUrls, setImageUrls] = useState(memo.image_urls);
+  const [originImageUrls, setOriginalImageUrls] = useState(memo.image_urls);
+  const {
+    imageUrls: newImageUrls,
+    handleImageFilesChange,
+    removeImage,
+  } = useImageList();
 
-  const { handleImageFilesChange, handleAddImageButtonClick } = useImageList();
+  const imageUrls = useMemo(
+    () => [...originImageUrls, ...newImageUrls],
+    [originImageUrls, newImageUrls]
+  );
 
   const { handleDeleteMemo } = useMemoManager();
 
@@ -33,7 +41,11 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   };
 
   const removeImageUrl = useCallback((index: number) => {
-    setImageUrls((prev) => prev.filter((_, i) => i !== index));
+    if (index >= originImageUrls.length) {
+      removeImage(index - originImageUrls.length);
+    } else {
+      setOriginalImageUrls((prev) => prev.filter((_, i) => i !== index));
+    }
   }, []);
 
   const handleUpdateMemoWithUploadFiles = async () => {};
@@ -42,7 +54,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     if (editable) {
       setEditable(false);
       setMessage(memo.content);
-      setImageUrls(memo.image_urls);
+      setOriginalImageUrls(memo.image_urls);
     } else {
       setEditable(true);
     }
@@ -100,11 +112,11 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           metadata={memo.metadata}
           setMessage={setMessage}
           editable={editable}
+          handleImageFilesChange={handleImageFilesChange}
         />
         {editable && (
           <EditOptions
             handleImageFilesChange={handleImageFilesChange}
-            handleAddImageButtonClick={handleAddImageButtonClick}
             handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
           />
         )}

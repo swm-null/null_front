@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { MemoText } from './MemoText';
 import { ImageSlider } from './ImageSlider';
 import { useImageList } from 'pages/home/subPages/hooks';
@@ -6,6 +6,7 @@ import { useImageList } from 'pages/home/subPages/hooks';
 const ImageMemoText = ({
   imageUrls,
   removeImageUrl,
+  handleImageFilesChange,
   textColor,
   message,
   metadata,
@@ -17,6 +18,7 @@ const ImageMemoText = ({
   message: string;
   metadata: string | null;
   textColor?: string;
+  handleImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
   setMessage?: (newMessage: string) => void;
   editable?: boolean;
 }) => {
@@ -44,6 +46,7 @@ const ImageMemoText = ({
                 <ImageSlider
                   imageUrls={imageUrls}
                   removeImageUrl={removeImageUrl}
+                  handleImageFilesChange={handleImageFilesChange}
                   editable={editable}
                 />
               </div>

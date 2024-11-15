@@ -111,13 +111,6 @@ const useImageList = () => {
     }
   };
 
-  const handleAddImageButtonClick = () => {
-    const inputFile = document.querySelector(
-      '#image-file-input'
-    ) as HTMLInputElement;
-    if (inputFile) inputFile.click();
-  };
-
   return {
     images,
     imageUrls,
@@ -129,7 +122,6 @@ const useImageList = () => {
     handlePaste,
     handleImageFileChange,
     handleImageFilesChange,
-    handleAddImageButtonClick,
   };
 };
 

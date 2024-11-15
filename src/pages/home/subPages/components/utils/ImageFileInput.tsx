@@ -1,34 +1,43 @@
-import { ChangeEvent, ReactNode } from 'react';
+import {
+  ChangeEvent,
+  ReactNode,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { useImageList } from '../../hooks';
 
 interface ImageFileInputProps {
-  handleClick?: () => void;
-  handleImageFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   children: ReactNode;
   className?: string;
 }
 
-const ImageFileInput = ({
-  handleClick,
-  handleImageFileChange,
-  children,
-  className,
-}: ImageFileInputProps) => {
-  const { ALLOWED_IMAGE_FILE_TYPES } = useImageList();
+const ImageFileInput = forwardRef<HTMLInputElement, ImageFileInputProps>(
+  ({ onFileChange, children, className }, ref) => {
+    const { ALLOWED_IMAGE_FILE_TYPES } = useImageList();
+    const inputRef = useRef<HTMLInputElement>(null);
 
-  return (
-    <form className={className} onClick={handleClick}>
-      <input
-        id="image-file-input"
-        title="input-file"
-        type="file"
-        accept={ALLOWED_IMAGE_FILE_TYPES.join(', ')}
-        onChange={handleImageFileChange}
-        className="hidden"
-      />
-      {children}
-    </form>
-  );
-};
+    useImperativeHandle(ref, () => inputRef.current!);
+
+    return (
+      <div
+        className={`cursor-pointer ${className}`}
+        onClick={() => {
+          if (!ref) inputRef.current?.click();
+        }}
+      >
+        <input
+          ref={inputRef}
+          type="file"
+          accept={ALLOWED_IMAGE_FILE_TYPES.join(',')}
+          onChange={(e) => onFileChange(e)}
+          className="hidden"
+        />
+        {children}
+      </div>
+    );
+  }
+);
 
 export default ImageFileInput;

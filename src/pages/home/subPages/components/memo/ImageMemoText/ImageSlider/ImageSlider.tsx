@@ -1,41 +1,31 @@
-import { useMemo, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { ImageLightbox } from './ImageLightbox';
 import { FlickityWrapper } from './FlickityWrapper';
 import { AddItem, ImageItem } from './item';
 import { PageDots } from './PageDots';
-import { useImageList } from 'pages/home/subPages/hooks';
 
 const ImageSlider = ({
   imageUrls,
   removeImageUrl,
+  handleImageFilesChange,
   editable = false,
 }: {
   imageUrls: string[];
   removeImageUrl?: (index: number) => void;
+  handleImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
   editable?: boolean;
 }) => {
-  const { images, removeImage, handleAddImageButtonClick, handleImageFilesChange } =
-    useImageList();
-
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
 
-  const showPageDots =
-    (imageUrls.length + images.length >= 1 && editable) || imageUrls.length >= 2;
+  const addImageInputRef = useRef<HTMLInputElement>(null);
 
-  const allImages = useMemo(() => {
-    const objectUrls = editable ? images.map((img) => URL.createObjectURL(img)) : [];
-    return [...(imageUrls || []), ...objectUrls];
-  }, [imageUrls, images]);
+  const showPageDots = (imageUrls.length >= 1 && editable) || imageUrls.length >= 2;
 
-  const isNoImages = () => allImages.length === 0;
+  const isNoImages = () => imageUrls.length === 0;
 
   const handleRemoveClick = (index: number) => {
-    if (index < imageUrls?.length) {
-      removeImageUrl?.(index);
-    } else {
-      removeImage(index - imageUrls?.length);
-    }
+    removeImageUrl?.(index);
   };
 
   const handleImageClick = (index: number) => {
@@ -52,13 +42,13 @@ const ImageSlider = ({
       <div className="xs:w-60 w-full max-w-72 rounded-2xl overflow-hidden">
         <FlickityWrapper
           onImageClick={handleImageClick}
+          addImageInputRef={addImageInputRef}
           onRemoveClick={editable ? handleRemoveClick : null}
-          onAddClick={editable ? handleAddImageButtonClick : null}
-          totalImageCount={allImages.length}
+          totalImageCount={imageUrls.length}
           onChange={setPhotoIndex}
           currentIndex={photoIndex}
         >
-          {allImages.map((image, index) => (
+          {imageUrls.map((image, index) => (
             <ImageItem
               key={`origin-${index}`}
               image={image}
@@ -66,12 +56,17 @@ const ImageSlider = ({
               editable={editable}
             />
           ))}
-          {editable && <AddItem handleImageFilesChange={handleImageFilesChange} />}
+          {editable && (
+            <AddItem
+              addImageInputRef={addImageInputRef}
+              handleImageFilesChange={handleImageFilesChange}
+            />
+          )}
         </FlickityWrapper>
       </div>
       {showPageDots && (
         <PageDots
-          allImages={allImages}
+          allImages={imageUrls}
           photoIndex={photoIndex}
           setPhotoIndex={setPhotoIndex}
           editable={editable}
@@ -82,7 +77,7 @@ const ImageSlider = ({
         onClose={() => setIsOpen(false)}
         photoIndex={photoIndex}
         setPhotoIndex={setPhotoIndex}
-        images={allImages}
+        images={imageUrls}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -23,12 +23,21 @@ const EditableMemo = ({
 
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
-  const [imageUrls, setImageUrls] = useState(memo.image_urls);
+  const [originImageUrls, setOriginalImageUrls] = useState(memo.image_urls);
 
   const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
 
-  const { images, handleImageFilesChange, handleAddImageButtonClick } =
-    useImageList();
+  const {
+    images,
+    imageUrls: newImageUrls,
+    handleImageFilesChange,
+    removeImage,
+  } = useImageList();
+
+  const imageUrls = useMemo(
+    () => [...originImageUrls, ...newImageUrls],
+    [originImageUrls, newImageUrls]
+  );
 
   const getFileUrls = async (files: File[]): Promise<string[]> => {
     if (files.length === 0) return [];
@@ -61,7 +70,11 @@ const EditableMemo = ({
   };
 
   const removeImageUrl = useCallback((index: number) => {
-    setImageUrls((prev) => prev.filter((_, i) => i !== index));
+    if (index >= originImageUrls.length) {
+      removeImage(index - originImageUrls.length);
+    } else {
+      setOriginalImageUrls((prev) => prev.filter((_, i) => i !== index));
+    }
   }, []);
 
   useEffect(() => {
@@ -85,6 +98,7 @@ const EditableMemo = ({
           <ImageMemoText
             imageUrls={imageUrls}
             removeImageUrl={removeImageUrl}
+            handleImageFilesChange={handleImageFilesChange}
             message={message}
             metadata={memo.metadata}
             setMessage={setMessage}
@@ -94,7 +108,6 @@ const EditableMemo = ({
       </div>
       <EditOptions
         handleImageFilesChange={handleImageFilesChange}
-        handleAddImageButtonClick={handleAddImageButtonClick}
         handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
       />
     </div>

@@ -8,8 +8,16 @@ import { useImageList } from '../hooks';
 
 const CreatePage = () => {
   const { t } = useTranslation();
-  const { images, imageUrls, getInputProps, getRootProps, removeAllImage } =
-    useImageList();
+  const {
+    images,
+    imageUrls,
+    getInputProps,
+    getRootProps,
+    removeImage,
+    removeAllImage,
+    handleImageFilesChange,
+    handlePaste,
+  } = useImageList();
   const { audioBlobs, removeAudio } = useContext(RecordingContext);
 
   const [message, setMessage] = useState('');
@@ -46,9 +54,13 @@ const CreatePage = () => {
           <div className={`overflow-scroll no-scrollbar`}>
             <MemoCreateTextArea
               value={message}
-              onChange={handleMessageChange}
               placeholder={t('pages.create.inputPlaceholder')}
+              imageUrls={imageUrls}
+              onImageFilesChange={handleImageFilesChange}
+              onPaste={handlePaste}
+              onChange={handleMessageChange}
               onSubmit={handleSubmit}
+              removeImage={removeImage}
             />
             <CreatedMemoList
               memos={createMemoManager.data}
