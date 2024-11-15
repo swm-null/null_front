@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { ImageLightbox } from './ImageLightbox';
 import { FlickityWrapper } from './FlickityWrapper';
 import { AddItem, ImageItem } from './item';
@@ -17,9 +17,7 @@ const ImageSlider = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
-
   const addImageInputRef = useRef<HTMLInputElement>(null);
-
   const showPageDots = (imageUrls.length >= 1 && editable) || imageUrls.length >= 2;
 
   const isNoImages = () => imageUrls.length === 0;
@@ -33,8 +31,27 @@ const ImageSlider = ({
     setIsOpen(true);
   };
 
+  const imageItems = imageUrls.map((image, index) => (
+    <ImageItem
+      key={`image-${image}`}
+      image={image}
+      index={index}
+      editable={editable}
+    />
+  ));
+
+  useEffect(() => {
+    if (photoIndex >= imageUrls.length) {
+      setPhotoIndex(0);
+    }
+  }, [editable]);
+
+  useEffect(() => {
+    setPhotoIndex(0);
+  }, [imageUrls]);
+
   if (isNoImages()) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -48,14 +65,7 @@ const ImageSlider = ({
           onChange={setPhotoIndex}
           currentIndex={photoIndex}
         >
-          {imageUrls.map((image, index) => (
-            <ImageItem
-              key={`origin-${index}`}
-              image={image}
-              index={index}
-              editable={editable}
-            />
-          ))}
+          {imageItems}
           {editable && (
             <AddItem
               addImageInputRef={addImageInputRef}
