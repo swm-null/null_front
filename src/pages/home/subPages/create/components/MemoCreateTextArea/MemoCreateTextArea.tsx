@@ -88,7 +88,7 @@ const MemoCreateTextArea = ({
   return (
     <div className="p-4">
       <div
-        className="flex flex-shrink-0 px-4 py-3 rounded-2xl overflow-hidden gap-4 bg-[#FFF6E3CC] border
+        className="flex flex-shrink-0 px-4 py-3 rounded-2xl gap-4 bg-[#FFF6E3CC] border
         border-black border-opacity-10 bg-clip-padding font-regular shadow-custom backdrop-blur-lg"
         onBlur={handleBlur}
         onPaste={handlePaste}
@@ -105,7 +105,7 @@ const MemoCreateTextArea = ({
         >
           <TextareaAutosize
             className="flex-auto focus:outline-none resize-none min-h-9 content-center
-              text-[#111111] bg-transparent placeholder-custom"
+              text-[#111111] bg-transparent placeholder-custom scrollbar-none"
             value={value}
             onFocus={() => {
               setFocus(true);
@@ -114,7 +114,7 @@ const MemoCreateTextArea = ({
             placeholder={placeholder}
             onKeyDown={handlePressEnterFetch}
             minRows={1}
-            maxRows={20}
+            maxRows={7}
           />
           <MediaList
             images={imageUrls}
