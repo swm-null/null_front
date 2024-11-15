@@ -1,8 +1,8 @@
 import { ImageFileInput } from 'pages/home/subPages/components';
-import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TagRebuildCheckbox } from './TagRebuildCheckbox';
+import { CameraIcon, MicIcon } from 'assets/icons';
 
 const EditOptions = ({
   handleImageFilesChange,
@@ -21,11 +21,9 @@ const EditOptions = ({
         className="flex gap-4 flex-shrink-0 "
         onFileChange={handleImageFilesChange}
       >
-        <AddAPhotoOutlinedIcon
-          sx={{ width: 20, height: 20 }}
-          className="text-brown2 cursor-pointer"
-        />
+        <CameraIcon className="w-6 h-6 p-[2px] text-brown2 cursor-pointer" />
       </ImageFileInput>
+      <MicIcon className="w-6 h-6 text-brown2 " />
       <div className="flex ml-auto w-fit gap-6 items-center">
         <TagRebuildCheckbox checked={checked} setChecked={setChecked} />
         <button
