@@ -1,7 +1,8 @@
 import { ImageFileInput } from 'pages/home/subPages/components';
 import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 
 const EditOptions = ({
   handleImageFilesChange,
@@ -13,6 +14,8 @@ const EditOptions = ({
   handleUpdateMemoWithUploadFiles: () => void;
 }) => {
   const { t } = useTranslation();
+
+  const [checked, setChecked] = useState(false);
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -27,6 +30,7 @@ const EditOptions = ({
         />
       </ImageFileInput>
       <div className="flex ml-auto w-fit gap-6 items-center">
+        <TagRebuildCheckbox checked={checked} setChecked={setChecked} />
         <button
           type="button"
           className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
