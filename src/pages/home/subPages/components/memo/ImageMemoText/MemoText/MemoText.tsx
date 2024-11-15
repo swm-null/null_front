@@ -37,11 +37,11 @@ const MemoText = ({
 
   const descriptions =
     !message && voiceDescriptions
-      ? voiceDescriptions[0]
+      ? voiceDescriptions[0].simple_description
       : haveOnlyLink && linkDescriptions
-        ? linkDescriptions[0]
+        ? linkDescriptions[0].simple_description
         : !message && imageDescriptions
-          ? imageDescriptions
+          ? imageDescriptions.simple_description
           : null;
 
   const handleBlur = (e: FocusEvent<HTMLDivElement>) => {

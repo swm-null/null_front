@@ -23,6 +23,7 @@ const MemoText = forwardRef<
   }, [message]);
 
   const convertToHyperlinks = (text: string) => {
+    console.log(text);
     const urlPattern = /(https?:\/\/[^\s]+)/g;
     return text.replace(
       urlPattern,
