@@ -5,6 +5,7 @@ import { useIntersectionObserver } from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
 import { SortOption } from 'pages/home/subPages/types';
 import { SummaryMemoWithoutDrag } from '../SummaryMemoWithoutDrag';
+import { Fab } from '@mui/material';
 import { AddIcon } from 'assets/icons';
 
 interface MemoSectionProps {
@@ -52,7 +53,7 @@ const MemoSection = ({
 
   return (
     <div
-      className="flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border 
+      className="relative flex flex-col rounded-2xl overflow-hidden flex-shrink-0 bg-[#FFF6E366] border 
       border-black border-opacity-10 bg-clip-padding shadow-custom backdrop-blur-lg"
     >
       <MemoSectionHeader
@@ -72,15 +73,20 @@ const MemoSection = ({
                 <SummaryMemoWithoutDrag key={memo?.id} memo={memo} shadow border />
               )
           )}
-          <div
-            className="relative flex px-4 h-full flex-col rounded-2xl overflow-hidden  bg-white min-h-[115px]
-            border border-black border-opacity-10 bg-clip-padding items-center justify-center"
-          >
-            <AddIcon className="text-brown1" />
-          </div>
         </div>
         <div ref={observerRef} className="min-h-[1px] bg-transparent" />
       </div>
+      <Fab
+        style={{
+          position: 'absolute',
+          width: 42,
+          height: 42,
+          background: '#FFF6E3',
+        }}
+        className="bottom-4 right-4 shadow-md z-50"
+      >
+        <AddIcon className="text-brown2" />
+      </Fab>
     </div>
   );
 };
