@@ -23,7 +23,11 @@ const UneditableMemo = ({
       <div className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden">
         <MemoHeader updatedAt={memo.updated_at} dateFormat={t('memo.dateFormat')} />
         <div className="flex flex-col flex-1 overflow-y-scroll no-scrollbar gap-4">
-          <ImageMemoText imageUrls={memo.image_urls} message={memo.content} />
+          <ImageMemoText
+            imageUrls={memo.image_urls}
+            message={memo.content}
+            metadata={memo.metadata}
+          />
         </div>
       </div>
 
