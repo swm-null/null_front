@@ -95,7 +95,7 @@ const useMemoManager = () => {
         newMemo.voice_urls
       );
       if (!Api.isUpdateMemoResponse(response)) {
-        alert(t('pages.memo.updateErrorMessage'));
+        alert(t('memo.updateErrorMessage'));
         restoreMemoData(backupData);
       }
     }
@@ -122,6 +122,85 @@ const useMemoManager = () => {
         return { ...oldData, pages: updatedPages };
       });
     });
+  };
+
+  const handleUpdateMemoWithRecreateTags = async ({
+    memo,
+    newMessage,
+    newTags,
+    newImageUrls,
+    handlePreProcess,
+  }: {
+    memo: Memo;
+    newMessage: string;
+    newTags: Tag[];
+    newImageUrls: string[];
+    handlePreProcess: () => void;
+  }) => {
+    handlePreProcess();
+
+    const newMemo = {
+      ...memo,
+      content: newMessage,
+      tags: newTags,
+      image_urls: newImageUrls,
+    };
+
+    const isContentChanged = memo.content !== newMemo.content;
+    const isTagsChanged = JSON.stringify(memo.tags) !== JSON.stringify(newMemo.tags);
+    const isImagesChanged =
+      JSON.stringify(memo.image_urls) !== JSON.stringify(newMemo.image_urls);
+
+    if (isContentChanged || isTagsChanged || isImagesChanged) {
+      const backupData = backupMemoData();
+      updateMemoDataInQueries(newMemo);
+
+      const response = await Api.updateMemoWithNewTags(
+        newMemo.id,
+        newMemo.content,
+        newMemo.image_urls
+      );
+      if (Api.isUpdateMemoResponse(response)) {
+        const newMemo = response as Memo;
+
+        if (JSON.stringify(memo.tags) === JSON.stringify(newMemo.tags)) return;
+
+        memo.tags.forEach((tag) => {
+          queryClient.setQueryData(
+            ['childTagMemos', tag.id],
+            (oldData: InfiniteQueryData) => {
+              if (!oldData) return oldData;
+              const updatedPages = oldData.pages.map((page) => ({
+                ...page,
+                memos: page.memos.filter((m) => m.id !== memo.id),
+              }));
+              return { ...oldData, pages: updatedPages };
+            }
+          );
+        });
+
+        newMemo.tags.forEach((tag) => {
+          queryClient.setQueryData(
+            ['childTagMemos', tag.id],
+            (oldData: InfiniteQueryData) => {
+              if (!oldData) return oldData;
+              const firstPage = oldData.pages[0];
+              const updatedFirstPage = {
+                ...firstPage,
+                memos: [newMemo, ...firstPage.memos],
+              };
+              return {
+                ...oldData,
+                pages: [updatedFirstPage, ...oldData.pages.slice(1)],
+              };
+            }
+          );
+        });
+      } else {
+        alert(t('memo.updateErrorMessage'));
+        restoreMemoData(backupData);
+      }
+    }
   };
 
   const handleDeleteMemo = async ({
@@ -163,7 +242,7 @@ const useMemoManager = () => {
     });
   };
 
-  return { handleUpdateMemo, handleDeleteMemo };
+  return { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo };
 };
 
 export default useMemoManager;
