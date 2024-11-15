@@ -20,6 +20,8 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
   const [editable, setEditable] = useState(false);
   const [message, setMessage] = useState(memo.content);
+  const [tagRebuild, setTagRebuild] = useState(false);
+
   const [originImageUrls, setOriginalImageUrls] = useState(memo.image_urls);
   const {
     images,
@@ -28,7 +30,8 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     removeImage,
   } = useImageList();
 
-  const { handleUpdateMemo, handleDeleteMemo } = useMemoManager();
+  const { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo } =
+    useMemoManager();
 
   const imageUrls = useMemo(
     () => [...originImageUrls, ...newImageUrls],
@@ -65,14 +68,24 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     try {
       const newImageUrls = await getFileUrls(images);
 
-      handleUpdateMemo({
-        memo,
-        newMessage: message,
-        newTags: memo.tags,
-        newImageUrls: [...originImageUrls, ...newImageUrls],
-        newVoiceUrls: memo.voice_urls,
-        handlePreProcess: () => setEditable(false),
-      });
+      if (tagRebuild) {
+        handleUpdateMemoWithRecreateTags({
+          memo,
+          newMessage: message,
+          newTags: memo.tags,
+          newImageUrls: [...originImageUrls, ...newImageUrls],
+          handlePreProcess: () => setEditable(false),
+        });
+      } else {
+        handleUpdateMemo({
+          memo,
+          newMessage: message,
+          newTags: memo.tags,
+          newImageUrls: [...originImageUrls, ...newImageUrls],
+          newVoiceUrls: [],
+          handlePreProcess: () => setEditable(false),
+        });
+      }
     } catch {
       // FIXME: 에러 처리 어캐 하지...
 
@@ -146,6 +159,8 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         />
         {editable && (
           <EditOptions
+            tagRebuild={tagRebuild}
+            setTagRebuild={setTagRebuild}
             handleImageFilesChange={handleImageFilesChange}
             handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
           />
