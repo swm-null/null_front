@@ -51,12 +51,13 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           handleEditMemo={() => openMemoEditModal(memo)}
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
-          {memo.tags.length === 1 ? (
+          {memo.tags.length === 0 ? (
             <div className="rounded-2xl overflow-hidden">
               <Skeleton
                 animation="wave"
                 height={27}
-                className="px-[0.5625rem] self-center content-center text-[10px] normal-scale"
+                className="px-[0.5625rem] self-center content-center text-[10px]"
+                style={{ transform: 'scale(1, 1)' }}
               >
                 {skeletonText}
               </Skeleton>
