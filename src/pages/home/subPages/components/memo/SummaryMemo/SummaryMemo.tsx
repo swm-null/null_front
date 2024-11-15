@@ -44,16 +44,15 @@ const SummaryMemo = ({
   const urlPattern = /^https?:\/\/[^\s]+$/;
   const haveOnlyLink = urlPattern.test(memo.content || '');
 
-  const voiceDescriptions = parsedMetadata?.voice_descriptions || null;
-  const linkDescriptions = parsedMetadata?.link_descriptions || null;
-  const imageDescriptions =
-    parsedMetadata?.image_descriptions?.[0]?.image_description || null;
+  const voiceDescriptions = parsedMetadata?.voice_descriptions?.[0] || null;
+  const linkDescriptions = parsedMetadata?.link_descriptions?.[0] || null;
+  const imageDescriptions = parsedMetadata?.image_descriptions?.[0] || null;
 
   const descriptions =
     !memo.content && voiceDescriptions
-      ? voiceDescriptions[0].simple_description
+      ? voiceDescriptions.simple_description
       : haveOnlyLink && linkDescriptions
-        ? linkDescriptions[0].simple_description
+        ? linkDescriptions.simple_description
         : !memo.content && imageDescriptions
           ? imageDescriptions.simple_description
           : null;
