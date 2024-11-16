@@ -25,29 +25,33 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
   const [recordingModal, setRecordingModal] = useState<RecordingModalState | null>(
     null
   );
-  const [audioFileUrl, setAudioFileUrl] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 
   const closeRecordingModal = useCallback(() => {
     setRecordingModal(null);
   }, []);
 
-  const handleSaveAudio = useCallback((blob: Blob) => {
-    setAudioBlob(blob);
-    closeRecordingModal();
-  }, []);
+  const openRecordingModal = useCallback(
+    (audio: File | null, setAudioFn: (audio: File | null) => void) => {
+      setRecordingModal({
+        open: true,
+        onClose: () => closeRecordingModal(),
+        onSend: (audio: Blob | File) => {
+          const file =
+            audio instanceof Blob
+              ? new File([audio], 'audio_file_' + Date.now(), { type: audio.type })
+              : audio;
 
-  const openRecordingModal = useCallback(() => {
-    setRecordingModal({
-      open: true,
-      onClose: () => closeRecordingModal(),
-      onSend: handleSaveAudio,
-    });
-  }, []);
-
-  const removeAudio = useCallback(() => {
-    setAudioBlob(null);
-  }, []);
+          setAudioFn(file);
+          setAudioBlob(audio);
+          closeRecordingModal();
+        },
+        audio,
+        setAudio: setAudioFn,
+      });
+    },
+    [closeRecordingModal]
+  );
 
   const isValidFileType = (file: File) => {
     return ALLOWED_AUDIO_FILE_TYPES.includes(file.type);
@@ -57,13 +61,14 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
     (acceptedFiles: File[]) => {
       acceptedFiles.forEach(async (file) => {
         if (isValidFileType(file)) {
-          const blob = new Blob([file], { type: file.type });
-          setAudioBlob(blob);
+          recordingModal?.setAudio(file);
           closeRecordingModal();
+        } else {
+          alert(t('Invalid file type'));
         }
       });
     },
-    [closeRecordingModal, alert, t]
+    [closeRecordingModal, recordingModal?.setAudio, alert, isValidFileType, t]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -86,7 +91,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
         openRecordingModal,
         closeRecordingModal,
         audioBlob,
-        removeAudio,
+        removeAudio: () => setAudioBlob(null),
         setAudioBlob,
         ALLOWED_AUDIO_FILE_TYPES,
         isValidFileType,

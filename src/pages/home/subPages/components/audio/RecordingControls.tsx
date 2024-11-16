@@ -7,18 +7,19 @@ import { Skeleton } from '@mui/material';
 interface RecordingControlsProps {
   audioUrl: string | null;
   recordingTime?: number;
-  editable?: {
-    isRecording: boolean;
-    visualizerData: number[];
-    handleStopRecording: () => void;
-    handleStartRecording: () => void;
-  };
+  isRecording: boolean;
+  visualizerData: number[];
+  handleStopRecording: () => void;
+  handleStartRecording: () => void;
 }
 
 const RecordingControls = ({
   audioUrl,
   recordingTime: originalRecordingTime,
-  editable,
+  isRecording,
+  visualizerData,
+  handleStopRecording,
+  handleStartRecording,
 }: RecordingControlsProps) => {
   const { recordingTime } = useAudioPlayer(audioUrl);
   const [audioWaveform] = useAudioWaveform(audioUrl);
@@ -41,9 +42,7 @@ const RecordingControls = ({
   if (audioUrl && audioWaveform.length <= 0) {
     return (
       <div ref={containerRef} className="flex w-full h-full">
-        <div
-          className={`flex h-full ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
-        >
+        <div className="flex h-full gap-4 w-full">
           <Skeleton
             className="self-center"
             variant="circular"
@@ -65,37 +64,32 @@ const RecordingControls = ({
     <div ref={containerRef} className="flex w-full h-full">
       <div
         ref={contentRef}
-        className={`flex h-full ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
+        className="flex h-full gap-4 w-full"
         style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}
       >
         <RecordButton
-          isRecording={editable?.isRecording || false}
+          isRecording={isRecording}
           onToggleRecording={
-            editable
-              ? editable.isRecording
-                ? editable.handleStopRecording
-                : editable.handleStartRecording
-              : () => {}
+            isRecording ? handleStopRecording : handleStartRecording
           }
         />
-        {editable && (
-          <AudioVisualizer
-            isRecording={
-              editable?.visualizerData && editable.visualizerData.length > 0
-                ? {
-                    isRecording: editable.isRecording,
-                    visualizerData: editable.visualizerData,
-                  }
-                : null
-            }
-            recordingTime={
-              audioUrl || !originalRecordingTime
-                ? recordingTime
-                : originalRecordingTime
-            }
-            audioWaveform={audioWaveform}
-          />
-        )}
+        <AudioVisualizer
+          audioUrl={audioUrl}
+          isRecording={
+            visualizerData && visualizerData.length > 0
+              ? {
+                  isRecording: isRecording,
+                  visualizerData: visualizerData,
+                }
+              : null
+          }
+          recordingTime={
+            audioUrl || !originalRecordingTime
+              ? recordingTime
+              : originalRecordingTime
+          }
+          audioWaveform={audioWaveform}
+        />
       </div>
     </div>
   );

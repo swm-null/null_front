@@ -4,24 +4,24 @@ import { AudioPlayer } from 'react-audio-player-component';
 interface MediaListProps {
   images: string[];
   removeImage: (index: number) => void;
-  audioBlob: Blob | null;
+  audioUrl: string | null;
   removeAudio: () => void;
 }
 
 const MediaList = ({
   images,
   removeImage,
-  audioBlob,
+  audioUrl,
   removeAudio,
 }: MediaListProps) => {
-  if (images.length === 0 && !audioBlob) return null;
+  if (images.length === 0 && !audioUrl) return null;
 
   return (
     <div className="w-full flex gap-5 overflow-x-auto no-scrollbar">
-      {audioBlob && (
+      {audioUrl && (
         <div className="relative flex gap-3 flex-shrink-0">
           <AudioPlayer
-            src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"
+            src={audioUrl}
             width={300}
             trackHeight={96}
             barWidth={2}

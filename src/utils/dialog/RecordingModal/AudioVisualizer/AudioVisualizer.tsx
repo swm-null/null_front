@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AudioPlayer } from 'react-audio-player-component';
 
 interface AudioVisualizerProps {
+  audioUrl: string | null;
   isRecording: {
     isRecording: boolean;
     visualizerData: number[];
@@ -11,6 +12,7 @@ interface AudioVisualizerProps {
 }
 
 const AudioVisualizer = ({
+  audioUrl,
   isRecording,
   recordingTime,
   audioWaveform,
@@ -49,9 +51,9 @@ const AudioVisualizer = ({
               <span className="text-[#8b7e74]">{formatTime(recordingTime)}</span>
             </div>
           </>
-        ) : audioWaveform.length ? (
+        ) : audioUrl ? (
           <AudioPlayer
-            src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"
+            src={audioUrl}
             minimal={true}
             width={containerWidth}
             trackHeight={containerHeight}

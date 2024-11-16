@@ -1,8 +1,8 @@
 import {
   ChangeEvent,
-  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -21,7 +21,7 @@ interface MemoCreateTextAreaProps {
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: () => void;
+  onSubmit: (audioBlob: Blob | null) => void;
   onImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
   removeImage: (index: number) => void;
   onPaste: (e: React.ClipboardEvent) => void;
@@ -37,8 +37,14 @@ const MemoCreateTextArea = ({
   removeImage,
   onPaste,
 }: MemoCreateTextAreaProps) => {
-  const { audioBlob, removeAudio, openRecordingModal } =
+  const { audioBlob, setAudioBlob, removeAudio, openRecordingModal } =
     useContext(RecordingContext);
+
+  const [audio, setAudio] = useState<File | null>(null);
+  const audioUrl = useMemo(
+    () => (audio ? URL.createObjectURL(audio) : null),
+    [audio]
+  );
 
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -48,10 +54,11 @@ const MemoCreateTextArea = ({
 
   const { hiddenTextareaRef, isMultiline } = useHiddenTextareaManager(
     value,
-    imageUrls
+    imageUrls,
+    audioUrl
   );
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleEnterWithCtrl: onSubmit,
+    handleEnterWithCtrl: () => audioBlob && onSubmit(audioBlob),
   });
 
   const handleBlur = (e: React.FocusEvent) => {
@@ -61,13 +68,14 @@ const MemoCreateTextArea = ({
   };
 
   const handleMicButtonClick = () => {
-    openRecordingModal();
+    openRecordingModal(audio, setAudio);
   };
 
-  const handleTextareaMultiline = useCallback(
-    () => isMultiline || imageUrls.length !== 0 || audioBlob,
-    [isMultiline, imageUrls, audioBlob]
-  );
+  const handleSubmit = () => {
+    onSubmit(audioBlob);
+    setAudio(null);
+    setAudioBlob(null);
+  };
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > MAX_TEXT_LENGTH) {
@@ -108,7 +116,7 @@ const MemoCreateTextArea = ({
         />
         <div
           ref={containerRef}
-          className={`w-full flex flex-1 ${handleTextareaMultiline() ? 'flex-col' : 'flex-row items-center'}`}
+          className={`w-full flex flex-1 ${isMultiline ? 'flex-col' : 'flex-row items-center'}`}
         >
           <TextareaAutosize
             className="flex-auto focus:outline-none resize-none min-h-9 content-center
@@ -126,7 +134,7 @@ const MemoCreateTextArea = ({
           <MediaList
             images={imageUrls}
             removeImage={removeImage}
-            audioBlob={audioBlob}
+            audioUrl={audioUrl}
             removeAudio={removeAudio}
           />
           <IconButtons
@@ -135,7 +143,7 @@ const MemoCreateTextArea = ({
             MAX_TEXT_LENGTH={MAX_TEXT_LENGTH}
             onMicButtonClick={handleMicButtonClick}
             onImageFilesChange={onImageFilesChange}
-            onSubmitButtonClick={onSubmit}
+            onSubmitButtonClick={handleSubmit}
           />
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { Modal } from '@mui/material';
-import { ResetButton } from './buttons';
 import { useRecordingManager, useVisualizerManager } from './hooks';
 import { ModalActionButtons } from './ModalActionButtons';
 import { AudioFileInput, RecordingControls } from 'pages/home/subPages/components';
@@ -15,11 +14,14 @@ interface RecordingModalProps {
 const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
   const { getRootProps, getInputProps, handleAddAudioButtonClick } =
     useContext(RecordingContext);
+
   const recordingManager = useRecordingManager();
   const visualizerManager = useVisualizerManager();
 
   const handleStartRecording = async () => {
     try {
+      // 이전 녹음이 있으면 이전 url 삭제
+
       await recordingManager.startRecording(visualizerManager.startVisualizer);
     } catch (err) {
       // TODO: 시스템 설정에서 브라우저의 마이크 접근이 차단되어 있을 때 혹은, 다른 탭에서 마이크를 사용중일 때 나는 오류
@@ -36,10 +38,6 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
       onSend(recordingManager.audioBlob, visualizerManager.audioWaveform);
       onClose();
     }
-  };
-
-  const handleReset = () => {
-    recordingManager.handleDelete(visualizerManager.resetVisualizer);
   };
 
   return (
@@ -59,14 +57,12 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
           >
             <div className="flex w-full h-36 items-center gap-4">
               <RecordingControls
-                audioUrl={recordingManager.audioUrl}
+                audioUrl={recordingManager?.audioUrl || null}
                 recordingTime={recordingManager.recordingTime}
-                editable={{
-                  isRecording: recordingManager.isRecording,
-                  visualizerData: visualizerManager.visualizerData,
-                  handleStopRecording: handleStopRecording,
-                  handleStartRecording: handleStartRecording,
-                }}
+                isRecording={recordingManager.isRecording}
+                visualizerData={visualizerManager.visualizerData}
+                handleStopRecording={handleStopRecording}
+                handleStartRecording={handleStartRecording}
               />
             </div>
           </AudioFileInput>

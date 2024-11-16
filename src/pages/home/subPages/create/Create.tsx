@@ -18,7 +18,7 @@ const CreatePage = () => {
     handleImageFilesChange,
     handlePaste,
   } = useImageList();
-  const { audioBlobs, removeAudio } = useContext(RecordingContext);
+  const { removeAudio } = useContext(RecordingContext);
   const { isSmallScreen } = useContext(BottomNavContext);
 
   const [message, setMessage] = useState('');
@@ -28,16 +28,12 @@ const CreatePage = () => {
     setMessage(e.target.value);
   };
 
-  const handleSubmit = () => {
-    if (
-      message.trim().length === 0 &&
-      images.length === 0 &&
-      audioBlobs.length === 0
-    ) {
+  const handleSubmit = (audioBlob: Blob | null) => {
+    if (message.trim().length === 0 && images.length === 0 && !audioBlob) {
       return;
     }
 
-    createMemoManager.handleCreateMemo(message, images, imageUrls, audioBlobs);
+    createMemoManager.handleCreateMemo(message, images, imageUrls, audioBlob);
 
     setMessage('');
     removeAllImage();
