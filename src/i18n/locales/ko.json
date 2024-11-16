@@ -1,0 +1,172 @@
+{
+  "utils": {
+    "service": {
+      "name": "OatNote"
+    },
+    "alert": { "ok": "확인", "cancel": "취소" },
+    "auth": {
+      "loginRequired": "로그인이 필요합니다. 로그인 페이지로 이동합니다.",
+      "sessionExpired": "세션이 만료되었습니다. 다시 로그인 해주세요.",
+      "serverError": "서버에 문제가 발생했습니다. 나중에 다시 시도해 주세요.",
+
+      "code": "인증코드",
+      "password": "Password",
+      "confirmPassword": "Password 확인",
+      "codeSent": "인증코드를 이메일로 전송했습니다.",
+      "codeSendFailed": "유효한 이메일을 입력해주세요."
+    },
+    "file": {
+      "invalidImageType": "이미지에는 jpeg, jpg, png, webp 파일만 들어갈 수 있습니다."
+    }
+  },
+  "profile": {
+    "header": "설정",
+    "logoutButton": "로그아웃",
+    "editProfile": "프로필 수정",
+    "uploadDataButton": "카카오톡 데이터 가져오기",
+    "deleteAccountButton": "회원탈퇴",
+    "accountDeletionConfirmation": "회원탈퇴 하시겠습니까?",
+    "accountDeleted": "회원탈퇴가 성공적으로 완료되었습니다.",
+    "accountDeleteFailed": "회원탈퇴를 실패하였습니다. 다시 시도해주세요.",
+    "profileEditFailed": "프로필 수정을 실패하였습니다. 다시 시도해주세요."
+  },
+  "memo": {
+    "deleteErrorMessage": "메모 삭제에 실패했습니다. 다시 시도해 주세요.",
+    "updateErrorMessage": "메모 업데이트에 실패했습니다. 다시 시도해 주세요.",
+    "dateFormat": "yyyy.MM.dd HH:mm",
+    "tagRebuild": "태그 재생성",
+    "save": "저장",
+    "close": "닫기",
+    "delete": {
+      "alert": "메모를 정말 삭제하시겠습니까?"
+    }
+  },
+  "voice": {
+    "save": "저장",
+    "cancel": "취소",
+    "upload": "업로드"
+  },
+  "login": {
+    "header": "로그인",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Login",
+    "signupButton": "Sign Up",
+    "loginErrorMessage": "로그인 중에 오류가 발생했습니다. 다시 시도해 주세요.",
+    "findPw": "비밀번호를 잊어버리셨나요?",
+    "findPwButton": "비밀번호 찾기",
+    "socialLogin": {
+      "kakao": "카카오톡",
+      "apple": "애플 아이디",
+      "google": "구글"
+    }
+  },
+  "signup": {
+    "header": "회원가입",
+    "email": "Email",
+    "signupButton": "회원가입",
+    "checkEmail": "중복확인",
+    "name": "닉네임",
+    "sendCode": "코드전송",
+    "noCheckEmail": "이메일 중복확인을 해주세요.",
+    "checkEmailSuccess": "사용 가능한 이메일입니다.",
+    "emailAlreadyExists": "이미 사용 중인 이메일입니다. 다른 이메일을 입력하세요.",
+    "invalidEmail": "유효하지 않은 이메일 주소입니다.",
+    "invalidPassword": "비밀번호는 8자 이상의 영어, 숫자, 특수기호의 조합이어야 합니다.",
+    "invalidName": "이름은 빈 문자열이 될 수 없습니다.",
+    "invalidCodeForm": "6자리의 숫자코드를 입력해주세요.",
+    "passwordsDoNotMatch": "비밀번호가 일치하지 않습니다.",
+    "signupErrorMessage": "회원가입 중에 오류가 발생했습니다. 다시 시도해 주세요.",
+    "signupSuccess": "회원가입이 완료되었습니다. 로그인 화면으로 이동합니다."
+  },
+  "findPw": {
+    "header": "비밀번호 찾기",
+    "instruction": "가입한 이메일을 입력해 주세요.",
+    "emailInfo": "이메일을 통해 인증번호가 전송됩니다.",
+    "sendCode": "코드전송",
+    "resetPwButton": "비밀번호 재설정하기",
+    "findPwSuccess": "비밀번호 변경이 완료되었습니다. 로그인 화면으로 이동합니다."
+  },
+  "pages": {
+    "sidebar": {
+      "create": "메모추가",
+      "search": "메모검색",
+      "dashboard": "대시보드",
+      "uploadData": "불러오기"
+    },
+    "main": {
+      "mode": {
+        "create": "추가",
+        "search": "검색"
+      }
+    },
+    "create": {
+      "header": "메모 추가하기",
+      "inputPlaceholder": "메모 작성...",
+      "tagRebuilding": "태그 생성중...",
+      "placeholder": "AI로 관련 태그를 자동으로 생성해드립니다.",
+      "errorMessage": "죄송합니다. 메모 추가 중에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+      "refreshButton": "새로고침(임시버튼)"
+    },
+    "dashboard": {
+      "header": "메모 대시보드",
+      "allMemoButton": "모든 메모",
+      "toggle": {
+        "latest": "최신순",
+        "oldest": "오래된순"
+      },
+      "tag": {
+        "linkedTag": "현재 태그",
+        "edit": {
+          "title": "태그 이름 수정하기",
+          "placeholder": "새로운 이름"
+        },
+        "delete": {
+          "alert": "태그에 포함된 모든 메모도 삭제됩니다. 정말 삭제하시겠습니까?"
+        }
+      }
+    },
+    "search": {
+      "header": "메모 검색하기",
+      "inputPlaceholder": "메모 검색...",
+      "conversation": {
+        "removeButton": "삭제",
+        "noResults": "검색 결과가 없습니다.",
+        "db": {
+          "searching": "검색 중입니다."
+        },
+        "ai": {
+          "generating": "답변을 생성중입니다."
+        }
+      },
+      "errorMessage": "검색을 하는 과정에서 오류가 났습니다. 새로 고침 후 다시 검색해주세요",
+      "memoSearchButton": {
+        "loading": "로딩 중...",
+        "default": "메모 검색하기"
+      },
+      "searchButton": "검색"
+    },
+    "uploadData": {
+      "header": "카카오톡 나와의 채팅 데이터 가져오기",
+      "emailInstruction": {
+        "header": "이메일 사용법",
+        "copyEmail": "아래 이메일을 복사해주세요.",
+        "kakaoExport": "카카오톡 접속 후 아래 이미지를 참고해주세요.",
+        "sendMail": "받는사람에 복사한 이메일을 붙여놓고, 메일을 전송해주세요."
+      },
+      "uploadFileInstruction": {
+        "header": "파일 업로드",
+        "text": "저장된 파일을 여기에 업로드 해주세요."
+      },
+      "dropzone": {
+        "text1": "파일을 여기로 업로드하거나 클릭하여 파일을 선택하세요.",
+        "text2": "*.csv 파일만 전송 가능합니다."
+      },
+      "kakaoAcceptedFiles": {
+        "header": "카카오톡 데이터 파일",
+        "deleteButton": "삭제"
+      },
+      "createMemoButton": "카카오톡 데이터로 메모 추가하기"
+    }
+  }
+}
