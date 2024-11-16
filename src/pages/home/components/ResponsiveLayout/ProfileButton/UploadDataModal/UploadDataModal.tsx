@@ -5,11 +5,12 @@ import { BottomNavContext } from 'utils';
 import { useContext } from 'react';
 
 interface UploadDataModalProps {
+  email: string | null;
   isOpen: boolean;
   handleClose: () => void;
 }
 
-const UploadDataModal = ({ isOpen, handleClose }: UploadDataModalProps) => {
+const UploadDataModal = ({ email, isOpen, handleClose }: UploadDataModalProps) => {
   const { handleMouseDown, handleMouseMove, handleClick } =
     useClickWithoutDrag(handleClose);
 
@@ -38,7 +39,7 @@ const UploadDataModal = ({ isOpen, handleClose }: UploadDataModalProps) => {
           </button>
           <div className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden">
             <div className="flex flex-col flex-1 overflow-y-scroll no-scrollbar gap-4">
-              <UploadData handleProProcess={handleClose} />
+              <UploadData email={email} handleProProcess={handleClose} />
             </div>
           </div>
         </div>

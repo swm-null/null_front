@@ -115,6 +115,30 @@ export const createMemo = async (
   }
 };
 
+export const createMemos = async (
+  fileUrl: string,
+  email: string
+): Promise<validResponse | errorResponse> => {
+  const method = getMethodName();
+  const endpoint = `/memos`;
+  try {
+    const response = await refreshableApi.post(
+      endpoint,
+      JSON.stringify({
+        file_url: fileUrl,
+        email,
+      })
+    );
+    const responseInfo = {
+      method,
+      status: response.status,
+    } as validResponse;
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
 export const updateMemo = async (
   id: string,
   content: string,

@@ -56,6 +56,7 @@ const ProfileButton = () => {
       )}
       {isUploadDataModalOpen && (
         <UploadDataModal
+          email={profileManager.userProfile?.email || null}
           isOpen={isUploadDataModalOpen}
           handleClose={handleCloseUploadData}
         />
