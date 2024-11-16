@@ -1,6 +1,8 @@
 import { Modal } from '@mui/material';
 import { useClickWithoutDrag } from 'pages/hooks';
 import { UploadData } from './UploadData';
+import { BottomNavContext } from 'utils';
+import { useContext } from 'react';
 
 interface UploadDataModalProps {
   isOpen: boolean;
@@ -11,6 +13,8 @@ const UploadDataModal = ({ isOpen, handleClose }: UploadDataModalProps) => {
   const { handleMouseDown, handleMouseMove, handleClick } =
     useClickWithoutDrag(handleClose);
 
+  const { isSmallScreen } = useContext(BottomNavContext);
+
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <div
@@ -20,8 +24,9 @@ const UploadDataModal = ({ isOpen, handleClose }: UploadDataModalProps) => {
         onClick={handleClick}
       >
         <div
-          className="relative p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-2xl gap-4 max-w-[600px] min-h-[400px] shadow-custom 
-            border-black border-opacity-10 bg-clip-padding"
+          className={`relative ${isSmallScreen ? 'p-4' : 'p-7'} flex flex-col h-auto w-full bg-[#FFF6E3] 
+            border rounded-2xl gap-4 max-w-[600px] min-h-[400px] shadow-custom 
+            border-black border-opacity-10 bg-clip-padding`}
           onClick={(e) => e.stopPropagation()}
         >
           <button
