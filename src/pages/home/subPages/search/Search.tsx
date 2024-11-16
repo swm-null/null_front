@@ -26,15 +26,17 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="flex justify-center overflow-hidden h-full">
-      <div className="w-full max-w-[740px] h-full flex flex-col flex-1 text-gray3">
+    <div className="flex flex-col justify-center overflow-hidden h-full">
+      <div className="flex flex-col max-w-[740px] w-full self-center">
         <MemoSearchTextArea
           value={message}
           onChange={handleMessageChange}
           placeholder={t('pages.search.inputPlaceholder')}
           onSubmit={handleSubmit}
         />
-        <div className={`overflow-scroll no-scrollbar`}>
+      </div>
+      <div className="flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar">
+        <div className="max-w-[740px] w-full self-center">
           <SearchConversationList fetchNextPage={searchMemoManager.fetchNextPage}>
             {searchMemoManager.data.map((conversation, index) => {
               return (
