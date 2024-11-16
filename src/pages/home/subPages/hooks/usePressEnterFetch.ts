@@ -3,9 +3,11 @@ import { KeyboardEvent } from 'react';
 // Enter keyboard 동작 확인 시, submit 동작 수행
 // form 형식은 textarea 못 써서, keyboard 입력으로 직접 수행
 const usePressEnterFetch = ({
+  handleShiftWithCtrl,
   handleEnterWithCtrl,
   handleEnter,
 }: {
+  handleShiftWithCtrl?: () => void;
   handleEnterWithCtrl?: () => void;
   handleEnter?: () => void;
 }) => {
@@ -18,7 +20,16 @@ const usePressEnterFetch = ({
     ) {
       e.preventDefault();
       handleEnterWithCtrl();
-    } else if (handleEnter && e.key === 'Enter') {
+    } else if (handleShiftWithCtrl && e.key === 'Enter' && e.shiftKey) {
+      handleShiftWithCtrl();
+    } else if (
+      handleEnter &&
+      e.key === 'Enter' &&
+      !e.ctrlKey &&
+      !e.metaKey &&
+      !e.shiftKey &&
+      !e.altKey
+    ) {
       e.preventDefault();
       handleEnter();
     }
