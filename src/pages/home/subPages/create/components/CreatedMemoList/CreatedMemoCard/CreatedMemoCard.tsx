@@ -106,14 +106,12 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const urlPattern = /(https?:\/\/[^\s]+)/g;
   const haveLink = urlPattern.test(memo.content);
 
-  const skeletonText =
-    memo.voice_urls.length > 0
-      ? '음성 분석 중...'
-      : haveLink
-        ? '링크 분석 중...'
-        : memo.image_urls.length > 0
-          ? '이미지 분석 중...'
-          : '텍스트 분석 중...';
+  const skeletonTexts = [
+    memo.voice_urls.length > 0 && '음성 분석 중...',
+    haveLink && '링크 분석 중...',
+    memo.image_urls.length > 0 && '이미지 분석 중...',
+    memo.content && '텍스트 분석 중...',
+  ].filter(Boolean);
 
   return (
     <div
@@ -128,16 +126,18 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
           {memo.tags.length === 0 ? (
-            <div className="rounded-2xl overflow-hidden">
-              <Skeleton
-                animation="wave"
-                height={27}
-                className="self-center content-center px-[0.5625rem] text-[10px]"
-                style={{ transform: 'scale(1, 1)' }}
-              >
-                {skeletonText}
-              </Skeleton>
-            </div>
+            skeletonTexts.map((skeletonText, index) => (
+              <div key={index} className="rounded-2xl overflow-hidden">
+                <Skeleton
+                  animation="wave"
+                  height={27}
+                  className="self-center content-center px-[0.5625rem] text-[10px]"
+                  style={{ transform: 'scale(1, 1)' }}
+                >
+                  {skeletonText}
+                </Skeleton>
+              </div>
+            ))
           ) : (
             <UneditableTagList
               tags={memo.tags}
