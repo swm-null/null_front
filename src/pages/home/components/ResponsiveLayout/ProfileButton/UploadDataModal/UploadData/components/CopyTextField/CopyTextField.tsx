@@ -17,6 +17,7 @@ function CopyTextField({ text }: { text: string }) {
         borderRadius: '4px',
         padding: '8px',
         maxWidth: '300px',
+        background: 'white',
       }}
     >
       <p className="flex flex-1">{text}</p>

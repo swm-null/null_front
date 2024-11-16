@@ -17,8 +17,7 @@ const KakaoDropzone = () => {
       const newFiles = acceptedFiles.filter(
         (file) =>
           !prev.some(
-            (prevFile) =>
-              prevFile.name === file.name && prevFile.size === file.size
+            (prevFile) => prevFile.name === file.name && prevFile.size === file.size
           )
       );
       return [...prev, ...newFiles];
@@ -49,7 +48,7 @@ const KakaoDropzone = () => {
     <section>
       <div
         {...getRootProps({ className: 'dropzone' })}
-        className="bg-[#F0F0F0] py-10"
+        className="bg-[#F0F0F0] py-10 rounded-lg overflow-hidden"
       >
         <p className="text-center">{t('pages.uploadData.dropzone.text1')}</p>
         <p className="text-center">{t('pages.uploadData.dropzone.text2')}</p>

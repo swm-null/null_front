@@ -35,10 +35,5 @@ export const getSubPagesData = (): routerType[] => {
       ),
       title: 'dashboard',
     },
-    {
-      path: 'uploadData',
-      element: <Page.UploadData />,
-      title: 'uploadData',
-    },
   ];
 };

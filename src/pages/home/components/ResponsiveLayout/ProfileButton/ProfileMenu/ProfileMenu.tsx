@@ -7,6 +7,7 @@ interface ProfileMenuProps {
   onClose: () => void;
   userProfile: profile | null;
   onEditProfile: () => void;
+  onUploadData: () => void;
   onDeleteAccount: () => void;
   onLogout: () => void;
 }
@@ -16,6 +17,7 @@ const ProfileMenu = ({
   onClose,
   userProfile,
   onEditProfile,
+  onUploadData,
   onDeleteAccount,
   onLogout,
 }: ProfileMenuProps) => {
@@ -38,6 +40,7 @@ const ProfileMenu = ({
         <Divider key="divider" />,
       ]}
       <MenuItem onClick={onEditProfile}>{t('profile.editProfile')}</MenuItem>
+      <MenuItem onClick={onUploadData}>{t('profile.uploadDataButton')}</MenuItem>
       <Divider />
       <MenuItem onClick={onDeleteAccount} sx={{ marginBottom: 1 }}>
         {t('profile.deleteAccountButton')}
