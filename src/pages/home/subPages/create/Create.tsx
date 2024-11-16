@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCreateMemoManager } from './hook';
-import { RecordingContext } from 'utils';
+import { BottomNavContext, RecordingContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
 import { useImageList } from '../hooks';
@@ -19,6 +19,7 @@ const CreatePage = () => {
     handlePaste,
   } = useImageList();
   const { audioBlobs, removeAudio } = useContext(RecordingContext);
+  const { isSmallScreen } = useContext(BottomNavContext);
 
   const [message, setMessage] = useState('');
   const createMemoManager = useCreateMemoManager();
@@ -62,8 +63,12 @@ const CreatePage = () => {
             removeImage={removeImage}
           />
         </div>
-        <div className="flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar">
-          <div className="max-w-[740px] w-full self-center">
+        <div
+          className={`flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar ${isSmallScreen ? '' : 'mb-10'}`}
+        >
+          <div
+            className={`max-w-[740px] w-full self-center ${isSmallScreen ? '' : 'mx-20'}`}
+          >
             <CreatedMemoList
               memos={createMemoManager.data}
               fetchNextPage={createMemoManager.fetchNextPage}

@@ -79,7 +79,7 @@ const DashboardPage = () => {
 
   return (
     <div
-      className="flex flex-col h-full text-gray2 overflow-hidden"
+      className={`flex flex-col h-full text-gray2 overflow-hidden ${isSmallScreen ? '' : 'mb-10 mx-20'}`}
       style={{ paddingBottom: isSmallScreen ? bottomNavHeight + 8 : 0 }}
     >
       <div className="w-full h-full flex flex-col max-w-[1102px] self-center gap-4">
