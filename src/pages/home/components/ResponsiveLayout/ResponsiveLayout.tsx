@@ -41,11 +41,7 @@ const ResponsiveLayout = ({
           </button>
           <ProfileButton />
         </div>
-        <div
-          className={`flex-grow overflow-auto ${isSmallScreen ? '' : 'px-20 pb-10'}`}
-        >
-          {children}
-        </div>
+        {children}
       </div>
       <NavigationBar setCurrentPage={handleNavigation} />
     </div>
