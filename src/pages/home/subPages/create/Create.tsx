@@ -47,21 +47,23 @@ const CreatePage = () => {
     <>
       <input {...getInputProps()} />
       <div
-        className="flex justify-center overflow-hidden h-full"
+        className="flex flex-col justify-center overflow-hidden h-full"
         {...getRootProps()}
       >
-        <div className="w-full max-w-[740px] h-full flex flex-col flex-1 text-gray3">
-          <div className={`overflow-scroll no-scrollbar`}>
-            <MemoCreateTextArea
-              value={message}
-              placeholder={t('pages.create.inputPlaceholder')}
-              imageUrls={imageUrls}
-              onImageFilesChange={handleImageFilesChange}
-              onPaste={handlePaste}
-              onChange={handleMessageChange}
-              onSubmit={handleSubmit}
-              removeImage={removeImage}
-            />
+        <div className="flex flex-col max-w-[740px] w-full self-center">
+          <MemoCreateTextArea
+            value={message}
+            placeholder={t('pages.create.inputPlaceholder')}
+            imageUrls={imageUrls}
+            onImageFilesChange={handleImageFilesChange}
+            onPaste={handlePaste}
+            onChange={handleMessageChange}
+            onSubmit={handleSubmit}
+            removeImage={removeImage}
+          />
+        </div>
+        <div className="flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar">
+          <div className="max-w-[740px] w-full self-center">
             <CreatedMemoList
               memos={createMemoManager.data}
               fetchNextPage={createMemoManager.fetchNextPage}
