@@ -37,7 +37,7 @@ const MemoCreateTextArea = ({
   removeImage,
   onPaste,
 }: MemoCreateTextAreaProps) => {
-  const { audioBlobs, removeAudio, openRecordingModal } =
+  const { audioBlob, removeAudio, openRecordingModal } =
     useContext(RecordingContext);
 
   const [focus, setFocus] = useState(false);
@@ -65,8 +65,8 @@ const MemoCreateTextArea = ({
   };
 
   const handleTextareaMultiline = useCallback(
-    () => isMultiline || imageUrls.length !== 0 || audioBlobs.length !== 0,
-    [isMultiline, imageUrls, audioBlobs]
+    () => isMultiline || imageUrls.length !== 0 || audioBlob,
+    [isMultiline, imageUrls, audioBlob]
   );
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -126,7 +126,7 @@ const MemoCreateTextArea = ({
           <MediaList
             images={imageUrls}
             removeImage={removeImage}
-            audioBlobs={audioBlobs}
+            audioBlob={audioBlob}
             removeAudio={removeAudio}
           />
           <IconButtons

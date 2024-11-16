@@ -25,14 +25,15 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
   const [recordingModal, setRecordingModal] = useState<RecordingModalState | null>(
     null
   );
-  const [audioBlobs, setAudioBlobs] = useState<Blob[]>([]);
+  const [audioFileUrl, setAudioFileUrl] = useState<string | null>(null);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 
   const closeRecordingModal = useCallback(() => {
     setRecordingModal(null);
   }, []);
 
   const handleSaveAudio = useCallback((blob: Blob) => {
-    setAudioBlobs([blob]);
+    setAudioBlob(blob);
     closeRecordingModal();
   }, []);
 
@@ -45,7 +46,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const removeAudio = useCallback(() => {
-    setAudioBlobs([]);
+    setAudioBlob(null);
   }, []);
 
   const isValidFileType = (file: File) => {
@@ -57,7 +58,7 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
       acceptedFiles.forEach(async (file) => {
         if (isValidFileType(file)) {
           const blob = new Blob([file], { type: file.type });
-          setAudioBlobs([blob]);
+          setAudioBlob(blob);
           closeRecordingModal();
         }
       });
@@ -84,9 +85,9 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
         recordingModal,
         openRecordingModal,
         closeRecordingModal,
-        audioBlobs,
+        audioBlob,
         removeAudio,
-        setAudioBlobs,
+        setAudioBlob,
         ALLOWED_AUDIO_FILE_TYPES,
         isValidFileType,
         getRootProps,

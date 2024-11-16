@@ -10,9 +10,9 @@ type RecordingContextType = {
   recordingModal: RecordingModalState | null;
   openRecordingModal: () => void;
   closeRecordingModal: () => void;
-  audioBlobs: Blob[];
+  audioBlob: Blob | null;
   removeAudio: () => void;
-  setAudioBlobs: (blobs: Blob[]) => void;
+  setAudioBlob: (blobs: Blob) => void;
   ALLOWED_AUDIO_FILE_TYPES: string[];
   isValidFileType: (file: File) => boolean;
   getRootProps: any;
@@ -24,9 +24,9 @@ export const RecordingContext = createContext<RecordingContextType>({
   recordingModal: null,
   openRecordingModal: () => {},
   closeRecordingModal: () => {},
-  audioBlobs: [],
+  audioBlob: null,
   removeAudio: () => {},
-  setAudioBlobs: () => {},
+  setAudioBlob: () => {},
   ALLOWED_AUDIO_FILE_TYPES: [],
   isValidFileType: () => false,
   getRootProps: () => {},

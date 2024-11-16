@@ -1,26 +1,43 @@
 import { CloseIcon } from 'assets/icons';
-import { RecordingControls } from 'pages/home/subPages/components';
+import { AudioPlayer } from 'react-audio-player-component';
 
 interface MediaListProps {
   images: string[];
   removeImage: (index: number) => void;
-  audioBlobs: Blob[];
+  audioBlob: Blob | null;
   removeAudio: () => void;
 }
 
 const MediaList = ({
   images,
   removeImage,
-  audioBlobs,
+  audioBlob,
   removeAudio,
 }: MediaListProps) => {
-  if (images.length === 0 && audioBlobs.length === 0) return null;
+  if (images.length === 0 && !audioBlob) return null;
 
   return (
     <div className="w-full flex gap-5 overflow-x-auto no-scrollbar">
-      {audioBlobs.length > 0 && (
-        <div className="relative flex h-24 gap-3 flex-shrink-0">
-          <RecordingControls audioUrl={URL.createObjectURL(audioBlobs[0])} />
+      {audioBlob && (
+        <div className="relative flex gap-3 flex-shrink-0">
+          <AudioPlayer
+            src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"
+            width={300}
+            trackHeight={96}
+            barWidth={2}
+            gap={1}
+            visualise
+            backgroundColor="#e8e1d9"
+            barColor="#8b7e74"
+            barPlayedColor="#F4CDB1"
+            skipDuration={2}
+            minimal
+            showLoopOption
+            showVolumeControl
+            hideSeekBar
+            hideSeekKnobWhenPlaying
+          />
+
           <div
             className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
             onClick={removeAudio}

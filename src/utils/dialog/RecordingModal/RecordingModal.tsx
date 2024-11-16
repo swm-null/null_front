@@ -68,7 +68,6 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
                   handleStartRecording: handleStartRecording,
                 }}
               />
-              {recordingManager.audioUrl && <ResetButton onReset={handleReset} />}
             </div>
           </AudioFileInput>
           <ModalActionButtons
