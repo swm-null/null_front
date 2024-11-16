@@ -2,9 +2,11 @@ import { ChangeEvent, useEffect } from 'react';
 import { MemoText } from './MemoText';
 import { ImageSlider } from './ImageSlider';
 import { useImageList } from 'pages/home/subPages/hooks';
+import { AudioPlayer } from 'react-audio-player-component';
 
 const ImageMemoText = ({
   imageUrls,
+  voiceUrl,
   removeImageUrl,
   handleImageFilesChange,
   textColor,
@@ -14,6 +16,7 @@ const ImageMemoText = ({
   editable,
 }: {
   imageUrls: string[];
+  voiceUrl: string | null;
   removeImageUrl?: (index: number) => void;
   message: string;
   metadata: string | null;
@@ -39,7 +42,7 @@ const ImageMemoText = ({
         {...getRootProps()}
         onPaste={handlePaste}
       >
-        {message || imageUrls.length !== 0 || editable ? (
+        {message || imageUrls.length !== 0 || voiceUrl || editable ? (
           <div className="w-full overflow-hidden">
             {imageUrls.length !== 0 && (
               <div className="xsm:float-left mr-4 mb-1">
@@ -50,6 +53,25 @@ const ImageMemoText = ({
                   editable={editable}
                 />
               </div>
+            )}
+            {voiceUrl && (
+              <AudioPlayer
+                src={voiceUrl}
+                width={300}
+                trackHeight={96}
+                barWidth={2}
+                gap={1}
+                visualise
+                backgroundColor="#e8e1d9"
+                barColor="#8b7e74"
+                barPlayedColor="#F4CDB1"
+                skipDuration={2}
+                minimal
+                showLoopOption
+                showVolumeControl
+                hideSeekBar
+                hideSeekKnobWhenPlaying
+              />
             )}
             <MemoText
               textColor={textColor}

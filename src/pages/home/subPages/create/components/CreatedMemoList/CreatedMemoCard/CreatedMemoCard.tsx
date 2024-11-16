@@ -150,6 +150,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         </CreatedMemoCardHeader>
         <ImageMemoText
           imageUrls={imageUrls}
+          voiceUrl={memo.voice_urls.length > 0 ? memo.voice_urls[0] : null}
           message={message}
           removeImageUrl={removeImageUrl}
           metadata={memo.metadata}
