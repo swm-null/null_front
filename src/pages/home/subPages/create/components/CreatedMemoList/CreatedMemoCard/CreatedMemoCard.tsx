@@ -1,4 +1,11 @@
-import { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -42,10 +49,11 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   );
 
   const [audio, setAudio] = useState<File | null>(null);
-  const audioUrl = useMemo(
-    () => (audio ? URL.createObjectURL(audio) : null),
-    [audio]
-  );
+  const [audioUrl, setAudioUrl] = useState<string | null>(memo.voice_urls[0]);
+
+  useEffect(() => {
+    audio && setAudioUrl(URL.createObjectURL(audio));
+  }, [audio]);
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
@@ -79,25 +87,19 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       const newImageUrls = await getFileUrls(images);
       const newVoiceUrls = await getFileUrls(audio ? [audio] : []);
 
-      if (tagRebuild) {
-        handleUpdateMemoWithRecreateTags({
-          memo,
-          newMessage: message,
-          newTags: memo.tags,
-          newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
-          handlePreProcess: () => setEditable(false),
-        });
-      } else {
-        handleUpdateMemo({
-          memo,
-          newMessage: message,
-          newTags: memo.tags,
-          newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
-          handlePreProcess: () => setEditable(false),
-        });
-      }
+      const updateHandler = tagRebuild
+        ? handleUpdateMemoWithRecreateTags
+        : handleUpdateMemo;
+
+      updateHandler({
+        memo,
+        newMessage: message,
+        newTags: memo.tags,
+        newImageUrls: [...originImageUrls, ...newImageUrls],
+        newVoiceUrls:
+          newVoiceUrls.length > 0 ? newVoiceUrls : audioUrl ? [audioUrl] : [],
+        handlePreProcess: () => setEditable(false),
+      });
     } catch {
       // FIXME: 에러 처리 어캐 하지...
 
@@ -117,6 +119,10 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     } else {
       setEditable(true);
     }
+  };
+
+  const handleRemoveVoice = () => {
+    setAudioUrl(null);
   };
 
   const urlPattern = /(https?:\/\/[^\s]+)/g;
@@ -166,14 +172,9 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         </CreatedMemoCardHeader>
         <ImageMemoText
           key={audioUrl}
-          voiceUrl={
-            audioUrl
-              ? audioUrl
-              : memo.voice_urls.length > 0
-                ? memo.voice_urls[0]
-                : null
-          }
+          voiceUrl={audioUrl}
           imageUrls={imageUrls}
+          removeVoiceUrl={handleRemoveVoice}
           message={message}
           removeImageUrl={removeImageUrl}
           metadata={memo.metadata}
