@@ -27,7 +27,8 @@ const DashboardHeader = ({
   setSortOption,
   invalidCharsPattern,
 }: DashboardHeaderProps) => {
-  const { onReset, tagStack, setTagStack } = useContext(TagContext);
+  const { selectedTag, onReset, tagStack, setTagStack, openTagCreateModal } =
+    useContext(TagContext);
 
   const handleAllTagsClick = () => {
     onReset();
@@ -47,6 +48,12 @@ const DashboardHeader = ({
     const newStack = tagStack.slice(0, index + 1);
     setTagStack(newStack);
     handleTagOrAllTagsClick(newStack[index]);
+  };
+
+  const handleCreateTag = () => {
+    openTagCreateModal(selectedTag);
+    try {
+    } catch {}
   };
 
   return (
@@ -87,7 +94,11 @@ const DashboardHeader = ({
             invalidCharsPattern={invalidCharsPattern}
             onChildTagClick={handleChildTagClick}
           />
-          <AddIcon className="text-brown2 bg-cream0 p-[7px] h-[27px] w-[27px] rounded-full border border-black border-opacity-10 bg-clip-padding" />
+          <AddIcon
+            className="text-brown2 bg-cream0 p-[7px] h-[27px] w-[27px] rounded-full cursor-pointer
+            border border-black border-opacity-10 bg-clip-padding"
+            onClick={handleCreateTag}
+          />
         </div>
         <div className="flex ml-auto w-fit">
           <SortToggle

@@ -3,13 +3,11 @@ import { MemoText } from './MemoText';
 import { ImageSlider } from './ImageSlider';
 import { useImageList } from 'pages/home/subPages/hooks';
 import { AudioPlayer } from 'react-audio-player-component';
-import { CloseIcon } from 'assets/icons';
 
 const ImageMemoText = ({
   imageUrls,
   voiceUrl,
   removeImageUrl,
-  removeVoiceUrl,
   handleImageFilesChange,
   textColor,
   message,
@@ -21,7 +19,6 @@ const ImageMemoText = ({
   imageUrls: string[];
   voiceUrl: string | null;
   removeImageUrl?: (index: number) => void;
-  removeVoiceUrl?: () => void;
   message: string;
   metadata: string | null;
   textColor?: string;
@@ -112,14 +109,6 @@ const ImageMemoText = ({
                       showVolumeControl
                       showLoopOption
                     />
-                    {editable && (
-                      <div
-                        className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md cursor-pointer"
-                        onClick={removeVoiceUrl}
-                      >
-                        <CloseIcon className="w-8 h-8" />
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

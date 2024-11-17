@@ -3,8 +3,10 @@ import { createContext, Dispatch, SetStateAction } from 'react';
 
 export type TagModalState = {
   isOpen: boolean;
-  tag: Tag;
+  tag: Tag | null;
+  inputTagName: string;
   onClose: () => void;
+  title: string;
 };
 
 interface TagContextType {
@@ -12,9 +14,10 @@ interface TagContextType {
   setSelectedTag: Dispatch<SetStateAction<Tag | null>>;
   tagStack: Tag[];
   setTagStack: Dispatch<SetStateAction<Tag[]>>;
-  tagEditModal: TagModalState | null;
+  tagModal: TagModalState | null;
   openTagEditModal: (tag: Tag) => void;
-  closeTagEditModal: () => void;
+  openTagCreateModal: (parentTag: Tag | null) => void;
+  closeTagModal: () => void;
   subscribeToReset: (listener: () => void) => void;
   unsubscribeFromReset: (listener: () => void) => void;
   onReset: () => void;
@@ -25,9 +28,10 @@ export const TagContext = createContext<TagContextType>({
   setSelectedTag: (_: SetStateAction<Tag | null>) => {},
   tagStack: [],
   setTagStack: (_: SetStateAction<Tag[]>) => {},
-  tagEditModal: null,
+  tagModal: null,
   openTagEditModal: (_: Tag) => {},
-  closeTagEditModal: () => {},
+  openTagCreateModal: (_: Tag | null) => {},
+  closeTagModal: () => {},
   subscribeToReset: () => {},
   unsubscribeFromReset: () => {},
   onReset: () => {},
