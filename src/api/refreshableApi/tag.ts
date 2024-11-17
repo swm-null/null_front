@@ -31,6 +31,29 @@ interface getTagResponse extends validResponse {
   tag: Tag;
 }
 
+export const createTag = async (
+  parentTag: Tag | null,
+  tagName: string
+): Promise<getTagResponse | errorResponse> => {
+  const method = getMethodName();
+  const endpoint = `/childTag${parentTag ? `?tagId=${parentTag.id}` : ''}`;
+
+  try {
+    const response = await refreshableApi.post(
+      endpoint,
+      JSON.stringify({ name: tagName })
+    );
+    const responseInfo = {
+      method,
+      status: response.status,
+      tag: response.data.tag,
+    };
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
 export const editTag = async (
   tagId: string,
   tagNewName: string

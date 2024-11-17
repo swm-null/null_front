@@ -5,29 +5,30 @@ import { useTagManager } from 'pages/home/subPages/components';
 import { TagContext } from 'utils';
 import { useClickWithoutDrag } from 'pages/hooks';
 
-const TagEditModal = () => {
-  const { tagEditModal, closeTagEditModal } = useContext(TagContext);
+const TagModal = () => {
+  const { selectedTag, tagStack, tagModal, closeTagModal } = useContext(TagContext);
   const { handleMouseDown, handleMouseMove, handleClick } =
-    useClickWithoutDrag(closeTagEditModal);
+    useClickWithoutDrag(closeTagModal);
 
-  const [newTagName, setTagName] = useState(tagEditModal?.tag.name || '');
+  const [newTagName, setTagName] = useState('');
 
-  const { handleUpdateTag } = useTagManager();
+  const { handleCreateTag, handleUpdateTag } = useTagManager();
+
+  const isCreateMode = tagModal?.mode === 'create';
+  const isEditMode = tagModal?.mode === 'edit';
 
   useEffect(() => {
-    if (tagEditModal?.tag) {
-      setTagName(tagEditModal?.tag.name);
-    }
-  }, [tagEditModal?.tag]);
+    setTagName(tagModal?.inputTagName || '');
+  }, [tagModal?.inputTagName]);
 
-  if (!tagEditModal) return <></>;
+  if (!tagModal) return <></>;
 
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
   return (
-    <Modal open={tagEditModal.isOpen} onClose={closeTagEditModal}>
+    <Modal open={tagModal.isOpen} onClose={closeTagModal}>
       <div
         className="fixed inset-0 flex items-center justify-center p-4"
         onMouseDown={handleMouseDown}
@@ -39,15 +40,23 @@ const TagEditModal = () => {
           onClick={handleContentClick}
         >
           <ModalContent
+            title={tagModal.title}
             newTagName={newTagName}
             setNewTagName={setTagName}
-            handleClose={closeTagEditModal}
+            handleClose={closeTagModal}
             handleEdit={() => {
-              closeTagEditModal();
-              handleUpdateTag({
-                id: tagEditModal.tag.id,
-                name: newTagName,
-              });
+              closeTagModal();
+              if (isEditMode && tagModal?.tag)
+                handleUpdateTag(
+                  selectedTag?.id !== tagModal.tag.id ? selectedTag : tagStack[-2],
+                  {
+                    id: tagModal.tag.id,
+                    name: newTagName,
+                  }
+                );
+              if (isCreateMode) {
+                handleCreateTag(selectedTag, newTagName);
+              }
             }}
           />
         </div>
@@ -56,4 +65,4 @@ const TagEditModal = () => {
   );
 };
 
-export default TagEditModal;
+export default TagModal;
