@@ -12,7 +12,7 @@ export interface InfiniteQueryData {
 }
 
 const TagWithOptions = ({ tag }: { tag: Tag }) => {
-  const { openTagEditModal } = useContext(TagContext);
+  const { selectedTag, tagStack, openTagEditModal } = useContext(TagContext);
   const { handleDeleteTag } = useTagManager();
 
   return (
@@ -23,7 +23,12 @@ const TagWithOptions = ({ tag }: { tag: Tag }) => {
       />
       <IconWrapper
         IconComponent={DeleteIcon}
-        handleStaticClick={() => handleDeleteTag(tag)}
+        handleStaticClick={() =>
+          handleDeleteTag(
+            selectedTag?.id !== tag.id ? selectedTag : tagStack[-2],
+            tag
+          )
+        }
       />
     </div>
   );

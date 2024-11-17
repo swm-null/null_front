@@ -6,7 +6,7 @@ import { TagContext } from 'utils';
 import { useClickWithoutDrag } from 'pages/hooks';
 
 const TagModal = () => {
-  const { selectedTag, tagModal, closeTagModal } = useContext(TagContext);
+  const { selectedTag, tagStack, tagModal, closeTagModal } = useContext(TagContext);
   const { handleMouseDown, handleMouseMove, handleClick } =
     useClickWithoutDrag(closeTagModal);
 
@@ -47,10 +47,13 @@ const TagModal = () => {
             handleEdit={() => {
               closeTagModal();
               if (isEditMode && tagModal?.tag)
-                handleUpdateTag({
-                  id: tagModal?.tag?.id,
-                  name: newTagName,
-                });
+                handleUpdateTag(
+                  selectedTag?.id !== tagModal.tag.id ? selectedTag : tagStack[-2],
+                  {
+                    id: tagModal.tag.id,
+                    name: newTagName,
+                  }
+                );
               if (isCreateMode) {
                 handleCreateTag(selectedTag, newTagName);
               }
