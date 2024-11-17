@@ -1,5 +1,5 @@
 import { Divider } from '@mui/material';
-import { FocusEvent, useRef, useState } from 'react';
+import { FocusEvent, useEffect, useRef, useState } from 'react';
 
 const MemoText = ({
   message,
@@ -7,15 +7,17 @@ const MemoText = ({
   textColor = '#111111',
   setMessage,
   editable = false,
+  placeholder,
 }: {
   message: string;
   metadata: string | null;
   textColor?: string;
   setMessage?: (newMessage: string) => void;
   editable?: boolean;
+  placeholder?: string;
 }) => {
   const editableDivRef = useRef<HTMLDivElement>(null);
-  const [isBlurred, setIsBlurred] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   const convertToHyperlinks = (text: string) => {
     const urlPattern = /(https?:\/\/[^\s]+)/g;
@@ -54,37 +56,51 @@ const MemoText = ({
       .replace(/<[^>]*>/g, '')
       .trim();
     setMessage && setMessage(cleanText);
-    setIsBlurred(true);
-    editableDivRef.current?.blur();
   };
 
-  const handleClick = (event: React.MouseEvent) => {
+  const handleFocus = () => {
+    console.log('??');
     if (!editable) return;
 
-    setIsBlurred(false);
+    setIsEditing(true);
+  };
 
+  const handleClickLink = (event: React.MouseEvent) => {
     const target = event.target as HTMLAnchorElement;
     if (target.id === 'memo-link') {
       window.open(target.href, '_blank');
-      editableDivRef.current?.blur();
+      event.preventDefault();
     }
   };
+
+  useEffect(() => {
+    if (isEditing && editableDivRef.current) {
+      editableDivRef.current.focus();
+    }
+  }, [isEditing]);
 
   return (
     <>
       <div
+        className={`w-full text-text-gray2 text-gray2 font-regular ${editable && !isEditing && !message ? 'visible' : 'hidden'}`}
+        onClick={handleFocus}
+      >
+        {placeholder}
+      </div>
+      <div
         ref={editableDivRef}
-        className={`w-full bg-transparent font-regular text-[15px] whitespace-break-spaces focus:outline-none
-        [&_a]:pointer-events-auto [&_a]:break-all select-text`}
+        className={`ml-auto bg-transparent font-regular text-[15px] whitespace-break-spaces focus:outline-none
+          [&_a]:pointer-events-auto [&_a]:break-all select-text ${isEditing || message ? 'visible' : 'hidden'}`}
         style={{ color: textColor }}
         contentEditable={editable}
-        onClick={handleClick}
-        suppressContentEditableWarning
+        onClick={handleClickLink}
         onBlur={handleBlur}
+        suppressContentEditableWarning
         dangerouslySetInnerHTML={{
-          __html: isBlurred ? convertToHyperlinks(message) : message,
+          __html: message.length !== 0 ? convertToHyperlinks(message) : '',
         }}
       />
+
       {descriptions && (
         <>
           {(editable || message) && <Divider className="pt-2" />}

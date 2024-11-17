@@ -1,9 +1,11 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { MemoText } from './MemoText';
 import { ImageSlider } from './ImageSlider';
 import { useImageList } from 'pages/home/subPages/hooks';
 import { AudioPlayer } from 'react-audio-player-component';
 import { CloseIcon } from 'assets/icons';
+import { useTranslation } from 'react-i18next';
+import { MemoContext } from 'utils';
 
 const ImageMemoText = ({
   imageUrls,
@@ -32,6 +34,11 @@ const ImageMemoText = ({
 }) => {
   const { removeAllImage, handlePaste, getInputProps, getRootProps } =
     useImageList();
+
+  const { memoModal } = useContext(MemoContext);
+  const isCreateMode = memoModal?.mode === 'create';
+
+  const { t } = useTranslation();
 
   const [width, setWidth] = useState(400);
   const [scale, setScale] = useState(1);
@@ -73,7 +80,7 @@ const ImageMemoText = ({
         onPaste={handlePaste}
       >
         {message || imageUrls.length !== 0 || voiceUrl || editable ? (
-          <div className="w-full overflow-hidden">
+          <div className="w-full overflow-hidden relative">
             {(imageUrls.length !== 0 || voiceUrl) && (
               <div
                 className="flex flex-col xsm:float-left mr-4 mb-1 h-fit gap-3"
@@ -141,6 +148,11 @@ const ImageMemoText = ({
               metadata={metadata}
               setMessage={setMessage}
               editable={editable}
+              placeholder={
+                isCreateMode
+                  ? t('memo.createContentPlaceholder')
+                  : t('memo.editContentPlaceholder')
+              }
             />
           </div>
         ) : (

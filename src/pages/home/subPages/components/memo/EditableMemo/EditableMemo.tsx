@@ -13,9 +13,11 @@ const EditableMemo = ({
   memo,
   border,
   handlePreProcess,
+  mode = 'edit',
 }: {
   memo: Memo;
   border?: boolean;
+  mode?: 'create' | 'edit';
   handlePreProcess: () => void;
 }) => {
   const { t } = useTranslation();
@@ -29,6 +31,8 @@ const EditableMemo = ({
 
   const { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo } =
     useMemoManager();
+
+  const isEditMode = mode === 'edit';
 
   const {
     images,
@@ -140,6 +144,7 @@ const EditableMemo = ({
         </div>
       </div>
       <EditOptions
+        tagRebuildable={isEditMode}
         tagRebuild={tagRebuild}
         setTagRebuild={setTagRebuild}
         handleMicButtonClick={handleMicButtonClick}

@@ -9,7 +9,7 @@ export interface Memo {
   image_urls: string[];
   voice_urls: string[];
   metadata: string | null;
-  created_at: string;
-  updated_at: string;
+  created_at: string | null;
+  updated_at: string | null;
   tags: Tag[];
 }

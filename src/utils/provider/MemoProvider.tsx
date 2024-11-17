@@ -3,26 +3,37 @@ import { useState, useCallback, ReactNode } from 'react';
 import { MemoContext, MemoModalState } from 'utils';
 
 const MemoProvider = ({ children }: { children: ReactNode }) => {
-  const [memoEditModal, setMemoEditModal] = useState<MemoModalState | null>(null);
+  const [memoModal, setMemoModal] = useState<MemoModalState | null>(null);
 
   const openMemoEditModal = (memo: Memo) => {
-    setMemoEditModal({
+    setMemoModal({
       isOpen: true,
       memo,
-      onClose: () => closeMemoEditModal(),
+      onClose: () => closeMemoModal(),
+      mode: 'edit',
     });
   };
 
-  const closeMemoEditModal = useCallback(() => {
-    setMemoEditModal(null);
+  const openMemoCreateModal = (memo: Memo) => {
+    setMemoModal({
+      isOpen: true,
+      memo,
+      onClose: () => closeMemoModal(),
+      mode: 'create',
+    });
+  };
+
+  const closeMemoModal = useCallback(() => {
+    setMemoModal(null);
   }, []);
 
   return (
     <MemoContext.Provider
       value={{
-        memoEditModal,
+        memoModal,
         openMemoEditModal,
-        closeMemoEditModal,
+        openMemoCreateModal,
+        closeMemoModal,
       }}
     >
       {children}

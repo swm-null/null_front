@@ -5,16 +5,19 @@ export type MemoModalState = {
   isOpen: boolean;
   memo: Memo;
   onClose: () => void;
+  mode: 'create' | 'edit';
 };
 
 type MemoContextType = {
-  memoEditModal: MemoModalState | null;
+  memoModal: MemoModalState | null;
   openMemoEditModal: (memo: Memo) => void;
-  closeMemoEditModal: () => void;
+  openMemoCreateModal: (memo: Memo) => void;
+  closeMemoModal: () => void;
 };
 
 export const MemoContext = createContext<MemoContextType>({
-  memoEditModal: null,
+  memoModal: null,
   openMemoEditModal: (_: Memo) => {},
-  closeMemoEditModal: () => {},
+  openMemoCreateModal: (_: Memo) => {},
+  closeMemoModal: () => {},
 });

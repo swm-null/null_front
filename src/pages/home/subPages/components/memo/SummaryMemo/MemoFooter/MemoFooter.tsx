@@ -9,7 +9,7 @@ const MemoFooter = ({
   handleDeleteMemo,
   readonly,
 }: {
-  updatedAt: string;
+  updatedAt: string | null;
   dateFormat: string;
   textColor: string;
   handleDeleteMemo: () => void;
@@ -29,7 +29,7 @@ const MemoFooter = ({
 
   return (
     <div className="flex items-center mt-auto" style={{ color: textColor }}>
-      <p className="font-medium text-[10px]">{formatDate(updatedAt)}</p>
+      <p className="font-medium text-[10px]">{updatedAt && formatDate(updatedAt)}</p>
 
       {!readonly && (
         <button

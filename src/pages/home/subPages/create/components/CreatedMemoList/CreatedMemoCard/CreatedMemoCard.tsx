@@ -1,18 +1,15 @@
-import {
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ReactNode, useCallback, useContext } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon, EditIcon, NoEditIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
-import { useMemoManager, UneditableTagList } from 'pages/home/subPages/components';
+import {
+  useMemoManager,
+  UneditableTagList,
+  ImageMemoText,
+} from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
@@ -145,7 +142,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         <CreatedMemoCardHeader
           editable={editable}
           toggleEditable={toggleEditable}
-          updatedAt={formatDate(memo.updated_at)}
+          updatedAt={memo.updated_at ? formatDate(memo.updated_at) : ''}
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
           {memo.tags.length === 0 ? (
@@ -185,6 +182,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         />
         {editable && (
           <EditOptions
+            tagRebuildable
             tagRebuild={tagRebuild}
             setTagRebuild={setTagRebuild}
             handleMicButtonClick={handleMicButtonClick}
