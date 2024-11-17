@@ -21,6 +21,7 @@ const MediaList = ({
       {audioUrl && (
         <div className="relative flex gap-3 flex-shrink-0">
           <AudioPlayer
+            key={audioUrl}
             src={audioUrl}
             width={300}
             trackHeight={96}
