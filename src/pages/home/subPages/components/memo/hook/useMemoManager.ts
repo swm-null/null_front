@@ -52,23 +52,77 @@ const useMemoManager = () => {
     });
   };
 
+  const getFileUrls = async (files: File[]): Promise<string[]> => {
+    if (files.length === 0) return [];
+
+    const response =
+      files.length === 1
+        ? await Api.uploadFile(files[0])
+        : await Api.uploadFiles(files);
+
+    if (!Api.isFilesResponse(response))
+      throw new Error('파일 업로드에 문제가 생겼습니다.');
+
+    return response.urls;
+  };
+
+  const handleUpdateMemoWithUploadFiles = async ({
+    memo,
+    tagRebuild,
+    newContent,
+    newImages,
+    originImageUrls,
+    newVoice,
+    originalVoiceUrl,
+  }: {
+    memo: Memo;
+    tagRebuild: boolean;
+    newContent: string;
+    newImages: File[];
+    originImageUrls: string[];
+    newVoice: File | null;
+    originalVoiceUrl: string | null;
+  }) => {
+    try {
+      const newImageUrls = await getFileUrls(newImages);
+      const newVoiceUrls = await getFileUrls(newVoice ? [newVoice] : []);
+
+      const updateHandler = tagRebuild
+        ? handleUpdateMemoWithRecreateTags
+        : handleUpdateMemo;
+
+      updateHandler({
+        memo,
+        newMessage: newContent,
+        newTags: memo.tags,
+        newImageUrls: [...originImageUrls, ...newImageUrls],
+        newVoiceUrls:
+          newVoiceUrls.length > 0
+            ? newVoiceUrls
+            : originalVoiceUrl
+              ? [originalVoiceUrl]
+              : [],
+      });
+    } catch {
+      // FIXME: 에러 처리 어캐 하지...
+
+      alert('메모 수정 실패');
+    }
+  };
+
   const handleUpdateMemo = async ({
     memo,
     newMessage,
     newTags,
     newImageUrls,
     newVoiceUrls,
-    handlePreProcess,
   }: {
     memo: Memo;
     newMessage: string;
     newTags: Tag[];
     newImageUrls: string[];
     newVoiceUrls: string[];
-    handlePreProcess: () => void;
   }) => {
-    handlePreProcess();
-
     const newMemo = {
       ...memo,
       content: newMessage,
@@ -130,17 +184,13 @@ const useMemoManager = () => {
     newTags,
     newImageUrls,
     newVoiceUrls,
-    handlePreProcess,
   }: {
     memo: Memo;
     newMessage: string;
     newTags: Tag[];
     newImageUrls: string[];
     newVoiceUrls: string[];
-    handlePreProcess: () => void;
   }) => {
-    handlePreProcess();
-
     const newMemo = {
       ...memo,
       content: newMessage,
@@ -249,7 +299,10 @@ const useMemoManager = () => {
     });
   };
 
-  return { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo };
+  return {
+    handleUpdateMemoWithUploadFiles,
+    handleDeleteMemo,
+  };
 };
 
 export default useMemoManager;

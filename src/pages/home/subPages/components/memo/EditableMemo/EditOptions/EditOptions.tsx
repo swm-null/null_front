@@ -10,14 +10,14 @@ const EditOptions = ({
   setTagRebuild,
   handleImageFilesChange,
   handleMicButtonClick,
-  handleUpdateMemoWithUploadFiles,
+  handleSubmit,
 }: {
   tagRebuildable: boolean;
   tagRebuild: boolean;
   setTagRebuild: (tagRebuild: boolean) => void;
   handleImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleMicButtonClick: () => void;
-  handleUpdateMemoWithUploadFiles: () => void;
+  handleSubmit: () => void;
 }) => {
   const { t } = useTranslation();
 
@@ -38,7 +38,7 @@ const EditOptions = ({
           type="button"
           className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
               rounded-[30px] border border-[#917360]"
-          onClick={handleUpdateMemoWithUploadFiles}
+          onClick={handleSubmit}
         >
           {t('memo.save')}
         </button>

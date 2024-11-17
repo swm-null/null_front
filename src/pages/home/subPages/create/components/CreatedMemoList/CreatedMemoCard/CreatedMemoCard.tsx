@@ -13,7 +13,6 @@ import {
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
-import { isFilesResponse, uploadFile, uploadFiles } from 'api';
 import { RecordingContext } from 'utils';
 
 interface CreatedMemoCardProps {
@@ -35,8 +34,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     removeImage,
   } = useImageList();
 
-  const { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo } =
-    useMemoManager();
+  const { handleUpdateMemoWithUploadFiles, handleDeleteMemo } = useMemoManager();
 
   const { openRecordingModal } = useContext(RecordingContext);
 
@@ -77,41 +75,17 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     setAudioUrl(null);
   };
 
-  const getFileUrls = async (files: File[]): Promise<string[]> => {
-    if (files.length === 0) return [];
-
-    const response =
-      files.length === 1 ? await uploadFile(files[0]) : await uploadFiles(files);
-
-    if (!isFilesResponse(response))
-      throw new Error('파일 업로드에 문제가 생겼습니다.');
-
-    return response.urls;
-  };
-
-  const handleUpdateMemoWithUploadFiles = async () => {
-    try {
-      const newImageUrls = await getFileUrls(images);
-      const newVoiceUrls = await getFileUrls(audio ? [audio] : []);
-
-      const updateHandler = tagRebuild
-        ? handleUpdateMemoWithRecreateTags
-        : handleUpdateMemo;
-
-      updateHandler({
-        memo,
-        newMessage: message,
-        newTags: memo.tags,
-        newImageUrls: [...originImageUrls, ...newImageUrls],
-        newVoiceUrls:
-          newVoiceUrls.length > 0 ? newVoiceUrls : audioUrl ? [audioUrl] : [],
-        handlePreProcess: () => setEditable(false),
-      });
-    } catch {
-      // FIXME: 에러 처리 어캐 하지...
-
-      alert('메모 수정 실패');
-    }
+  const handleSubmit = () => {
+    setEditable(false);
+    handleUpdateMemoWithUploadFiles({
+      memo,
+      tagRebuild,
+      newContent: message,
+      newImages: images,
+      originImageUrls,
+      newVoice: audio,
+      originalVoiceUrl: audioUrl,
+    });
   };
 
   const handleMicButtonClick = () => {
@@ -187,7 +161,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
             setTagRebuild={setTagRebuild}
             handleMicButtonClick={handleMicButtonClick}
             handleImageFilesChange={handleImageFilesChange}
-            handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
+            handleSubmit={handleSubmit}
           />
         )}
       </div>
