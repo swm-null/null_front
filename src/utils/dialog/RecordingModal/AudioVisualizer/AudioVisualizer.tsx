@@ -8,14 +8,12 @@ interface AudioVisualizerProps {
     visualizerData: number[];
   } | null;
   recordingTime: number;
-  audioWaveform: number[];
 }
 
 const AudioVisualizer = ({
   audioUrl,
   isRecording,
   recordingTime,
-  audioWaveform,
 }: AudioVisualizerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -53,6 +51,7 @@ const AudioVisualizer = ({
           </>
         ) : audioUrl ? (
           <AudioPlayer
+            key={audioUrl}
             src={audioUrl}
             minimal={true}
             width={containerWidth}

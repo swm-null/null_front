@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { AudioVisualizer } from 'utils/dialog/RecordingModal/AudioVisualizer';
 import { RecordButton } from 'utils/dialog/RecordingModal/buttons';
-import { useAudioPlayer, useAudioWaveform } from './hooks';
-import { Skeleton } from '@mui/material';
+import { useAudioPlayer } from './hooks';
 
 interface RecordingControlsProps {
   audioUrl: string | null;
@@ -22,7 +21,6 @@ const RecordingControls = ({
   handleStartRecording,
 }: RecordingControlsProps) => {
   const { recordingTime } = useAudioPlayer(audioUrl);
-  const [audioWaveform] = useAudioWaveform(audioUrl);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -37,28 +35,7 @@ const RecordingControls = ({
     } else {
       setScale(1);
     }
-  }, [audioUrl, recordingTime, audioWaveform]);
-
-  if (audioUrl && audioWaveform.length <= 0) {
-    return (
-      <div ref={containerRef} className="flex w-full h-full">
-        <div className="flex h-full gap-4 w-full">
-          <Skeleton
-            className="self-center"
-            variant="circular"
-            width={48}
-            height={48}
-          />
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height="100%"
-            className="flex flex-col flex-1 min-h-24 rounded-xl"
-          />
-        </div>
-      </div>
-    );
-  }
+  }, [audioUrl, recordingTime]);
 
   return (
     <div ref={containerRef} className="flex w-full h-full">
@@ -88,7 +65,6 @@ const RecordingControls = ({
               ? recordingTime
               : originalRecordingTime
           }
-          audioWaveform={audioWaveform}
         />
       </div>
     </div>

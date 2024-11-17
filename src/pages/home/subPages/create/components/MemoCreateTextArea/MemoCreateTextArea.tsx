@@ -21,7 +21,7 @@ interface MemoCreateTextAreaProps {
   value: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (audioBlob: Blob | null) => void;
+  onSubmit: (voice: File | null) => void;
   onImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
   removeImage: (index: number) => void;
   onPaste: (e: React.ClipboardEvent) => void;
@@ -37,15 +37,13 @@ const MemoCreateTextArea = ({
   removeImage,
   onPaste,
 }: MemoCreateTextAreaProps) => {
-  const { audioBlob, setAudioBlob, removeAudio, openRecordingModal } =
-    useContext(RecordingContext);
+  const { openRecordingModal } = useContext(RecordingContext);
 
   const [audio, setAudio] = useState<File | null>(null);
   const audioUrl = useMemo(
     () => (audio ? URL.createObjectURL(audio) : null),
     [audio]
   );
-
   const [focus, setFocus] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [hiddenTextareaWidth, setHiddenTextareaWidth] = useState<number | null>(
@@ -58,7 +56,7 @@ const MemoCreateTextArea = ({
     audioUrl
   );
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleEnterWithCtrl: () => audioBlob && onSubmit(audioBlob),
+    handleEnterWithCtrl: () => audio && onSubmit(audio),
   });
 
   const handleBlur = (e: React.FocusEvent) => {
@@ -72,9 +70,8 @@ const MemoCreateTextArea = ({
   };
 
   const handleSubmit = () => {
-    onSubmit(audioBlob);
+    onSubmit(audio);
     setAudio(null);
-    setAudioBlob(null);
   };
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -93,12 +90,6 @@ const MemoCreateTextArea = ({
       setHiddenTextareaWidth(containerRef.current?.clientWidth);
     }
   }, [containerRef.current]);
-
-  useEffect(() => {
-    return () => {
-      removeAudio();
-    };
-  }, []);
 
   return (
     <div className="p-4">
@@ -135,7 +126,7 @@ const MemoCreateTextArea = ({
             images={imageUrls}
             removeImage={removeImage}
             audioUrl={audioUrl}
-            removeAudio={removeAudio}
+            removeAudio={() => setAudio(null)}
           />
           <IconButtons
             message={value}

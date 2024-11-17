@@ -25,8 +25,6 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
   const [recordingModal, setRecordingModal] = useState<RecordingModalState | null>(
     null
   );
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
-
   const closeRecordingModal = useCallback(() => {
     setRecordingModal(null);
   }, []);
@@ -39,11 +37,9 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
         onSend: (audio: Blob | File) => {
           const file =
             audio instanceof Blob
-              ? new File([audio], 'audio_file_' + Date.now(), { type: audio.type })
+              ? new File([audio], 'audio.webm', { type: 'audio/webm' })
               : audio;
-
           setAudioFn(file);
-          setAudioBlob(audio);
           closeRecordingModal();
         },
         audio,
@@ -90,9 +86,6 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
         recordingModal,
         openRecordingModal,
         closeRecordingModal,
-        audioBlob,
-        removeAudio: () => setAudioBlob(null),
-        setAudioBlob,
         ALLOWED_AUDIO_FILE_TYPES,
         isValidFileType,
         getRootProps,

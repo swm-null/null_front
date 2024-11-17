@@ -36,7 +36,7 @@ const useCreateMemoManager = () => {
     message: string,
     images: File[],
     imagesLocalUrls: string[],
-    audioBlob: Blob | null
+    voice: File | null
   ) => {
     try {
       const temporaryMemo = await createTemporaryMemo({
@@ -46,10 +46,7 @@ const useCreateMemoManager = () => {
       addMemoInQueries(temporaryMemo);
 
       const imageUrls = await getFileUrls(images);
-      const voiceFile = audioBlob
-        ? new File([audioBlob], 'audio.webm', { type: 'audio/webm' })
-        : null;
-      const voiceUrls = await getFileUrls(voiceFile ? [voiceFile] : []);
+      const voiceUrls = await getFileUrls(voice ? [voice] : []);
 
       temporaryMemo.image_urls = imageUrls;
       temporaryMemo.voice_urls = voiceUrls;

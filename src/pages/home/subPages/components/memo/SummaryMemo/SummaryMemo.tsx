@@ -1,4 +1,4 @@
-import { HTMLProps, useRef, useState } from 'react';
+import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UneditableTagList, useMemoManager } from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';

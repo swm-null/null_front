@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -10,6 +10,7 @@ import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
 import { isFilesResponse, uploadFile, uploadFiles } from 'api';
+import { RecordingContext } from 'utils';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -33,9 +34,17 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo } =
     useMemoManager();
 
+  const { openRecordingModal } = useContext(RecordingContext);
+
   const imageUrls = useMemo(
     () => [...originImageUrls, ...newImageUrls],
     [originImageUrls, newImageUrls]
+  );
+
+  const [audio, setAudio] = useState<File | null>(null);
+  const audioUrl = useMemo(
+    () => (audio ? URL.createObjectURL(audio) : null),
+    [audio]
   );
 
   const formatDate = (date: string): string => {
@@ -58,6 +67,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
     const response =
       files.length === 1 ? await uploadFile(files[0]) : await uploadFiles(files);
+
     if (!isFilesResponse(response))
       throw new Error('파일 업로드에 문제가 생겼습니다.');
 
@@ -67,6 +77,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   const handleUpdateMemoWithUploadFiles = async () => {
     try {
       const newImageUrls = await getFileUrls(images);
+      const newVoiceUrls = await getFileUrls(audio ? [audio] : []);
 
       if (tagRebuild) {
         handleUpdateMemoWithRecreateTags({
@@ -74,6 +85,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           newMessage: message,
           newTags: memo.tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
+          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
           handlePreProcess: () => setEditable(false),
         });
       } else {
@@ -82,7 +94,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           newMessage: message,
           newTags: memo.tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: [],
+          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
           handlePreProcess: () => setEditable(false),
         });
       }
@@ -91,6 +103,10 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
       alert('메모 수정 실패');
     }
+  };
+
+  const handleMicButtonClick = () => {
+    openRecordingModal(audio, setAudio);
   };
 
   const toggleEditable = () => {
@@ -149,8 +165,15 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           )}
         </CreatedMemoCardHeader>
         <ImageMemoText
+          key={audioUrl}
+          voiceUrl={
+            audioUrl
+              ? audioUrl
+              : memo.voice_urls.length > 0
+                ? memo.voice_urls[0]
+                : null
+          }
           imageUrls={imageUrls}
-          voiceUrl={memo.voice_urls.length > 0 ? memo.voice_urls[0] : null}
           message={message}
           removeImageUrl={removeImageUrl}
           metadata={memo.metadata}
@@ -162,6 +185,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           <EditOptions
             tagRebuild={tagRebuild}
             setTagRebuild={setTagRebuild}
+            handleMicButtonClick={handleMicButtonClick}
             handleImageFilesChange={handleImageFilesChange}
             handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
           />

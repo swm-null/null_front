@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCreateMemoManager } from './hook';
-import { BottomNavContext, RecordingContext } from 'utils';
+import { BottomNavContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
 import { useImageList } from '../hooks';
@@ -18,7 +18,6 @@ const CreatePage = () => {
     handleImageFilesChange,
     handlePaste,
   } = useImageList();
-  const { removeAudio } = useContext(RecordingContext);
   const { isSmallScreen } = useContext(BottomNavContext);
 
   const [message, setMessage] = useState('');
@@ -28,16 +27,15 @@ const CreatePage = () => {
     setMessage(e.target.value);
   };
 
-  const handleSubmit = (audioBlob: Blob | null) => {
-    if (message.trim().length === 0 && images.length === 0 && !audioBlob) {
+  const handleSubmit = (voice: File | null) => {
+    if (message.trim().length === 0 && images.length === 0 && !voice) {
       return;
     }
 
-    createMemoManager.handleCreateMemo(message, images, imageUrls, audioBlob);
+    createMemoManager.handleCreateMemo(message, images, imageUrls, voice);
 
     setMessage('');
     removeAllImage();
-    removeAudio();
   };
 
   return (

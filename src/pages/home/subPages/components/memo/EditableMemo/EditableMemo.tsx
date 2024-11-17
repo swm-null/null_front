@@ -5,7 +5,7 @@ import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
 import { useMemoManager } from '../hook';
 import { isFilesResponse, uploadFile, uploadFiles } from 'api';
-import { AlertContext } from 'utils';
+import { AlertContext, RecordingContext } from 'utils';
 import { EditOptions } from './EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
 
@@ -20,6 +20,7 @@ const EditableMemo = ({
 }) => {
   const { t } = useTranslation();
   const { alert } = useContext(AlertContext);
+  const { openRecordingModal } = useContext(RecordingContext);
 
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
@@ -35,6 +36,12 @@ const EditableMemo = ({
     handleImageFilesChange,
     removeImage,
   } = useImageList();
+
+  const [audio, setAudio] = useState<File | null>(null);
+  const audioUrl = useMemo(() => {
+    console.log(audio ? URL.createObjectURL(audio) : 'no audio');
+    return audio ? URL.createObjectURL(audio) : null;
+  }, [audio]);
 
   const imageUrls = useMemo(
     () => [...originImageUrls, ...newImageUrls],
@@ -55,6 +62,7 @@ const EditableMemo = ({
   const handleUpdateMemoWithUploadFiles = async () => {
     try {
       const newImageUrls = await getFileUrls(images);
+      const newVoiceUrls = await getFileUrls(audio ? [audio] : []);
 
       if (tagRebuild) {
         handleUpdateMemoWithRecreateTags({
@@ -62,6 +70,7 @@ const EditableMemo = ({
           newMessage: message,
           newTags: tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
+          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
           handlePreProcess,
         });
       } else {
@@ -70,7 +79,7 @@ const EditableMemo = ({
           newMessage: message,
           newTags: tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: [],
+          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
           handlePreProcess,
         });
       }
@@ -88,6 +97,10 @@ const EditableMemo = ({
       setOriginalImageUrls((prev) => prev.filter((_, i) => i !== index));
     }
   }, []);
+
+  const handleMicButtonClick = () => {
+    openRecordingModal(audio, setAudio);
+  };
 
   useEffect(() => {
     setMessage(memo.content);
@@ -108,7 +121,14 @@ const EditableMemo = ({
         />
         <div className="flex flex-col flex-1 overflow-y-scroll no-scrollbar gap-4">
           <ImageMemoText
-            voiceUrl={memo.voice_urls.length > 0 ? memo.voice_urls[0] : null}
+            key={audioUrl}
+            voiceUrl={
+              audioUrl
+                ? audioUrl
+                : memo.voice_urls.length > 0
+                  ? memo.voice_urls[0]
+                  : null
+            }
             imageUrls={imageUrls}
             removeImageUrl={removeImageUrl}
             handleImageFilesChange={handleImageFilesChange}
@@ -122,6 +142,7 @@ const EditableMemo = ({
       <EditOptions
         tagRebuild={tagRebuild}
         setTagRebuild={setTagRebuild}
+        handleMicButtonClick={handleMicButtonClick}
         handleImageFilesChange={handleImageFilesChange}
         handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
       />
