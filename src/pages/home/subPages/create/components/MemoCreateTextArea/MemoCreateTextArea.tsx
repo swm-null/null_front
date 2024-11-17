@@ -56,7 +56,8 @@ const MemoCreateTextArea = ({
     audioUrl
   );
   const { handlePressEnterFetch } = usePressEnterFetch({
-    handleEnterWithCtrl: () => audio && onSubmit(audio),
+    handleEnterWithCtrl: handleSubmit,
+    handleEnter: handleSubmit,
   });
 
   const handleBlur = (e: React.FocusEvent) => {
@@ -69,10 +70,10 @@ const MemoCreateTextArea = ({
     openRecordingModal(audio, setAudio);
   };
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     onSubmit(audio);
     setAudio(null);
-  };
+  }
 
   const handleTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > MAX_TEXT_LENGTH) {

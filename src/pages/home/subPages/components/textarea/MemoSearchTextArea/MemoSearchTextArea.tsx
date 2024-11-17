@@ -28,6 +28,7 @@ const MemoSearchTextArea = ({
 
   const { handlePressEnterFetch } = usePressEnterFetch({
     handleEnterWithCtrl: onSubmit,
+    handleEnter: onSubmit,
   });
 
   const handleBlur = (e: React.FocusEvent) => {
