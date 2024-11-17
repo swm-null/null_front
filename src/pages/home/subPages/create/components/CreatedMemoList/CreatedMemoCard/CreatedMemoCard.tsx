@@ -1,4 +1,11 @@
-import { ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
@@ -42,10 +49,17 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
   );
 
   const [audio, setAudio] = useState<File | null>(null);
-  const audioUrl = useMemo(
-    () => (audio ? URL.createObjectURL(audio) : null),
-    [audio]
-  );
+  const [audioUrl, setAudioUrl] = useState<string | null>(memo.voice_urls[0]);
+
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  const haveLink = urlPattern.test(memo.content);
+
+  const skeletonTexts = [
+    memo.voice_urls.length > 0 && '음성 분석 중...',
+    haveLink && '링크 분석 중...',
+    memo.image_urls.length > 0 && '이미지 분석 중...',
+    memo.content && '텍스트 분석 중...',
+  ].filter(Boolean);
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
@@ -61,6 +75,10 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       setOriginalImageUrls((prev) => prev.filter((_, i) => i !== index));
     }
   }, []);
+
+  const removeVoiceUrl = () => {
+    setAudioUrl(null);
+  };
 
   const getFileUrls = async (files: File[]): Promise<string[]> => {
     if (files.length === 0) return [];
@@ -79,25 +97,19 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       const newImageUrls = await getFileUrls(images);
       const newVoiceUrls = await getFileUrls(audio ? [audio] : []);
 
-      if (tagRebuild) {
-        handleUpdateMemoWithRecreateTags({
-          memo,
-          newMessage: message,
-          newTags: memo.tags,
-          newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
-          handlePreProcess: () => setEditable(false),
-        });
-      } else {
-        handleUpdateMemo({
-          memo,
-          newMessage: message,
-          newTags: memo.tags,
-          newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
-          handlePreProcess: () => setEditable(false),
-        });
-      }
+      const updateHandler = tagRebuild
+        ? handleUpdateMemoWithRecreateTags
+        : handleUpdateMemo;
+
+      updateHandler({
+        memo,
+        newMessage: message,
+        newTags: memo.tags,
+        newImageUrls: [...originImageUrls, ...newImageUrls],
+        newVoiceUrls:
+          newVoiceUrls.length > 0 ? newVoiceUrls : audioUrl ? [audioUrl] : [],
+        handlePreProcess: () => setEditable(false),
+      });
     } catch {
       // FIXME: 에러 처리 어캐 하지...
 
@@ -114,20 +126,15 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       setEditable(false);
       setMessage(memo.content);
       setOriginalImageUrls(memo.image_urls);
+      setAudioUrl(memo.voice_urls[0]);
     } else {
       setEditable(true);
     }
   };
 
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
-  const haveLink = urlPattern.test(memo.content);
-
-  const skeletonTexts = [
-    memo.voice_urls.length > 0 && '음성 분석 중...',
-    haveLink && '링크 분석 중...',
-    memo.image_urls.length > 0 && '이미지 분석 중...',
-    memo.content && '텍스트 분석 중...',
-  ].filter(Boolean);
+  useEffect(() => {
+    audio && setAudioUrl(URL.createObjectURL(audio));
+  }, [audio]);
 
   return (
     <div
@@ -166,16 +173,11 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         </CreatedMemoCardHeader>
         <ImageMemoText
           key={audioUrl}
-          voiceUrl={
-            audioUrl
-              ? audioUrl
-              : memo.voice_urls.length > 0
-                ? memo.voice_urls[0]
-                : null
-          }
+          voiceUrl={audioUrl}
           imageUrls={imageUrls}
           message={message}
           removeImageUrl={removeImageUrl}
+          removeVoiceUrl={removeVoiceUrl}
           metadata={memo.metadata}
           setMessage={setMessage}
           editable={editable}
