@@ -30,16 +30,13 @@ const ImageMemoText = ({
   const { removeAllImage, handlePaste, getInputProps, getRootProps } =
     useImageList();
 
-  useEffect(() => {
-    return () => {
-      removeAllImage();
-    };
-  }, []);
-
   const [width, setWidth] = useState(400);
+  const [scale, setScale] = useState(1);
   const [scaledWidth, setScaledWidth] = useState(0);
   const [scaledHeight, setScaledHeight] = useState(0);
+
   const containerRef = useRef<HTMLDivElement>(null);
+  const imageSliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 30rem)');
@@ -47,14 +44,18 @@ const ImageMemoText = ({
     mediaQuery.addEventListener('change', updateWidth);
 
     updateWidth();
-    return () => mediaQuery.removeEventListener('change', updateWidth);
+    return () => {
+      mediaQuery.removeEventListener('change', updateWidth);
+      removeAllImage();
+    };
   }, []);
 
   useEffect(() => {
     if (containerRef.current) {
-      const scale = width / 400;
-      const newWidth = 400 + 16;
-      const newHeight = trackHeight * (1 / scale) + 16;
+      const newScale = (width - 16) / 400;
+      setScale(newScale);
+      const newWidth = 429;
+      const newHeight = trackHeight * (1 / newScale) + 29;
       setScaledWidth(newWidth);
       setScaledHeight(newHeight);
     }
@@ -72,18 +73,27 @@ const ImageMemoText = ({
           <div className="w-full overflow-hidden">
             {(imageUrls.length !== 0 || voiceUrl) && (
               <div
-                className="xsm:float-left mr-4 mb-1 h-fit"
+                className="flex flex-col xsm:float-left mr-4 mb-1 h-fit gap-3"
                 style={{
-                  width: scaledWidth * (width / 400),
-                  height: scaledHeight * (width / 400),
+                  width:
+                    scaledWidth * (width / 400) ||
+                    imageSliderRef.current?.clientWidth ||
+                    0,
+                  height:
+                    scaledHeight * (width / 400) +
+                    (imageSliderRef.current?.clientHeight || 0),
                 }}
               >
-                <ImageSlider
-                  imageUrls={imageUrls}
-                  removeImageUrl={removeImageUrl}
-                  handleImageFilesChange={handleImageFilesChange}
-                  editable={editable}
-                />
+                {imageUrls.length !== 0 && (
+                  <div ref={imageSliderRef} className="h-fit w-fit">
+                    <ImageSlider
+                      imageUrls={imageUrls}
+                      removeImageUrl={removeImageUrl}
+                      handleImageFilesChange={handleImageFilesChange}
+                      editable={editable}
+                    />
+                  </div>
+                )}
                 {voiceUrl && (
                   <div
                     ref={containerRef}
@@ -91,7 +101,7 @@ const ImageMemoText = ({
                     style={{
                       width: scaledWidth,
                       height: scaledHeight,
-                      transform: `scale(${(width - 16) / 400})`,
+                      transform: `scale(${scale})`,
                       transformOrigin: 'top left',
                     }}
                   >
