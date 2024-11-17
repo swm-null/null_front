@@ -2,6 +2,7 @@ import { Tag } from 'pages/home/subPages/interfaces';
 import { createContext, Dispatch, SetStateAction } from 'react';
 
 export type TagModalState = {
+  mode: 'create' | 'edit';
   isOpen: boolean;
   tag: Tag | null;
   inputTagName: string;

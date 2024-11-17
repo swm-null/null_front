@@ -32,11 +32,11 @@ interface getTagResponse extends validResponse {
 }
 
 export const createTag = async (
-  tagId: string,
+  parentTag: Tag | null,
   tagName: string
 ): Promise<getTagResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/childTag?tagId=${tagId}`;
+  const endpoint = `/childTag${parentTag ? `?tagId=${parentTag.id}` : ''}`;
 
   try {
     const response = await refreshableApi.post(

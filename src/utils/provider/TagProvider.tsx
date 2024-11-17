@@ -34,6 +34,7 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
 
   const openTagEditModal = (tag: Tag) => {
     setTagModal({
+      mode: 'edit',
       isOpen: true,
       tag,
       inputTagName: tag.name,
@@ -44,6 +45,7 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
 
   const openTagCreateModal = (parentTag: Tag | null) => {
     setTagModal({
+      mode: 'create',
       isOpen: true,
       tag: parentTag,
       inputTagName: '',

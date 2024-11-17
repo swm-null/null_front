@@ -5,14 +5,17 @@ import { useTagManager } from 'pages/home/subPages/components';
 import { TagContext } from 'utils';
 import { useClickWithoutDrag } from 'pages/hooks';
 
-const TagEditModal = () => {
-  const { tagModal, closeTagModal } = useContext(TagContext);
+const TagModal = () => {
+  const { selectedTag, tagModal, closeTagModal } = useContext(TagContext);
   const { handleMouseDown, handleMouseMove, handleClick } =
     useClickWithoutDrag(closeTagModal);
 
   const [newTagName, setTagName] = useState('');
 
-  const { handleUpdateTag } = useTagManager();
+  const { handleCreateTag, handleUpdateTag } = useTagManager();
+
+  const isCreateMode = tagModal?.mode === 'create';
+  const isEditMode = tagModal?.mode === 'edit';
 
   useEffect(() => {
     setTagName(tagModal?.inputTagName || '');
@@ -43,11 +46,14 @@ const TagEditModal = () => {
             handleClose={closeTagModal}
             handleEdit={() => {
               closeTagModal();
-              if (tagModal.tag)
+              if (isEditMode && tagModal?.tag)
                 handleUpdateTag({
-                  id: tagModal.tag.id,
+                  id: tagModal?.tag?.id,
                   name: newTagName,
                 });
+              if (isCreateMode) {
+                handleCreateTag(selectedTag, newTagName);
+              }
             }}
           />
         </div>
@@ -56,4 +62,4 @@ const TagEditModal = () => {
   );
 };
 
-export default TagEditModal;
+export default TagModal;

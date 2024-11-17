@@ -100,6 +100,25 @@ const useTagManager = () => {
     });
   };
 
+  const handleCreateTag = async (
+    parentTag: Tag | null,
+    createTargetName: string
+  ) => {
+    try {
+      const response = await Api.createTag(parentTag, createTargetName);
+      if (Api.isGetTagResponse(response)) {
+        queryClient.invalidateQueries({
+          queryKey: ['tags', parentTag ? parentTag.id : 'root'],
+          exact: true,
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['childTags', parentTag ? parentTag.id : 'root'],
+          exact: true,
+        });
+      }
+    } catch {}
+  };
+
   const handleUpdateTag = async (updateTarget: Tag) => {
     const oldTagRelationsMap = backupTagRelations();
     const oldTagsMap = backupTags();
@@ -268,7 +287,7 @@ const useTagManager = () => {
     });
   };
 
-  return { handleUpdateTag, handleDeleteTag };
+  return { handleCreateTag, handleUpdateTag, handleDeleteTag };
 };
 
 export default useTagManager;
