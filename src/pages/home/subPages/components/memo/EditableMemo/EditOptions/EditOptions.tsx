@@ -8,11 +8,13 @@ const EditOptions = ({
   tagRebuild,
   setTagRebuild,
   handleImageFilesChange,
+  handleMicButtonClick,
   handleUpdateMemoWithUploadFiles,
 }: {
   tagRebuild: boolean;
   setTagRebuild: (tagRebuild: boolean) => void;
   handleImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleMicButtonClick: () => void;
   handleUpdateMemoWithUploadFiles: () => void;
 }) => {
   const { t } = useTranslation();
@@ -25,7 +27,7 @@ const EditOptions = ({
       >
         <CameraIcon className="w-6 h-6 p-[2px] text-brown2 cursor-pointer" />
       </ImageFileInput>
-      <MicIcon className="w-6 h-6 text-brown2 " />
+      <MicIcon className="w-6 h-6 text-brown2 " onClick={handleMicButtonClick} />
       <div className="flex ml-auto w-fit gap-6 items-center">
         <TagRebuildCheckbox checked={tagRebuild} setChecked={setTagRebuild} />
         <button

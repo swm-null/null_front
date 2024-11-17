@@ -6,6 +6,7 @@ const IconButtons = ({
   message,
   submitAvailable,
   MAX_TEXT_LENGTH,
+  onMicButtonClick,
   onImageFilesChange,
   onSubmitButtonClick,
 }: {
@@ -22,7 +23,7 @@ const IconButtons = ({
       <ImageFileInput onFileChange={onImageFilesChange}>
         <CameraIcon className="w-6 h-6 p-[2px] text-brown2 cursor-pointer" />
       </ImageFileInput>
-      <MicIcon className="w-7 h-7 text-brown2 " />
+      <MicIcon className="w-7 h-7 text-brown2 " onClick={onMicButtonClick} />
       {submitAvailable && (
         <RightArrowIcon
           tabIndex={0}

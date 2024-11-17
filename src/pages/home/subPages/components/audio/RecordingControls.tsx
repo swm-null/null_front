@@ -1,29 +1,26 @@
-import { useRef } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { AudioVisualizer } from 'utils/dialog/RecordingModal/AudioVisualizer';
-import { PlaybackButton, RecordButton } from 'utils/dialog/RecordingModal/buttons';
-import { useAudioPlayer, useAudioWaveform } from './hooks';
-import { Skeleton } from '@mui/material';
+import { RecordButton } from 'utils/dialog/RecordingModal/buttons';
+import { useAudioPlayer } from './hooks';
 
 interface RecordingControlsProps {
   audioUrl: string | null;
   recordingTime?: number;
-  editable?: {
-    isRecording: boolean;
-    visualizerData: number[];
-    handleStopRecording: () => void;
-    handleStartRecording: () => void;
-  };
+  isRecording: boolean;
+  visualizerData: number[];
+  handleStopRecording: () => void;
+  handleStartRecording: () => void;
 }
 
 const RecordingControls = ({
   audioUrl,
   recordingTime: originalRecordingTime,
-  editable,
+  isRecording,
+  visualizerData,
+  handleStopRecording,
+  handleStartRecording,
 }: RecordingControlsProps) => {
-  const { isPlaying, recordingTime, togglePlayback } = useAudioPlayer(audioUrl);
-  const [audioWaveform] = useAudioWaveform(audioUrl);
+  const { recordingTime } = useAudioPlayer(audioUrl);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -38,58 +35,28 @@ const RecordingControls = ({
     } else {
       setScale(1);
     }
-  }, [audioUrl, isPlaying, recordingTime, audioWaveform]);
-
-  if (audioUrl && audioWaveform.length <= 0) {
-    return (
-      <div ref={containerRef} className="flex w-full h-full">
-        <div
-          className={`flex h-full ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
-        >
-          <Skeleton
-            className="self-center"
-            variant="circular"
-            width={48}
-            height={48}
-          />
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height="100%"
-            className="flex flex-col flex-1 min-h-24 rounded-xl"
-          />
-        </div>
-      </div>
-    );
-  }
+  }, [audioUrl, recordingTime]);
 
   return (
     <div ref={containerRef} className="flex w-full h-full">
       <div
         ref={contentRef}
-        className={`flex h-full ${editable ? 'gap-4 w-full' : 'gap-2 min-w-fit'}`}
+        className="flex h-full gap-4 w-full"
         style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}
       >
-        {!audioUrl ? (
-          editable && (
-            <RecordButton
-              isRecording={editable.isRecording}
-              onToggleRecording={
-                editable.isRecording
-                  ? editable.handleStopRecording
-                  : editable.handleStartRecording
-              }
-            />
-          )
-        ) : (
-          <PlaybackButton isPlaying={isPlaying} onTogglePlayback={togglePlayback} />
-        )}
+        <RecordButton
+          isRecording={isRecording}
+          onToggleRecording={
+            isRecording ? handleStopRecording : handleStartRecording
+          }
+        />
         <AudioVisualizer
+          audioUrl={audioUrl}
           isRecording={
-            editable?.visualizerData && editable.visualizerData.length > 0
+            visualizerData && visualizerData.length > 0
               ? {
-                  isRecording: editable.isRecording,
-                  visualizerData: editable.visualizerData,
+                  isRecording: isRecording,
+                  visualizerData: visualizerData,
                 }
               : null
           }
@@ -98,7 +65,6 @@ const RecordingControls = ({
               ? recordingTime
               : originalRecordingTime
           }
-          audioWaveform={audioWaveform}
         />
       </div>
     </div>
