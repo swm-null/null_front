@@ -70,7 +70,7 @@ const EditableMemo = ({
           newMessage: message,
           newTags: tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
+          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
           handlePreProcess,
         });
       } else {
@@ -79,7 +79,7 @@ const EditableMemo = ({
           newMessage: message,
           newTags: tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
+          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
           handlePreProcess,
         });
       }

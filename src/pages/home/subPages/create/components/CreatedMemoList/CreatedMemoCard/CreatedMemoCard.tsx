@@ -85,7 +85,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           newMessage: message,
           newTags: memo.tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
+          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
           handlePreProcess: () => setEditable(false),
         });
       } else {
@@ -94,7 +94,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           newMessage: message,
           newTags: memo.tags,
           newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: newVoiceUrls ? newVoiceUrls : memo.voice_urls,
+          newVoiceUrls: newVoiceUrls.length > 0 ? newVoiceUrls : memo.voice_urls,
           handlePreProcess: () => setEditable(false),
         });
       }
