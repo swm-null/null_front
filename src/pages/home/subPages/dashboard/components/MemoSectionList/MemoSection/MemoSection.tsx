@@ -9,7 +9,7 @@ import { Fab } from '@mui/material';
 import { AddIcon } from 'assets/icons';
 
 interface MemoSectionProps {
-  tag: Tag | null;
+  tag: Tag;
   childTags: Tag[];
   isLinked?: boolean;
   isLeaf?: boolean;
@@ -31,7 +31,7 @@ const MemoSection = ({
   const [updateKey, setUpdateKey] = useState(0);
 
   const { memos, fetchNextPage } = useChildTagMemosManager(
-    tag?.id || null,
+    tag.id,
     isLinked,
     sortOption
   );
@@ -59,7 +59,7 @@ const MemoSection = ({
       border-black border-opacity-10 bg-clip-padding shadow-custom backdrop-blur-lg"
     >
       <MemoSectionHeader
-        tag={tag!}
+        tag={tag}
         isLinked={isLinked}
         isLeaf={isLeaf}
         childTags={isLinked ? [] : childTags}
