@@ -1,5 +1,5 @@
-import { CloseIcon } from 'assets/icons';
 import { AudioPlayer } from 'react-audio-player-component';
+import { CloseIcon } from 'assets/icons';
 
 interface MediaListProps {
   images: string[];
