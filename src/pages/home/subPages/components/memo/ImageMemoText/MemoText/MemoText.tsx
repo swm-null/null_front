@@ -59,7 +59,6 @@ const MemoText = ({
   };
 
   const handleFocus = () => {
-    console.log('??');
     if (!editable) return;
 
     setIsEditing(true);

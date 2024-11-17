@@ -43,7 +43,6 @@ const EditableMemo = ({
 
   const [audio, setAudio] = useState<File | null>(null);
   const audioUrl = useMemo(() => {
-    console.log(audio ? URL.createObjectURL(audio) : 'no audio');
     return audio ? URL.createObjectURL(audio) : null;
   }, [audio]);
 

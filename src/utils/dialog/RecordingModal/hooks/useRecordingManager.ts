@@ -39,7 +39,6 @@ export const useRecordingManager = () => {
     };
 
     mediaRecorder.onstop = () => {
-      console.log('stop');
       const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
