@@ -108,6 +108,7 @@ const EditableMemo = ({
         />
         <div className="flex flex-col flex-1 overflow-y-scroll no-scrollbar gap-4">
           <ImageMemoText
+            voiceUrl={memo.voice_urls.length > 0 ? memo.voice_urls[0] : null}
             imageUrls={imageUrls}
             removeImageUrl={removeImageUrl}
             handleImageFilesChange={handleImageFilesChange}

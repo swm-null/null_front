@@ -1,4 +1,4 @@
-import { HTMLProps, useState } from 'react';
+import { HTMLProps, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UneditableTagList, useMemoManager } from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
@@ -7,6 +7,7 @@ import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Divider } from '@mui/material';
+import { AudioPlayer } from 'react-audio-player-component';
 
 interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -87,6 +88,38 @@ const SummaryMemo = ({
             // FIXME : server에서 특정 태그의 부모 태그를 알 수 있는 api를 주면, 해당 api로 부모 태그를 알아내고, context의
           }}
         />
+        {memo.voice_urls?.length > 0 && (
+          <div
+            className="w-full p-2 bg-[#e8e1d9] rounded-2xl"
+            style={{ position: 'relative', overflow: 'hidden' }}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <AudioPlayer
+              src={memo.voice_urls[0]}
+              width={190}
+              trackHeight={49}
+              barWidth={1}
+              gap={1}
+              visualise
+              backgroundColor="#e8e1d9"
+              barColor="#8b7e74"
+              barPlayedColor="#F4CDB1"
+              skipDuration={2}
+              minimal
+              showLoopOption
+              showVolumeControl
+            />
+            <style>
+              {`
+                [data-testid="timer"] {
+                  display: none;
+                }
+              `}
+            </style>
+          </div>
+        )}
         {memo.content && (
           <MemoText
             textColor={getStyleByImagePresence('#111111', 'white')}
