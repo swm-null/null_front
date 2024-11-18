@@ -62,8 +62,8 @@ const useChildTagMemosManager = (
   }, [data]);
 
   useEffect(() => {
-    const resetQueriesCurrentQuery = () => {
-      queryClient.resetQueries({
+    const invalidateCurrentQuery = () => {
+      queryClient.invalidateQueries({
         queryKey: [
           'childTagMemos',
           tagId,
@@ -75,10 +75,10 @@ const useChildTagMemosManager = (
       });
     };
 
-    subscribeToReset('dashboard', resetQueriesCurrentQuery);
+    subscribeToReset('dashboard', invalidateCurrentQuery);
 
     return () => {
-      unsubscribeFromReset('dashboard', resetQueriesCurrentQuery);
+      unsubscribeFromReset('dashboard', invalidateCurrentQuery);
     };
   }, [tagId]);
 
