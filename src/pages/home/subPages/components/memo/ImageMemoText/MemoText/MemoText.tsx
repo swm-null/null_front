@@ -38,14 +38,13 @@ const MemoText = ({
   const linkDescriptions = parsedMetadata?.link_descriptions?.[0] || null;
   const imageDescriptions = parsedMetadata?.image_descriptions?.[0] || null;
 
-  const descriptions =
-    !message && voiceDescriptions
-      ? voiceDescriptions.simple_description
-      : haveOnlyLink && linkDescriptions
-        ? linkDescriptions.simple_description
-        : !message && imageDescriptions
-          ? imageDescriptions.simple_description
-          : null;
+  const descriptions = voiceDescriptions
+    ? voiceDescriptions.simple_description
+    : haveOnlyLink && linkDescriptions
+      ? linkDescriptions.simple_description
+      : imageDescriptions
+        ? imageDescriptions.simple_description
+        : null;
 
   const handleBlur = (e: FocusEvent<HTMLDivElement>) => {
     if (!editable) return;
