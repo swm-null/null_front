@@ -45,8 +45,7 @@ const MemoSectionList = ({
     }
   }, [selectedTag, scrollRef?.current]);
 
-  // return <LeafMemoSection parentTag={selectedTag} sortOption={sortOption} />;
-  if (hasNoSection()) {
+  if (hasNoSection() && selectedTag) {
     return (
       <div className="flex flex-1 mx-4 pb-2 pt-2">
         <MemoSection

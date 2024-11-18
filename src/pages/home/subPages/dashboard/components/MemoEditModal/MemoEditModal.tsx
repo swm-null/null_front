@@ -5,18 +5,18 @@ import { useContext } from 'react';
 import { MemoContext } from 'utils';
 
 const MemoEditModal = () => {
-  const { memoEditModal, closeMemoEditModal } = useContext(MemoContext);
+  const { memoModal, closeMemoModal } = useContext(MemoContext);
   const { handleMouseDown, handleMouseMove, handleClick } =
-    useClickWithoutDrag(closeMemoEditModal);
+    useClickWithoutDrag(closeMemoModal);
 
-  if (!memoEditModal) return <></>;
+  if (!memoModal) return <></>;
 
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
   return (
-    <Modal open={memoEditModal.isOpen} onClose={closeMemoEditModal}>
+    <Modal open={memoModal.isOpen} onClose={closeMemoModal}>
       <div
         className="fixed inset-0 flex items-center justify-center p-4"
         onMouseDown={handleMouseDown}
@@ -28,9 +28,9 @@ const MemoEditModal = () => {
           onClick={handleContentClick}
         >
           <EditableMemo
-            key={memoEditModal.memo.id}
-            memo={memoEditModal.memo}
-            handlePreProcess={closeMemoEditModal}
+            key={memoModal.memo.id}
+            memo={memoModal.memo}
+            handlePreProcess={closeMemoModal}
           />
         </div>
       </div>

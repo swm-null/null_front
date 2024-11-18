@@ -1,20 +1,24 @@
-import { Memo } from 'pages/home/subPages/interfaces';
+import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { createContext } from 'react';
 
 export type MemoModalState = {
   isOpen: boolean;
   memo: Memo;
   onClose: () => void;
+  mode: 'create' | 'edit';
+  tag: Tag | null;
 };
 
 type MemoContextType = {
-  memoEditModal: MemoModalState | null;
+  memoModal: MemoModalState | null;
   openMemoEditModal: (memo: Memo) => void;
-  closeMemoEditModal: () => void;
+  openMemoCreateModal: (memo: Memo, tag: Tag) => void;
+  closeMemoModal: () => void;
 };
 
 export const MemoContext = createContext<MemoContextType>({
-  memoEditModal: null,
+  memoModal: null,
   openMemoEditModal: (_: Memo) => {},
-  closeMemoEditModal: () => {},
+  openMemoCreateModal: (_: Memo, __: Tag) => {},
+  closeMemoModal: () => {},
 });

@@ -11,7 +11,7 @@ const MemoHeader = ({
   handleDeleteMemo,
 }: {
   tags: Tag[];
-  updatedAt: string;
+  updatedAt: string | null;
   dateFormat: string;
   handleDeleteMemo: () => void;
 }) => {
@@ -34,9 +34,11 @@ const MemoHeader = ({
         />
       </div>
       <div className="ml-auto flex gap-4">
-        <p className="text-center font-medium text-sm text-brown2">
-          {formatDate(updatedAt)}
-        </p>
+        {updatedAt && (
+          <p className="text-center font-medium text-sm text-brown2">
+            {formatDate(updatedAt)}
+          </p>
+        )}
         <DeleteIcon
           className="text-brown2 w-5 h-5 flex-shrink-0 cursor-pointer"
           onClick={handleDeleteMemo}

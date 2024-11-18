@@ -5,17 +5,19 @@ import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 import { CameraIcon, MicIcon } from 'assets/icons';
 
 const EditOptions = ({
+  tagRebuildable = false,
   tagRebuild,
   setTagRebuild,
   handleImageFilesChange,
   handleMicButtonClick,
-  handleUpdateMemoWithUploadFiles,
+  handleSubmit,
 }: {
+  tagRebuildable: boolean;
   tagRebuild: boolean;
   setTagRebuild: (tagRebuild: boolean) => void;
   handleImageFilesChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleMicButtonClick: () => void;
-  handleUpdateMemoWithUploadFiles: () => void;
+  handleSubmit: () => void;
 }) => {
   const { t } = useTranslation();
 
@@ -29,12 +31,14 @@ const EditOptions = ({
       </ImageFileInput>
       <MicIcon className="w-6 h-6 text-brown2 " onClick={handleMicButtonClick} />
       <div className="flex ml-auto w-fit gap-6 items-center">
-        <TagRebuildCheckbox checked={tagRebuild} setChecked={setTagRebuild} />
+        {tagRebuildable && (
+          <TagRebuildCheckbox checked={tagRebuild} setChecked={setTagRebuild} />
+        )}
         <button
           type="button"
           className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
               rounded-[30px] border border-[#917360]"
-          onClick={handleUpdateMemoWithUploadFiles}
+          onClick={handleSubmit}
         >
           {t('memo.save')}
         </button>

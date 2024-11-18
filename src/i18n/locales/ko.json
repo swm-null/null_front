@@ -39,7 +39,9 @@
     "close": "닫기",
     "delete": {
       "alert": "메모를 정말 삭제하시겠습니까?"
-    }
+    },
+    "createContentPlaceholder": "메모 내용을 입력해 주세요.",
+    "editContentPlaceholder": "메모 내용을 변경할 수 있습니다."
   },
   "voice": {
     "save": "저장",
