@@ -1,14 +1,10 @@
-import { useState } from 'react';
 import { v4 as uuid_v4 } from 'uuid';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
-import { Status } from 'pages/home/subPages/types';
 
 const useCreateMemoManager = () => {
   const queryClient = useQueryClient();
-
-  const [status, setStatus] = useState<Status>('default');
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
     useInfiniteQuery<Api.paginationMemosResponse, Error>({
@@ -32,6 +28,45 @@ const useCreateMemoManager = () => {
   const allMemos =
     !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
 
+  const handleCreateLinkedMemo = async (
+    tag: Interface.Tag,
+    message: string,
+    images: File[],
+    imagesLocalUrls: string[],
+    voice: File | null,
+    voiceLocalUrl: string[]
+  ) => {
+    try {
+      const temporaryMemo = await createTemporaryMemo({
+        message,
+        images: imagesLocalUrls,
+        voices: voiceLocalUrl,
+        tag,
+      });
+      addMemoInQueries(temporaryMemo);
+
+      const imageUrls = await getFileUrls(images);
+      const voiceUrls = await getFileUrls(voice ? [voice] : []);
+
+      temporaryMemo.image_urls = imageUrls;
+      temporaryMemo.voice_urls = voiceUrls;
+      updateMemoInQueries(temporaryMemo.id, temporaryMemo);
+
+      const response = await Api.createLinkedMemo(
+        tag,
+        message,
+        imageUrls,
+        voiceUrls
+      );
+
+      if (Api.isCreateMemoResponse(response)) {
+        updateMemoInQueries(temporaryMemo.id, response as Interface.Memo);
+      } else {
+        deleteMemoInQueries(temporaryMemo.id);
+      }
+    } catch (error) {}
+  };
+
   const handleCreateMemo = async (
     message: string,
     images: File[],
@@ -52,11 +87,14 @@ const useCreateMemoManager = () => {
       temporaryMemo.voice_urls = voiceUrls;
       updateMemoInQueries(temporaryMemo.id, temporaryMemo);
 
-      await createMemo({ temporaryMemo, message, images: imageUrls, voiceUrls });
-      setStatus('success');
-    } catch (error) {
-      setStatus('error');
-    }
+      const response = await Api.createMemo(message, imageUrls, voiceUrls);
+
+      if (Api.isCreateMemoResponse(response)) {
+        updateMemoInQueries(temporaryMemo.id, response as Interface.Memo);
+      } else {
+        deleteMemoInQueries(temporaryMemo.id);
+      }
+    } catch (error) {}
   };
 
   const getFileUrls = async (files: File[]): Promise<string[]> => {
@@ -71,39 +109,16 @@ const useCreateMemoManager = () => {
 
     return response.urls;
   };
-
-  const createMemo = async ({
-    temporaryMemo,
-    message,
-    images,
-    voiceUrls,
-  }: {
-    temporaryMemo: Interface.Memo;
-    message: string;
-    images?: string[];
-    voiceUrls?: string[];
-  }) => {
-    try {
-      const response = await Api.createMemo(message, images, voiceUrls);
-
-      if (Api.isCreateMemoResponse(response)) {
-        updateMemoInQueries(temporaryMemo.id, response as Interface.Memo);
-      } else {
-        throw new Error('Memo Create Error');
-      }
-    } catch (error) {
-      deleteMemoInQueries(temporaryMemo.id);
-    }
-  };
-
   const createTemporaryMemo = async ({
     message,
     images,
     voices,
+    tag,
   }: {
     message: string;
     images?: string[];
     voices?: string[];
+    tag?: Interface.Tag;
   }) => {
     const optimisticMemo: Interface.Memo = {
       id: uuid_v4(),
@@ -113,7 +128,7 @@ const useCreateMemoManager = () => {
       metadata: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      tags: [],
+      tags: tag ? [tag] : [],
     };
 
     return optimisticMemo;
@@ -162,8 +177,8 @@ const useCreateMemoManager = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    status,
     handleCreateMemo,
+    handleCreateLinkedMemo,
   };
 };
 

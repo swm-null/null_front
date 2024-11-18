@@ -2,12 +2,13 @@ import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ImageMemoText,
+  useCreateMemoManager,
   useDeleteMemoManager,
   useUpdateMemoManager,
 } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
-import { RecordingContext } from 'utils';
+import { MemoContext, RecordingContext } from 'utils';
 import { EditOptions } from './EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
 
@@ -15,25 +16,25 @@ const EditableMemo = ({
   memo,
   border,
   handlePreProcess,
-  mode = 'edit',
 }: {
   memo: Memo;
   border?: boolean;
-  mode?: 'create' | 'edit';
   handlePreProcess: () => void;
 }) => {
   const { t } = useTranslation();
   const { openRecordingModal } = useContext(RecordingContext);
+  const { memoModal } = useContext(MemoContext);
 
   const [message, setMessage] = useState(memo.content);
   const [tags, setTags] = useState(memo.tags);
   const [tagRebuild, setTagRebuild] = useState(false);
   const [originImageUrls, setOriginalImageUrls] = useState(memo.image_urls);
 
+  const { handleCreateLinkedMemo } = useCreateMemoManager();
   const { handleUpdateMemo } = useUpdateMemoManager();
   const { handleDeleteMemo } = useDeleteMemoManager();
 
-  const isEditMode = mode === 'edit';
+  const isEditMode = memoModal === null || memoModal.mode === 'edit';
 
   const {
     images,
@@ -76,7 +77,16 @@ const EditableMemo = ({
       });
     } else {
       handlePreProcess();
-      // 해당 태그에 메모 추가하는 코드 넣기
+      if (!memoModal.tag) return;
+
+      handleCreateLinkedMemo(
+        memoModal.tag,
+        message,
+        images,
+        imageUrls,
+        audio,
+        audioUrl ? [audioUrl] : []
+      );
     }
   };
 

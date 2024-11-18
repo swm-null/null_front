@@ -1,4 +1,4 @@
-import { Memo } from 'pages/home/subPages/interfaces';
+import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { useState, useCallback, ReactNode } from 'react';
 import { MemoContext, MemoModalState } from 'utils';
 
@@ -11,15 +11,17 @@ const MemoProvider = ({ children }: { children: ReactNode }) => {
       memo,
       onClose: () => closeMemoModal(),
       mode: 'edit',
+      tag: null,
     });
   };
 
-  const openMemoCreateModal = (memo: Memo) => {
+  const openMemoCreateModal = (memo: Memo, tag: Tag) => {
     setMemoModal({
       isOpen: true,
       memo,
       onClose: () => closeMemoModal(),
       mode: 'create',
+      tag,
     });
   };
 

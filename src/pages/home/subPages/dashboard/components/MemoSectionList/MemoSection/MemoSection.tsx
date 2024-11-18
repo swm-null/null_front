@@ -52,7 +52,7 @@ const MemoSection = ({
       created_at: null,
       updated_at: null,
     } as Memo;
-    openMemoCreateModal(memo);
+    openMemoCreateModal(memo, tag);
   };
 
   useIntersectionObserver(observerRef, {

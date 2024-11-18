@@ -31,7 +31,6 @@ const MemoEditModal = () => {
             key={memoModal.memo.id}
             memo={memoModal.memo}
             handlePreProcess={closeMemoModal}
-            mode={memoModal.mode}
           />
         </div>
       </div>
