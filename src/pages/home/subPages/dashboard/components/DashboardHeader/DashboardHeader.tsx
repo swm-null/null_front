@@ -6,7 +6,7 @@ import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
 import { UneditableTagList } from 'pages/home/subPages/components';
-import { TagContext } from 'utils';
+import { ResetContext, TagContext } from 'utils';
 
 interface DashboardHeaderProps {
   allTagText: string;
@@ -27,12 +27,13 @@ const DashboardHeader = ({
   setSortOption,
   invalidCharsPattern,
 }: DashboardHeaderProps) => {
-  const { selectedTag, onReset, tagStack, setTagStack, openTagCreateModal } =
+  const { selectedTag, onTagReset, tagStack, setTagStack, openTagCreateModal } =
     useContext(TagContext);
+  const { onReset } = useContext(ResetContext);
 
   const handleAllTagsClick = () => {
-    onReset();
-    setTagStack([]);
+    onTagReset();
+    onReset('dashboard');
     handleTagOrAllTagsClick(null);
   };
 

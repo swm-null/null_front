@@ -19,9 +19,7 @@ interface TagContextType {
   openTagEditModal: (tag: Tag) => void;
   openTagCreateModal: (parentTag: Tag | null) => void;
   closeTagModal: () => void;
-  subscribeToReset: (listener: () => void) => void;
-  unsubscribeFromReset: (listener: () => void) => void;
-  onReset: () => void;
+  onTagReset: () => void;
 }
 
 export const TagContext = createContext<TagContextType>({
@@ -33,7 +31,5 @@ export const TagContext = createContext<TagContextType>({
   openTagEditModal: (_: Tag) => {},
   openTagCreateModal: (_: Tag | null) => {},
   closeTagModal: () => {},
-  subscribeToReset: () => {},
-  unsubscribeFromReset: () => {},
-  onReset: () => {},
+  onTagReset: () => {},
 });

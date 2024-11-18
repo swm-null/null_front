@@ -1,10 +1,11 @@
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BottomNavContext } from 'utils';
+import { BottomNavContext, ResetContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
 import { useImageList } from '../hooks';
 import { useCreateMemoManager } from '../components';
+import { useRecentMemoManager } from './hook';
 
 const CreatePage = () => {
   const { t } = useTranslation();
@@ -19,9 +20,13 @@ const CreatePage = () => {
     handlePaste,
   } = useImageList();
   const { isSmallScreen } = useContext(BottomNavContext);
+  const { subscribeToReset, unsubscribeFromReset } = useContext(ResetContext);
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
-  const createMemoManager = useCreateMemoManager();
+
+  const { handleCreateMemo } = useCreateMemoManager();
+  const recentMemoManager = useRecentMemoManager();
 
   const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -32,11 +37,25 @@ const CreatePage = () => {
       return;
     }
 
-    createMemoManager.handleCreateMemo(message, images, imageUrls, voice);
+    handleCreateMemo(message, images, imageUrls, voice);
 
     setMessage('');
     removeAllImage();
   };
+
+  useEffect(() => {
+    const scrollToTop = () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    subscribeToReset('', scrollToTop);
+
+    return () => {
+      unsubscribeFromReset('', scrollToTop);
+    };
+  }, []);
 
   return (
     <>
@@ -58,14 +77,15 @@ const CreatePage = () => {
           />
         </div>
         <div
+          ref={scrollContainerRef}
           className={`flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar ${isSmallScreen ? '' : 'mb-10'}`}
         >
           <div
             className={`max-w-[740px] w-full self-center ${isSmallScreen ? '' : 'mx-20'}`}
           >
             <CreatedMemoList
-              memos={createMemoManager.data}
-              fetchNextPage={createMemoManager.fetchNextPage}
+              memos={recentMemoManager.data}
+              fetchNextPage={recentMemoManager.fetchNextPage}
             />
           </div>
         </div>

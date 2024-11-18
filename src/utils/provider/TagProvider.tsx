@@ -9,28 +9,11 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
   const [tagStack, setTagStack] = useState<Tag[]>([]);
   const { t } = useTranslation();
 
-  const [eventListeners] = useState(new Set<() => void>());
-
-  const subscribeToReset = useCallback(
-    (listener: () => void) => {
-      eventListeners.add(listener);
-    },
-    [eventListeners]
-  );
-
-  const unsubscribeFromReset = useCallback(
-    (listener: () => void) => {
-      eventListeners.delete(listener);
-    },
-    [eventListeners]
-  );
-
-  const onReset = useCallback(() => {
-    eventListeners.forEach((listener) => listener());
+  const onTagReset = useCallback(() => {
     setTagModal(null);
     setSelectedTag(null);
     setTagStack([]);
-  }, [eventListeners]);
+  }, []);
 
   const openTagEditModal = (tag: Tag) => {
     setTagModal({
@@ -69,9 +52,7 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
         openTagEditModal,
         closeTagModal,
         openTagCreateModal,
-        subscribeToReset,
-        unsubscribeFromReset,
-        onReset,
+        onTagReset,
       }}
     >
       {children}

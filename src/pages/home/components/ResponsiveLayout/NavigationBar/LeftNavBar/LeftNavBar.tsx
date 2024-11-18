@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import * as Icon from 'assets/icons';
 import { useTranslation } from 'react-i18next';
-import { TagContext } from 'utils';
+import { ResetContext } from 'utils';
 
 interface LeftNavBarProps {
   currentPage: string;
@@ -10,11 +10,11 @@ interface LeftNavBarProps {
 
 const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
   const { t } = useTranslation();
-  const { onReset } = useContext(TagContext);
+  const { onReset } = useContext(ResetContext);
 
-  const handleClickDashboard = () => {
-    onReset();
-    setCurrentPage('dashboard');
+  const handleClickPage = (page: string) => {
+    onReset(page);
+    setCurrentPage(page);
   };
 
   return (
@@ -25,19 +25,19 @@ const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
             selected={currentPage === ''}
             icon={<Icon.AddIcon />}
             label={t('pages.sidebar.create')}
-            onClick={() => setCurrentPage('')}
+            onClick={() => handleClickPage('')}
           />
           <SidebarTooltipButton
             selected={currentPage === 'search'}
             icon={<Icon.SearchIcon />}
             label={t('pages.sidebar.search')}
-            onClick={() => setCurrentPage('search')}
+            onClick={() => handleClickPage('search')}
           />
           <SidebarTooltipButton
             selected={currentPage === 'dashboard'}
             icon={<Icon.DashboardIcon />}
             label={t('pages.sidebar.dashboard')}
-            onClick={handleClickDashboard}
+            onClick={() => handleClickPage('dashboard')}
           />
         </div>
       </div>
