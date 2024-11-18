@@ -9,6 +9,7 @@ import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 import { useTranslation } from 'react-i18next';
 import { SummaryMemoWithoutDrag } from 'pages/home/subPages/search/components';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const ConversationContent = ({
   isOpen,
@@ -119,6 +120,7 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
         <div className="flex flex-col gap-5">
           {memoSearchAnswer.processed_message && (
             <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
               className="font-regular text-brown2 whitespace-break-spaces [&>br]:display-none"
               disallowedElements={['br']}
               components={{
@@ -126,6 +128,19 @@ const AIAnswer = ({ content }: { content: MemoSearchAnswerWithAI | null }) => {
                   <ol {...props} className={`${props.className || ''} grid`}>
                     {props.children}
                   </ol>
+                ),
+                li: ({ node, ...props }) => (
+                  <li
+                    {...props}
+                    style={{
+                      width: '100%',
+                      maxWidth: '100%',
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    {props.children}
+                  </li>
                 ),
                 a: ({ node, ...props }) => (
                   <a {...props} className={`${props.className || ''} underline`}>

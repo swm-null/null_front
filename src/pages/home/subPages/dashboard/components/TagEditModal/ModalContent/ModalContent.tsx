@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next';
 
 const ModalContent = ({
+  title,
   newTagName,
   setNewTagName,
   handleClose,
   handleEdit,
 }: {
+  title: string;
   newTagName: string;
   setNewTagName: (newTagName: string) => void;
   handleClose: () => void;
@@ -20,7 +22,7 @@ const ModalContent = ({
 
   return (
     <form className="flex flex-col p-4 w-full flex-1" onSubmit={handleSubmit}>
-      <p className="mb-2 text-base">{t('pages.dashboard.tag.edit.title')}</p>
+      <p className="mb-2 text-base">{title}</p>
       <div className="w-full flex flex-col flex-1">
         <input
           type="text"

@@ -1,1 +1,1 @@
-export { default as useCreateMemoManager } from './useCreateMemoManager';
+export { default as useRecentMemoManager } from './useRecentMemoManager';

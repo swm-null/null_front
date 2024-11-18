@@ -1,15 +1,20 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useContext } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText } from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { DeleteIcon, EditIcon, NoEditIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
-import { useMemoManager, UneditableTagList } from 'pages/home/subPages/components';
+import {
+  UneditableTagList,
+  ImageMemoText,
+  useDeleteMemoManager,
+  useUpdateMemoManager,
+} from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
-import { isFilesResponse, uploadFile, uploadFiles } from 'api';
+import { RecordingContext } from 'utils';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -28,15 +33,31 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     imageUrls: newImageUrls,
     handleImageFilesChange,
     removeImage,
+    handlePaste,
   } = useImageList();
 
-  const { handleUpdateMemo, handleUpdateMemoWithRecreateTags, handleDeleteMemo } =
-    useMemoManager();
+  const { handleUpdateMemo } = useUpdateMemoManager();
+  const { handleDeleteMemo } = useDeleteMemoManager();
+
+  const { openRecordingModal } = useContext(RecordingContext);
 
   const imageUrls = useMemo(
     () => [...originImageUrls, ...newImageUrls],
     [originImageUrls, newImageUrls]
   );
+
+  const [audio, setAudio] = useState<File | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(memo.voice_urls[0]);
+
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  const haveLink = urlPattern.test(memo.content);
+
+  const skeletonTexts = [
+    memo.voice_urls.length > 0 && '음성 분석 중...',
+    haveLink && '링크 분석 중...',
+    memo.image_urls.length > 0 && '이미지 분석 중...',
+    memo.content && '텍스트 분석 중...',
+  ].filter(Boolean);
 
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
@@ -53,44 +74,25 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     }
   }, []);
 
-  const getFileUrls = async (files: File[]): Promise<string[]> => {
-    if (files.length === 0) return [];
-
-    const response =
-      files.length === 1 ? await uploadFile(files[0]) : await uploadFiles(files);
-    if (!isFilesResponse(response))
-      throw new Error('파일 업로드에 문제가 생겼습니다.');
-
-    return response.urls;
+  const removeVoiceUrl = () => {
+    setAudioUrl(null);
   };
 
-  const handleUpdateMemoWithUploadFiles = async () => {
-    try {
-      const newImageUrls = await getFileUrls(images);
+  const handleSubmit = () => {
+    setEditable(false);
+    handleUpdateMemo({
+      memo,
+      tagRebuild,
+      newContent: message,
+      newImages: images,
+      newVoice: audio,
+      oldImageUrls: originImageUrls,
+      oldVoiceUrls: audioUrl ? [audioUrl] : [],
+    });
+  };
 
-      if (tagRebuild) {
-        handleUpdateMemoWithRecreateTags({
-          memo,
-          newMessage: message,
-          newTags: memo.tags,
-          newImageUrls: [...originImageUrls, ...newImageUrls],
-          handlePreProcess: () => setEditable(false),
-        });
-      } else {
-        handleUpdateMemo({
-          memo,
-          newMessage: message,
-          newTags: memo.tags,
-          newImageUrls: [...originImageUrls, ...newImageUrls],
-          newVoiceUrls: [],
-          handlePreProcess: () => setEditable(false),
-        });
-      }
-    } catch {
-      // FIXME: 에러 처리 어캐 하지...
-
-      alert('메모 수정 실패');
-    }
+  const handleMicButtonClick = () => {
+    openRecordingModal(audio, setAudio);
   };
 
   const toggleEditable = () => {
@@ -98,20 +100,15 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       setEditable(false);
       setMessage(memo.content);
       setOriginalImageUrls(memo.image_urls);
+      setAudioUrl(memo.voice_urls[0]);
     } else {
       setEditable(true);
     }
   };
 
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
-  const haveLink = urlPattern.test(memo.content);
-
-  const skeletonTexts = [
-    memo.voice_urls.length > 0 && '음성 분석 중...',
-    haveLink && '링크 분석 중...',
-    memo.image_urls.length > 0 && '이미지 분석 중...',
-    memo.content && '텍스트 분석 중...',
-  ].filter(Boolean);
+  useEffect(() => {
+    audio && setAudioUrl(URL.createObjectURL(audio));
+  }, [audio]);
 
   return (
     <div
@@ -122,7 +119,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
         <CreatedMemoCardHeader
           editable={editable}
           toggleEditable={toggleEditable}
-          updatedAt={formatDate(memo.updated_at)}
+          updatedAt={memo.updated_at ? formatDate(memo.updated_at) : ''}
           handleDeleteMemo={() => handleDeleteMemo({ memo })}
         >
           {memo.tags.length === 0 ? (
@@ -149,20 +146,26 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           )}
         </CreatedMemoCardHeader>
         <ImageMemoText
+          key={audioUrl}
+          voiceUrl={audioUrl}
           imageUrls={imageUrls}
           message={message}
           removeImageUrl={removeImageUrl}
+          removeVoiceUrl={removeVoiceUrl}
           metadata={memo.metadata}
           setMessage={setMessage}
           editable={editable}
           handleImageFilesChange={handleImageFilesChange}
+          handlePaste={handlePaste}
         />
         {editable && (
           <EditOptions
+            tagRebuildable
             tagRebuild={tagRebuild}
             setTagRebuild={setTagRebuild}
+            handleMicButtonClick={handleMicButtonClick}
             handleImageFilesChange={handleImageFilesChange}
-            handleUpdateMemoWithUploadFiles={handleUpdateMemoWithUploadFiles}
+            handleSubmit={handleSubmit}
           />
         )}
       </div>

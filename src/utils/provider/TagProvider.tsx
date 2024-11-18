@@ -1,43 +1,44 @@
 import { Tag } from 'pages/home/subPages/interfaces';
 import { useState, useCallback, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TagContext, TagModalState } from 'utils';
 
 const TagProvider = ({ children }: { children: ReactNode }) => {
-  const [tagEditModal, setTagEditModal] = useState<TagModalState | null>(null);
+  const [tagModal, setTagModal] = useState<TagModalState | null>(null);
   const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
   const [tagStack, setTagStack] = useState<Tag[]>([]);
+  const { t } = useTranslation();
 
-  const [eventListeners] = useState(new Set<() => void>());
-
-  const subscribeToReset = useCallback(
-    (listener: () => void) => {
-      eventListeners.add(listener);
-    },
-    [eventListeners]
-  );
-
-  const unsubscribeFromReset = useCallback(
-    (listener: () => void) => {
-      eventListeners.delete(listener);
-    },
-    [eventListeners]
-  );
-
-  const onReset = useCallback(() => {
-    eventListeners.forEach((listener) => listener());
-    closeTagEditModal();
-  }, [eventListeners]);
+  const onTagReset = useCallback(() => {
+    setTagModal(null);
+    setSelectedTag(null);
+    setTagStack([]);
+  }, []);
 
   const openTagEditModal = (tag: Tag) => {
-    setTagEditModal({
+    setTagModal({
+      mode: 'edit',
       isOpen: true,
       tag,
-      onClose: () => closeTagEditModal(),
+      inputTagName: tag.name,
+      onClose: () => closeTagModal(),
+      title: t('pages.dashboard.tag.edit.title'),
     });
   };
 
-  const closeTagEditModal = useCallback(() => {
-    setTagEditModal(null);
+  const openTagCreateModal = (parentTag: Tag | null) => {
+    setTagModal({
+      mode: 'create',
+      isOpen: true,
+      tag: parentTag,
+      inputTagName: '',
+      onClose: () => closeTagModal(),
+      title: `${parentTag?.name || '모든 메모'} 태그에 하위 태그 생성하기`,
+    });
+  };
+
+  const closeTagModal = useCallback(() => {
+    setTagModal(null);
   }, []);
 
   return (
@@ -47,12 +48,11 @@ const TagProvider = ({ children }: { children: ReactNode }) => {
         setSelectedTag,
         tagStack,
         setTagStack,
-        tagEditModal,
+        tagModal,
         openTagEditModal,
-        closeTagEditModal,
-        subscribeToReset,
-        unsubscribeFromReset,
-        onReset,
+        closeTagModal,
+        openTagCreateModal,
+        onTagReset,
       }}
     >
       {children}
