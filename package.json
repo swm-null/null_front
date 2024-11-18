@@ -44,6 +44,7 @@
     "react-responsive": "^10.0.0",
     "react-responsive-masonry": "^2.3.0",
     "react-router-dom": "^6.26.0",
+    "remark-gfm": "^4.0.0",
     "rxjs": "^7.8.1",
     "tailwind-variants": "^0.2.1",
     "tailwindcss-filters": "^3.0.0",
