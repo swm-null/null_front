@@ -44,6 +44,7 @@ const useCreateMemoManager = () => {
         tag,
       });
       addMemoInQueries(temporaryMemo);
+      addMemoInTagQueries(tag, temporaryMemo);
 
       const imageUrls = await getFileUrls(images);
       const voiceUrls = await getFileUrls(voice ? [voice] : []);
@@ -51,6 +52,7 @@ const useCreateMemoManager = () => {
       temporaryMemo.image_urls = imageUrls;
       temporaryMemo.voice_urls = voiceUrls;
       updateMemoInQueries(temporaryMemo.id, temporaryMemo);
+      updateMemoInTagQueries(tag, temporaryMemo.id, temporaryMemo);
 
       const response = await Api.createLinkedMemo(
         tag,
@@ -60,7 +62,8 @@ const useCreateMemoManager = () => {
       );
 
       if (Api.isCreateMemoResponse(response)) {
-        updateMemoInQueries(temporaryMemo.id, response as Interface.Memo);
+        queryClient.invalidateQueries({ queryKey: ['recentMemo'] });
+        queryClient.invalidateQueries({ queryKey: ['childTagMemos', tag.id] });
       } else {
         deleteMemoInQueries(temporaryMemo.id);
       }
@@ -90,6 +93,7 @@ const useCreateMemoManager = () => {
       const response = await Api.createMemo(message, imageUrls, voiceUrls);
 
       if (Api.isCreateMemoResponse(response)) {
+        // FIXME: 이 때 배치가 완료 된 건 아니어서 일단 놔둠. sse 적용하면 해당 내용으로 수정
         updateMemoInQueries(temporaryMemo.id, response as Interface.Memo);
       } else {
         deleteMemoInQueries(temporaryMemo.id);
@@ -146,6 +150,21 @@ const useCreateMemoManager = () => {
     });
   };
 
+  const addMemoInTagQueries = (tag: Interface.Tag, memo: Interface.Memo) => {
+    queryClient.setQueriesData<unknown>(
+      { queryKey: ['childTagMemos', tag.id] },
+      (oldData: any) => {
+        return {
+          pages: oldData?.pages.map((page: any) => ({
+            ...page,
+            memos: [memo, ...page?.memos],
+          })),
+          pageParams: oldData?.pageParams as any,
+        };
+      }
+    );
+  };
+
   const updateMemoInQueries = (
     optimisticMemoId: string,
     updateMemo: Interface.Memo
@@ -161,6 +180,27 @@ const useCreateMemoManager = () => {
         pageParams: oldData?.pageParams as any,
       };
     });
+  };
+
+  const updateMemoInTagQueries = (
+    tag: Interface.Tag,
+    optimisticMemoId: string,
+    updateMemo: Interface.Memo
+  ) => {
+    queryClient.setQueriesData<unknown>(
+      { queryKey: ['childTagMemos', tag.id] },
+      (oldData: any) => {
+        return {
+          pages: oldData?.pages.map((page: any) => ({
+            ...page,
+            memos: page?.memos.map((memo: any) =>
+              memo.id === optimisticMemoId ? updateMemo : memo
+            ),
+          })),
+          pageParams: oldData?.pageParams as any,
+        };
+      }
+    );
   };
 
   const deleteMemoInQueries = (optimisticMemoId: string) => {
