@@ -41,6 +41,9 @@ const EditableMemo = ({
     imageUrls: newImageUrls,
     handleImageFilesChange,
     removeImage,
+    handlePaste,
+    getInputProps,
+    getRootProps,
   } = useImageList();
 
   const imageUrls = useMemo(
@@ -104,7 +107,11 @@ const EditableMemo = ({
       className={`p-7 flex flex-col h-auto w-full bg-[#FFF6E3] border rounded-md gap-4 
         ${border ? 'border-black border-opacity-10 bg-clip-padding' : 'border-gray1'}`}
     >
-      <div className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden">
+      <input {...getInputProps()} />
+      <div
+        {...getRootProps()}
+        className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden"
+      >
         <MemoHeader
           tags={tags}
           updatedAt={memo.updated_at}
@@ -128,6 +135,7 @@ const EditableMemo = ({
             metadata={memo.metadata}
             setMessage={setMessage}
             editable
+            handlePaste={handlePaste}
           />
         </div>
       </div>

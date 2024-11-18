@@ -33,6 +33,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     imageUrls: newImageUrls,
     handleImageFilesChange,
     removeImage,
+    handlePaste,
   } = useImageList();
 
   const { handleUpdateMemo } = useUpdateMemoManager();
@@ -155,6 +156,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           setMessage={setMessage}
           editable={editable}
           handleImageFilesChange={handleImageFilesChange}
+          handlePaste={handlePaste}
         />
         {editable && (
           <EditOptions

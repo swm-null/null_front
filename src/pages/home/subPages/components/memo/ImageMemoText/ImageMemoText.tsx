@@ -1,7 +1,6 @@
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { MemoText } from './MemoText';
 import { ImageSlider } from './ImageSlider';
-import { useImageList } from 'pages/home/subPages/hooks';
 import { AudioPlayer } from 'react-audio-player-component';
 import { CloseIcon } from 'assets/icons';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,7 @@ const ImageMemoText = ({
   setMessage,
   editable,
   trackHeight = 96,
+  handlePaste,
 }: {
   imageUrls: string[];
   voiceUrl: string | null;
@@ -31,10 +31,8 @@ const ImageMemoText = ({
   setMessage?: (newMessage: string) => void;
   editable?: boolean;
   trackHeight?: number;
+  handlePaste: (e: React.ClipboardEvent) => void;
 }) => {
-  const { removeAllImage, handlePaste, getInputProps, getRootProps } =
-    useImageList();
-
   const { memoModal } = useContext(MemoContext);
   const isCreateMode = memoModal?.mode === 'create';
 
@@ -56,7 +54,6 @@ const ImageMemoText = ({
     updateWidth();
     return () => {
       mediaQuery.removeEventListener('change', updateWidth);
-      removeAllImage();
     };
   }, []);
 
@@ -73,12 +70,7 @@ const ImageMemoText = ({
 
   return (
     <>
-      <input {...getInputProps()} />
-      <div
-        className="flex mb-auto flex-col xsm:flex-row w-full flex-1 gap-5 xsm:gap-9 flex-wrap"
-        {...getRootProps()}
-        onPaste={handlePaste}
-      >
+      <div className="flex mb-auto flex-col xsm:flex-row w-full flex-1 gap-5 xsm:gap-9 flex-wrap">
         {message || imageUrls.length !== 0 || voiceUrl || editable ? (
           <div className="w-full overflow-hidden relative">
             {(imageUrls.length !== 0 || voiceUrl) && (
@@ -153,6 +145,7 @@ const ImageMemoText = ({
                   ? t('memo.createContentPlaceholder')
                   : t('memo.editContentPlaceholder')
               }
+              onPaste={handlePaste}
             />
           </div>
         ) : (

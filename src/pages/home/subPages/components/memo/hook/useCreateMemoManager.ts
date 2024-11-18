@@ -63,8 +63,13 @@ const useCreateMemoManager = () => {
 
       if (Api.isCreateMemoResponse(response)) {
         queryClient.invalidateQueries({ queryKey: ['recentMemo'] });
+        console.log(
+          queryClient.getQueriesData({ queryKey: ['childTagMemos', tag.id] })
+        );
         queryClient.invalidateQueries({ queryKey: ['childTagMemos', tag.id] });
+        console.log(68);
       } else {
+        console.log(70);
         deleteMemoInQueries(temporaryMemo.id);
       }
     } catch (error) {}
