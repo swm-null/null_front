@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ImageMemoText } from 'pages/home/subPages/components';
+import {
+  ImageMemoText,
+  useDeleteMemoManager,
+  useUpdateMemoManager,
+} from 'pages/home/subPages/components';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoHeader } from './MemoHeader';
-import { useMemoManager } from '../hook';
 import { RecordingContext } from 'utils';
 import { EditOptions } from './EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
@@ -27,7 +30,8 @@ const EditableMemo = ({
   const [tagRebuild, setTagRebuild] = useState(false);
   const [originImageUrls, setOriginalImageUrls] = useState(memo.image_urls);
 
-  const { handleUpdateMemoWithUploadFiles, handleDeleteMemo } = useMemoManager();
+  const { handleUpdateMemo } = useUpdateMemoManager();
+  const { handleDeleteMemo } = useDeleteMemoManager();
 
   const isEditMode = mode === 'edit';
 
@@ -38,15 +42,17 @@ const EditableMemo = ({
     removeImage,
   } = useImageList();
 
-  const [audio, setAudio] = useState<File | null>(null);
-  const audioUrl = useMemo(() => {
-    return audio ? URL.createObjectURL(audio) : null;
-  }, [audio]);
-
   const imageUrls = useMemo(
     () => [...originImageUrls, ...newImageUrls],
     [originImageUrls, newImageUrls]
   );
+
+  const [audio, setAudio] = useState<File | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(memo.voice_urls[0]);
+
+  useEffect(() => {
+    audio && setAudioUrl(URL.createObjectURL(audio));
+  }, [audio]);
 
   const removeImageUrl = useCallback((index: number) => {
     if (index >= originImageUrls.length) {
@@ -59,14 +65,14 @@ const EditableMemo = ({
   const handleSubmit = () => {
     if (isEditMode) {
       handlePreProcess();
-      handleUpdateMemoWithUploadFiles({
+      handleUpdateMemo({
         memo,
         tagRebuild,
         newContent: message,
         newImages: images,
-        originImageUrls,
         newVoice: audio,
-        originalVoiceUrl: audioUrl,
+        oldImageUrls: originImageUrls,
+        oldVoiceUrls: audioUrl ? [audioUrl] : [],
       });
     } else {
       handlePreProcess();

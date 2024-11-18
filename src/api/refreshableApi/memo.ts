@@ -80,7 +80,7 @@ export const searchMemoWithAI = async function (
   }
 };
 
-interface cuMemoResponse extends Memo, validResponse {}
+export interface cuMemoResponse extends Memo, validResponse {}
 
 export const createMemo = async (
   inputContent: string,

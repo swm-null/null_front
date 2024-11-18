@@ -1,10 +1,10 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCreateMemoManager } from './hook';
 import { BottomNavContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
 import { useImageList } from '../hooks';
+import { useCreateMemoManager } from '../components';
 
 const CreatePage = () => {
   const { t } = useTranslation();

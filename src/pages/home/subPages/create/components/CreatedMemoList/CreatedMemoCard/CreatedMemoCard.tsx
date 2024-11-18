@@ -6,9 +6,10 @@ import { DeleteIcon, EditIcon, NoEditIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 import {
-  useMemoManager,
   UneditableTagList,
   ImageMemoText,
+  useDeleteMemoManager,
+  useUpdateMemoManager,
 } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
@@ -34,7 +35,8 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     removeImage,
   } = useImageList();
 
-  const { handleUpdateMemoWithUploadFiles, handleDeleteMemo } = useMemoManager();
+  const { handleUpdateMemo } = useUpdateMemoManager();
+  const { handleDeleteMemo } = useDeleteMemoManager();
 
   const { openRecordingModal } = useContext(RecordingContext);
 
@@ -77,14 +79,14 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 
   const handleSubmit = () => {
     setEditable(false);
-    handleUpdateMemoWithUploadFiles({
+    handleUpdateMemo({
       memo,
       tagRebuild,
       newContent: message,
       newImages: images,
-      originImageUrls,
       newVoice: audio,
-      originalVoiceUrl: audioUrl,
+      oldImageUrls: originImageUrls,
+      oldVoiceUrls: audioUrl ? [audioUrl] : [],
     });
   };
 

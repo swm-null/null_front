@@ -1,6 +1,9 @@
 import { HTMLProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UneditableTagList, useMemoManager } from 'pages/home/subPages/components';
+import {
+  UneditableTagList,
+  useDeleteMemoManager,
+} from 'pages/home/subPages/components';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { ImageBlur } from './ImageBlur';
@@ -24,7 +27,7 @@ const SummaryMemo = ({
   ...divProps
 }: SummaryMemoProps) => {
   const { t } = useTranslation();
-  const { handleDeleteMemo } = useMemoManager();
+  const { handleDeleteMemo } = useDeleteMemoManager();
 
   const [tags] = useState(memo.tags);
 
