@@ -1,14 +1,43 @@
+import { createContext } from 'react';
 import { useState, useCallback, ReactNode, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import {
-  RecordingContext,
-  RecordingModalState,
-  RecordingModal,
-  AlertContext,
-} from 'utils';
+import { RecordingModal, AlertContext } from 'utils';
 
-const RecordingProvider = ({ children }: { children: ReactNode }) => {
+type RecordingModalState = {
+  open: boolean;
+  onClose: () => void;
+  onSend: (audio: Blob | File) => void;
+  audio: File | null;
+  setAudio: (audio: File | null) => void;
+};
+
+type RecordingContextType = {
+  recordingModal: RecordingModalState | null;
+  openRecordingModal: (
+    audio: File | null,
+    setAudio: (audio: File | null) => void
+  ) => void;
+  closeRecordingModal: () => void;
+  ALLOWED_AUDIO_FILE_TYPES: string[];
+  isValidFileType: (file: File) => boolean;
+  getRootProps: any;
+  getInputProps: any;
+  handleAddAudioButtonClick: () => void;
+};
+
+export const RecordingContext = createContext<RecordingContextType>({
+  recordingModal: null,
+  openRecordingModal: () => {},
+  closeRecordingModal: () => {},
+  ALLOWED_AUDIO_FILE_TYPES: [],
+  isValidFileType: () => false,
+  getRootProps: () => {},
+  getInputProps: () => {},
+  handleAddAudioButtonClick: () => {},
+});
+
+export const RecordingProvider = ({ children }: { children: ReactNode }) => {
   const ALLOWED_AUDIO_FILE_TYPES = [
     'audio/mpeg',
     'audio/wav',
@@ -98,5 +127,3 @@ const RecordingProvider = ({ children }: { children: ReactNode }) => {
     </RecordingContext.Provider>
   );
 };
-
-export default RecordingProvider;

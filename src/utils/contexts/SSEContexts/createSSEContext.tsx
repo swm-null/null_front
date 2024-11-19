@@ -1,13 +1,19 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState, createContext } from 'react';
 
-const createSSEContext = () => {
-  const SSEContext = React.createContext<{
-    connect: (url: string, onReset: () => void) => void;
-    disconnect: () => void;
-    isConnected: boolean;
-  } | null>(null);
+type SSEContextType = {
+  connect: (url: string, onReset: () => void) => void;
+  disconnect: () => void;
+  isConnected: boolean;
+};
 
-  const SSEProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const createSSEContext = () => {
+  const SSEContext = createContext<SSEContextType>({
+    connect: () => {},
+    disconnect: () => {},
+    isConnected: false,
+  });
+
+  const SSEProvider = ({ children }: { children: ReactNode }) => {
     const [eventSource, setEventSource] = useState<EventSource | null>(null);
     const [isConnected, setIsConnected] = useState(false);
 
@@ -57,12 +63,3 @@ const createSSEContext = () => {
 
   return { SSEContext, SSEProvider };
 };
-
-export const { SSEContext: CreateSSEContext, SSEProvider: CreateSSEProvider } =
-  createSSEContext();
-
-export const { SSEContext: SearchSSEContext, SSEProvider: SearchSSEProvider } =
-  createSSEContext();
-
-export const { SSEContext: DashboardSSEContext, SSEProvider: DashboardSSEProvider } =
-  createSSEContext();
