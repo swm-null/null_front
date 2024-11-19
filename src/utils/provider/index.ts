@@ -5,3 +5,4 @@ export { default as MemoProvider } from './MemoProvider';
 export { default as TagProvider } from './TagProvider';
 export { default as RecordingProvider } from './RecordingProvider';
 export * from './ResetProvider';
+export * from './SSEProvider';
