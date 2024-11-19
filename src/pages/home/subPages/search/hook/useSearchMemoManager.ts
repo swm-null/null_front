@@ -175,6 +175,8 @@ const useSearchMemoManager = () => {
     newAIAnswer: Interface.MemoSearchAnswerWithAI
   ) => {
     queryClient.setQueryData(SEARCH_QUERY_KEY, (oldData: SearchQueryData) => {
+      if (!oldData) return oldData;
+
       const updatedPages = oldData.pages.map((page) => {
         const updatedHistories = page.search_histories.map((history) => {
           if (history.id === conversationId) {
@@ -196,6 +198,8 @@ const useSearchMemoManager = () => {
     newDBAnswer: Interface.MemoSearchAnswerWithDB
   ) => {
     queryClient.setQueryData(SEARCH_QUERY_KEY, (oldData: SearchQueryData) => {
+      if (!oldData) return oldData;
+
       const updatedPages = oldData.pages.map((page) => {
         const updatedHistories = page.search_histories.map((history) => {
           if (history.id === conversationId) {

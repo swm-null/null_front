@@ -118,6 +118,8 @@ const useCreateMemoManager = () => {
 
   const addMemoInQueries = (memo: Interface.Memo) => {
     queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+      if (!oldData) return oldData;
+
       return {
         pages: oldData?.pages.map((page: any) => ({
           ...page,
@@ -132,6 +134,8 @@ const useCreateMemoManager = () => {
     queryClient.setQueriesData<unknown>(
       { queryKey: ['childTagMemos', tag.id] },
       (oldData: any) => {
+        if (!oldData) return oldData;
+
         return {
           pages: oldData?.pages.map((page: any) => ({
             ...page,
@@ -148,6 +152,8 @@ const useCreateMemoManager = () => {
     updateMemo: Interface.Memo
   ) => {
     queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+      if (!oldData) return oldData;
+
       return {
         pages: oldData?.pages.map((page: any) => ({
           ...page,
@@ -168,6 +174,8 @@ const useCreateMemoManager = () => {
     queryClient.setQueriesData<unknown>(
       { queryKey: ['childTagMemos', tag.id] },
       (oldData: any) => {
+        if (!oldData) return null;
+
         return {
           pages: oldData?.pages.map((page: any) => ({
             ...page,

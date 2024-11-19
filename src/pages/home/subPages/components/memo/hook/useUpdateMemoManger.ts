@@ -164,6 +164,7 @@ const useUpdateMemoManager = () => {
         ['childTagMemos', tag.id],
         (oldData: InfiniteQueryData) => {
           if (!oldData) return oldData;
+
           return {
             ...oldData,
             pages: oldData.pages.map((page) => ({
@@ -180,6 +181,7 @@ const useUpdateMemoManager = () => {
         ['childTagMemos', tag.id],
         (oldData: InfiniteQueryData) => {
           if (!oldData) return oldData;
+
           const firstPage = oldData.pages[0];
           const updatedFirstPage = {
             ...firstPage,
