@@ -27,7 +27,12 @@ const TagItem = ({
   invalidCharsPattern: RegExp;
 }) => {
   const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(
-    onChildTagClick ? () => onChildTagClick(tag) : () => {}
+    onChildTagClick
+      ? (e) => {
+          e?.stopPropagation();
+          onChildTagClick(tag);
+        }
+      : () => {}
   );
 
   return (

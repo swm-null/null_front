@@ -4,7 +4,7 @@ import {
   UneditableTagList,
   useDeleteMemoManager,
 } from 'pages/home/subPages/components';
-import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { Memo } from 'pages/home/subPages/interfaces';
 import { MemoFooter } from './MemoFooter';
 import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
@@ -87,9 +87,6 @@ const SummaryMemo = ({
           color="peach0"
           borderOpacity={0}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-          onChildTagClick={(_: Tag) => {
-            // FIXME : server에서 특정 태그의 부모 태그를 알 수 있는 api를 주면, 해당 api로 부모 태그를 알아내고, context의
-          }}
         />
         {memo.voice_urls?.length > 0 && (
           <div

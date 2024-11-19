@@ -12,7 +12,6 @@ interface DashboardHeaderProps {
   allTagText: string;
   tags: Tag[];
   handleTagOrAllTagsClick: (tag: Tag | null) => void;
-  handleChildTagClick: (tag: Tag) => void;
   sortOption: SortOption;
   setSortOption: (sortOption: SortOption) => void;
   invalidCharsPattern: RegExp;
@@ -22,7 +21,6 @@ const DashboardHeader = ({
   allTagText,
   tags,
   handleTagOrAllTagsClick,
-  handleChildTagClick,
   sortOption,
   setSortOption,
   invalidCharsPattern,
@@ -40,7 +38,7 @@ const DashboardHeader = ({
   const handleMiddleTagClick = (index: number) => {
     history.pushState(
       {
-        tagStack: tagStack,
+        tagStack: tagStack.slice(0, index + 1),
       },
       '',
       window.location.href
@@ -93,7 +91,6 @@ const DashboardHeader = ({
             color="cream0"
             borderOpacity={10}
             invalidCharsPattern={invalidCharsPattern}
-            onChildTagClick={handleChildTagClick}
           />
           <AddIcon
             className="text-brown2 bg-cream0 p-[7px] h-[27px] w-[27px] rounded-full cursor-pointer

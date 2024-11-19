@@ -86,7 +86,6 @@ const DashboardPage = () => {
             sortOption={sortOption}
             setSortOption={setSortOption}
             handleTagOrAllTagsClick={tagsManager.handleTagOrAllTagsClick}
-            handleChildTagClick={handleChildTagClick}
             invalidCharsPattern={Constants.TAG_INVALID_CHARS_PATTERN}
           />
           <Components.MemoSectionList

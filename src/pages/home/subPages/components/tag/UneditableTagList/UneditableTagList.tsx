@@ -1,7 +1,10 @@
 import { Tag } from 'pages/home/subPages/interfaces';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import TagItem from './TagItem';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
+import { useNavigate } from 'react-router-dom';
+import { TagContext } from 'utils';
+import { getAncestorTags, isGetTagsResponse } from 'api';
 
 interface UneditableTagListProps {
   tags: Tag[];
@@ -24,7 +27,7 @@ interface UneditableTagListProps {
    */
   borderOpacity?: 0 | 5 | 10;
   invalidCharsPattern: RegExp;
-  onChildTagClick?: (tag: Tag) => void;
+  beforeChildTagClick?: () => void;
 }
 
 export const UneditableTagList = ({
@@ -33,10 +36,38 @@ export const UneditableTagList = ({
   size = 'medium',
   color = 'peach2',
   borderOpacity = 10,
-  onChildTagClick,
+  beforeChildTagClick,
 }: UneditableTagListProps) => {
+  const { setSelectedTag, setTagStack } = useContext(TagContext);
+  const navigate = useNavigate();
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
+
+  const onChildTagClick = async (tag: Tag) => {
+    try {
+      const response = await getAncestorTags(tag.id);
+
+      if (isGetTagsResponse(response)) {
+        beforeChildTagClick && beforeChildTagClick();
+        setSelectedTag(response.tags[response.tags.length - 1]);
+        setTagStack(response.tags);
+
+        const splitedUrl = window.location.href.split('/');
+        if (splitedUrl[splitedUrl.length - 1] === 'dashboard') {
+          history.pushState(
+            {
+              tagStack: response.tags,
+            },
+            '',
+            window.location.href
+          );
+        } else {
+          navigate('/dashboard');
+        }
+      }
+    } catch {}
+  };
 
   return (
     <div
