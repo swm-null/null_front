@@ -29,7 +29,10 @@ const EditOptions = ({
       >
         <CameraIcon className="w-6 h-6 p-[2px] text-brown2 cursor-pointer" />
       </ImageFileInput>
-      <MicIcon className="w-6 h-6 text-brown2 " onClick={handleMicButtonClick} />
+      <MicIcon
+        className="w-6 h-6 text-brown2 cursor-pointer"
+        onClick={handleMicButtonClick}
+      />
       <div className="flex ml-auto w-fit gap-6 items-center">
         {tagRebuildable && (
           <TagRebuildCheckbox checked={tagRebuild} setChecked={setTagRebuild} />
