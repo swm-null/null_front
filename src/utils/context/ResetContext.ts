@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
 type ResetContextType = {
-  subscribeToReset: (key: string, listener: () => void) => void;
-  unsubscribeFromReset: (key: string, listener: () => void) => void;
-  onReset: (key: string) => void;
+  subscribeToReset: (listener: () => void) => void;
+  unsubscribeFromReset: (listener: () => void) => void;
+  onReset: () => void;
 };
 
 const ResetContext = createContext<ResetContextType>({

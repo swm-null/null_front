@@ -1,40 +1,43 @@
 import { ReactNode, useCallback, useState } from 'react';
-import { ResetContext } from 'utils';
+import { ResetContext } from 'utils/context';
 
-const ResetProvider = ({ children }: { children: ReactNode }) => {
-  const [eventListeners] = useState<Map<string, Set<() => void>>>(new Map());
+const createResetContext = () => {
+  const Context = ResetContext;
 
-  const subscribeToReset = useCallback(
-    (key: string, listener: () => void) => {
-      if (!eventListeners.has(key)) {
-        eventListeners.set(key, new Set());
-      }
-      eventListeners.get(key)?.add(listener);
-    },
-    [eventListeners]
-  );
+  const Provider = ({ children }: { children: ReactNode }) => {
+    const [eventListeners] = useState(new Set<() => void>());
 
-  const unsubscribeFromReset = useCallback(
-    (key: string, listener: () => void) => {
-      eventListeners.get(key)?.delete(listener);
-    },
-    [eventListeners]
-  );
+    const subscribeToReset = useCallback(
+      (listener: () => void) => {
+        eventListeners.add(listener);
+      },
+      [eventListeners]
+    );
 
-  const onReset = useCallback(
-    (key: string) => {
-      eventListeners.get(key)?.forEach((listener) => listener());
-    },
-    [eventListeners]
-  );
+    const unsubscribeFromReset = useCallback(
+      (listener: () => void) => {
+        eventListeners.delete(listener);
+      },
+      [eventListeners]
+    );
 
-  return (
-    <ResetContext.Provider
-      value={{ subscribeToReset, unsubscribeFromReset, onReset }}
-    >
-      {children}
-    </ResetContext.Provider>
-  );
+    const onReset = useCallback(() => {
+      eventListeners.forEach((listener) => listener());
+    }, [eventListeners]);
+
+    return (
+      <Context.Provider value={{ onReset, subscribeToReset, unsubscribeFromReset }}>
+        {children}
+      </Context.Provider>
+    );
+  };
+
+  return { Context, Provider };
 };
 
-export default ResetProvider;
+export const { Context: CreateResetContext, Provider: CreateResetProvider } =
+  createResetContext();
+export const { Context: SearchResetContext, Provider: SearchResetProvider } =
+  createResetContext();
+export const { Context: DashboardResetContext, Provider: DashboardResetProvider } =
+  createResetContext();

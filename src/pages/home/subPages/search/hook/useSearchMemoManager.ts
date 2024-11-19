@@ -3,7 +3,7 @@ import * as Api from 'api';
 import * as Interface from 'pages/home/subPages/interfaces';
 import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertContext, ResetContext } from 'utils';
+import { AlertContext, SearchResetContext } from 'utils';
 
 const SEARCH_HISTORY_LIMIT = 10;
 const SEARCH_QUERY_KEY = ['search'] as const;
@@ -18,7 +18,7 @@ const useSearchMemoManager = () => {
   const { t } = useTranslation();
 
   const { alert } = useContext(AlertContext);
-  const { subscribeToReset, unsubscribeFromReset } = useContext(ResetContext);
+  const { subscribeToReset, unsubscribeFromReset } = useContext(SearchResetContext);
 
   const { data, fetchNextPage, isLoading } = useInfiniteQuery<
     Api.paginationSearchHistories,
@@ -220,10 +220,10 @@ const useSearchMemoManager = () => {
       });
     };
 
-    subscribeToReset('search', invalidateCurrentQuery);
+    subscribeToReset(invalidateCurrentQuery);
 
     return () => {
-      unsubscribeFromReset('search', invalidateCurrentQuery);
+      unsubscribeFromReset(invalidateCurrentQuery);
     };
   }, []);
 

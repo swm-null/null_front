@@ -5,13 +5,14 @@ import * as Components from './components';
 import * as Constants from 'pages/home/constants';
 import * as Hooks from './hooks';
 import { SortOption } from 'pages/home/subPages/types';
-import { BottomNavContext, ResetContext, TagContext } from 'utils';
+import { BottomNavContext, DashboardResetContext, TagContext } from 'utils';
 
 const DashboardPage = () => {
   const { t } = useTranslation();
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
   const { selectedTag, tagStack, setTagStack } = useContext(TagContext);
-  const { subscribeToReset, unsubscribeFromReset } = useContext(ResetContext);
+  const { subscribeToReset, unsubscribeFromReset } =
+    useContext(DashboardResetContext);
 
   const [sortOption, setSortOption] = useState<SortOption>('LATEST');
 
@@ -65,10 +66,10 @@ const DashboardPage = () => {
       handleChildTagClick(null);
     };
 
-    subscribeToReset('dashboard', resetTagStack);
+    subscribeToReset(resetTagStack);
 
     return () => {
-      unsubscribeFromReset('dashboard', resetTagStack);
+      unsubscribeFromReset(resetTagStack);
     };
   }, []);
 

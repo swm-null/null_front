@@ -3,7 +3,7 @@ import * as Api from 'api';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/types';
 import { useContext, useEffect, useMemo } from 'react';
-import { ResetContext } from 'utils';
+import { DashboardResetContext } from 'utils';
 
 const MEMO_LIMIT = 10;
 
@@ -13,7 +13,8 @@ const useChildTagMemosManager = (
   sortOption: SortOption,
   memoLimit?: number
 ) => {
-  const { subscribeToReset, unsubscribeFromReset } = useContext(ResetContext);
+  const { subscribeToReset, unsubscribeFromReset } =
+    useContext(DashboardResetContext);
   const queryClient = useQueryClient();
 
   const { data, fetchNextPage } = useInfiniteQuery({
@@ -75,10 +76,10 @@ const useChildTagMemosManager = (
       });
     };
 
-    subscribeToReset('dashboard', invalidateCurrentQuery);
+    subscribeToReset(invalidateCurrentQuery);
 
     return () => {
-      unsubscribeFromReset('dashboard', invalidateCurrentQuery);
+      unsubscribeFromReset(invalidateCurrentQuery);
     };
   }, [tagId]);
 
