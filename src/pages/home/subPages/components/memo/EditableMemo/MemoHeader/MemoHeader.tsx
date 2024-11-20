@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import { UneditableTagList } from 'pages/home/subPages/components';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Tag } from 'pages/home/subPages/interfaces';
+import { useContext } from 'react';
+import { MemoContext } from 'utils';
 
 const MemoHeader = ({
   tags,
@@ -15,6 +17,8 @@ const MemoHeader = ({
   dateFormat: string;
   handleDeleteMemo: () => void;
 }) => {
+  const { closeMemoModal } = useContext(MemoContext);
+
   const formatDate = (date: string): string => {
     if (date.endsWith('Z')) {
       return format(new Date(date), dateFormat);
@@ -31,6 +35,7 @@ const MemoHeader = ({
           color="peach2"
           borderOpacity={0}
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
+          beforeChildTagClick={closeMemoModal}
         />
       </div>
       <div className="ml-auto flex gap-4">

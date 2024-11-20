@@ -5,13 +5,13 @@ import { useSearchMemoManager } from './hook';
 import { SearchConversationList } from './components/SearchConversationList';
 import { SearchConversation } from './components';
 import { MemoEditModal } from '../dashboard/components';
-import { BottomNavContext, ResetContext } from 'utils';
+import { BottomNavContext, SearchResetContext } from 'utils';
 
 const SearchPage = () => {
   const { t } = useTranslation();
 
   const { isSmallScreen } = useContext(BottomNavContext);
-  const { subscribeToReset, unsubscribeFromReset } = useContext(ResetContext);
+  const { subscribeToReset, unsubscribeFromReset } = useContext(SearchResetContext);
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
@@ -38,10 +38,10 @@ const SearchPage = () => {
       }
     };
 
-    subscribeToReset('search', scrollToTop);
+    subscribeToReset(scrollToTop);
 
     return () => {
-      unsubscribeFromReset('search', scrollToTop);
+      unsubscribeFromReset(scrollToTop);
     };
   }, []);
 

@@ -47,7 +47,7 @@ const MemoSectionList = ({
 
   if (hasNoSection() && selectedTag) {
     return (
-      <div className="flex flex-1 mx-4 pb-2 pt-2">
+      <div className="flex flex-1 overflow-x-scroll mx-4 pb-2 pt-2">
         <MemoSection
           key={`section-${selectedTag?.id}`}
           tag={selectedTag}
@@ -56,7 +56,6 @@ const MemoSectionList = ({
           isLeaf
           isLinked
           handleTagClick={() => {}}
-          handleChildTagClick={() => {}}
         />
       </div>
     );
@@ -81,9 +80,6 @@ const MemoSectionList = ({
             isLinked
             sortOption={sortOption}
             handleTagClick={() => addTagToStack(selectedTag)}
-            handleChildTagClick={(childTag: Tag) =>
-              addTagToStack([selectedTag, childTag])
-            }
           />
         )}
         {tagRelations.map((tagRelation) => {
@@ -97,7 +93,6 @@ const MemoSectionList = ({
               childTags={childTags}
               sortOption={sortOption}
               handleTagClick={() => addTagToStack(tag)}
-              handleChildTagClick={(childTag: Tag) => addTagToStack([tag, childTag])}
             />
           );
         })}

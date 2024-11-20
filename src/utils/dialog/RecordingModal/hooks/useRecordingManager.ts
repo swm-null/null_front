@@ -6,7 +6,7 @@ import {
   useCallback,
   ChangeEvent,
 } from 'react';
-import { RecordingContext } from 'utils/context';
+import { RecordingContext } from 'utils/contexts';
 
 export const useRecordingManager = () => {
   const [isRecording, setIsRecording] = useState(false);

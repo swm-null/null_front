@@ -5,7 +5,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 const baseButtonStyles =
-  'bg-[#e8e1d9] hover:bg-[#d8d1c9] rounded-full p-3 transition-colors w-12 h-12 self-center';
+  'bg-[#e8e1d9] hover:bg-[#d8d1c9] rounded-full p-3 transition-colors w-12 h-12 self-center cursor-pointer';
 const baseIconStyles = 'text-[#8b7e74]';
 
 interface RecordButtonProps {

@@ -12,7 +12,6 @@ interface MemoSectionHeaderProps {
   isLinked: boolean;
   isLeaf: boolean;
   handleTagClick?: () => void;
-  handleChildTagClick: (tag: Tag) => void;
 }
 
 const MemoSectionHeader = ({
@@ -21,7 +20,6 @@ const MemoSectionHeader = ({
   isLinked,
   isLeaf,
   handleTagClick,
-  handleChildTagClick,
 }: MemoSectionHeaderProps) => {
   const { t } = useTranslation();
   const { handleMouseDown, handleMouseMove, handleClick } = useClickWithoutDrag(
@@ -53,7 +51,6 @@ const MemoSectionHeader = ({
             color="white"
             borderOpacity={5}
             invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
-            onChildTagClick={handleChildTagClick}
           />
         ) : (
           <div className="h-6">

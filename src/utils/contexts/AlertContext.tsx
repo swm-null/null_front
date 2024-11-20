@@ -1,5 +1,5 @@
+import { createContext } from 'react';
 import { useState, useEffect, useCallback, ReactNode } from 'react';
-import { AlertContext } from 'utils/context';
 
 type AlertState = {
   message: string;
@@ -7,7 +7,19 @@ type AlertState = {
   onClose?: () => void;
 };
 
-const AlertProvider = ({ children }: { children: ReactNode }) => {
+type Type = {
+  alert: (message?: string) => Promise<undefined>;
+  confirmAlert: (message?: string) => Promise<boolean>;
+  alertState: AlertState | null;
+};
+
+export const AlertContext = createContext<Type>({
+  alert: () => new Promise((_, reject) => reject()),
+  confirmAlert: () => new Promise((_, reject) => reject()),
+  alertState: null,
+});
+
+export const AlertProvider = ({ children }: { children: ReactNode }) => {
   const [alertState, setAlertState] = useState<AlertState | null>(null);
 
   const alert = (message?: string): Promise<undefined> =>
@@ -59,5 +71,3 @@ const AlertProvider = ({ children }: { children: ReactNode }) => {
     </AlertContext.Provider>
   );
 };
-
-export default AlertProvider;

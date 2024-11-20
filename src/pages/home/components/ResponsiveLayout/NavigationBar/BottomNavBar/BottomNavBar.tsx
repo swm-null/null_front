@@ -1,7 +1,12 @@
 import * as Icon from 'assets/icons';
 import { useContext, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BottomNavContext, ResetContext } from 'utils';
+import {
+  BottomNavContext,
+  CreateResetContext,
+  DashboardResetContext,
+  SearchResetContext,
+} from 'utils';
 
 interface BottomNavBarProps {
   currentPage: string;
@@ -11,7 +16,9 @@ interface BottomNavBarProps {
 const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
   const { t } = useTranslation();
   const { setBottomNavHeight } = useContext(BottomNavContext);
-  const { onReset } = useContext(ResetContext);
+  const { onReset: onCreateReset } = useContext(CreateResetContext);
+  const { onReset: onSearchReset } = useContext(SearchResetContext);
+  const { onReset: onDashboardReset } = useContext(DashboardResetContext);
 
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
 
@@ -21,9 +28,19 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
     }
   }, [bottomNavRef]);
 
-  const handleClickPage = (page: string) => {
-    onReset(page);
-    setCurrentPage(page);
+  const handleClickCreate = () => {
+    onCreateReset();
+    setCurrentPage('');
+  };
+
+  const handleClickSearch = () => {
+    onSearchReset();
+    setCurrentPage('search');
+  };
+
+  const handleClickDashboard = () => {
+    onDashboardReset();
+    setCurrentPage('dashboard');
   };
 
   return (
@@ -36,19 +53,19 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
           selected={currentPage === ''}
           icon={<Icon.AddIcon />}
           label={t('pages.sidebar.create')}
-          onClick={() => handleClickPage('')}
+          onClick={handleClickCreate}
         />
         <BottomNavButton
           selected={currentPage === 'search'}
           icon={<Icon.SearchIcon />}
           label={t('pages.sidebar.search')}
-          onClick={() => handleClickPage('search')}
+          onClick={handleClickSearch}
         />
         <BottomNavButton
           selected={currentPage === 'dashboard'}
           icon={<Icon.DashboardIcon />}
           label={t('pages.sidebar.dashboard')}
-          onClick={() => handleClickPage('dashboard')}
+          onClick={handleClickDashboard}
         />
       </div>
     </div>

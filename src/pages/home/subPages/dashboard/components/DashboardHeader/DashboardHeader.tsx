@@ -6,13 +6,12 @@ import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
 import { UneditableTagList } from 'pages/home/subPages/components';
-import { ResetContext, TagContext } from 'utils';
+import { DashboardResetContext, SSEContext, TagContext } from 'utils';
 
 interface DashboardHeaderProps {
   allTagText: string;
   tags: Tag[];
   handleTagOrAllTagsClick: (tag: Tag | null) => void;
-  handleChildTagClick: (tag: Tag) => void;
   sortOption: SortOption;
   setSortOption: (sortOption: SortOption) => void;
   invalidCharsPattern: RegExp;
@@ -22,25 +21,25 @@ const DashboardHeader = ({
   allTagText,
   tags,
   handleTagOrAllTagsClick,
-  handleChildTagClick,
   sortOption,
   setSortOption,
   invalidCharsPattern,
 }: DashboardHeaderProps) => {
   const { selectedTag, onTagReset, tagStack, setTagStack, openTagCreateModal } =
     useContext(TagContext);
-  const { onReset } = useContext(ResetContext);
+  const { onReset } = useContext(DashboardResetContext);
+  const { batchingMemoCount } = useContext(SSEContext);
 
   const handleAllTagsClick = () => {
     onTagReset();
-    onReset('dashboard');
+    onReset();
     handleTagOrAllTagsClick(null);
   };
 
   const handleMiddleTagClick = (index: number) => {
     history.pushState(
       {
-        tagStack: tagStack,
+        tagStack: tagStack.slice(0, index + 1),
       },
       '',
       window.location.href
@@ -79,10 +78,12 @@ const DashboardHeader = ({
             />
           ))}
         </Breadcrumbs>
-        <p className="flex ml-auto pr-4 text-sm self-center gap-2 text-[#6A5344E6]">
-          배치 중입니다
-          <CircularProgress className="self-center" size={14} />
-        </p>
+        {batchingMemoCount !== 0 && (
+          <p className="flex ml-auto pr-4 text-sm self-center gap-2 text-[#6A5344E6]">
+            배치 중입니다
+            <CircularProgress className="self-center" size={14} />
+          </p>
+        )}
       </div>
 
       <div className="flex w-full flex-wrap p-4 pb-2 gap-2">
@@ -93,7 +94,6 @@ const DashboardHeader = ({
             color="cream0"
             borderOpacity={10}
             invalidCharsPattern={invalidCharsPattern}
-            onChildTagClick={handleChildTagClick}
           />
           <AddIcon
             className="text-brown2 bg-cream0 p-[7px] h-[27px] w-[27px] rounded-full cursor-pointer

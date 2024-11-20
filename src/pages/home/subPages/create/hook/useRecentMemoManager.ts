@@ -1,10 +1,10 @@
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
-import { useContext, useEffect } from 'react';
-import { ResetContext } from 'utils';
+import { useContext, useEffect, useMemo } from 'react';
+import { CreateResetContext } from 'utils';
 
 const useRecentMemoManager = () => {
-  const { subscribeToReset, unsubscribeFromReset } = useContext(ResetContext);
+  const { subscribeToReset, unsubscribeFromReset } = useContext(CreateResetContext);
   const queryClient = useQueryClient();
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
@@ -26,8 +26,10 @@ const useRecentMemoManager = () => {
       staleTime: 600000,
     });
 
-  const allMemos =
-    !isLoading && data ? data.pages.flatMap((page) => page.memos ?? []) : [];
+  const allMemos = useMemo(() => {
+    if (isLoading || !data) return [];
+    return data.pages.flatMap((page) => page.memos ?? []);
+  }, [data, isLoading]);
 
   useEffect(() => {
     const invalidateCurrentQuery = () => {
@@ -37,10 +39,10 @@ const useRecentMemoManager = () => {
       });
     };
 
-    subscribeToReset('', invalidateCurrentQuery);
+    subscribeToReset(invalidateCurrentQuery);
 
     return () => {
-      unsubscribeFromReset('', invalidateCurrentQuery);
+      unsubscribeFromReset(invalidateCurrentQuery);
     };
   }, []);
 

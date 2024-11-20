@@ -95,6 +95,25 @@ export const deleteTag = async (
   }
 };
 
+export const getAncestorTags = async (
+  tagId: string
+): Promise<getTagsResponse | errorResponse> => {
+  const method = getMethodName();
+  const endpoint = `/ancestorTags?tagId=${tagId}`;
+
+  try {
+    const response = await refreshableApi.get(endpoint);
+    const responseInfo = {
+      method,
+      status: response.status,
+      tags: response.data,
+    };
+    return responseInfo;
+  } catch (error) {
+    return errorHandler(error, method);
+  }
+};
+
 export const isGetTagsResponse = (
   response: getTagsResponse | errorResponse
 ): response is getTagsResponse => {

@@ -3,15 +3,17 @@ import { Home } from './home';
 import { Login } from './login';
 import { Signup } from './signup';
 import { FindPw } from './findPw';
-import { ResetProvider } from 'utils';
+import { SSEProviders, ResetProviders } from 'utils';
 
 const pagesData: routerType[] = [
   {
     path: '*',
     element: (
-      <ResetProvider>
-        <Home />
-      </ResetProvider>
+      <SSEProviders>
+        <ResetProviders>
+          <Home />
+        </ResetProviders>
+      </SSEProviders>
     ),
     title: 'home',
   },

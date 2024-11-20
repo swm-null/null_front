@@ -41,13 +41,8 @@ const useCreateMemoManager = () => {
 
       if (Api.isCreateMemoResponse(response)) {
         queryClient.invalidateQueries({ queryKey: ['recentMemo'] });
-        console.log(
-          queryClient.getQueriesData({ queryKey: ['childTagMemos', tag.id] })
-        );
         queryClient.invalidateQueries({ queryKey: ['childTagMemos', tag.id] });
-        console.log(68);
       } else {
-        console.log(70);
         deleteMemoInQueries(temporaryMemo.id);
       }
     } catch (error) {}
@@ -123,6 +118,8 @@ const useCreateMemoManager = () => {
 
   const addMemoInQueries = (memo: Interface.Memo) => {
     queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+      if (!oldData) return oldData;
+
       return {
         pages: oldData?.pages.map((page: any) => ({
           ...page,
@@ -137,6 +134,8 @@ const useCreateMemoManager = () => {
     queryClient.setQueriesData<unknown>(
       { queryKey: ['childTagMemos', tag.id] },
       (oldData: any) => {
+        if (!oldData) return oldData;
+
         return {
           pages: oldData?.pages.map((page: any) => ({
             ...page,
@@ -153,6 +152,8 @@ const useCreateMemoManager = () => {
     updateMemo: Interface.Memo
   ) => {
     queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+      if (!oldData) return oldData;
+
       return {
         pages: oldData?.pages.map((page: any) => ({
           ...page,
@@ -173,6 +174,8 @@ const useCreateMemoManager = () => {
     queryClient.setQueriesData<unknown>(
       { queryKey: ['childTagMemos', tag.id] },
       (oldData: any) => {
+        if (!oldData) return null;
+
         return {
           pages: oldData?.pages.map((page: any) => ({
             ...page,

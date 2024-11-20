@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { AlertContext } from 'utils/context';
+import { AlertContext } from 'utils/contexts';
 import Cookies from 'js-cookie';
 import * as Api from 'api';
 import { useTranslation } from 'react-i18next';

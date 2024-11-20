@@ -1,6 +1,6 @@
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BottomNavContext, ResetContext } from 'utils';
+import { BottomNavContext, CreateResetContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
 import { useImageList } from '../hooks';
@@ -20,7 +20,7 @@ const CreatePage = () => {
     handlePaste,
   } = useImageList();
   const { isSmallScreen } = useContext(BottomNavContext);
-  const { subscribeToReset, unsubscribeFromReset } = useContext(ResetContext);
+  const { subscribeToReset, unsubscribeFromReset } = useContext(CreateResetContext);
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
@@ -50,10 +50,10 @@ const CreatePage = () => {
       }
     };
 
-    subscribeToReset('', scrollToTop);
+    subscribeToReset(scrollToTop);
 
     return () => {
-      unsubscribeFromReset('', scrollToTop);
+      unsubscribeFromReset(scrollToTop);
     };
   }, []);
 

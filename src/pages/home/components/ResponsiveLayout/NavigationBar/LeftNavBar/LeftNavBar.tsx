@@ -1,7 +1,11 @@
 import { useContext, useState } from 'react';
 import * as Icon from 'assets/icons';
 import { useTranslation } from 'react-i18next';
-import { ResetContext } from 'utils';
+import {
+  CreateResetContext,
+  DashboardResetContext,
+  SearchResetContext,
+} from 'utils';
 
 interface LeftNavBarProps {
   currentPage: string;
@@ -10,11 +14,23 @@ interface LeftNavBarProps {
 
 const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
   const { t } = useTranslation();
-  const { onReset } = useContext(ResetContext);
+  const { onReset: onCreateReset } = useContext(CreateResetContext);
+  const { onReset: onSearchReset } = useContext(SearchResetContext);
+  const { onReset: onDashboardReset } = useContext(DashboardResetContext);
 
-  const handleClickPage = (page: string) => {
-    onReset(page);
-    setCurrentPage(page);
+  const handleClickCreate = () => {
+    onCreateReset();
+    setCurrentPage('');
+  };
+
+  const handleClickSearch = () => {
+    onSearchReset();
+    setCurrentPage('search');
+  };
+
+  const handleClickDashboard = () => {
+    onDashboardReset();
+    setCurrentPage('dashboard');
   };
 
   return (
@@ -25,19 +41,19 @@ const LeftNavBar = ({ currentPage, setCurrentPage }: LeftNavBarProps) => {
             selected={currentPage === ''}
             icon={<Icon.AddIcon />}
             label={t('pages.sidebar.create')}
-            onClick={() => handleClickPage('')}
+            onClick={handleClickCreate}
           />
           <SidebarTooltipButton
             selected={currentPage === 'search'}
             icon={<Icon.SearchIcon />}
             label={t('pages.sidebar.search')}
-            onClick={() => handleClickPage('search')}
+            onClick={handleClickSearch}
           />
           <SidebarTooltipButton
             selected={currentPage === 'dashboard'}
             icon={<Icon.DashboardIcon />}
             label={t('pages.sidebar.dashboard')}
-            onClick={() => handleClickPage('dashboard')}
+            onClick={handleClickDashboard}
           />
         </div>
       </div>
