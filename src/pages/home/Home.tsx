@@ -30,10 +30,7 @@ const Home = () => {
 
   useEffect(() => {
     checkTokenFromCookie();
-    connect(`${API_BASE_URL}/sse/subscribe`, () => {
-      onCreateReset();
-      onDashboardReset();
-    });
+    connect(`${API_BASE_URL}/sse/subscribe`, onCreateReset, onDashboardReset);
 
     return () => {
       disconnect();

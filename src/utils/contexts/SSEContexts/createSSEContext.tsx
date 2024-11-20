@@ -4,7 +4,11 @@ import Cookies from 'js-cookie';
 
 type SSEContextType = {
   batchingMemoCount: number;
-  connect: (url: string, onReset: () => void) => void;
+  connect: (
+    url: string,
+    onResetWhenNoBatchingMemo: () => void,
+    onReset: () => void
+  ) => void;
   disconnect: () => void;
   isConnected: boolean;
 };
@@ -22,7 +26,11 @@ export const createSSEContext = () => {
     const [isConnected, setIsConnected] = useState(false);
     const [batchingMemoCount, setBatchingMemoCount] = useState(0);
 
-    const connect = (url: string, onReset: () => void) => {
+    const connect = (
+      url: string,
+      onResetWhenNoBatchingMemo: () => void,
+      onReset: () => void
+    ) => {
       if (eventSource) {
         eventSource.close();
       }
@@ -38,7 +46,12 @@ export const createSSEContext = () => {
       };
 
       newEventSource.onmessage = (event) => {
-        setBatchingMemoCount(Number(event.data));
+        const newBatchingMemoCount = Number(event.data);
+
+        if (newBatchingMemoCount === 0) {
+          onResetWhenNoBatchingMemo();
+        }
+        setBatchingMemoCount(newBatchingMemoCount);
         onReset();
       };
 
