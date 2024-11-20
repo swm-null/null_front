@@ -10,14 +10,24 @@ const { SSEContext: SearchSSEContext, SSEProvider: SearchSSEProvider } =
 const { SSEContext: DashboardSSEContext, SSEProvider: DashboardSSEProvider } =
   createSSEContext();
 
+const { SSEContext, SSEProvider } = createSSEContext();
+
 const SSEProviders = ({ children }: { children: ReactNode }) => {
   return (
-    <CreateSSEProvider>
-      <SearchSSEProvider>
-        <DashboardSSEProvider>{children}</DashboardSSEProvider>
-      </SearchSSEProvider>
-    </CreateSSEProvider>
+    <SSEProvider>
+      <CreateSSEProvider>
+        <SearchSSEProvider>
+          <DashboardSSEProvider>{children}</DashboardSSEProvider>
+        </SearchSSEProvider>
+      </CreateSSEProvider>
+    </SSEProvider>
   );
 };
 
-export { CreateSSEContext, SearchSSEContext, DashboardSSEContext, SSEProviders };
+export {
+  SSEContext,
+  CreateSSEContext,
+  SearchSSEContext,
+  DashboardSSEContext,
+  SSEProviders,
+};

@@ -1,6 +1,9 @@
 import { ReactNode, useEffect, useState, createContext } from 'react';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import Cookies from 'js-cookie';
 
 type SSEContextType = {
+  batchingMemoCount: number;
   connect: (url: string, onReset: () => void) => void;
   disconnect: () => void;
   isConnected: boolean;
@@ -8,6 +11,7 @@ type SSEContextType = {
 
 export const createSSEContext = () => {
   const SSEContext = createContext<SSEContextType>({
+    batchingMemoCount: 0,
     connect: () => {},
     disconnect: () => {},
     isConnected: false,
@@ -16,19 +20,25 @@ export const createSSEContext = () => {
   const SSEProvider = ({ children }: { children: ReactNode }) => {
     const [eventSource, setEventSource] = useState<EventSource | null>(null);
     const [isConnected, setIsConnected] = useState(false);
+    const [batchingMemoCount, setBatchingMemoCount] = useState(0);
 
     const connect = (url: string, onReset: () => void) => {
       if (eventSource) {
         eventSource.close();
       }
 
-      const newEventSource = new EventSource(url);
+      const newEventSource = new EventSourcePolyfill(url, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('access_token')}`,
+        },
+      });
 
       newEventSource.onopen = () => {
         setIsConnected(true);
       };
 
-      newEventSource.onmessage = () => {
+      newEventSource.onmessage = (event) => {
+        setBatchingMemoCount(Number(event.data));
         onReset();
       };
 
@@ -55,7 +65,9 @@ export const createSSEContext = () => {
     }, []);
 
     return (
-      <SSEContext.Provider value={{ connect, disconnect, isConnected }}>
+      <SSEContext.Provider
+        value={{ batchingMemoCount, connect, disconnect, isConnected }}
+      >
         {children}
       </SSEContext.Provider>
     );

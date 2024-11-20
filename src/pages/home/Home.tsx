@@ -4,13 +4,24 @@ import { ResponsiveLayout } from './components';
 import { useNavigate } from 'react-router-dom';
 import { HomeRouter } from './router';
 import { useContext, useEffect } from 'react';
-import { ApiContext, BottomNavProvider, TagProvider } from 'utils';
+import {
+  ApiContext,
+  BottomNavProvider,
+  CreateResetContext,
+  DashboardResetContext,
+  SSEContext,
+  TagProvider,
+} from 'utils';
 import 'flickity/css/flickity.css';
+import { API_BASE_URL } from 'api/utils';
 
 const queryClient = new QueryClient();
 
 const Home = () => {
+  const { connect, disconnect } = useContext(SSEContext);
   const { checkTokenFromCookie } = useContext(ApiContext);
+  const { onReset: onCreateReset } = useContext(CreateResetContext);
+  const { onReset: onDashboardReset } = useContext(DashboardResetContext);
   const navigate = useNavigate();
 
   const handleNavigation = (page: string) => {
@@ -19,6 +30,14 @@ const Home = () => {
 
   useEffect(() => {
     checkTokenFromCookie();
+    connect(`${API_BASE_URL}/sse/subscribe`, () => {
+      onCreateReset();
+      onDashboardReset();
+    });
+
+    return () => {
+      disconnect();
+    };
   }, []);
 
   return (

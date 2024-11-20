@@ -6,7 +6,7 @@ import { TagPathButton } from './TagPathButton';
 import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
 import { UneditableTagList } from 'pages/home/subPages/components';
-import { DashboardResetContext, TagContext } from 'utils';
+import { DashboardResetContext, SSEContext, TagContext } from 'utils';
 
 interface DashboardHeaderProps {
   allTagText: string;
@@ -30,6 +30,7 @@ const DashboardHeader = ({
   const { selectedTag, onTagReset, tagStack, setTagStack, openTagCreateModal } =
     useContext(TagContext);
   const { onReset } = useContext(DashboardResetContext);
+  const { batchingMemoCount } = useContext(SSEContext);
 
   const handleAllTagsClick = () => {
     onTagReset();
@@ -79,10 +80,12 @@ const DashboardHeader = ({
             />
           ))}
         </Breadcrumbs>
-        <p className="flex ml-auto pr-4 text-sm self-center gap-2 text-[#6A5344E6]">
-          배치 중입니다
-          <CircularProgress className="self-center" size={14} />
-        </p>
+        {batchingMemoCount !== 0 && (
+          <p className="flex ml-auto pr-4 text-sm self-center gap-2 text-[#6A5344E6]">
+            배치 중입니다
+            <CircularProgress className="self-center" size={14} />
+          </p>
+        )}
       </div>
 
       <div className="flex w-full flex-wrap p-4 pb-2 gap-2">
