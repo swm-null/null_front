@@ -64,6 +64,18 @@ export const createSSEContext = () => {
         setIsConnected(false);
         newEventSource.close();
         setEventSource(null);
+
+        setEventSource(
+          new EventSourcePolyfill(url, {
+            headers: {
+              'Content-Type': 'text/event-stream',
+              'Cache-Control': 'no-cache',
+              Connection: 'keep-alive',
+              Authorization: `Bearer ${Cookies.get('access_token')}`,
+              withCredentials: 'true',
+            },
+          })
+        );
       };
 
       setEventSource(newEventSource);
