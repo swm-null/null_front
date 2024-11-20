@@ -25,6 +25,7 @@ export const createSSEContext = () => {
     const [eventSource, setEventSource] = useState<EventSource | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [batchingMemoCount, setBatchingMemoCount] = useState(0);
+    const [reconnectInterval, setReconnectInterval] = useState<number | null>(null);
 
     const connect = (
       url: string,
@@ -40,10 +41,9 @@ export const createSSEContext = () => {
           'Content-Type': 'text/event-stream',
           'Cache-Control': 'no-cache',
           Connection: 'keep-alive',
-          'X-Accel-Buffering': 'no',
           Authorization: `Bearer ${Cookies.get('access_token')}`,
+          withCredentials: 'true',
         },
-        heartbeatTimeout: 3600000,
       });
 
       newEventSource.onopen = () => {
@@ -63,8 +63,7 @@ export const createSSEContext = () => {
       newEventSource.onerror = () => {
         setIsConnected(false);
         newEventSource.close();
-
-        connect(url, onResetWhenNoBatchingMemo, onReset);
+        setEventSource(null);
       };
 
       setEventSource(newEventSource);
@@ -78,15 +77,45 @@ export const createSSEContext = () => {
       }
     };
 
+    const setupReconnection = (
+      url: string,
+      onResetWhenNoBatchingMemo: () => void,
+      onReset: () => void
+    ) => {
+      disconnect();
+      connect(url, onResetWhenNoBatchingMemo, onReset);
+      const intervalId = setInterval(() => {
+        disconnect();
+        connect(url, onResetWhenNoBatchingMemo, onReset);
+      }, 3300000);
+      setReconnectInterval(intervalId);
+    };
+
+    const stopReconnection = () => {
+      if (reconnectInterval) {
+        clearInterval(reconnectInterval);
+        setReconnectInterval(null);
+      }
+    };
+
     useEffect(() => {
       return () => {
         disconnect();
+        stopReconnection();
       };
     }, []);
 
     return (
       <SSEContext.Provider
-        value={{ batchingMemoCount, connect, disconnect, isConnected }}
+        value={{
+          batchingMemoCount,
+          connect: setupReconnection,
+          disconnect: () => {
+            stopReconnection();
+            disconnect();
+          },
+          isConnected,
+        }}
       >
         {children}
       </SSEContext.Provider>
