@@ -47,7 +47,7 @@ const MemoSectionList = ({
 
   if (hasNoSection() && selectedTag) {
     return (
-      <div className="flex flex-1 mx-4 pb-2 pt-2">
+      <div className="flex flex-1 overflow-x-scroll mx-4 pb-2 pt-2">
         <MemoSection
           key={`section-${selectedTag?.id}`}
           tag={selectedTag}
