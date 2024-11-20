@@ -37,8 +37,13 @@ export const createSSEContext = () => {
 
       const newEventSource = new EventSourcePolyfill(url, {
         headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          Connection: 'keep-alive',
+          'X-Accel-Buffering': 'no',
           Authorization: `Bearer ${Cookies.get('access_token')}`,
         },
+        heartbeatTimeout: 3600000,
       });
 
       newEventSource.onopen = () => {
@@ -58,6 +63,8 @@ export const createSSEContext = () => {
       newEventSource.onerror = () => {
         setIsConnected(false);
         newEventSource.close();
+
+        connect(url, onResetWhenNoBatchingMemo, onReset);
       };
 
       setEventSource(newEventSource);
