@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { Dialog } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { AlertContext } from 'utils/context';
+import { AlertContext } from 'utils/contexts';
 
 const AlertDialog = () => {
   const { alertState } = useContext(AlertContext);

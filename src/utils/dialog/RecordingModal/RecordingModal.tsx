@@ -3,7 +3,7 @@ import { useRecordingManager, useVisualizerManager } from './hooks';
 import { ModalActionButtons } from './ModalActionButtons';
 import { AudioFileInput, RecordingControls } from 'pages/home/subPages/components';
 import { useContext } from 'react';
-import { RecordingContext } from 'utils/context';
+import { RecordingContext } from 'utils/contexts';
 
 interface RecordingModalProps {
   open: boolean;

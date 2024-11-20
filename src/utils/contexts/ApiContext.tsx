@@ -1,11 +1,24 @@
+import { createContext } from 'react';
 import { useContext, ReactNode, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { AlertDialog, AlertContext, ApiContext } from 'utils';
+import { AlertDialog, AlertContext } from 'utils';
 import { authApi, getNewAccessToken, isTokenValid, refreshableApi } from 'api';
 
-const ApiProvider = ({ children }: { children: ReactNode }) => {
+type ApiContextType = {
+  authApi: any;
+  refreshableApi: any;
+  checkTokenFromCookie: () => void;
+};
+
+export const ApiContext = createContext<ApiContextType>({
+  authApi: null,
+  refreshableApi: null,
+  checkTokenFromCookie: () => {},
+});
+
+export const ApiProvider = ({ children }: { children: ReactNode }) => {
   const { alert } = useContext(AlertContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -46,5 +59,3 @@ const ApiProvider = ({ children }: { children: ReactNode }) => {
     </ApiContext.Provider>
   );
 };
-
-export default ApiProvider;

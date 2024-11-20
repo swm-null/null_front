@@ -1,8 +1,30 @@
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
+import { createContext } from 'react';
 import { useState, useCallback, ReactNode } from 'react';
-import { MemoContext, MemoModalState } from 'utils';
 
-const MemoProvider = ({ children }: { children: ReactNode }) => {
+type MemoModalState = {
+  isOpen: boolean;
+  memo: Memo;
+  onClose: () => void;
+  mode: 'create' | 'edit';
+  tag: Tag | null;
+};
+
+type MemoContextType = {
+  memoModal: MemoModalState | null;
+  openMemoEditModal: (memo: Memo) => void;
+  openMemoCreateModal: (memo: Memo, tag: Tag) => void;
+  closeMemoModal: () => void;
+};
+
+export const MemoContext = createContext<MemoContextType>({
+  memoModal: null,
+  openMemoEditModal: (_: Memo) => {},
+  openMemoCreateModal: (_: Memo, __: Tag) => {},
+  closeMemoModal: () => {},
+});
+
+export const MemoProvider = ({ children }: { children: ReactNode }) => {
   const [memoModal, setMemoModal] = useState<MemoModalState | null>(null);
 
   const openMemoEditModal = (memo: Memo) => {
@@ -42,5 +64,3 @@ const MemoProvider = ({ children }: { children: ReactNode }) => {
     </MemoContext.Provider>
   );
 };
-
-export default MemoProvider;
