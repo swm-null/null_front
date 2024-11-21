@@ -113,7 +113,7 @@ const EditableMemo = ({
     >
       <input {...getInputProps()} />
       <div
-        {...getRootProps()}
+        {...getRootProps({ style: { outline: 'none' } })}
         className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden"
       >
         <MemoHeader

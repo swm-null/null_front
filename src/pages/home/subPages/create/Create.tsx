@@ -62,7 +62,7 @@ const CreatePage = () => {
       <input {...getInputProps()} />
       <div
         className="flex flex-col justify-center overflow-hidden h-full"
-        {...getRootProps()}
+        {...getRootProps({ style: { outline: 'none' } })}
       >
         <div className="flex flex-col max-w-[740px] w-full self-center">
           <MemoCreateTextArea
