@@ -65,6 +65,7 @@ const ModalContent = ({
             value={userProfile.email}
             setValue={() => {}}
             editable={false}
+            disabled
           />
         </div>
         <div className="flex justify-end mt-4 gap-2">
