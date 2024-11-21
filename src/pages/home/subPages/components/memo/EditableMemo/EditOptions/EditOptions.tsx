@@ -13,7 +13,7 @@ const EditOptions = ({
   handleMicButtonClick,
   handleSubmit,
 }: {
-  isSubmitDisabled: boolean;
+  isSubmitDisabled?: boolean;
   tagRebuildable: boolean;
   tagRebuild: boolean;
   setTagRebuild: (tagRebuild: boolean) => void;
