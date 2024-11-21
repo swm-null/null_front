@@ -71,6 +71,7 @@ const useUpdateMemoManager = () => {
     newVoice,
     oldImageUrls,
     oldVoiceUrls,
+    localImageUrls,
   }: {
     memo: Memo;
     tagRebuild: boolean;
@@ -79,37 +80,48 @@ const useUpdateMemoManager = () => {
     newVoice: File | null;
     oldImageUrls: string[];
     oldVoiceUrls: string[];
+    localImageUrls: string[];
   }) => {
     try {
-      const newImageUrls = await getFileUrls(newImages);
-      const newVoiceUrls = await getFileUrls(newVoice ? [newVoice] : []);
-
       const newMemo = {
         ...memo,
         content: newContent,
-        image_urls: [...oldImageUrls, ...newImageUrls],
-        voice_urls: newVoiceUrls.length ? newVoiceUrls : oldVoiceUrls,
+        image_urls: [...oldImageUrls, ...localImageUrls],
+        voice_urls: oldVoiceUrls,
       };
+
+      console.log(95, newMemo, oldImageUrls);
+
+      updateMemoDataInQueries(newMemo);
+
+      const newImageS3Urls = await getFileUrls(newImages);
+      const newVoiceS3Urls = await getFileUrls(newVoice ? [newVoice] : []);
+
+      const updateMemo = { ...newMemo };
+      updateMemo.image_urls = [...oldImageUrls, ...newImageS3Urls];
+      updateMemo.voice_urls = newVoiceS3Urls.length ? newVoiceS3Urls : oldVoiceUrls;
+
+      updateMemoDataInQueries(updateMemo);
 
       const backupData = backupMemoData();
 
       const updateApiCall = tagRebuild
         ? () =>
             Api.updateMemoWithNewTags(
-              newMemo.id,
-              newMemo.content,
-              newMemo.image_urls,
-              newMemo.voice_urls
+              updateMemo.id,
+              updateMemo.content,
+              updateMemo.image_urls,
+              updateMemo.voice_urls
             )
         : () =>
             Api.updateMemo(
-              newMemo.id,
-              newMemo.content,
-              newMemo.image_urls,
-              newMemo.voice_urls
+              updateMemo.id,
+              updateMemo.content,
+              updateMemo.image_urls,
+              updateMemo.voice_urls
             );
 
-      await handleUpdateMemoData(memo, newMemo, backupData, updateApiCall);
+      await handleUpdateMemoData(memo, backupData, updateApiCall);
     } catch (error) {
       alert(t('memo.updateErrorMessage'));
     }
@@ -117,12 +129,9 @@ const useUpdateMemoManager = () => {
 
   const handleUpdateMemoData = async (
     memo: Memo,
-    newMemo: Memo,
     backupData: Map<QueryKey, InfiniteQueryData>,
     updateApiCall: () => Promise<Api.cuMemoResponse | errorResponse>
   ) => {
-    updateMemoDataInQueries(newMemo);
-
     const response = await updateApiCall();
     if (Api.isUpdateMemoResponse(response)) {
       const updatedMemo = response as Memo;
@@ -138,6 +147,8 @@ const useUpdateMemoManager = () => {
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
         if (!oldData) return oldData;
 
+        console.log(151, oldData, newMemo);
+
         return {
           ...oldData,
           pages: oldData.pages.map((page) => {
@@ -146,8 +157,8 @@ const useUpdateMemoManager = () => {
             const memoIndex = page.memos.findIndex((m) => m.id === newMemo.id);
             if (memoIndex !== -1) {
               const updatedMemos = [...page.memos];
-              updatedMemos[memoIndex] = newMemo;
-              return { ...page, memos: updatedMemos };
+              updatedMemos.splice(memoIndex, 1);
+              return { ...page, memos: [newMemo, ...updatedMemos] };
             }
             return page;
           }),

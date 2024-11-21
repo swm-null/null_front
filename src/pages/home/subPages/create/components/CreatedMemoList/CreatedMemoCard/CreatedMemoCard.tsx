@@ -79,8 +79,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     setAudioUrl(null);
   };
 
-  const handleSubmit = () => {
-    setEditable(false);
+  const handleSubmit = async () => {
     handleUpdateMemo({
       memo,
       tagRebuild,
@@ -89,7 +88,9 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       newVoice: audio,
       oldImageUrls: originImageUrls,
       oldVoiceUrls: audioUrl ? [audioUrl] : [],
+      localImageUrls: imageUrls,
     });
+    setEditable(false);
   };
 
   const handleMicButtonClick = () => {
