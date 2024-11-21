@@ -97,6 +97,10 @@ const EditableMemo = ({
     openRecordingModal(audio, setAudio);
   };
 
+  const isSubmitDisabled = useMemo(() => {
+    return !message.trim() && imageUrls.length === 0 && !audioUrl;
+  }, [message, imageUrls, audioUrl]);
+
   useEffect(() => {
     setMessage(memo.content);
     setTags(memo.tags);
@@ -140,6 +144,7 @@ const EditableMemo = ({
         </div>
       </div>
       <EditOptions
+        isSubmitDisabled={isSubmitDisabled}
         tagRebuildable={isEditMode}
         tagRebuild={tagRebuild}
         setTagRebuild={setTagRebuild}
