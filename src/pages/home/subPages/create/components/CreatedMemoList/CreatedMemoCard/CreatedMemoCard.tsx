@@ -1,8 +1,7 @@
-import { ReactNode, useCallback, useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Memo } from 'pages/home/subPages/interfaces';
-import { DeleteIcon, EditIcon, NoEditIcon } from 'assets/icons';
 import { format } from 'date-fns';
 import { Skeleton } from '@mui/material';
 import {
@@ -15,6 +14,7 @@ import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { EditOptions } from 'pages/home/subPages/components/memo/EditableMemo/EditOptions';
 import { useImageList } from 'pages/home/subPages/hooks';
 import { RecordingContext } from 'utils';
+import { CreatedMemoCardHeader } from './CreatedMemoCardHeader';
 
 interface CreatedMemoCardProps {
   memo: Memo;
@@ -33,6 +33,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     imageUrls: newImageUrls,
     handleImageFilesChange,
     removeImage,
+    removeAllImage,
     handlePaste,
   } = useImageList();
 
@@ -110,6 +111,10 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     audio && setAudioUrl(URL.createObjectURL(audio));
   }, [audio]);
 
+  useEffect(() => {
+    removeAllImage();
+  }, [editable]);
+
   return (
     <div
       className="flex items-start px-7 py-[1.88rem] bg-[#FFF6E3CC] border border-black border-opacity-10 
@@ -168,56 +173,6 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
             handleImageFilesChange={handleImageFilesChange}
             handleSubmit={handleSubmit}
           />
-        )}
-      </div>
-    </div>
-  );
-};
-
-const CreatedMemoCardHeader = ({
-  creating,
-  editable,
-  toggleEditable,
-  updatedAt,
-  handleDeleteMemo,
-  children,
-}: {
-  creating: boolean;
-  editable: boolean;
-  toggleEditable: () => void;
-  updatedAt: string;
-  handleDeleteMemo: () => void;
-  children: ReactNode;
-}) => {
-  return (
-    <div className="flex flex-row flex-wrap-reverse flex-1 gap-2">
-      {children}
-      <div className="flex gap-2 ml-auto">
-        <p className="text-[#6A5344] select-none content-center text-sm">
-          {updatedAt}
-        </p>
-        {!creating && (
-          <>
-            <button type="button" className="rounded-full">
-              {editable ? (
-                <NoEditIcon
-                  className="w-5 h-5 text-[#887262]"
-                  onClick={toggleEditable}
-                />
-              ) : (
-                <EditIcon
-                  className="w-5 h-5 text-[#887262]"
-                  onClick={toggleEditable}
-                />
-              )}
-            </button>
-            <button type="button" className="rounded-full">
-              <DeleteIcon
-                className="w-5 h-5 text-[#887262]"
-                onClick={handleDeleteMemo}
-              />
-            </button>
-          </>
         )}
       </div>
     </div>
