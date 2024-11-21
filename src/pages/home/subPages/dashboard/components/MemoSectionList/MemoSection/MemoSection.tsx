@@ -37,8 +37,6 @@ const MemoSection = ({
     sortOption
   );
 
-  const haveLinkedMemos = isLinked && !memos.length;
-
   const handleCreateMemo = () => {
     const memo = {
       id: 'temp',
@@ -65,8 +63,6 @@ const MemoSection = ({
   useEffect(() => {
     setUpdateKey((prev) => prev + 1);
   }, [memos]);
-
-  if (haveLinkedMemos) return <></>;
 
   return (
     <div

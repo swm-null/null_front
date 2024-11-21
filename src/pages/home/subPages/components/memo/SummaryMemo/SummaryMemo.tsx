@@ -10,7 +10,8 @@ import { ImageBlur } from './ImageBlur';
 import { MemoText } from './MemoText';
 import { TAG_INVALID_CHARS_PATTERN } from 'pages/home/constants';
 import { Divider } from '@mui/material';
-import { AudioPlayer } from 'react-audio-player-component';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 interface SummaryMemoProps extends HTMLProps<HTMLDivElement> {
   memo: Memo;
@@ -89,36 +90,23 @@ const SummaryMemo = ({
           invalidCharsPattern={TAG_INVALID_CHARS_PATTERN}
         />
         {memo.voice_urls?.length > 0 && (
-          <div
-            className="w-full p-2 bg-[#e8e1d9] rounded-2xl"
-            style={{ position: 'relative', overflow: 'hidden' }}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <AudioPlayer
-              src={memo.voice_urls[0]}
-              width={190}
-              trackHeight={49}
-              barWidth={1}
-              gap={1}
-              visualise
-              backgroundColor="#e8e1d9"
-              barColor="#8b7e74"
-              barPlayedColor="#F4CDB1"
-              skipDuration={2}
-              minimal
-              showLoopOption
-              showVolumeControl
-            />
-            <style>
-              {`
-                [data-testid="timer"] {
-                  display: none;
-                }
-              `}
-            </style>
-          </div>
+          <AudioPlayer
+            className="bg-white rounded-xl shadow-none"
+            src={memo.voice_urls[0]}
+            customAdditionalControls={[]}
+            showJumpControls={false}
+            timeFormat="mm:ss"
+            showDownloadProgress
+            autoPlay={false}
+            layout="stacked"
+            customProgressBarSection={[
+              RHAP_UI.CURRENT_TIME,
+              RHAP_UI.PROGRESS_BAR,
+              RHAP_UI.DURATION,
+            ]}
+            customControlsSection={[RHAP_UI.MAIN_CONTROLS, RHAP_UI.VOLUME_CONTROLS]}
+            volume={0.5}
+          />
         )}
         {memo.content && (
           <MemoText
