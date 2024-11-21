@@ -24,11 +24,11 @@ const AudioFileInput = ({
 
     if (file && file.size > MAX_FILE_SIZE_BYTES) {
       alert(`${MAX_FILE_SIZE_MB}MB를 초과하는 파일은 메모에 추가할 수 없습니다.`);
-      e.target.value = ''; // 입력 초기화
+      e.target.value = '';
       return;
     }
 
-    handleAudioFileChange(e); // 원래 이벤트를 그대로 부모로 전달
+    handleAudioFileChange(e);
   };
 
   return (
