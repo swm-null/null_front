@@ -15,7 +15,7 @@ const useTagManager = () => {
     createTargetName: string
   ) => {
     try {
-      const response = await Api.createTag(parentTag, createTargetName);
+      const response = await Api.createTag(parentTag, createTargetName.trim());
       if (Api.isGetTagResponse(response)) {
         queryClient.invalidateQueries({
           queryKey: ['tags', parentTag ? parentTag.id : 'root'],
