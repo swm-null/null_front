@@ -3,12 +3,13 @@ import * as Api from 'api';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertContext } from 'utils';
+import { AlertContext, TagContext } from 'utils';
 
 const useTagManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
+  const { selectedTag, setSelectedTag, setTagStack } = useContext(TagContext);
 
   const handleCreateTag = async (
     parentTag: Tag | null,
@@ -55,6 +56,11 @@ const useTagManager = () => {
     try {
       const response = await Api.deleteTag(deleteTarget.id);
       if (Api.isValidResponse(response)) {
+        if (selectedTag && selectedTag.id === deleteTarget.id) {
+          setTagStack((prev) => [...prev.slice(0, -1)]);
+          setSelectedTag(parentTag);
+        }
+
         queryClient.invalidateQueries({
           queryKey: ['tags', parentTag ? parentTag.id : 'root'],
           exact: true,
