@@ -25,8 +25,8 @@ const UploadDataModal = ({ email, isOpen, handleClose }: UploadDataModalProps) =
         onClick={handleClick}
       >
         <div
-          className={`relative ${isSmallScreen ? 'p-4' : 'p-7'} flex flex-col h-auto w-full bg-[#FFF6E3] 
-            border rounded-2xl gap-4 max-w-[600px] min-h-[400px] shadow-custom 
+          className={`relative ${isSmallScreen ? 'p-4 max-w-[500px]' : 'p-7 max-w-[900px]'} flex flex-col w-full bg-[#FFF6E3] 
+            border rounded-2xl gap-4  min-h-[400px] h-full shadow-custom 
             border-black border-opacity-10 bg-clip-padding`}
           onClick={(e) => e.stopPropagation()}
         >

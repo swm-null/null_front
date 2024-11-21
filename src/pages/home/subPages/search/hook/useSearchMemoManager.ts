@@ -43,8 +43,7 @@ const useSearchMemoManager = () => {
         : undefined;
     },
     initialPageParam: 1,
-    staleTime: 600000,
-    gcTime: 900000,
+    gcTime: 0,
     refetchOnMount: true,
   });
 

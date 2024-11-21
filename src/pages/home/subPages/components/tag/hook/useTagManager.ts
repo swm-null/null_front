@@ -3,12 +3,13 @@ import * as Api from 'api';
 import { Tag } from 'pages/home/subPages/interfaces';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertContext } from 'utils';
+import { AlertContext, TagContext } from 'utils';
 
 const useTagManager = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { alert, confirmAlert } = useContext(AlertContext);
+  const { selectedTag, setSelectedTag, setTagStack } = useContext(TagContext);
 
   const handleCreateTag = async (
     parentTag: Tag | null,
@@ -29,17 +30,22 @@ const useTagManager = () => {
     } catch {}
   };
 
-  const handleUpdateTag = async (parentTag: Tag | null, updateTarget: Tag) => {
+  const handleUpdateTag = async (_parentTag: Tag | null, updateTarget: Tag) => {
     try {
       const response = await Api.editTag(updateTarget.id, updateTarget.name);
       if (Api.isValidResponse(response)) {
+        if (selectedTag && selectedTag.id === updateTarget.id) {
+          setTagStack((prev) => [...prev.slice(0, -1), updateTarget]);
+          setSelectedTag(updateTarget);
+        }
+
+        // FIXME: 부모 tags invalidate하게 수정하기
         queryClient.invalidateQueries({
-          queryKey: ['tags', parentTag ? parentTag.id : 'root'],
-          exact: true,
+          queryKey: ['tags'],
         });
+        // FIXME: 조부모 childTags invalidate하게 수정하기
         queryClient.invalidateQueries({
-          queryKey: ['childTags', parentTag ? parentTag.id : 'root'],
-          exact: true,
+          queryKey: ['childTags'],
         });
         queryClient.invalidateQueries({ queryKey: ['childTagMemos'] });
       }
@@ -55,6 +61,11 @@ const useTagManager = () => {
     try {
       const response = await Api.deleteTag(deleteTarget.id);
       if (Api.isValidResponse(response)) {
+        if (selectedTag && selectedTag.id === deleteTarget.id) {
+          setTagStack((prev) => [...prev.slice(0, -1)]);
+          setSelectedTag(parentTag);
+        }
+
         queryClient.invalidateQueries({
           queryKey: ['tags', parentTag ? parentTag.id : 'root'],
           exact: true,

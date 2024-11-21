@@ -69,7 +69,6 @@ const AudioVisualizer = ({
     ].filter(Boolean);
 
     if (playerContainers) {
-      console.log(playerContainers);
       playerContainers.map((playerContainer) => {
         (playerContainer as HTMLElement).style.backgroundColor = 'transparent';
       });
@@ -101,7 +100,7 @@ const AudioVisualizer = ({
               {formatTime(recordingTime)}
             </span>
             <AudioPlayer
-              key={'modal'}
+              key={audioUrl}
               playList={playList}
               activeUI={activeUI}
               audioInitialState={{

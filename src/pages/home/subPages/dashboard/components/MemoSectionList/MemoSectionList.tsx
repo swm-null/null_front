@@ -49,7 +49,7 @@ const MemoSectionList = ({
     return (
       <div className="flex flex-1 overflow-x-scroll mx-4 pb-2 pt-2">
         <MemoSection
-          key={`section-${selectedTag?.id}`}
+          key={`section-${JSON.stringify(selectedTag)}`}
           tag={selectedTag}
           sortOption={sortOption}
           childTags={[]}
@@ -64,6 +64,7 @@ const MemoSectionList = ({
   return (
     <div
       ref={scrollRef}
+      key={JSON.stringify(tagRelations)}
       className="flex flex-1 overflow-x-scroll mx-4 pb-2 pt-2
         scrollbar-thin scrollbar-thumb-peach0 scrollbar-track-transparent hover:scrollbar-thumb-peach0"
       onMouseDown={onDragStart}
@@ -71,10 +72,10 @@ const MemoSectionList = ({
       onMouseUp={onDragEnd}
       onMouseLeave={onDragEnd}
     >
-      <div className="flex gap-4">
+      <div key={JSON.stringify(tagRelations)} className="flex gap-4">
         {selectedTag && (
           <MemoSection
-            key={`section-${selectedTag.id}`}
+            key={`section-${JSON.stringify(selectedTag)}`}
             tag={selectedTag}
             childTags={[]}
             isLinked
@@ -88,7 +89,7 @@ const MemoSectionList = ({
 
           return (
             <MemoSection
-              key={`section-${tag?.id}` || uuid_v4()}
+              key={`section-${JSON.stringify(tag)}` || uuid_v4()}
               tag={tag}
               childTags={childTags}
               sortOption={sortOption}

@@ -25,7 +25,7 @@ const TagWithOptions = ({ tag }: { tag: Tag }) => {
         IconComponent={DeleteIcon}
         handleStaticClick={() =>
           handleDeleteTag(
-            selectedTag?.id !== tag.id ? selectedTag : tagStack[-2],
+            selectedTag?.id !== tag.id ? selectedTag : tagStack[tagStack.length - 2],
             tag
           )
         }

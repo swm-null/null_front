@@ -90,8 +90,6 @@ const useUpdateMemoManager = () => {
         voice_urls: oldVoiceUrls,
       };
 
-      console.log(95, newMemo, oldImageUrls);
-
       updateMemoDataInQueries(newMemo);
 
       const newImageS3Urls = await getFileUrls(newImages);
@@ -146,8 +144,6 @@ const useUpdateMemoManager = () => {
     allMemosQueriesData.forEach(([queryKey]) => {
       queryClient.setQueryData(queryKey, (oldData: InfiniteQueryData) => {
         if (!oldData) return oldData;
-
-        console.log(151, oldData, newMemo);
 
         return {
           ...oldData,

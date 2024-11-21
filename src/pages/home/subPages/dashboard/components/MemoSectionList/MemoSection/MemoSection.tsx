@@ -32,7 +32,7 @@ const MemoSection = ({
   const { openMemoCreateModal } = useContext(MemoContext);
 
   const { memos, fetchNextPage } = useChildTagMemosManager(
-    tag.id,
+    tag,
     isLinked,
     sortOption
   );
