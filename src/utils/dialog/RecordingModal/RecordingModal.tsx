@@ -8,7 +8,7 @@ import { RecordingContext } from 'utils/contexts';
 interface RecordingModalProps {
   open: boolean;
   onClose: () => void;
-  onSend?: (audioBlob: Blob) => void;
+  onSend?: (audioFile: File) => void;
 }
 
 const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
@@ -34,8 +34,8 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
 
   const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (recordingManager.audioBlob && onSend) {
-      onSend(recordingManager.audioBlob);
+    if (recordingManager.audioFile && onSend) {
+      onSend(recordingManager.audioFile);
       onClose();
     }
   };
