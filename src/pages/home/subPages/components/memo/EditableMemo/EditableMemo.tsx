@@ -77,6 +77,7 @@ const EditableMemo = ({
         newVoice: audio,
         oldImageUrls: originImageUrls,
         oldVoiceUrls: audioUrl ? [audioUrl] : [],
+        localImageUrls: imageUrls,
       });
     } else {
       handlePreProcess();
