@@ -1,5 +1,5 @@
 import { ChangeEvent, ReactNode, useContext } from 'react';
-import { RecordingContext } from 'utils';
+import { AlertContext, RecordingContext } from 'utils';
 
 interface AudioFileInputProps {
   handleClick?: () => void;
@@ -15,6 +15,21 @@ const AudioFileInput = ({
   className,
 }: AudioFileInputProps) => {
   const { ALLOWED_AUDIO_FILE_TYPES } = useContext(RecordingContext);
+  const { alert } = useContext(AlertContext);
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const MAX_FILE_SIZE_MB = 10;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
+    if (file && file.size > MAX_FILE_SIZE_BYTES) {
+      alert(`${MAX_FILE_SIZE_MB}MB를 초과하는 파일은 메모에 추가할 수 없습니다.`);
+      e.target.value = ''; // 입력 초기화
+      return;
+    }
+
+    handleAudioFileChange(e); // 원래 이벤트를 그대로 부모로 전달
+  };
 
   return (
     <>
@@ -23,7 +38,7 @@ const AudioFileInput = ({
           id="audio-file-input"
           type="file"
           accept={ALLOWED_AUDIO_FILE_TYPES.join(', ')}
-          onChange={handleAudioFileChange}
+          onChange={handleFileChange}
           className="hidden"
         />
       </form>
