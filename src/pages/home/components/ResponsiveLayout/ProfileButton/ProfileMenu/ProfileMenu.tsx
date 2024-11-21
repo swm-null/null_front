@@ -23,6 +23,14 @@ const ProfileMenu = ({
 }: ProfileMenuProps) => {
   const { t } = useTranslation();
 
+  const handleHowToUse = () => {
+    window.open(
+      'https://heady-card-402.notion.site/Oatnote-145feb7f17f58049ac6af16c7959556c?pvs=74',
+      '_blank',
+      'noopener, noreferrer'
+    );
+  };
+
   return (
     <Menu
       anchorEl={anchorEl}
@@ -40,6 +48,7 @@ const ProfileMenu = ({
         <Divider key="divider" />,
       ]}
       <MenuItem onClick={onEditProfile}>{t('profile.editProfile')}</MenuItem>
+      <MenuItem onClick={handleHowToUse}>Oatnote는 어떻게 쓰나요?</MenuItem>
       <MenuItem onClick={onUploadData}>{t('profile.uploadDataButton')}</MenuItem>
       <Divider />
       <MenuItem onClick={onDeleteAccount} sx={{ marginBottom: 1 }}>
