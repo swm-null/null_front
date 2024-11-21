@@ -39,10 +39,7 @@ const useCreateMemoManager = () => {
         voiceUrls
       );
 
-      if (Api.isCreateMemoResponse(response)) {
-        queryClient.invalidateQueries({ queryKey: ['recentMemo'] });
-        queryClient.invalidateQueries({ queryKey: ['childTagMemos', tag.id] });
-      } else {
+      if (!Api.isCreateMemoResponse(response)) {
         deleteMemoInQueries(temporaryMemo.id);
       }
     } catch (error) {}
