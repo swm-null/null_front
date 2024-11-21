@@ -20,8 +20,8 @@ const queryClient = new QueryClient();
 const Home = () => {
   const { connect, disconnect } = useContext(SSEContext);
   const { checkTokenFromCookie } = useContext(ApiContext);
-  const { onReset: onCreateReset } = useContext(CreateResetContext);
-  const { onReset: onDashboardReset } = useContext(DashboardResetContext);
+  const { onInvalid: onCreateInvalid } = useContext(CreateResetContext);
+  const { onInvalid: onDashboardInvalid } = useContext(DashboardResetContext);
   const navigate = useNavigate();
 
   const handleNavigation = (page: string) => {
@@ -30,7 +30,7 @@ const Home = () => {
 
   useEffect(() => {
     checkTokenFromCookie();
-    connect(`${API_BASE_URL}/sse/subscribe`, onCreateReset, onDashboardReset);
+    connect(`${API_BASE_URL}/sse/subscribe`, onCreateInvalid, onDashboardInvalid);
 
     return () => {
       disconnect();

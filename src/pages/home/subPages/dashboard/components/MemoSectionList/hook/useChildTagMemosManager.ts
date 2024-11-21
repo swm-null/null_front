@@ -13,7 +13,7 @@ const useChildTagMemosManager = (
   sortOption: SortOption,
   memoLimit?: number
 ) => {
-  const { subscribeToReset, unsubscribeFromReset } =
+  const { subscribeToInvalid, unsubscribeFromInvalid } =
     useContext(DashboardResetContext);
   const queryClient = useQueryClient();
 
@@ -76,10 +76,10 @@ const useChildTagMemosManager = (
       });
     };
 
-    subscribeToReset(invalidateCurrentQuery);
+    subscribeToInvalid(invalidateCurrentQuery);
 
     return () => {
-      unsubscribeFromReset(invalidateCurrentQuery);
+      unsubscribeFromInvalid(invalidateCurrentQuery);
     };
   }, [tagId]);
 
