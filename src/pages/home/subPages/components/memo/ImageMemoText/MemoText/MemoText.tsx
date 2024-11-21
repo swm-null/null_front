@@ -20,6 +20,7 @@ const MemoText = ({
 }) => {
   const editableDivRef = useRef<HTMLDivElement>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [divMessage, setDivMessage] = useState(message);
 
   const convertToHyperlinks = (text: string) => {
     const urlPattern = /(https?:\/\/[^\s]+)/g;
@@ -51,6 +52,11 @@ const MemoText = ({
 
     setIsEditing(false);
 
+    const cleanText = getCleanText(e);
+    setDivMessage(cleanText);
+  };
+
+  const getCleanText = (e: FocusEvent<HTMLDivElement>) => {
     const cleanText = e.target.innerHTML
       .replace(/<div>/g, '')
       .replace(/<\/div>/g, '\n')
@@ -59,7 +65,7 @@ const MemoText = ({
       .replace(/<[^>]*>/g, '')
       .trim();
 
-    setMessage && setMessage(cleanText);
+    return cleanText;
   };
 
   const handleClickLink = (event: React.MouseEvent) => {
@@ -128,13 +134,16 @@ const MemoText = ({
         onClick={handleClickLink}
         onPaste={handlePaste}
         onBlur={handleBlur}
+        onInput={(e: FocusEvent<HTMLDivElement>) =>
+          setMessage && setMessage(getCleanText(e))
+        }
         suppressContentEditableWarning
         dangerouslySetInnerHTML={{
           __html:
-            message.length !== 0
+            divMessage.length !== 0
               ? isEditing
-                ? message
-                : convertToHyperlinks(message)
+                ? divMessage
+                : convertToHyperlinks(divMessage)
               : '',
         }}
       />
