@@ -164,18 +164,21 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           handleImageFilesChange={handleImageFilesChange}
           handlePaste={handlePaste}
         />
-        <div className="flex ml-auto w-fit gap-6 items-center text-gray2">
-          {`${message ? message.length : 0} / ${1000}`}
-        </div>
+
         {editable && (
-          <EditOptions
-            tagRebuildable
-            tagRebuild={tagRebuild}
-            setTagRebuild={setTagRebuild}
-            handleMicButtonClick={handleMicButtonClick}
-            handleImageFilesChange={handleImageFilesChange}
-            handleSubmit={handleSubmit}
-          />
+          <div className="flex flex-col gap-2">
+            <div className="flex ml-auto w-fit gap-6 items-center text-gray2">
+              {`${message ? message.length : 0} / ${1000}`}
+            </div>
+            <EditOptions
+              tagRebuildable
+              tagRebuild={tagRebuild}
+              setTagRebuild={setTagRebuild}
+              handleMicButtonClick={handleMicButtonClick}
+              handleImageFilesChange={handleImageFilesChange}
+              handleSubmit={handleSubmit}
+            />
+          </div>
         )}
       </div>
     </div>
