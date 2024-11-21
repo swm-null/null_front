@@ -54,7 +54,7 @@ const ImageMemoText = ({
             {(imageUrls.length !== 0 || voiceUrl) && (
               <div className="flex flex-col xsm:float-left mr-4 mb-1 h-fit gap-3">
                 {imageUrls.length !== 0 && (
-                  <div className="h-fit w-fit">
+                  <div className="xs:w-60 w-full max-w-72">
                     <ImageSlider
                       imageUrls={imageUrls}
                       removeImageUrl={removeImageUrl}
