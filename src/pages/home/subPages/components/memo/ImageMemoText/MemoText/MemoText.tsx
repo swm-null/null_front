@@ -143,7 +143,7 @@ const MemoText = ({
         dangerouslySetInnerHTML={{
           __html:
             divMessage.length !== 0
-              ? isEditing
+              ? editable && isEditing
                 ? divMessage
                 : convertToHyperlinks(divMessage)
               : '',
