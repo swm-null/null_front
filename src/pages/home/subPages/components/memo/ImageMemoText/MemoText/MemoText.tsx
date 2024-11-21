@@ -120,7 +120,7 @@ const MemoText = ({
       </div>
       <div
         ref={editableDivRef}
-        className="ml-auto bg-transparent font-regular text-[15px] whitespace-break-spaces focus:outline-none"
+        className="ml-auto bg-transparent font-regular text-[15px] whitespace-break-spaces break-all focus:outline-none"
         style={{ color: textColor }}
         contentEditable={editable}
         onClick={handleClickLink}
