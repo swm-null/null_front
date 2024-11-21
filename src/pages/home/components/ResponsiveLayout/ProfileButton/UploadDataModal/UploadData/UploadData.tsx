@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tabs, Tab, Box } from '@mui/material';
 import { KakaoDropzone, CopyTextField } from './components';
-import { uploadDataIOS } from 'assets/images';
+import { email1, email2, kakao1, kakao2 } from 'assets/images';
 import { createMemos, isFilesResponse, isValidResponse, uploadFile } from 'api';
+import { BottomNavContext } from 'utils';
 
 const UploadData = ({
   handleProProcess,
@@ -13,21 +13,22 @@ const UploadData = ({
   email: string | null;
 }) => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState(0);
+  const { isSmallScreen } = useContext(BottomNavContext);
+
+  const thirdImageRef = useRef<HTMLImageElement>(null);
+  const email1Ref = useRef<HTMLImageElement>(null);
+  const email2Ref = useRef<HTMLImageElement>(null);
 
   const [file, setFile] = useState<File | null>(null);
+  const [lastImageHeight, setLastImageHeight] = useState<number | null>(null);
 
-  const serverMail = 'test@oatnote.io';
-
-  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
-  };
+  const serverMail = 'import@oatnote.io';
 
   const getFileUrl = async (file: File): Promise<string> => {
     const response = await uploadFile(file);
-    if (!isFilesResponse(response))
+    if (!isFilesResponse(response)) {
       throw new Error('파일 업로드에 문제가 생겼습니다.');
-
+    }
     return response.urls[0];
   };
 
@@ -39,74 +40,137 @@ const UploadData = ({
     try {
       const response = await createMemos(fileUrl, email);
       if (!isValidResponse(response)) {
-        // FIXME: 안되는 경우 에러 처리
+        // FIXME: 실패 시 처리
       }
-    } catch {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
+  useEffect(() => {
+    const updateHeight = () => {
+      if (email1Ref.current && email2Ref.current) {
+        const height1 = email1Ref.current.offsetHeight;
+        const height2 = email2Ref.current.offsetHeight;
+        setLastImageHeight(Math.max(height1, height2));
+      }
+    };
+
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 h-screen text-gray3">
-      <Box className="flex flex-col flex-1 overflow-hidden gap-2">
-        <Tabs
-          value={activeTab}
-          onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          className="mb-4"
-        >
-          <Tab label={t('pages.uploadData.emailInstruction.header')} />
-          <Tab label={t('pages.uploadData.uploadFileInstruction.header')} />
-        </Tabs>
+    <div className="flex flex-col flex-1 h-full text-gray3">
+      <div className="flex flex-col flex-1 gap-2">
+        <div className="flex flex-col flex-1 gap-3 text-[#604B3D]">
+          <p className="font-bold text-xl">카카오톡 대화 내용을 메모로 불러와요.</p>
+          <div className="flex flex-col gap-1">
+            <p>대화 내용은 이메일로 업로드하거나, 직접 업로드 할 수 있어요.</p>
+            <p>이메일을 이용하려면 아래 이메일을 먼저 복사해주세요.</p>
+            <CopyTextField text={serverMail} />
+          </div>
 
-        <Box className="h-96 flex flex-col overflow-y-scroll scrollbar-thin">
-          {activeTab === 0 && (
-            <Box className="flex flex-col flex-1 gap-3">
-              <div className="flex flex-col gap-1">
-                <p>1. {t('pages.uploadData.emailInstruction.copyEmail')}</p>
-                <CopyTextField text={serverMail} />
-              </div>
-              <p>2. {t('pages.uploadData.emailInstruction.kakaoExport')}</p>
+          <div className="flex flex-col gap-4">
+            <p>1. 카카오톡에서 대화 내용을 내보내요.</p>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: isSmallScreen ? 'column' : 'row',
+                flexWrap: isSmallScreen ? 'nowrap' : 'wrap',
+                gap: isSmallScreen ? '20px' : '20px',
+              }}
+              className="p-4 rounded-2xl bg-[#F7DBC2]"
+            >
               <img
-                src={uploadDataIOS}
+                src={kakao1}
+                ref={thirdImageRef}
                 alt="iOS upload instructions"
-                className="w-full"
-              />
-              <p className="mb-5">
-                3. {t('pages.uploadData.emailInstruction.sendMail')}
-              </p>
-            </Box>
-          )}
-
-          {activeTab === 1 && (
-            <Box className="flex flex-col flex-1 gap-3">
-              <p>1. {t('pages.uploadData.emailInstruction.kakaoExport')}</p>
-              <img
-                src={uploadDataIOS}
-                alt="iOS upload instructions"
-                className="w-full"
-              />
-              <div className="flex flex-col gap-1">
-                <p>2. {t('pages.uploadData.uploadFileInstruction.text')}</p>
-                <div className="flex flex-col flex-1">
-                  <KakaoDropzone kakaoCsvFile={file} setKakaoCsvFile={setFile} />
-                </div>
-              </div>
-              <button
-                type="button"
-                className={`${!file ? 'bg-gray1 text-gray3' : 'bg-gray2 text-white'} mt-auto w-full rounded-lg py-2 px-6`}
-                disabled={!file}
-                onClick={() => {
-                  handleProProcess();
-                  handleUploadData();
+                className="flex flex-shrink-0"
+                style={{
+                  width: isSmallScreen ? '100%' : 'calc(50% - 10px)',
+                  height: 'auto',
                 }}
-              >
-                {t('pages.uploadData.createMemoButton')}
-              </button>
-            </Box>
-          )}
-        </Box>
-      </Box>
+                onClick={() => {
+                  window.open(kakao1);
+                }}
+              />
+              <img
+                src={kakao2}
+                alt="iOS upload instructions"
+                className="flex flex-shrink-0"
+                style={{
+                  width: isSmallScreen ? '100%' : 'calc(50% - 10px)',
+                  height: 'auto',
+                }}
+                onClick={() => {
+                  window.open(kakao2);
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col flex-1 gap-3">
+            <p>{t('pages.uploadData.emailInstruction.kakaoExport')}</p>
+
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-col flex-1">
+                <KakaoDropzone kakaoCsvFile={file} setKakaoCsvFile={setFile} />
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: isSmallScreen ? 'column' : 'row',
+                flexWrap: isSmallScreen ? 'nowrap' : 'wrap',
+                gap: isSmallScreen ? '20px' : '20px',
+              }}
+              className="p-4 rounded-2xl bg-[#F7DBC2]"
+            >
+              <img
+                src={email1}
+                ref={email1Ref}
+                alt="iOS upload instructions"
+                className="flex w-fit"
+                style={{
+                  height: lastImageHeight || 'auto',
+                }}
+                onClick={() => {
+                  window.open(email1);
+                }}
+              />
+              <img
+                src={email2}
+                ref={email2Ref}
+                alt="iOS upload instructions"
+                className="flex w-fit"
+                style={{
+                  height: lastImageHeight || 'auto',
+                }}
+                onClick={() => {
+                  window.open(email2);
+                }}
+              />
+            </div>
+          </div>
+          <button
+            type="button"
+            className={`${!file ? 'bg-[#F7DBC2] bg-opacity-50 text-brown1' : 'bg-[#F7DBC2]'} mt-auto w-full rounded-lg py-2 px-6`}
+            disabled={!file}
+            onClick={() => {
+              handleProProcess();
+              handleUploadData();
+            }}
+          >
+            {t('pages.uploadData.createMemoButton')}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
