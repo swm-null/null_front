@@ -30,6 +30,7 @@ const ImageFileInput = forwardRef<HTMLInputElement, ImageFileInputProps>(
         <input
           ref={inputRef}
           type="file"
+          multiple
           accept={ALLOWED_IMAGE_FILE_TYPES.join(',')}
           onChange={(e) => onFileChange(e)}
           className="hidden"
