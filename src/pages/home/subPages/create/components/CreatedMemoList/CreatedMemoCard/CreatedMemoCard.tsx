@@ -117,6 +117,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     >
       <div className="flex flex-col w-full gap-9">
         <CreatedMemoCardHeader
+          creating={memo.tags.length === 0}
           editable={editable}
           toggleEditable={toggleEditable}
           updatedAt={memo.updated_at ? formatDate(memo.updated_at) : ''}
@@ -174,12 +175,14 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
 };
 
 const CreatedMemoCardHeader = ({
+  creating,
   editable,
   toggleEditable,
   updatedAt,
   handleDeleteMemo,
   children,
 }: {
+  creating: boolean;
   editable: boolean;
   toggleEditable: () => void;
   updatedAt: string;
@@ -193,22 +196,29 @@ const CreatedMemoCardHeader = ({
         <p className="text-[#6A5344] select-none content-center text-sm">
           {updatedAt}
         </p>
-        <button type="button" className="rounded-full">
-          {editable ? (
-            <NoEditIcon
-              className="w-5 h-5 text-[#887262]"
-              onClick={toggleEditable}
-            />
-          ) : (
-            <EditIcon className="w-5 h-5 text-[#887262]" onClick={toggleEditable} />
-          )}
-        </button>
-        <button type="button" className="rounded-full">
-          <DeleteIcon
-            className="w-5 h-5 text-[#887262]"
-            onClick={handleDeleteMemo}
-          />
-        </button>
+        {!creating && (
+          <>
+            <button type="button" className="rounded-full">
+              {editable ? (
+                <NoEditIcon
+                  className="w-5 h-5 text-[#887262]"
+                  onClick={toggleEditable}
+                />
+              ) : (
+                <EditIcon
+                  className="w-5 h-5 text-[#887262]"
+                  onClick={toggleEditable}
+                />
+              )}
+            </button>
+            <button type="button" className="rounded-full">
+              <DeleteIcon
+                className="w-5 h-5 text-[#887262]"
+                onClick={handleDeleteMemo}
+              />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
