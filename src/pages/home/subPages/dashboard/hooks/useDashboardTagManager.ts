@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import {
   getDashboardTagRelations,
@@ -7,13 +7,22 @@ import {
   isDashboardTagRelationsResponse,
   isGetTagsResponse,
 } from 'api';
-import { TagContext } from 'utils';
+import { DashboardResetContext, TagContext } from 'utils';
 
 const TAG_LIMIT = 10;
 
 const useDashboardTagManager = () => {
   const { selectedTag, setSelectedTag } = useContext(TagContext);
   const [tagRelations, setTagRelations] = useState<TagRelation[]>([]);
+
+  const {
+    subscribeToReset,
+    subscribeToInvalid,
+    unsubscribeFromReset,
+    unsubscribeFromInvalid,
+  } = useContext(DashboardResetContext);
+
+  const queryClient = useQueryClient();
 
   const { data: tagData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['tags', selectedTag ? selectedTag.id : 'root'],
@@ -41,9 +50,8 @@ const useDashboardTagManager = () => {
       return nextPage <= lastPage.total_page ? nextPage : undefined;
     },
     initialPageParam: 1,
-    staleTime: 600000,
-    gcTime: 900000,
     refetchOnWindowFocus: true,
+    gcTime: 0,
   });
 
   const { data: childTags } = useQuery({
@@ -58,6 +66,7 @@ const useDashboardTagManager = () => {
 
       return response.tags;
     },
+    staleTime: 600000,
   });
 
   const handleTagOrAllTagsClick = (tag: Tag | null) => {
@@ -82,6 +91,26 @@ const useDashboardTagManager = () => {
     const newMemoSectionList = tagData.pages.flatMap((page) => page.tag_relations);
     setTagRelations(newMemoSectionList);
   }, [tagData]);
+
+  useEffect(() => {
+    const invalidateCurrentQuery = () => {
+      queryClient.invalidateQueries({
+        queryKey: ['tags', selectedTag ? selectedTag.id : 'root'],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['childTags', selectedTag ? selectedTag.id : 'root'],
+      });
+    };
+
+    subscribeToInvalid(invalidateCurrentQuery);
+    subscribeToReset(invalidateCurrentQuery);
+
+    return () => {
+      unsubscribeFromInvalid(invalidateCurrentQuery);
+      unsubscribeFromReset(invalidateCurrentQuery);
+    };
+  }, [selectedTag]);
 
   return {
     childTags: childTags ? childTags : [],

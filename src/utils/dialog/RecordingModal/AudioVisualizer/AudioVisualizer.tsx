@@ -69,7 +69,6 @@ const AudioVisualizer = ({
     ].filter(Boolean);
 
     if (playerContainers) {
-      console.log(playerContainers);
       playerContainers.map((playerContainer) => {
         (playerContainer as HTMLElement).style.backgroundColor = 'transparent';
       });

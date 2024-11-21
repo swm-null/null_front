@@ -36,49 +36,43 @@ export const createSSEContext = () => {
         eventSource.close();
       }
 
-      const newEventSource = new EventSourcePolyfill(url, {
-        headers: {
-          'Content-Type': 'text/event-stream',
-          'Cache-Control': 'no-cache',
-          Connection: 'keep-alive',
-          Authorization: `Bearer ${Cookies.get('access_token')}`,
-          withCredentials: 'true',
-        },
-      });
+      const initializeEventSource = () => {
+        const newEventSource = new EventSourcePolyfill(url, {
+          headers: {
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
+            Authorization: `Bearer ${Cookies.get('access_token')}`,
+            withCredentials: 'true',
+          },
+          heartbeatTimeout: 3600000,
+        });
 
-      newEventSource.onopen = () => {
-        setIsConnected(true);
+        newEventSource.onopen = () => {
+          setIsConnected(true);
+        };
+
+        newEventSource.onmessage = (event) => {
+          const newBatchingMemoCount = Number(event.data);
+
+          if (newBatchingMemoCount === 0) {
+            onResetWhenNoBatchingMemo();
+          }
+          setBatchingMemoCount(newBatchingMemoCount);
+          onReset();
+        };
+
+        newEventSource.onerror = () => {
+          setIsConnected(false);
+          newEventSource.close();
+          setEventSource(null);
+          initializeEventSource();
+        };
+
+        setEventSource(newEventSource);
       };
 
-      newEventSource.onmessage = (event) => {
-        const newBatchingMemoCount = Number(event.data);
-
-        if (newBatchingMemoCount === 0) {
-          onResetWhenNoBatchingMemo();
-        }
-        setBatchingMemoCount(newBatchingMemoCount);
-        onReset();
-      };
-
-      newEventSource.onerror = () => {
-        setIsConnected(false);
-        newEventSource.close();
-        setEventSource(null);
-
-        setEventSource(
-          new EventSourcePolyfill(url, {
-            headers: {
-              'Content-Type': 'text/event-stream',
-              'Cache-Control': 'no-cache',
-              Connection: 'keep-alive',
-              Authorization: `Bearer ${Cookies.get('access_token')}`,
-              withCredentials: 'true',
-            },
-          })
-        );
-      };
-
-      setEventSource(newEventSource);
+      initializeEventSource();
     };
 
     const disconnect = () => {

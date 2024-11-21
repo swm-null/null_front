@@ -30,17 +30,22 @@ const useTagManager = () => {
     } catch {}
   };
 
-  const handleUpdateTag = async (parentTag: Tag | null, updateTarget: Tag) => {
+  const handleUpdateTag = async (_parentTag: Tag | null, updateTarget: Tag) => {
     try {
       const response = await Api.editTag(updateTarget.id, updateTarget.name);
       if (Api.isValidResponse(response)) {
+        if (selectedTag && selectedTag.id === updateTarget.id) {
+          setTagStack((prev) => [...prev.slice(0, -1), updateTarget]);
+          setSelectedTag(updateTarget);
+        }
+
+        // FIXME: 부모 tags invalidate하게 수정하기
         queryClient.invalidateQueries({
-          queryKey: ['tags', parentTag ? parentTag.id : 'root'],
-          exact: true,
+          queryKey: ['tags'],
         });
+        // FIXME: 조부모 childTags invalidate하게 수정하기
         queryClient.invalidateQueries({
-          queryKey: ['childTags', parentTag ? parentTag.id : 'root'],
-          exact: true,
+          queryKey: ['childTags'],
         });
         queryClient.invalidateQueries({ queryKey: ['childTagMemos'] });
       }

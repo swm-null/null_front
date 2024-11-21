@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import * as Api from 'api';
-import { Memo } from 'pages/home/subPages/interfaces';
+import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/types';
 import { useContext, useEffect, useMemo } from 'react';
 import { DashboardResetContext } from 'utils';
@@ -8,7 +8,7 @@ import { DashboardResetContext } from 'utils';
 const MEMO_LIMIT = 10;
 
 const useChildTagMemosManager = (
-  tagId: string | null,
+  tag: Tag | null,
   isLinked: boolean,
   sortOption: SortOption,
   memoLimit?: number
@@ -17,19 +17,19 @@ const useChildTagMemosManager = (
     useContext(DashboardResetContext);
   const queryClient = useQueryClient();
 
-  const { data, fetchNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, refetch } = useInfiniteQuery({
     queryKey: [
       'childTagMemos',
-      tagId,
+      JSON.stringify(tag),
       sortOption,
       isLinked,
       memoLimit ? memoLimit : MEMO_LIMIT,
     ],
     queryFn: async ({ pageParam = 1 }: any) => {
-      if (!tagId) return;
+      if (!tag) return;
 
       const response = await Api.getTagMemos({
-        tagId,
+        tagId: tag.id,
         page: pageParam,
         limit: memoLimit ? memoLimit : MEMO_LIMIT,
         isLinked,
@@ -47,10 +47,10 @@ const useChildTagMemosManager = (
       const nextPage = lastPage.current_page + 1;
       return nextPage <= lastPage.total_page ? nextPage : undefined;
     },
-    enabled: !!tagId,
-    gcTime: 0,
+
     initialPageParam: 1,
     refetchOnWindowFocus: true,
+    gcTime: 0,
   });
 
   const memos = useMemo(() => {
@@ -67,7 +67,7 @@ const useChildTagMemosManager = (
       queryClient.invalidateQueries({
         queryKey: [
           'childTagMemos',
-          tagId,
+          JSON.stringify(tag),
           sortOption,
           isLinked,
           memoLimit ? memoLimit : MEMO_LIMIT,
@@ -77,11 +77,13 @@ const useChildTagMemosManager = (
     };
 
     subscribeToInvalid(invalidateCurrentQuery);
+    subscribeToInvalid(refetch);
 
     return () => {
       unsubscribeFromInvalid(invalidateCurrentQuery);
+      unsubscribeFromInvalid(refetch);
     };
-  }, [tagId]);
+  }, [tag?.id]);
 
   return {
     memos,

@@ -24,7 +24,7 @@ const useRecentMemoManager = () => {
           : undefined;
       },
       initialPageParam: 1,
-      staleTime: 600000,
+      gcTime: 0,
     });
 
   const allMemos = useMemo(() => {

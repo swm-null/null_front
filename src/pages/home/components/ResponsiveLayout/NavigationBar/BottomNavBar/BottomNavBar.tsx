@@ -17,8 +17,10 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
   const { t } = useTranslation();
   const { setBottomNavHeight } = useContext(BottomNavContext);
   const { onReset: onCreateReset } = useContext(CreateResetContext);
-  const { onReset: onSearchReset } = useContext(SearchResetContext);
-  const { onReset: onDashboardReset } = useContext(DashboardResetContext);
+  const { onReset: onSearchReset, onInvalid: onSearchInvalid } =
+    useContext(SearchResetContext);
+  const { onReset: onDashboardReset, onInvalid: onDashboardInvalid } =
+    useContext(DashboardResetContext);
 
   const bottomNavRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,11 +37,13 @@ const BottomNavBar = ({ currentPage, setCurrentPage }: BottomNavBarProps) => {
 
   const handleClickSearch = () => {
     onSearchReset();
+    onSearchInvalid();
     setCurrentPage('search');
   };
 
   const handleClickDashboard = () => {
     onDashboardReset();
+    onDashboardInvalid();
     setCurrentPage('dashboard');
   };
 
