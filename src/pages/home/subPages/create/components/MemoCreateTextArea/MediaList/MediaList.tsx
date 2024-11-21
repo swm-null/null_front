@@ -21,7 +21,7 @@ const MediaList = ({
       {audioUrl && (
         <div className="relative flex gap-3 flex-shrink-0 h-24 w-60">
           <AudioPlayer
-            className="bg-white shadow-none rounded-xl"
+            className="bg-white shadow-none rounded-xl border"
             src={audioUrl}
             customAdditionalControls={[]}
             showJumpControls={false}

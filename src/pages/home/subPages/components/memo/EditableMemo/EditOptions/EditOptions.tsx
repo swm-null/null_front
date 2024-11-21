@@ -5,6 +5,7 @@ import { TagRebuildCheckbox } from './TagRebuildCheckbox';
 import { CameraIcon, MicIcon } from 'assets/icons';
 
 const EditOptions = ({
+  isSubmitDisabled = false,
   tagRebuildable = false,
   tagRebuild,
   setTagRebuild,
@@ -12,6 +13,7 @@ const EditOptions = ({
   handleMicButtonClick,
   handleSubmit,
 }: {
+  isSubmitDisabled?: boolean;
   tagRebuildable: boolean;
   tagRebuild: boolean;
   setTagRebuild: (tagRebuild: boolean) => void;
@@ -39,9 +41,10 @@ const EditOptions = ({
         )}
         <button
           type="button"
-          className="flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
-              rounded-[30px] border border-[#917360]"
+          className={`flex h-8 items-center text-brown2 font-medium text-sm px-[27px] py-[3px] 
+            rounded-[30px] border border-[#917360]`}
           onClick={handleSubmit}
+          disabled={isSubmitDisabled}
         >
           {t('memo.save')}
         </button>

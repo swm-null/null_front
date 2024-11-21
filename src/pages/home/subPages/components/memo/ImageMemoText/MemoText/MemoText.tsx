@@ -111,7 +111,7 @@ const MemoText = ({
   return (
     <>
       <div
-        className={`w-full text-gray2 font-regular ${
+        className={`w-full h-full text-gray2 font-regular ${
           editable && !isEditing && !message ? 'visible' : 'hidden'
         }`}
         onClick={handleFocus}
@@ -120,7 +120,9 @@ const MemoText = ({
       </div>
       <div
         ref={editableDivRef}
-        className="ml-auto bg-transparent font-regular text-[15px] whitespace-break-spaces break-all focus:outline-none"
+        className={`ml-auto bg-transparent font-regular 
+          ${!isEditing && !message ? 'hidden' : 'visible'} ${editable ? 'h-full' : ''} 
+          text-[15px] whitespace-break-spaces break-all focus:outline-none`}
         style={{ color: textColor }}
         contentEditable={editable}
         onClick={handleClickLink}

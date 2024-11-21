@@ -97,6 +97,10 @@ const EditableMemo = ({
     openRecordingModal(audio, setAudio);
   };
 
+  const isSubmitDisabled = useMemo(() => {
+    return !message.trim() && imageUrls.length === 0 && !audioUrl;
+  }, [message, imageUrls, audioUrl]);
+
   useEffect(() => {
     setMessage(memo.content);
     setTags(memo.tags);
@@ -109,7 +113,7 @@ const EditableMemo = ({
     >
       <input {...getInputProps()} />
       <div
-        {...getRootProps()}
+        {...getRootProps({ style: { outline: 'none' } })}
         className="flex flex-1 flex-col h-full gap-[1.14rem] overflow-hidden"
       >
         <MemoHeader
@@ -140,6 +144,7 @@ const EditableMemo = ({
         </div>
       </div>
       <EditOptions
+        isSubmitDisabled={isSubmitDisabled}
         tagRebuildable={isEditMode}
         tagRebuild={tagRebuild}
         setTagRebuild={setTagRebuild}

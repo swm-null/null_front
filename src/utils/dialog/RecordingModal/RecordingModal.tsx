@@ -50,7 +50,7 @@ const RecordingModal = ({ open, onClose, onSend }: RecordingModalProps) => {
         <input {...getInputProps()} />
         <div
           className="bg-[#f5f0ea] p-6 rounded-3xl shadow-lg w-[480px] relative"
-          {...getRootProps()}
+          {...getRootProps({ style: { outline: 'none' } })}
         >
           <AudioFileInput
             handleAudioFileChange={recordingManager.handleAudioFileChange}
