@@ -91,6 +91,7 @@ const SummaryMemo = ({
         />
         {memo.voice_urls?.length > 0 && (
           <AudioPlayer
+            className="bg-white rounded-xl shadow-none"
             src={memo.voice_urls[0]}
             customAdditionalControls={[]}
             showJumpControls={false}

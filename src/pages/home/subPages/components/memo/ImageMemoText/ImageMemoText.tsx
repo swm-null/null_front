@@ -69,6 +69,7 @@ const ImageMemoText = ({
                 {isReady && voiceUrl && (
                   <div className="relative xs:w-60 w-full max-w-72">
                     <AudioPlayer
+                      className="bg-white shadow-none rounded-xl"
                       src={voiceUrl}
                       customAdditionalControls={[]}
                       showJumpControls={false}
