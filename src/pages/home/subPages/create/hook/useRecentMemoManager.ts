@@ -4,7 +4,8 @@ import { useContext, useEffect, useMemo } from 'react';
 import { CreateResetContext } from 'utils';
 
 const useRecentMemoManager = () => {
-  const { subscribeToReset, unsubscribeFromReset } = useContext(CreateResetContext);
+  const { subscribeToInvalid, unsubscribeFromInvalid } =
+    useContext(CreateResetContext);
   const queryClient = useQueryClient();
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
@@ -39,10 +40,10 @@ const useRecentMemoManager = () => {
       });
     };
 
-    subscribeToReset(invalidateCurrentQuery);
+    subscribeToInvalid(invalidateCurrentQuery);
 
     return () => {
-      unsubscribeFromReset(invalidateCurrentQuery);
+      unsubscribeFromInvalid(invalidateCurrentQuery);
     };
   }, []);
 

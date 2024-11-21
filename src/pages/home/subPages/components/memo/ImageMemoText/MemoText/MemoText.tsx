@@ -106,6 +106,8 @@ const MemoText = ({
         selection.addRange(range);
       }
     }
+
+    setMessage && setMessage(text);
   };
 
   useEffect(() => {

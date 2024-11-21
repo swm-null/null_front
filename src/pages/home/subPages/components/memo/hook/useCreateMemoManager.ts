@@ -117,11 +117,12 @@ const useCreateMemoManager = () => {
     queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
       if (!oldData) return oldData;
 
+      const updatedPages = [...oldData.pages];
+      updatedPages[0].currentCount = updatedPages[0].currentCount + 1;
+      updatedPages[0].memos = [memo, ...updatedPages[0].memos];
+
       return {
-        pages: oldData?.pages.map((page: any) => ({
-          ...page,
-          memos: [memo, ...page?.memos],
-        })),
+        pages: updatedPages,
         pageParams: oldData?.pageParams as any,
       };
     });
@@ -133,11 +134,12 @@ const useCreateMemoManager = () => {
       (oldData: any) => {
         if (!oldData) return oldData;
 
+        const updatedPages = [...oldData.pages];
+        updatedPages[0].currentCount = updatedPages[0].currentCount + 1;
+        updatedPages[0].memos = [memo, ...updatedPages[0].memos];
+
         return {
-          pages: oldData?.pages.map((page: any) => ({
-            ...page,
-            memos: [memo, ...page?.memos],
-          })),
+          pages: updatedPages,
           pageParams: oldData?.pageParams as any,
         };
       }
@@ -187,12 +189,21 @@ const useCreateMemoManager = () => {
   };
 
   const deleteMemoInQueries = (optimisticMemoId: string) => {
-    if (optimisticMemoId) {
-      queryClient.setQueryData<Interface.Memo[]>(
-        ['recentMemo'],
-        (oldMemos) => oldMemos?.filter((memo) => memo.id !== optimisticMemoId) || []
-      );
-    }
+    queryClient.setQueryData<unknown>(['recentMemo'], (oldData: any) => {
+      if (!oldData) return oldData;
+
+      return {
+        pages: oldData?.pages.map((page: any) => ({
+          ...page,
+          currentCount: page?.currentCount - 1,
+          memos:
+            page?.memos.filter(
+              (memo: Interface.Memo) => memo.id !== optimisticMemoId
+            ) || [],
+        })),
+        pageParams: oldData?.pageParams as any,
+      };
+    });
   };
 
   return {
