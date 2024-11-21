@@ -49,7 +49,7 @@ const SummaryMemo = ({
   const urlPattern = /^https?:\/\/[^\s]+$/;
   const haveOnlyLink = urlPattern.test(memo.content || '');
 
-  const voiceDescriptions = parsedMetadata?.voice_descriptions?.[0] || null;
+  const voiceDescriptions = parsedMetadata?.voice_record_descriptions?.[0] || null;
   const linkDescriptions = parsedMetadata?.link_descriptions?.[0] || null;
   const imageDescriptions = parsedMetadata?.image_descriptions?.[0] || null;
 

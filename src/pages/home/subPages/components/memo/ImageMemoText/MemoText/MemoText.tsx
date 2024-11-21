@@ -30,18 +30,18 @@ const MemoText = ({
     );
   };
 
-  const urlPattern = /^https?:\/\/[^\s]+$/;
-  const haveOnlyLink = urlPattern.test(message || '');
+  const urlPattern = /https?:\/\/[^\s]+/;
+  const haveLink = urlPattern.test(message || '');
 
   const parsedMetadata = metadata ? JSON.parse(metadata) : null;
 
-  const voiceDescriptions = parsedMetadata?.voice_descriptions?.[0] || null;
+  const voiceDescriptions = parsedMetadata?.voice_record_descriptions?.[0] || null;
   const linkDescriptions = parsedMetadata?.link_descriptions?.[0] || null;
   const imageDescriptions = parsedMetadata?.image_descriptions?.[0] || null;
 
   const descriptions = voiceDescriptions
     ? voiceDescriptions.simple_description
-    : haveOnlyLink && linkDescriptions
+    : haveLink && linkDescriptions
       ? linkDescriptions.simple_description
       : imageDescriptions
         ? imageDescriptions.simple_description
