@@ -3,7 +3,7 @@ import { useContext, useRef } from 'react';
 import TagItem from './TagItem';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 import { useNavigate } from 'react-router-dom';
-import { TagContext } from 'utils';
+import { AlertContext, TagContext } from 'utils';
 import { getAncestorTags, isGetTagsResponse } from 'api';
 
 interface UneditableTagListProps {
@@ -39,6 +39,7 @@ export const UneditableTagList = ({
   beforeChildTagClick,
 }: UneditableTagListProps) => {
   const { setSelectedTag, setTagStack } = useContext(TagContext);
+  const { alert } = useContext(AlertContext);
   const navigate = useNavigate();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -65,6 +66,8 @@ export const UneditableTagList = ({
         } else {
           navigate('/dashboard');
         }
+      } else if (response.exceptionCode === '1002') {
+        alert('태그를 생성하고, 메모를 배치 중이니, 잠시만 기다려 주세요.');
       }
     } catch {}
   };

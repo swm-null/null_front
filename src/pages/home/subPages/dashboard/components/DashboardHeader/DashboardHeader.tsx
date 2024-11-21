@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Breadcrumbs, CircularProgress } from '@mui/material';
 import { AddIcon, RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
@@ -59,6 +59,29 @@ const DashboardHeader = ({
     } catch {}
   };
 
+  const [isWrapped, setIsWrapped] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkWrap = () => {
+      if (containerRef.current) {
+        const firstChild = containerRef.current.firstElementChild;
+        const secondChild = containerRef.current.lastElementChild;
+
+        if (firstChild && secondChild) {
+          const isWrappedNow =
+            firstChild.getBoundingClientRect().bottom !==
+            secondChild.getBoundingClientRect().top;
+          setIsWrapped(isWrappedNow);
+        }
+      }
+    };
+
+    checkWrap();
+    window.addEventListener('resize', checkWrap);
+    return () => window.removeEventListener('resize', checkWrap);
+  }, []);
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex w-full">
@@ -104,8 +127,8 @@ const DashboardHeader = ({
         )}
       </div>
 
-      <div className="flex w-full flex-wrap p-4 pb-2 gap-2">
-        <div className="flex max-w-full mr-auto gap-1">
+      <div className="flex w-full flex-wrap p-4 pb-2 gap-2" ref={containerRef}>
+        <div className={`flex max-w-full gap-1 ${isWrapped ? 'pr-8' : ''}`}>
           <UneditableTagList
             tags={tags}
             size="large"
@@ -115,7 +138,7 @@ const DashboardHeader = ({
           />
           <AddIcon
             className="text-brown2 bg-cream0 p-[7px] h-[27px] w-[27px] rounded-full cursor-pointer
-            border border-black border-opacity-10 bg-clip-padding"
+              border border-black border-opacity-10 bg-clip-padding flex-shrink-0"
             onClick={handleCreateTag}
           />
         </div>
