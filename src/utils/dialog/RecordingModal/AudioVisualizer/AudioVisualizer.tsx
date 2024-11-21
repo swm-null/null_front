@@ -101,7 +101,7 @@ const AudioVisualizer = ({
               {formatTime(recordingTime)}
             </span>
             <AudioPlayer
-              key={'modal'}
+              key={audioUrl}
               playList={playList}
               activeUI={activeUI}
               audioInitialState={{
