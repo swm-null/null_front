@@ -46,7 +46,7 @@ const MediaList = ({
         </div>
       )}
       {images.map((image, index) => (
-        <div key={index} className="relative h-24 min-w-[7rem] flex-shrink-0">
+        <div key={index} className="relative h-24 flex-shrink-0">
           <img
             src={image}
             alt="Pasted content"

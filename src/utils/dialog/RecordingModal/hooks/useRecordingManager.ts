@@ -11,7 +11,7 @@ import { RecordingContext } from 'utils/contexts';
 export const useRecordingManager = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioFile, setAudioFile] = useState<File | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
 
   const { isValidFileType } = useContext(RecordingContext);
@@ -39,10 +39,12 @@ export const useRecordingManager = () => {
     };
 
     mediaRecorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: 'audio/wav' });
-      const url = URL.createObjectURL(blob);
+      const file = new File(chunksRef.current, 'recorded_audio.wav', {
+        type: 'audio/wav',
+      });
+      const url = URL.createObjectURL(file);
       setAudioUrl(url);
-      setAudioBlob(blob);
+      setAudioFile(file);
     };
 
     setRecordingTime(0);
@@ -74,10 +76,9 @@ export const useRecordingManager = () => {
     const files = e.target.files;
     if (files && files.length > 0) {
       if (isValidFileType(files[0])) {
-        const blob = new Blob([files[0]], { type: files[0].type });
-        const url = URL.createObjectURL(blob);
+        const url = URL.createObjectURL(files[0]);
         setAudioUrl(url);
-        setAudioBlob(blob);
+        setAudioFile(files[0]);
       }
     }
   }, []);
@@ -87,7 +88,7 @@ export const useRecordingManager = () => {
       audioRef.current.pause();
     }
     setAudioUrl(null);
-    setAudioBlob(null);
+    setAudioFile(null);
     setRecordingTime(0);
     resetVisualizer();
   };
@@ -95,7 +96,7 @@ export const useRecordingManager = () => {
   return {
     isRecording,
     audioUrl,
-    audioBlob,
+    audioFile,
     audioRef,
     recordingTime,
     handleAudioFileChange,

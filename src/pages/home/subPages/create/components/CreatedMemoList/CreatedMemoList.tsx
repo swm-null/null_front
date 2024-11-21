@@ -30,7 +30,7 @@ const CreatedMemoList = ({
     >
       <div className="flex flex-col gap-3">
         {memos.map((memo) => (
-          <CreatedMemoCard key={memo.id} memo={memo} />
+          <CreatedMemoCard key={JSON.stringify(memo)} memo={memo} />
         ))}
       </div>
       <div ref={observerRef} className="min-h-[1px] bg-transparent" />

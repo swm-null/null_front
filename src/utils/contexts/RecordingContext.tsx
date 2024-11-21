@@ -7,7 +7,7 @@ import { RecordingModal, AlertContext } from 'utils';
 type RecordingModalState = {
   open: boolean;
   onClose: () => void;
-  onSend: (audio: Blob | File) => void;
+  onSend: (audio: File) => void;
   audio: File | null;
   setAudio: (audio: File | null) => void;
 };
@@ -43,7 +43,6 @@ export const RecordingProvider = ({ children }: { children: ReactNode }) => {
     'audio/wav',
     'audio/wave',
     'audio/x-wav',
-    'video/mp4',
     'audio/x-m4a',
     'audio/webm',
   ];
@@ -63,12 +62,8 @@ export const RecordingProvider = ({ children }: { children: ReactNode }) => {
       setRecordingModal({
         open: true,
         onClose: () => closeRecordingModal(),
-        onSend: (audio: Blob | File) => {
-          const file =
-            audio instanceof Blob
-              ? new File([audio], 'audio.webm', { type: 'audio/webm' })
-              : audio;
-          setAudioFn(file);
+        onSend: (audio: File) => {
+          setAudioFn(audio);
           closeRecordingModal();
         },
         audio,

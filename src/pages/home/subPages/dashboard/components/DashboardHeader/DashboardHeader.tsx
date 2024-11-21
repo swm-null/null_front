@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 import { Breadcrumbs, CircularProgress } from '@mui/material';
 import { AddIcon, RightIcon } from 'assets/icons';
 import { Tag } from 'pages/home/subPages/interfaces';
@@ -7,6 +7,7 @@ import { SortToggle } from './SortToggle';
 import { SortOption } from 'pages/home/subPages/types';
 import { UneditableTagList } from 'pages/home/subPages/components';
 import { DashboardResetContext, SSEContext, TagContext } from 'utils';
+import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 
 interface DashboardHeaderProps {
   allTagText: string;
@@ -29,6 +30,8 @@ const DashboardHeader = ({
     useContext(TagContext);
   const { onReset } = useContext(DashboardResetContext);
   const { batchingMemoCount } = useContext(SSEContext);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
 
   const handleAllTagsClick = () => {
     onTagReset();
@@ -59,27 +62,42 @@ const DashboardHeader = ({
   return (
     <div className="flex flex-col w-full">
       <div className="flex w-full">
-        <Breadcrumbs
-          className="px-4"
-          separator={<RightIcon />}
-          aria-label="breadcrumb"
-        >
-          <TagPathButton
-            key="all"
-            tag={{ id: '@', name: allTagText }}
-            onClick={handleAllTagsClick}
-          />
-          {tagStack.map((tag, index) => (
-            <TagPathButton
-              key={tag.id}
-              tag={tag}
-              isCurrentTag={index === tagStack.length - 1}
-              onClick={() => handleMiddleTagClick(index)}
-            />
-          ))}
-        </Breadcrumbs>
+        <div className="flex overflow-hidden p-4">
+          <div
+            ref={scrollRef}
+            className="flex w-full overflow-auto no-scrollbar"
+            onMouseDown={onDragStart}
+            onMouseMove={onDragMove}
+            onMouseUp={onDragEnd}
+            onMouseLeave={onDragEnd}
+          >
+            <Breadcrumbs
+              separator={<RightIcon />}
+              aria-label="breadcrumb"
+              sx={{
+                '& ol': {
+                  flexWrap: 'nowrap',
+                },
+              }}
+            >
+              <TagPathButton
+                key="all"
+                tag={{ id: '@', name: allTagText }}
+                onClick={handleAllTagsClick}
+              />
+              {tagStack.map((tag, index) => (
+                <TagPathButton
+                  key={tag.id}
+                  tag={tag}
+                  isCurrentTag={index === tagStack.length - 1}
+                  onClick={() => handleMiddleTagClick(index)}
+                />
+              ))}
+            </Breadcrumbs>
+          </div>
+        </div>
         {batchingMemoCount !== 0 && (
-          <p className="flex ml-auto pr-4 text-sm self-center gap-2 text-[#6A5344E6]">
+          <p className="flex flex-shrink-0 ml-auto pr-4 text-sm self-center gap-2 text-[#6A5344E6]">
             배치 중입니다
             <CircularProgress className="self-center" size={14} />
           </p>

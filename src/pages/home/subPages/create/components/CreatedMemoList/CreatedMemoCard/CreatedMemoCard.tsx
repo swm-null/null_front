@@ -79,8 +79,7 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
     setAudioUrl(null);
   };
 
-  const handleSubmit = () => {
-    setEditable(false);
+  const handleSubmit = async () => {
     handleUpdateMemo({
       memo,
       tagRebuild,
@@ -89,7 +88,9 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
       newVoice: audio,
       oldImageUrls: originImageUrls,
       oldVoiceUrls: audioUrl ? [audioUrl] : [],
+      localImageUrls: imageUrls,
     });
+    setEditable(false);
   };
 
   const handleMicButtonClick = () => {
@@ -164,15 +165,21 @@ const CreatedMemoCard = ({ memo }: CreatedMemoCardProps) => {
           handleImageFilesChange={handleImageFilesChange}
           handlePaste={handlePaste}
         />
+
         {editable && (
-          <EditOptions
-            tagRebuildable
-            tagRebuild={tagRebuild}
-            setTagRebuild={setTagRebuild}
-            handleMicButtonClick={handleMicButtonClick}
-            handleImageFilesChange={handleImageFilesChange}
-            handleSubmit={handleSubmit}
-          />
+          <div className="flex flex-col gap-2">
+            <div className="flex ml-auto w-fit gap-6 items-center text-gray2">
+              {`${message ? message.length : 0} / ${1000}`}
+            </div>
+            <EditOptions
+              tagRebuildable
+              tagRebuild={tagRebuild}
+              setTagRebuild={setTagRebuild}
+              handleMicButtonClick={handleMicButtonClick}
+              handleImageFilesChange={handleImageFilesChange}
+              handleSubmit={handleSubmit}
+            />
+          </div>
         )}
       </div>
     </div>
