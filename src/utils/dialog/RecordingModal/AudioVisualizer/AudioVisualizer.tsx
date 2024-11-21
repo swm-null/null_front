@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { AudioPlayer } from 'react-audio-player-component';
+import AudioPlayer, {
+  InterfacePlacementKey,
+  PlayListUI,
+  ProgressUI,
+  RepeatType,
+} from 'react-modern-audio-player';
 
 interface AudioVisualizerProps {
   audioUrl: string | null;
@@ -17,7 +22,6 @@ const AudioVisualizer = ({
 }: AudioVisualizerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -27,8 +31,50 @@ const AudioVisualizer = ({
 
   useEffect(() => {
     setContainerWidth(containerRef.current?.offsetWidth || 0);
-    setContainerHeight(containerRef.current?.offsetHeight || 0);
   }, [containerRef]);
+
+  const playList = [
+    {
+      src: audioUrl || '',
+      id: 1,
+    },
+  ];
+
+  const activeUI = {
+    playButton: true,
+    playList: false as PlayListUI,
+    prevNnext: false,
+    volume: false,
+    volumeSlider: false,
+    repeatType: false,
+    trackTime: true,
+    trackInfo: false,
+    artwork: false,
+    progress: 'waveform' as ProgressUI,
+  };
+
+  const interfacePlacement: Partial<Record<InterfacePlacementKey, string>> = {
+    progress: 'row1-2',
+    trackTimeCurrent: 'row2-1',
+    trackTimeDuration: 'row2-3',
+    playButton: 'row2-2',
+  };
+
+  useEffect(() => {
+    setContainerWidth(containerRef.current?.offsetWidth || 0);
+
+    const playerContainers = [
+      document.getElementsByClassName('interface-grid')[0],
+      document.getElementsByClassName('rm-audio-player-provider')[0],
+    ].filter(Boolean);
+
+    if (playerContainers) {
+      console.log(playerContainers);
+      playerContainers.map((playerContainer) => {
+        (playerContainer as HTMLElement).style.backgroundColor = 'transparent';
+      });
+    }
+  }, [audioUrl]);
 
   return (
     <div className="w-full flex flex-1 min-h-24 bg-[#e8e1d9] rounded-2xl p-3 flex-shrink-0">
@@ -50,24 +96,29 @@ const AudioVisualizer = ({
             </div>
           </>
         ) : audioUrl ? (
-          <AudioPlayer
-            key={audioUrl}
-            src={audioUrl}
-            minimal={true}
-            width={containerWidth}
-            trackHeight={containerHeight}
-            barWidth={2}
-            gap={1}
-            visualise={true}
-            backgroundColor="#e8e1d9"
-            barColor="#8b7e74"
-            barPlayedColor="#F4CDB1"
-            skipDuration={2}
-            showLoopOption={true}
-            showVolumeControl={true}
-            hideSeekBar={true}
-            hideSeekKnobWhenPlaying={true}
-          />
+          <div className="flex flex-col items-start gap-2 w-full">
+            <span className="text-[#8b7e74] absolute top-0 left-2">
+              {formatTime(recordingTime)}
+            </span>
+            <AudioPlayer
+              key={'modal'}
+              playList={playList}
+              activeUI={activeUI}
+              audioInitialState={{
+                curPlayId: 1,
+                isPlaying: false,
+                repeatType: 'ONE' as RepeatType,
+              }}
+              placement={{
+                interface: {
+                  templateArea: interfacePlacement as Record<string, string>,
+                },
+              }}
+              rootContainerProps={{
+                width: `${containerWidth}px`,
+              }}
+            />
+          </div>
         ) : (
           <div className="w-full"></div>
         )}

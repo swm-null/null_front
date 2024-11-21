@@ -1,5 +1,5 @@
-import { AudioPlayer } from 'react-audio-player-component';
 import { CloseIcon } from 'assets/icons';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 
 interface MediaListProps {
   images: string[];
@@ -19,26 +19,24 @@ const MediaList = ({
   return (
     <div className="w-full flex gap-5 overflow-x-auto no-scrollbar">
       {audioUrl && (
-        <div className="relative flex gap-3 flex-shrink-0">
+        <div className="relative flex gap-3 flex-shrink-0 h-24 w-60">
           <AudioPlayer
-            key={audioUrl}
+            className="custom-audio-player bg-[#E6DDCE80] shadow-none"
             src={audioUrl}
-            width={300}
-            trackHeight={96}
-            barWidth={2}
-            gap={1}
-            visualise
-            backgroundColor="#e8e1d9"
-            barColor="#8b7e74"
-            barPlayedColor="#F4CDB1"
-            skipDuration={2}
-            minimal
-            showLoopOption
-            showVolumeControl
-            hideSeekBar
-            hideSeekKnobWhenPlaying
+            customAdditionalControls={[]}
+            showJumpControls={false}
+            timeFormat="mm:ss"
+            showDownloadProgress
+            autoPlay={false}
+            layout="stacked"
+            customProgressBarSection={[
+              RHAP_UI.CURRENT_TIME,
+              RHAP_UI.PROGRESS_BAR,
+              RHAP_UI.DURATION,
+            ]}
+            customControlsSection={[RHAP_UI.MAIN_CONTROLS, RHAP_UI.VOLUME_CONTROLS]}
+            volume={0.5}
           />
-
           <div
             className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md cursor-pointer"
             onClick={removeAudio}
