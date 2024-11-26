@@ -1,0 +1,16 @@
+{
+  "theme_color": "#F7CBBB",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Oatnote",
+  "short_name": "오트노트",
+  "icons": [
+    {
+      "src": "icons/icon-1003x1003.png",
+      "sizes": "1003x1003",
+      "type": "image/png"
+    }
+  ]
+}

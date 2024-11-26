@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "svgr": "npx @svgr/cli -d src/assets/icons/svg --ignore-existing --typescript --no-dimensions public/sv",
     "format": "prettier --write ./src",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "pwa": "pwa-assets-generator --preset minimal public/logo.svg"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -24,6 +25,7 @@
     "@tanstack/react-query-devtools": "^5.52.1",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.7",
+    "@vue/cli-plugin-pwa": "^5.0.8",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
@@ -47,6 +49,7 @@
     "react-responsive": "^10.0.0",
     "react-responsive-masonry": "^2.3.0",
     "react-router-dom": "^6.26.0",
+    "register-service-worker": "^1.7.2",
     "remark-gfm": "^4.0.0",
     "rxjs": "^7.8.1",
     "tailwind-variants": "^0.2.1",
@@ -63,6 +66,7 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
@@ -79,6 +83,7 @@
     "tailwindcss": "^3.4.4",
     "typescript": "^5.6.2",
     "vite": "^5.3.1",
+    "vite-plugin-pwa": "^0.21.0",
     "vite-plugin-svgr": "^4.2.0"
   }
 }
