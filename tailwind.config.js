@@ -1,3 +1,6 @@
+import tailwindcssFilters from 'tailwindcss-filters';
+import tailwindScrollbar from 'tailwind-scrollbar';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   mode: 'jit',
@@ -43,5 +46,5 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-filters'), require('tailwind-scrollbar')],
+  plugins: [tailwindcssFilters, tailwindScrollbar],
 };
