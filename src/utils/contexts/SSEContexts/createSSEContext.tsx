@@ -66,7 +66,6 @@ export const createSSEContext = () => {
           setIsConnected(false);
           newEventSource.close();
           setEventSource(null);
-          initializeEventSource();
         };
 
         setEventSource(newEventSource);
