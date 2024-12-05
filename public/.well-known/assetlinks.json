@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.oatnote.stage.twa",
+      "sha256_cert_fingerprints": [
+        "86:95:20:CF:4A:06:35:94:3D:BF:0C:57:76:E1:C2:E9:6C:07:AB:4A:23:75:CD:73:B9:45:77:8A:CF:15:F9:36",
+        "86:95:E0:CF:4A:06:35:94:3D:BF:0C:57:76:E1:C2:E9:6C:D7:AB:4A:23:75:CD:73:B9:45:77:8A:CF:15:F9:36"
+      ]
+    }
+  }
+]
