@@ -50,9 +50,12 @@ const Login = () => {
   }
 
   return (
-    <div className="bg-custom-gradient-basic flex justify-center items-center h-screen py-8">
+    <div
+      className="flex flex-col bg-custom-gradient-basic justify-center items-center h-screen 
+        py-8 w-full self-center px-6"
+    >
       <form
-        className="flex flex-col bg-[#FFF6E3CC] p-8 shadow-custom w-full max-w-lg rounded-2xl gap-6"
+        className="flex flex-col bg-[#FFF6E3CC] w-full max-w-[500px] p-8 shadow-custom rounded-2xl gap-6"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-2">
