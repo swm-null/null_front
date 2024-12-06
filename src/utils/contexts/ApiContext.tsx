@@ -47,6 +47,8 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
           await getNewAccessToken(refreshToken);
         }
       } catch (error) {
+        Cookies.remove('access_token');
+        Cookies.remove('refresh_token');
         alertLoginRequiredThenRedirect();
       }
     }
