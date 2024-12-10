@@ -1,5 +1,5 @@
 import { Tag } from 'pages/home/subPages/interfaces';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import TagItem from './TagItem';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +30,7 @@ interface UneditableTagListProps {
   beforeChildTagClick?: () => void;
 }
 
-export const UneditableTagList = ({
+const UneditableTagList = ({
   tags,
   invalidCharsPattern,
   size = 'medium',
@@ -44,6 +44,25 @@ export const UneditableTagList = ({
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
+  const [scrollOpacity, setScrollOpacity] = useState({ left: 1, right: 1 });
+
+  const updateScrollOpacity = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const leftOpacity = scrollLeft > 0 ? 0.1 : 1;
+      const rightOpacity = scrollLeft + clientWidth < scrollWidth ? 0.1 : 1;
+      setScrollOpacity({ left: leftOpacity, right: rightOpacity });
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      updateScrollOpacity();
+      scrollElement.addEventListener('scroll', updateScrollOpacity);
+      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
+    }
+  }, []);
 
   const onChildTagClick = async (tag: Tag) => {
     try {
@@ -73,25 +92,31 @@ export const UneditableTagList = ({
   };
 
   return (
-    <div
-      ref={scrollRef}
-      className="flex flex-none w-fit max-w-full overflow-x-scroll no-scrollbar gap-1"
-      onMouseDown={onDragStart}
-      onMouseMove={onDragMove}
-      onMouseUp={onDragEnd}
-      onMouseLeave={onDragEnd}
-    >
-      {tags.map((tag, index) => (
-        <TagItem
-          key={index}
-          tag={tag}
-          size={size}
-          color={color}
-          borderOpacity={borderOpacity}
-          onChildTagClick={onChildTagClick}
-          invalidCharsPattern={invalidCharsPattern}
-        />
-      ))}
+    <div className="relative flex flex-1 w-full">
+      <div
+        ref={scrollRef}
+        className="flex flex-none w-fit max-w-full overflow-x-scroll no-scrollbar gap-1"
+        onMouseDown={onDragStart}
+        onMouseMove={onDragMove}
+        onMouseUp={onDragEnd}
+        onMouseLeave={onDragEnd}
+        style={{
+          maskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 5%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, ${scrollOpacity.right}) 95%)`,
+          WebkitMaskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 5%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, ${scrollOpacity.right}) 95%)`,
+        }}
+      >
+        {tags.map((tag, index) => (
+          <TagItem
+            key={index}
+            tag={tag}
+            size={size}
+            color={color}
+            borderOpacity={borderOpacity}
+            onChildTagClick={onChildTagClick}
+            invalidCharsPattern={invalidCharsPattern}
+          />
+        ))}
+      </div>
     </div>
   );
 };
