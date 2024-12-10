@@ -20,7 +20,7 @@ const useHorizontalScrollOpacity = () => {
       scrollElement.addEventListener('scroll', updateScrollOpacity);
       return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
     }
-  }, []);
+  }, [scrollRef.current?.scrollWidth]);
 
   return { scrollRef, scrollOpacity };
 };
