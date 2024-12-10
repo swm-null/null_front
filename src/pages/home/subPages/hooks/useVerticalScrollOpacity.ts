@@ -18,9 +18,14 @@ const useVerticalScrollOpacity = () => {
     if (scrollElement) {
       updateScrollOpacity();
       scrollElement.addEventListener('scroll', updateScrollOpacity);
-      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
     }
-  }, []);
+
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener('scroll', updateScrollOpacity);
+      }
+    };
+  }, [scrollRef.current?.scrollHeight]);
 
   return { scrollRef, scrollOpacity };
 };
