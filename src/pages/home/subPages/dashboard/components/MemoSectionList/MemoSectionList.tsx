@@ -1,7 +1,7 @@
 import { Tag, TagRelation } from 'pages/home/subPages/interfaces';
 import { MemoSection } from './MemoSection';
 import { v4 as uuid_v4 } from 'uuid';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import {
   useHorizontalScroll,
   useIntersectionObserver,
@@ -29,6 +29,26 @@ const MemoSectionList = ({
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
 
   const hasNoSection = () => tagRelations.length === 0;
+
+  const [scrollOpacity, setScrollOpacity] = useState({ left: 1, right: 1 });
+
+  const updateScrollOpacity = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const leftOpacity = scrollLeft > 0 ? 0.1 : 1;
+      const rightOpacity = scrollLeft + clientWidth < scrollWidth ? 0.1 : 1;
+      setScrollOpacity({ left: leftOpacity, right: rightOpacity });
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      updateScrollOpacity();
+      scrollElement.addEventListener('scroll', updateScrollOpacity);
+      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
+    }
+  }, []);
 
   useIntersectionObserver(observerRef, {
     callback: (entries) => {
@@ -71,6 +91,10 @@ const MemoSectionList = ({
       onMouseMove={onDragMove}
       onMouseUp={onDragEnd}
       onMouseLeave={onDragEnd}
+      style={{
+        maskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 0.1%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, ${scrollOpacity.right}) 99.9%)`,
+        WebkitMaskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 0.1%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, ${scrollOpacity.right}) 99.9%)`,
+      }}
     >
       <div key={JSON.stringify(tagRelations)} className="flex gap-4">
         {selectedTag && (
