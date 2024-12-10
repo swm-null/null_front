@@ -7,9 +7,18 @@ const useVerticalScrollOpacity = () => {
   const updateScrollOpacity = () => {
     if (scrollRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-      const topOpacity = scrollTop > 0 ? 0.1 : 1;
-      const bottomOpacity = scrollTop + clientHeight < scrollHeight ? 0.1 : 1;
-      setScrollOpacity({ top: topOpacity, bottom: bottomOpacity });
+      const newTopOpacity = scrollTop > 0 ? 0.1 : 1;
+      const newBottomOpacity = scrollTop + clientHeight < scrollHeight ? 0.1 : 1;
+
+      setScrollOpacity((prevOpacity) => {
+        if (
+          prevOpacity.top !== newTopOpacity ||
+          prevOpacity.bottom !== newBottomOpacity
+        ) {
+          return { top: newTopOpacity, bottom: newBottomOpacity };
+        }
+        return prevOpacity;
+      });
     }
   };
 

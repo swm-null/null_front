@@ -7,9 +7,18 @@ const useHorizontalScrollOpacity = () => {
   const updateScrollOpacity = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      const leftOpacity = scrollLeft > 0 ? 0.1 : 1;
-      const rightOpacity = scrollLeft + clientWidth < scrollWidth ? 0.1 : 1;
-      setScrollOpacity({ left: leftOpacity, right: rightOpacity });
+      const newLeftOpacity = scrollLeft > 0 ? 0.1 : 1;
+      const newRightOpacity = scrollLeft + clientWidth < scrollWidth ? 0.1 : 1;
+
+      setScrollOpacity((prevOpacity) => {
+        if (
+          prevOpacity.left !== newLeftOpacity ||
+          prevOpacity.right !== newRightOpacity
+        ) {
+          return { left: newLeftOpacity, right: newRightOpacity };
+        }
+        return prevOpacity;
+      });
     }
   };
 
