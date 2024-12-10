@@ -1,7 +1,10 @@
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSectionHeader } from './MemoSectionHeader';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useIntersectionObserver } from 'pages/home/subPages/hooks';
+import {
+  useIntersectionObserver,
+  useVerticalScrollOpacity,
+} from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
 import { SortOption } from 'pages/home/subPages/types';
 import { SummaryMemoWithoutDrag } from '../SummaryMemoWithoutDrag';
@@ -28,26 +31,7 @@ const MemoSection = ({
 }: MemoSectionProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
   const [updateKey, setUpdateKey] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const [scrollOpacity, setScrollOpacity] = useState({ top: 1, bottom: 1 });
-
-  const updateScrollOpacity = () => {
-    if (scrollContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
-      const topOpacity = scrollTop > 0 ? 0.1 : 1;
-      const bottomOpacity = scrollTop + clientHeight < scrollHeight ? 0.1 : 1;
-      setScrollOpacity({ top: topOpacity, bottom: bottomOpacity });
-    }
-  };
-
-  useEffect(() => {
-    const scrollElement = scrollContainerRef?.current;
-    if (scrollElement) {
-      updateScrollOpacity();
-      scrollElement.addEventListener('scroll', updateScrollOpacity);
-      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
-    }
-  }, []);
+  const { scrollRef, scrollOpacity } = useVerticalScrollOpacity();
 
   const { openMemoCreateModal } = useContext(MemoContext);
 
@@ -100,7 +84,7 @@ const MemoSection = ({
       />
       <div
         className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10"
-        ref={scrollContainerRef}
+        ref={scrollRef}
         style={{
           maskImage: `linear-gradient(to bottom, rgba(0, 0, 0, ${scrollOpacity.top}) 0.1%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, ${scrollOpacity.bottom}) 99.9%)`,
           WebkitMaskImage: `linear-gradient(to bottom, rgba(0, 0, 0, ${scrollOpacity.top}) 0.1%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, ${scrollOpacity.bottom}) 99.9%)`,

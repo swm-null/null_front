@@ -1,7 +1,10 @@
 import { Tag } from 'pages/home/subPages/interfaces';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext } from 'react';
 import TagItem from './TagItem';
-import { useHorizontalScroll } from 'pages/home/subPages/hooks';
+import {
+  useHorizontalScroll,
+  useHorizontalScrollOpacity,
+} from 'pages/home/subPages/hooks';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext, TagContext } from 'utils';
 import { getAncestorTags, isGetTagsResponse } from 'api';
@@ -42,27 +45,8 @@ const UneditableTagList = ({
   const { alert } = useContext(AlertContext);
   const navigate = useNavigate();
 
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const { scrollRef, scrollOpacity } = useHorizontalScrollOpacity();
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
-  const [scrollOpacity, setScrollOpacity] = useState({ left: 1, right: 1 });
-
-  const updateScrollOpacity = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      const leftOpacity = scrollLeft > 0 ? 0.1 : 1;
-      const rightOpacity = scrollLeft + clientWidth < scrollWidth ? 0.1 : 1;
-      setScrollOpacity({ left: leftOpacity, right: rightOpacity });
-    }
-  };
-
-  useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (scrollElement) {
-      updateScrollOpacity();
-      scrollElement.addEventListener('scroll', updateScrollOpacity);
-      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
-    }
-  }, []);
 
   const onChildTagClick = async (tag: Tag) => {
     try {

@@ -1,7 +1,10 @@
-import { forwardRef, useContext, useEffect, useRef, useState } from 'react';
+import { forwardRef, useContext, useImperativeHandle, useRef } from 'react';
 import { Memo } from 'pages/home/subPages/interfaces';
 import { CreatedMemoCard } from './CreatedMemoCard';
-import { useIntersectionObserver } from 'pages/home/subPages/hooks';
+import {
+  useIntersectionObserver,
+  useVerticalScrollOpacity,
+} from 'pages/home/subPages/hooks';
 import { BottomNavContext } from 'utils';
 
 const CreatedMemoList = forwardRef<
@@ -10,27 +13,10 @@ const CreatedMemoList = forwardRef<
 >(({ memos, fetchNextPage }, ref) => {
   const { isSmallScreen, bottomNavHeight } = useContext(BottomNavContext);
   const observerRef = useRef<HTMLDivElement | null>(null);
-  const [scrollOpacity, setScrollOpacity] = useState({ top: 1, bottom: 1 });
+  const { scrollRef, scrollOpacity } = useVerticalScrollOpacity();
 
-  const updateScrollOpacity = () => {
-    const scrollElement = typeof ref === 'function' ? null : ref?.current;
-
-    if (scrollElement) {
-      const { scrollTop, scrollHeight, clientHeight } = scrollElement;
-      const topOpacity = scrollTop > 0 ? 0.1 : 1;
-      const bottomOpacity = scrollTop + clientHeight < scrollHeight ? 0.1 : 1;
-      setScrollOpacity({ top: topOpacity, bottom: bottomOpacity });
-    }
-  };
-
-  useEffect(() => {
-    const scrollElement = (ref as React.RefObject<HTMLDivElement>)?.current;
-    if (scrollElement) {
-      updateScrollOpacity();
-      scrollElement.addEventListener('scroll', updateScrollOpacity);
-      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
-    }
-  }, []);
+  const fallbackRef = useRef<HTMLDivElement>(document.createElement('div'));
+  useImperativeHandle(ref, () => scrollRef.current || fallbackRef.current);
 
   useIntersectionObserver(observerRef, {
     callback: (entries) => {
@@ -43,7 +29,7 @@ const CreatedMemoList = forwardRef<
 
   return (
     <div
-      ref={ref}
+      ref={scrollRef}
       className={`flex flex-col flex-1 max-w-[740px] w-full self-center overflow-scroll no-scrollbar
         p-4 pt-0 ${isSmallScreen ? '' : 'mb-10 mx-20'}`}
       style={{

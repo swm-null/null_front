@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchTextArea } from '../components';
 import { useSearchMemoManager } from './hook';
@@ -6,6 +6,7 @@ import { SearchConversationList } from './components/SearchConversationList';
 import { SearchConversation } from './components';
 import { MemoEditModal } from '../dashboard/components';
 import { BottomNavContext, SearchResetContext } from 'utils';
+import { useVerticalScrollOpacity } from '../hooks';
 
 const SearchPage = () => {
   const { t } = useTranslation();
@@ -13,29 +14,10 @@ const SearchPage = () => {
   const { isSmallScreen } = useContext(BottomNavContext);
   const { subscribeToReset, unsubscribeFromReset } = useContext(SearchResetContext);
 
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [message, setMessage] = useState('');
 
   const searchMemoManager = useSearchMemoManager();
-  const [scrollOpacity, setScrollOpacity] = useState({ top: 1, bottom: 1 });
-
-  const updateScrollOpacity = () => {
-    if (scrollContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
-      const topOpacity = scrollTop > 0 ? 0.1 : 1;
-      const bottomOpacity = scrollTop + clientHeight < scrollHeight ? 0.1 : 1;
-      setScrollOpacity({ top: topOpacity, bottom: bottomOpacity });
-    }
-  };
-
-  useEffect(() => {
-    const scrollElement = scrollContainerRef?.current;
-    if (scrollElement) {
-      updateScrollOpacity();
-      scrollElement.addEventListener('scroll', updateScrollOpacity);
-      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
-    }
-  }, []);
+  const { scrollRef, scrollOpacity } = useVerticalScrollOpacity();
 
   const handleMessageChange = (e: ChangeEvent) => {
     setMessage((e.target as HTMLInputElement).value);
@@ -52,8 +34,8 @@ const SearchPage = () => {
 
   useEffect(() => {
     const scrollToTop = () => {
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      if (scrollRef.current) {
+        scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
@@ -76,7 +58,7 @@ const SearchPage = () => {
       </div>
 
       <div
-        ref={scrollContainerRef}
+        ref={scrollRef}
         className={`flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar ${isSmallScreen ? '' : 'mb-10'}`}
         style={{
           maskImage: `linear-gradient(to bottom, rgba(0, 0, 0, ${scrollOpacity.top}) 0.1%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, ${scrollOpacity.bottom}) 99.9%)`,
