@@ -17,6 +17,25 @@ const SearchPage = () => {
   const [message, setMessage] = useState('');
 
   const searchMemoManager = useSearchMemoManager();
+  const [scrollOpacity, setScrollOpacity] = useState({ top: 1, bottom: 1 });
+
+  const updateScrollOpacity = () => {
+    if (scrollContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+      const topOpacity = scrollTop > 0 ? 0.1 : 1;
+      const bottomOpacity = scrollTop + clientHeight < scrollHeight ? 0.1 : 1;
+      setScrollOpacity({ top: topOpacity, bottom: bottomOpacity });
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollContainerRef?.current;
+    if (scrollElement) {
+      updateScrollOpacity();
+      scrollElement.addEventListener('scroll', updateScrollOpacity);
+      return () => scrollElement.removeEventListener('scroll', updateScrollOpacity);
+    }
+  }, []);
 
   const handleMessageChange = (e: ChangeEvent) => {
     setMessage((e.target as HTMLInputElement).value);
@@ -59,6 +78,10 @@ const SearchPage = () => {
       <div
         ref={scrollContainerRef}
         className={`flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar ${isSmallScreen ? '' : 'mb-10'}`}
+        style={{
+          maskImage: `linear-gradient(to bottom, rgba(0, 0, 0, ${scrollOpacity.top}) 0.1%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, ${scrollOpacity.bottom}) 99.9%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, rgba(0, 0, 0, ${scrollOpacity.top}) 0.1%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, ${scrollOpacity.bottom}) 99.9%)`,
+        }}
       >
         <div
           className={`max-w-[740px] w-full self-center ${isSmallScreen ? '' : 'mx-20'}`}
