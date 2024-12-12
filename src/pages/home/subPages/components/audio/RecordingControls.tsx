@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { AudioVisualizer } from 'utils/dialog/RecordingModal/AudioVisualizer';
-import { RecordButton } from 'utils/dialog/RecordingModal/buttons';
+import { AudioVisualizer } from 'pages/home/contexts/RecordingContext/RecordingModal/AudioVisualizer';
+import { RecordButton } from 'pages/home/contexts/RecordingContext/RecordingModal/buttons';
 import { useAudioPlayer } from './hooks';
 
 interface RecordingControlsProps {

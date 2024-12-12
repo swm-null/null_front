@@ -5,6 +5,8 @@ import { AudioFileInput, RecordingControls } from 'pages/home/subPages/component
 import { useContext } from 'react';
 import { RecordingContext } from 'utils/contexts';
 
+// FIXME: 이거 안 바꾸면 내가 미친거 ㅇㅇ _ minji
+
 interface RecordingModalProps {
   open: boolean;
   onClose: () => void;
