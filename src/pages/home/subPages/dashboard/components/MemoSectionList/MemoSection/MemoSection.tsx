@@ -1,7 +1,10 @@
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { MemoSectionHeader } from './MemoSectionHeader';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useIntersectionObserver } from 'pages/home/subPages/hooks';
+import {
+  useIntersectionObserver,
+  useVerticalScrollOpacity,
+} from 'pages/home/subPages/hooks';
 import { useChildTagMemosManager } from '../hook';
 import { SortOption } from 'pages/home/subPages/types';
 import { SummaryMemoWithoutDrag } from '../SummaryMemoWithoutDrag';
@@ -28,6 +31,7 @@ const MemoSection = ({
 }: MemoSectionProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
   const [updateKey, setUpdateKey] = useState(0);
+  const { scrollRef, scrollOpacity } = useVerticalScrollOpacity();
 
   const { openMemoCreateModal } = useContext(MemoContext);
 
@@ -78,7 +82,14 @@ const MemoSection = ({
           handleTagClick: handleTagClick,
         })}
       />
-      <div className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10">
+      <div
+        className="flex-1 h-full overflow-scroll no-scrollbar py-4 px-[0.87rem] border-t border-black border-opacity-10"
+        ref={scrollRef}
+        style={{
+          maskImage: `linear-gradient(to bottom, rgba(0, 0, 0, ${scrollOpacity.top}) 0.1%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, ${scrollOpacity.bottom}) 99.9%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, rgba(0, 0, 0, ${scrollOpacity.top}) 0.1%, rgba(0, 0, 0, 1) 5%, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, ${scrollOpacity.bottom}) 99.9%)`,
+        }}
+      >
         <div key={updateKey} className="flex flex-col flex-1 gap-[0.4rem] w-60 ">
           {memos.map(
             (memo) =>

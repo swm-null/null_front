@@ -1,7 +1,10 @@
 import { Tag } from 'pages/home/subPages/interfaces';
-import { useContext, useRef } from 'react';
+import { useContext } from 'react';
 import TagItem from './TagItem';
-import { useHorizontalScroll } from 'pages/home/subPages/hooks';
+import {
+  useHorizontalScroll,
+  useHorizontalScrollOpacity,
+} from 'pages/home/subPages/hooks';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext, TagContext } from 'utils';
 import { getAncestorTags, isGetTagsResponse } from 'api';
@@ -30,7 +33,7 @@ interface UneditableTagListProps {
   beforeChildTagClick?: () => void;
 }
 
-export const UneditableTagList = ({
+const UneditableTagList = ({
   tags,
   invalidCharsPattern,
   size = 'medium',
@@ -42,7 +45,7 @@ export const UneditableTagList = ({
   const { alert } = useContext(AlertContext);
   const navigate = useNavigate();
 
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const { scrollRef, scrollOpacity } = useHorizontalScrollOpacity();
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
 
   const onChildTagClick = async (tag: Tag) => {
@@ -73,25 +76,31 @@ export const UneditableTagList = ({
   };
 
   return (
-    <div
-      ref={scrollRef}
-      className="flex flex-none w-fit max-w-full overflow-x-scroll no-scrollbar gap-1"
-      onMouseDown={onDragStart}
-      onMouseMove={onDragMove}
-      onMouseUp={onDragEnd}
-      onMouseLeave={onDragEnd}
-    >
-      {tags.map((tag, index) => (
-        <TagItem
-          key={index}
-          tag={tag}
-          size={size}
-          color={color}
-          borderOpacity={borderOpacity}
-          onChildTagClick={onChildTagClick}
-          invalidCharsPattern={invalidCharsPattern}
-        />
-      ))}
+    <div className="relative flex flex-none w-full">
+      <div
+        ref={scrollRef}
+        className="flex flex-none w-fit max-w-full overflow-x-scroll no-scrollbar gap-1"
+        onMouseDown={onDragStart}
+        onMouseMove={onDragMove}
+        onMouseUp={onDragEnd}
+        onMouseLeave={onDragEnd}
+        style={{
+          maskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 5%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, ${scrollOpacity.right}) 95%)`,
+          WebkitMaskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 5%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, ${scrollOpacity.right}) 95%)`,
+        }}
+      >
+        {tags.map((tag, index) => (
+          <TagItem
+            key={index}
+            tag={tag}
+            size={size}
+            color={color}
+            borderOpacity={borderOpacity}
+            onChildTagClick={onChildTagClick}
+            invalidCharsPattern={invalidCharsPattern}
+          />
+        ))}
+      </div>
     </div>
   );
 };

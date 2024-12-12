@@ -4,6 +4,7 @@ import { v4 as uuid_v4 } from 'uuid';
 import { useContext, useEffect, useRef } from 'react';
 import {
   useHorizontalScroll,
+  useHorizontalScrollOpacity,
   useIntersectionObserver,
 } from 'pages/home/subPages/hooks';
 import { SortOption } from 'pages/home/subPages/types';
@@ -24,7 +25,7 @@ const MemoSectionList = ({
 }: MemoSectionListProps) => {
   const { selectedTag } = useContext(TagContext);
   const observerRef = useRef<HTMLDivElement | null>(null);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const { scrollRef, scrollOpacity } = useHorizontalScrollOpacity();
 
   const { onDragStart, onDragMove, onDragEnd } = useHorizontalScroll({ scrollRef });
 
@@ -71,6 +72,10 @@ const MemoSectionList = ({
       onMouseMove={onDragMove}
       onMouseUp={onDragEnd}
       onMouseLeave={onDragEnd}
+      style={{
+        maskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 0.1%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, ${scrollOpacity.right}) 99.9%)`,
+        WebkitMaskImage: `linear-gradient(to right, rgba(0, 0, 0, ${scrollOpacity.left}) 0.1%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, rgba(0, 0, 0, ${scrollOpacity.right}) 99.9%)`,
+      }}
     >
       <div key={JSON.stringify(tagRelations)} className="flex gap-4">
         {selectedTag && (

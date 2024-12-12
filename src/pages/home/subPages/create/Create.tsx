@@ -1,6 +1,6 @@
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BottomNavContext, CreateResetContext } from 'utils';
+import { CreateResetContext } from 'utils';
 import { MemoCreateTextArea, CreatedMemoList } from './components';
 import { MemoEditModal } from '../dashboard/components';
 import { useImageList } from '../hooks';
@@ -19,7 +19,6 @@ const CreatePage = () => {
     handleImageFilesChange,
     handlePaste,
   } = useImageList();
-  const { isSmallScreen } = useContext(BottomNavContext);
   const { subscribeToReset, unsubscribeFromReset } = useContext(CreateResetContext);
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -76,19 +75,11 @@ const CreatePage = () => {
             removeImage={removeImage}
           />
         </div>
-        <div
+        <CreatedMemoList
           ref={scrollContainerRef}
-          className={`flex flex-col flex-1 w-full self-center overflow-scroll no-scrollbar ${isSmallScreen ? '' : 'mb-10'}`}
-        >
-          <div
-            className={`max-w-[740px] w-full self-center ${isSmallScreen ? '' : 'mx-20'}`}
-          >
-            <CreatedMemoList
-              memos={recentMemoManager.data}
-              fetchNextPage={recentMemoManager.fetchNextPage}
-            />
-          </div>
-        </div>
+          memos={recentMemoManager.data}
+          fetchNextPage={recentMemoManager.fetchNextPage}
+        />
       </div>
       <MemoEditModal />
     </>
