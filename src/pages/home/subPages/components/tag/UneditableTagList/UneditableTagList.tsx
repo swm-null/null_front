@@ -76,7 +76,7 @@ const UneditableTagList = ({
   };
 
   return (
-    <div className="relative flex flex-1 w-full">
+    <div className="relative flex flex-none w-full">
       <div
         ref={scrollRef}
         className="flex flex-none w-fit max-w-full overflow-x-scroll no-scrollbar gap-1"
