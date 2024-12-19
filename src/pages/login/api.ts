@@ -1,6 +1,6 @@
 import { errorResponse } from 'pages/api/interface';
 import saveToken from 'pages/api/saveToken';
-import { errorHandler, getMethodName } from 'pages/api/utils';
+import { API_BASE_URL, errorHandler, getMethodName } from 'pages/api/utils';
 import axios from 'axios';
 
 interface loginResponse {
@@ -15,7 +15,15 @@ export const login = async (
   const method = getMethodName();
   const endpoint = '/user/login';
   try {
-    const response = await axios.post(endpoint, JSON.stringify({ email, password }));
+    const response = await axios.post(
+      API_BASE_URL + endpoint,
+      JSON.stringify({ email, password }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const responseInfo = {
       method,
       status: response.status,

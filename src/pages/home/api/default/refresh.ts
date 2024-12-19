@@ -1,6 +1,6 @@
 import { errorResponse } from 'pages/api/interface';
 import saveToken from 'pages/api/saveToken';
-import { errorHandler, getMethodName } from 'pages/api/utils';
+import { API_BASE_URL, errorHandler, getMethodName } from 'pages/api/utils';
 import axios from 'axios';
 
 interface tokenResponse {
@@ -14,7 +14,15 @@ export const refresh = async (
   const method = getMethodName();
   const endpoint = '/user/refresh';
   try {
-    const response = await axios.post(endpoint, JSON.stringify({ refresh_token }));
+    const response = await axios.post(
+      API_BASE_URL + endpoint,
+      JSON.stringify({ refresh_token }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const responseInfo = {
       method,
       status: response.status,

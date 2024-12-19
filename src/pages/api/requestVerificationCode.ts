@@ -1,5 +1,5 @@
 import { errorResponse, validResponse } from 'pages/api/interface';
-import { errorHandler, getMethodName } from 'pages/api/utils';
+import { API_BASE_URL, errorHandler, getMethodName } from 'pages/api/utils';
 import axios from 'axios';
 
 export const requestVerificationCode = async (
@@ -8,7 +8,15 @@ export const requestVerificationCode = async (
   const method = getMethodName();
   const endpoint = '/user/sendCode';
   try {
-    const response = await axios.post(endpoint, JSON.stringify({ email }));
+    const response = await axios.post(
+      API_BASE_URL + endpoint,
+      JSON.stringify({ email }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const responseInfo = {
       method,
       status: response.status,

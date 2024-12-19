@@ -1,5 +1,5 @@
 import { errorResponse, validResponse } from 'pages/api/interface';
-import { errorHandler, getMethodName } from 'pages/api/utils';
+import { API_BASE_URL, errorHandler, getMethodName } from 'pages/api/utils';
 import axios from 'axios';
 
 export const checkVerificationCode = async (
@@ -9,7 +9,15 @@ export const checkVerificationCode = async (
   const method = getMethodName();
   const endpoint = '/user/verifyCode';
   try {
-    const response = await axios.post(endpoint, JSON.stringify({ email, code }));
+    const response = await axios.post(
+      API_BASE_URL + endpoint,
+      JSON.stringify({ email, code }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     const responseInfo = {
       method,
       status: response.status,
