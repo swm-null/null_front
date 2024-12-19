@@ -1,8 +1,8 @@
+import { useContext, useEffect, useMemo } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import * as Api from 'api';
+import { getTagMemos, isMemosResponse } from 'pages/home/subPages/api';
 import { Memo, Tag } from 'pages/home/subPages/interfaces';
 import { SortOption } from 'pages/home/subPages/types';
-import { useContext, useEffect, useMemo } from 'react';
 import { DashboardResetContext } from 'utils';
 
 const MEMO_LIMIT = 10;
@@ -28,7 +28,7 @@ const useChildTagMemosManager = (
     queryFn: async ({ pageParam = 1 }: any) => {
       if (!tag) return;
 
-      const response = await Api.getTagMemos({
+      const response = await getTagMemos({
         tagId: tag.id,
         page: pageParam,
         limit: memoLimit ? memoLimit : MEMO_LIMIT,
@@ -36,7 +36,7 @@ const useChildTagMemosManager = (
         sortOrder: sortOption,
       });
 
-      if (!Api.isMemosResponse(response)) {
+      if (!isMemosResponse(response)) {
         throw new Error('자식 태그 메모를 불러오는 중 오류가 발생했습니다.');
       }
 

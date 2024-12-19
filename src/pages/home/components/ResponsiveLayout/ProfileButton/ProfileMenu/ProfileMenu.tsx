@@ -1,5 +1,5 @@
 import { Menu, MenuItem, Divider } from '@mui/material';
-import { profile } from 'api';
+import { profile } from '../profileInterface';
 import { useTranslation } from 'react-i18next';
 
 interface ProfileMenuProps {

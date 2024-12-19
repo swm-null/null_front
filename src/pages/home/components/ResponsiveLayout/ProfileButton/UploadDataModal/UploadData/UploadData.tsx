@@ -2,8 +2,10 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KakaoDropzone, CopyTextField } from './components';
 import { email1, email2, kakao1, kakao2 } from 'assets/images';
-import { createMemos, isFilesResponse, isValidResponse, uploadFile } from 'api';
 import { BottomNavContext } from 'utils';
+import { createMemos } from './api';
+import { isFilesResponse, uploadFile } from 'pages/home/api';
+import { isValidResponse } from 'pages/api';
 
 const UploadData = ({
   handleProProcess,

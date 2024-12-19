@@ -1,10 +1,10 @@
-import { paginationDashboardTagRelations } from 'api';
+import { FunctionComponent, SVGProps, useContext } from 'react';
 import { DeleteIcon, EditIcon } from 'assets/icons';
 import { useTagManager } from 'pages/home/subPages/components';
 import { useClickWithoutDrag } from 'pages/hooks';
-import { Tag } from 'pages/home/subPages/interfaces';
-import { FunctionComponent, SVGProps, useContext } from 'react';
 import { TagContext } from 'utils';
+import { Tag } from 'pages/home/subPages/interfaces';
+import { paginationDashboardTagRelations } from 'pages/home/subPages/dashboard/interfaces';
 
 export interface InfiniteQueryData {
   pages: paginationDashboardTagRelations[];

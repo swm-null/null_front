@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Modal } from '@mui/material';
-import { profile } from 'api';
 import { ModalContent } from './ModalContent';
 import { useClickWithoutDrag } from 'pages/hooks';
 import { useImageList } from 'pages/home/subPages/hooks';
+import { profile } from '../profileInterface';
 
 interface ProfileEditModalProps {
   isOpen: boolean;

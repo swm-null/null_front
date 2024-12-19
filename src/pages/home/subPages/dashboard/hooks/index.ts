@@ -1,1 +1,1 @@
-export { default as useDashboardTagManager } from './useDashboardTagManager';
+export * from './useDashboardTagManager';

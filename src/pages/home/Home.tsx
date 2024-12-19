@@ -13,7 +13,7 @@ import {
   TagProvider,
 } from 'utils';
 import 'flickity/css/flickity.css';
-import { API_BASE_URL } from 'api/utils';
+import { API_BASE_URL } from 'pages/api/utils';
 
 const queryClient = new QueryClient();
 
