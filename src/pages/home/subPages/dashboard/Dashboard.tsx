@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Tag } from 'pages/home/subPages/interfaces';
 import * as Components from './components';
 import * as Constants from 'pages/home/constants';
-import * as Hooks from './hooks';
+import * as Hooks from './hooks/useDashboardTagManager';
 import { SortOption } from 'pages/home/subPages/types';
 import { BottomNavContext, DashboardResetContext, TagContext } from 'utils';
 

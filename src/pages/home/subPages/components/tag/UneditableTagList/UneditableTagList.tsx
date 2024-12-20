@@ -1,10 +1,10 @@
 import { Tag } from 'pages/home/subPages/interfaces';
 import { useContext, useRef } from 'react';
-import TagItem from './TagItem';
+import { TagItem } from './TagItem';
 import { useHorizontalScroll } from 'pages/home/subPages/hooks';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext, TagContext } from 'utils';
-import { getAncestorTags, isGetTagsResponse } from 'api';
+import { getAncestorTags, isGetTagsResponse } from './api';
 
 interface UneditableTagListProps {
   tags: Tag[];

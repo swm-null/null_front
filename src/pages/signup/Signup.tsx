@@ -2,11 +2,13 @@ import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Components from 'pages/components';
 import { CodeSendForm } from './components';
-import { checkEmail, isValidResponse, sendCode, signup } from 'api';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils';
 import { useChangeHandlerManager } from './hooks';
 import { useValidationManager } from 'pages/hooks';
+import { isValidResponse } from 'pages/api';
+import { checkEmailDuplication, signup } from './api';
+import { requestVerificationCode } from 'pages/api';
 
 const Signup = () => {
   const { t } = useTranslation();
@@ -31,7 +33,7 @@ const Signup = () => {
   const handleCheckEmail = async () => {
     try {
       const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
-      const response = await checkEmail(emailString);
+      const response = await checkEmailDuplication(emailString);
 
       if (isValidResponse(response)) {
         setIsEmailChecked(true);
@@ -65,7 +67,7 @@ const Signup = () => {
         flag: true,
         message: t('utils.auth.codeSent'),
       });
-      const response = await sendCode(emailString);
+      const response = await requestVerificationCode(emailString);
       if (!isValidResponse(response)) {
         validationManager.setCodeError(t('utils.auth.codeSendFailed'));
       }

@@ -1,1 +1,1 @@
-export { default as useSearchMemoManager } from './useSearchMemoManager';
+export * from './useSearchMemoManager';

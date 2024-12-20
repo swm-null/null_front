@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LoginSignupButton, CustomInput, HiddenInput } from 'pages/components';
-import { isLoginResponse, login } from 'api';
+import { isLoginResponse, login } from './api';
 import { AlertContext } from 'utils';
 
 const Login = () => {

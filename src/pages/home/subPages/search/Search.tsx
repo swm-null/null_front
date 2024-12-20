@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MemoSearchTextArea } from '../components';
-import { useSearchMemoManager } from './hook';
+import { useSearchMemoManager } from './hook/useSearchMemoManager';
 import { SearchConversationList } from './components/SearchConversationList';
 import { SearchConversation } from './components';
 import { MemoEditModal } from '../dashboard/components';

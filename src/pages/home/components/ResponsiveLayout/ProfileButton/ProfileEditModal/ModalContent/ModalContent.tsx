@@ -1,10 +1,10 @@
-import { profile } from 'api';
 import { oatmealUrl } from 'assets/images';
 import { CustomInput } from 'pages/components';
 import { ImageFileInput } from 'pages/home/subPages/components';
 import { useTranslation } from 'react-i18next';
 import { useImageList } from 'pages/home/subPages/hooks';
 import { CameraIcon } from 'assets/icons';
+import { profile } from '../../profileInterface';
 
 const ModalContent = ({
   profileName,

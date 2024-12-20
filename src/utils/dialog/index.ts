@@ -1,2 +1,2 @@
 export * from './AlertDialog';
-export * from './RecordingModal';
+export * from '../../pages/home/contexts/RecordingContext/RecordingModal';

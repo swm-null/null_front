@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import * as Components from 'pages/components';
 import { useNavigate } from 'react-router-dom';
 import { AlertContext } from 'utils';
-import { isValidResponse, resetPassword, sendCode } from 'api';
+import { isValidResponse } from 'pages/api';
 import { useChangeHandlerManager } from './hooks';
 import { useValidationManager } from 'pages/hooks';
+import { requestVerificationCode } from 'pages/api';
+import { resetPassword } from './api';
 
 const FindPw = () => {
   const { t } = useTranslation();
@@ -27,7 +29,7 @@ const FindPw = () => {
       const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
       setEmailSuccess({ flag: true, message: t('utils.auth.codeSent') });
 
-      const response = await sendCode(emailString);
+      const response = await requestVerificationCode(emailString);
       if (!isValidResponse(response)) {
         alert(t('utils.auth.codeSendFailed'));
       }
