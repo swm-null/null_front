@@ -12,7 +12,7 @@ export const createTag = async (
   tagName: string
 ): Promise<getTagResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/childTag${parentTag ? `?tagId=${parentTag.id}` : ''}`;
+  const endpoint = `/tag/child${parentTag ? `?id=${parentTag.id}` : ''}`;
 
   try {
     const response = await refreshableApi.post(

@@ -7,7 +7,7 @@ export const checkVerificationCode = async (
   code: string
 ): Promise<validResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = '/user/verifyCode';
+  const endpoint = '/user/email/verificationCode/verify';
   try {
     const response = await axios.post(
       API_BASE_URL + endpoint,
@@ -36,9 +36,9 @@ export const resetPassword = async (
   code: string
 ): Promise<validResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = '/user/findPassword';
+  const endpoint = '/user/password';
   try {
-    const response = await axios.post(
+    const response = await axios.put(
       endpoint,
       JSON.stringify({
         email,

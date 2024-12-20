@@ -6,17 +6,9 @@ export const checkEmailDuplication = async (
   email: string
 ): Promise<validResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = '/user/checkEmail';
+  const endpoint = `/user/email/exists?email=${email}`;
   try {
-    const response = await axios.post(
-      API_BASE_URL + endpoint,
-      JSON.stringify({ email }),
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await axios.get(API_BASE_URL + endpoint);
     const responseInfo = {
       method,
       status: response.status,

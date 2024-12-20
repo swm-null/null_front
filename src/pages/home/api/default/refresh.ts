@@ -12,7 +12,7 @@ export const refresh = async (
   refresh_token: string
 ): Promise<tokenResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = '/user/refresh';
+  const endpoint = '/user/token/refresh';
   try {
     const response = await axios.post(
       API_BASE_URL + endpoint,

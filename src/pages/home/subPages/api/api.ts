@@ -40,7 +40,7 @@ export const getTagMemos = async ({
   if (sortOrder) params.append('sortOrder', sortOrder);
   if (isLinked) params.append('isLinked', isLinked.toString());
 
-  const endpoint = `/tag/memos?${params.toString()}`;
+  const endpoint = `/memos/tag?${params.toString()}`;
 
   try {
     const response = await refreshableApi.get(endpoint);

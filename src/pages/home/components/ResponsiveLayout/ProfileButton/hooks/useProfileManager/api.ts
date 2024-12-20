@@ -10,7 +10,7 @@ export const getUserProfile = async (): Promise<profileResponse | errorResponse>
   const endpoint = `/user/me`;
 
   try {
-    const response = await refreshableApi.post(endpoint);
+    const response = await refreshableApi.get(endpoint);
     const responseInfo = {
       method,
       status: response.status,

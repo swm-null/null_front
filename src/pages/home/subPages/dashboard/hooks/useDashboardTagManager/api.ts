@@ -20,11 +20,11 @@ export const getDashboardTagRelations = async ({
   const method = getMethodName();
 
   const params = new URLSearchParams();
-  if (tagId) params.append('tagId', tagId);
+  if (tagId) params.append('id', tagId);
   if (page) params.append('page', page.toString());
   if (limit) params.append('limit', limit.toString());
 
-  const endpoint = `/tags?${params.toString()}`;
+  const endpoint = `/tag/descendants?${params.toString()}`;
 
   try {
     const response = await refreshableApi.get(endpoint);
@@ -52,7 +52,7 @@ export const getChildTags = async (
   tagId?: string
 ): Promise<getTagsResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = tagId ? `/childTags?tagId=${tagId}` : `/childTags`;
+  const endpoint = tagId ? `/tag/ancestors?id=${tagId}` : `/tag/children`;
 
   try {
     const response = await refreshableApi.get(endpoint);

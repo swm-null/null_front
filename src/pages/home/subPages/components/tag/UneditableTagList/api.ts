@@ -11,7 +11,7 @@ export const getAncestorTags = async (
   tagId: string
 ): Promise<getTagsResponse | errorResponse> => {
   const method = getMethodName();
-  const endpoint = `/ancestorTags?tagId=${tagId}`;
+  const endpoint = `/tag/ancestors?id=${tagId}`;
 
   try {
     const response = await refreshableApi.get(endpoint);
