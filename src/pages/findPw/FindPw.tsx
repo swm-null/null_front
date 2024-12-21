@@ -25,10 +25,11 @@ const FindPw = () => {
   const handleSendCode = async () => {
     try {
       const emailString = `${changeHandlerManager.form.email.emailId}@${changeHandlerManager.form.email.domain}`;
-      setEmailSuccess({ flag: true, message: t('utils.auth.codeSent') });
 
       const response = await sendCode(emailString);
-      if (!isValidResponse(response)) {
+      if (isValidResponse(response)) {
+        setEmailSuccess({ flag: true, message: t('utils.auth.codeSent') });
+      } else {
         alert(t('utils.auth.codeSendFailed'));
       }
     } catch {
@@ -52,8 +53,10 @@ const FindPw = () => {
         alert(t('findPw.findPwSuccess')).then(() => {
           navigate('/login');
         });
+      } else if (response.exceptionCode === '1004') {
+        alert('인증번호가 맞는지 확인해주세요');
       } else {
-        alert(response.exceptionMessage);
+        alert('잠시후 다시 시도해주세요.');
       }
     } catch {}
   };

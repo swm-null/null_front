@@ -92,7 +92,13 @@ const Signup = () => {
           navigate('/login');
         });
       } else {
-        alert(response.exceptionMessage);
+        if (response.exceptionCode === '1003') {
+          alert('닉네임에는 한글, 영문 및 숫자만 사용할 수 있습니다.');
+        } else if (response.exceptionCode === '1004') {
+          alert('인증번호가 맞는지 확인해주세요');
+        } else {
+          alert('잠시후 다시 시도해주세요.');
+        }
       }
     } catch {
       alert();

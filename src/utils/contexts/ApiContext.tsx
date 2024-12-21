@@ -38,7 +38,7 @@ export const ApiProvider = ({ children }: { children: ReactNode }) => {
     const accessToken = Cookies.get('access_token');
     const refreshToken = Cookies.get('refresh_token');
     if (!accessToken && !refreshToken) {
-      alertLoginRequiredThenRedirect();
+      navigate('/login');
     }
 
     if (refreshToken) {

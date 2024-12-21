@@ -23,7 +23,16 @@ const Login = () => {
       Cookies.set('refresh_token', response.refresh_token, {});
       navigate('/');
     } else {
-      alert(response.exceptionMessage);
+      if (response.exceptionCode === '1003') {
+        alert('올바른 형식의 이메일을 입력해 주세요.');
+      } else if (
+        response.exceptionCode === '1002' ||
+        response.exceptionCode === '0001'
+      ) {
+        alert('이메일, 비밀번호가 맞는지 확인해주세요');
+      } else {
+        alert('잠시후 다시 시도해주세요.');
+      }
     }
   };
 
